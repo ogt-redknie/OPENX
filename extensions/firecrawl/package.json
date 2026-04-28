@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/firecrawl-plugin",
+  "name": "@opnex/firecrawl-plugin",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Firecrawl plugin",
+  "description": "OPNEX Firecrawl plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.33"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

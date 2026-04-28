@@ -1,6 +1,6 @@
-import type { ChatCommandDefinition } from "openclaw/plugin-sdk/command-auth";
-import * as commandRegistryModule from "openclaw/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { ChatCommandDefinition } from "opnex/plugin-sdk/command-auth";
+import * as commandRegistryModule from "opnex/plugin-sdk/command-auth";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createDiscordCommandArgFallbackButton,
@@ -34,13 +34,13 @@ function createCommandDefinition(): ChatCommandDefinition {
 }
 
 function createContext(
-  discordConfig: NonNullable<OpenClawConfig["channels"]>["discord"],
+  discordConfig: NonNullable<OPNEXConfig["channels"]>["discord"],
 ): CommandArgContext {
   const cfg = {
     channels: {
       discord: discordConfig,
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
   return {
     cfg,
     discordConfig,

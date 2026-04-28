@@ -1,11 +1,11 @@
 import fs from "node:fs";
-import { validateJsonSchemaValue } from "openclaw/plugin-sdk/config-schema";
+import { validateJsonSchemaValue } from "opnex/plugin-sdk/config-schema";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { __testing } from "../test-api.js";
 import { createBraveWebSearchProvider } from "./brave-web-search-provider.js";
 
 const braveManifest = JSON.parse(
-  fs.readFileSync(new URL("../openclaw.plugin.json", import.meta.url), "utf-8"),
+  fs.readFileSync(new URL("../opnex.plugin.json", import.meta.url), "utf-8"),
 ) as {
   configSchema?: Record<string, unknown>;
 };

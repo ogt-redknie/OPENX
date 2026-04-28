@@ -1,17 +1,17 @@
-# @openclaw/zalo
+# @opnex/zalo
 
-Zalo channel plugin for OpenClaw (Bot API).
+Zalo channel plugin for OPNEX (Bot API).
 
 ## Install (local checkout)
 
 ```bash
-openclaw plugins install ./path/to/local/zalo-plugin
+opnex plugins install ./path/to/local/zalo-plugin
 ```
 
 ## Install (npm)
 
 ```bash
-openclaw plugins install @openclaw/zalo
+opnex plugins install @opnex/zalo
 ```
 
 Onboarding: select Zalo and confirm the install prompt to fetch the plugin automatically.

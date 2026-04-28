@@ -1,5 +1,5 @@
-import { getRuntimeConfig, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type OPNEXConfig } from "../config/config.js";
 
-export function loadBrowserConfigForRuntimeRefresh(): OpenClawConfig {
+export function loadBrowserConfigForRuntimeRefresh(): OPNEXConfig {
   return getRuntimeConfig();
 }

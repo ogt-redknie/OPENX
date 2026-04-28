@@ -8,7 +8,7 @@ import { inspectReadOnlyChannelAccount } from "../channels/read-only-account-ins
 import { withProgress } from "../cli/progress.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { resolveStorePath } from "../config/sessions/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { buildGatewayConnectionDetails, callGateway } from "../gateway/call.js";
 import type { ChannelRuntimeSnapshot } from "../gateway/server-channel-runtime.types.js";
 import { info } from "../globals.js";
@@ -52,7 +52,7 @@ function loadConfigModule(): Promise<ConfigModule> {
 }
 
 const debugHealth = (...args: unknown[]) => {
-  if (isTruthyEnvValue(process.env.OPENCLAW_DEBUG_HEALTH)) {
+  if (isTruthyEnvValue(process.env.OPNEX_DEBUG_HEALTH)) {
     console.warn("[health:debug]", ...args);
   }
 };
@@ -86,10 +86,10 @@ const formatDurationParts = (ms: number): string => {
   return parts.join(" ");
 };
 
-const resolveHeartbeatSummary = (cfg: OpenClawConfig, agentId: string) =>
+const resolveHeartbeatSummary = (cfg: OPNEXConfig, agentId: string) =>
   resolveHeartbeatSummaryForAgent(cfg, agentId);
 
-const resolveAgentOrder = (cfg: OpenClawConfig) => {
+const resolveAgentOrder = (cfg: OPNEXConfig) => {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const entries = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   const seen = new Set<string>();
@@ -176,7 +176,7 @@ function buildPluginHealthSummary(): PluginHealthSummary | undefined {
   return { loaded, errors };
 }
 
-async function inspectHealthAccount(plugin: ChannelPlugin, cfg: OpenClawConfig, accountId: string) {
+async function inspectHealthAccount(plugin: ChannelPlugin, cfg: OPNEXConfig, accountId: string) {
   return (
     plugin.config.inspectAccount?.(cfg, accountId) ??
     (await inspectReadOnlyChannelAccount({
@@ -197,7 +197,7 @@ function readBooleanField(value: unknown, key: string): boolean | undefined {
 
 async function resolveHealthAccountContext(params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
 }): Promise<{
   account: unknown;
@@ -455,7 +455,7 @@ export async function healthCommand(
     json?: boolean;
     timeoutMs?: number;
     verbose?: boolean;
-    config?: OpenClawConfig;
+    config?: OPNEXConfig;
     token?: string;
     password?: string;
   },
@@ -485,7 +485,7 @@ export async function healthCommand(
   if (opts.json) {
     writeRuntimeJson(runtime, summary);
   } else {
-    const debugEnabled = isTruthyEnvValue(process.env.OPENCLAW_DEBUG_HEALTH);
+    const debugEnabled = isTruthyEnvValue(process.env.OPNEX_DEBUG_HEALTH);
     const rich = isRich();
     if (opts.verbose) {
       const details = buildGatewayConnectionDetails({ config: cfg });
@@ -714,7 +714,7 @@ export async function healthCommand(
   }
 }
 
-async function readBestEffortHealthConfig(): Promise<OpenClawConfig> {
+async function readBestEffortHealthConfig(): Promise<OPNEXConfig> {
   const { readBestEffortConfig } = await loadConfigModule();
   return await readBestEffortConfig();
 }

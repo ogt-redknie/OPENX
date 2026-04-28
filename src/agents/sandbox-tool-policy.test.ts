@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import { resolveEffectiveToolPolicy } from "./pi-tools.policy.js";
 import { pickSandboxToolPolicy } from "./sandbox-tool-policy.js";
 import { resolveEffectiveToolFsRootExpansionAllowed } from "./tool-fs-policy.js";
@@ -56,22 +56,22 @@ describe("pickSandboxToolPolicy", () => {
   });
 
   it("keeps global alsoAllow additive in effective tool policy resolution", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: OPNEXConfig = {
       tools: {
         profile: "coding",
-        alsoAllow: ["lobster"],
+        alsoAllow: ["opnex"],
       },
     };
 
     const resolved = resolveEffectiveToolPolicy({ config: cfg, agentId: "main" });
-    expect(resolved.globalPolicy).toEqual({ allow: ["*", "lobster"], deny: undefined });
-    expect(resolved.profileAlsoAllow).toEqual(["lobster"]);
+    expect(resolved.globalPolicy).toEqual({ allow: ["*", "opnex"], deny: undefined });
+    expect(resolved.profileAlsoAllow).toEqual(["opnex"]);
   });
 
   it("does not block fs root expansion when only global alsoAllow is configured", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: OPNEXConfig = {
       tools: {
-        alsoAllow: ["lobster"],
+        alsoAllow: ["opnex"],
       },
     };
 

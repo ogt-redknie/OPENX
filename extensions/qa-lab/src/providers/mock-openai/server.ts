@@ -751,7 +751,7 @@ function buildAssistantText(
     return "Protocol note: I do not have enough context to say what you usually want for QA movie night.";
   }
   if (/tool continuity check/i.test(prompt) && toolOutput) {
-    return `Protocol note: model switch handoff confirmed on ${model || "the requested model"}. QA mission from QA_KICKOFF_TASK.md still applies: understand this OpenClaw repo from source + docs before acting.`;
+    return `Protocol note: model switch handoff confirmed on ${model || "the requested model"}. QA mission from QA_KICKOFF_TASK.md still applies: understand this OPNEX repo from source + docs before acting.`;
   }
   if (toolOutput && /repo contract followthrough check/i.test(prompt)) {
     if (
@@ -846,11 +846,11 @@ function buildAssistantText(
   if (toolOutput && /worked, failed, blocked|worked\/failed\/blocked|follow-up/i.test(prompt)) {
     return `Worked:\n- Read seeded QA material.\n- Expanded the report structure.\nFailed:\n- None observed in mock mode.\nBlocked:\n- No live provider evidence in this lane.\nFollow-up:\n- Re-run with a real model for qualitative coverage.`;
   }
-  if (toolOutput && /lobster invaders/i.test(prompt)) {
+  if (toolOutput && /opnex invaders/i.test(prompt)) {
     if (toolOutput.includes("QA mission") || toolOutput.includes("Testing")) {
       return "";
     }
-    return `Protocol note: Lobster Invaders built at lobster-invaders.html.`;
+    return `Protocol note: OPNEX Invaders built at opnex-invaders.html.`;
   }
   if (toolOutput && /compaction retry mutating tool check/i.test(prompt)) {
     if (
@@ -1388,17 +1388,17 @@ async function buildResponsesPayload(
       return buildAssistantEvents("RELEASE-AUDIT-COMPLETE");
     }
   }
-  if (/lobster invaders/i.test(prompt)) {
+  if (/opnex invaders/i.test(prompt)) {
     if (!toolOutput) {
       return buildToolCallEventsWithArgs("read", { path: "QA_KICKOFF_TASK.md" });
     }
     if (toolOutput.includes("QA mission") || toolOutput.includes("Testing")) {
       return buildToolCallEventsWithArgs("write", {
-        path: "lobster-invaders.html",
+        path: "opnex-invaders.html",
         content: `<!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8" /><title>Lobster Invaders</title></head>
-  <body><h1>Lobster Invaders</h1><p>Tiny playable stub.</p></body>
+  <head><meta charset="utf-8" /><title>OPNEX Invaders</title></head>
+  <body><h1>OPNEX Invaders</h1><p>Tiny playable stub.</p></body>
 </html>`,
       });
     }

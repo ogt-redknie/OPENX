@@ -3,9 +3,9 @@ import type {
   ProviderResolveWebSocketSessionPolicyContext,
   ProviderTransportTurnState,
   ProviderWebSocketSessionPolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/plugin-entry";
+import { normalizeProviderId } from "opnex/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { isOpenAIApiBaseUrl, isOpenAICodexBaseUrl } from "./base-url.js";
 
 const DEFAULT_OPENAI_WS_DEGRADE_COOLDOWN_MS = 60_000;
@@ -60,7 +60,7 @@ function resolveSessionHeaders(params: {
   }
   return {
     "x-client-request-id": sessionId,
-    "x-openclaw-session-id": sessionId,
+    "x-opnex-session-id": sessionId,
   };
 }
 
@@ -82,14 +82,14 @@ export function resolveOpenAITransportTurnState(
   return {
     headers: {
       ...sessionHeaders,
-      "x-openclaw-turn-id": turnId,
-      "x-openclaw-turn-attempt": attempt,
+      "x-opnex-turn-id": turnId,
+      "x-opnex-turn-attempt": attempt,
     },
     metadata: {
-      openclaw_session_id: sessionHeaders["x-openclaw-session-id"] ?? "",
-      openclaw_turn_id: turnId,
-      openclaw_turn_attempt: attempt,
-      openclaw_transport: ctx.transport,
+      opnex_session_id: sessionHeaders["x-opnex-session-id"] ?? "",
+      opnex_turn_id: turnId,
+      opnex_turn_attempt: attempt,
+      opnex_transport: ctx.transport,
     },
   };
 }

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { openBoundaryFileSync } from "../infra/boundary-file-read.js";
 import { parseFrontmatterBlock } from "../markdown/frontmatter.js";
 import { isPathInsideWithRealpath } from "../security/scan-paths.js";
@@ -171,7 +171,7 @@ function loadBundleCommandsFromRoot(params: {
 
 export function loadEnabledClaudeBundleCommands(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
 }): ClaudeBundleCommandSpec[] {
   if (!hasExplicitPluginConfig(params.cfg?.plugins)) {
     return [];

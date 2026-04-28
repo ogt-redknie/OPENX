@@ -2,11 +2,11 @@ import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-policy";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
 type WhatsAppGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderId?: string | null;

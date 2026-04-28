@@ -1,12 +1,12 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import type {
   DmPolicy,
   GroupPolicy,
   SignalReactionNotificationMode,
-} from "openclaw/plugin-sdk/config-types";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/config-types";
+import type { HistoryEntry } from "opnex/plugin-sdk/reply-history";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
 import type { SignalSender } from "../identity.js";
 
 export type SignalEnvelope = {
@@ -77,7 +77,7 @@ export type SignalReceivePayload = {
 
 export type SignalEventHandlerDeps = {
   runtime: RuntimeEnv;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   baseUrl: string;
   account?: string;
   accountUuid?: string;
@@ -105,7 +105,7 @@ export type SignalEventHandlerDeps = {
     maxBytes: number;
   }) => Promise<{ path: string; contentType?: string } | null>;
   deliverReplies: (params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     replies: ReplyPayload[];
     target: string;
     baseUrl: string;

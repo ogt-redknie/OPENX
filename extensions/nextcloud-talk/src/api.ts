@@ -1,1 +1,1 @@
-export { createAuthRateLimiter } from "openclaw/plugin-sdk/webhook-ingress";
+export { createAuthRateLimiter } from "opnex/plugin-sdk/webhook-ingress";

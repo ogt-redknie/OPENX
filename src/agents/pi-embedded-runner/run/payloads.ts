@@ -1,10 +1,10 @@
 import type { AssistantMessage } from "@mariozechner/pi-ai";
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
+import { hasOutboundReplyContent } from "opnex/plugin-sdk/reply-payload";
 import { parseReplyDirectives } from "../../../auto-reply/reply/reply-directives.js";
 import type { ReasoningLevel, ThinkLevel, VerboseLevel } from "../../../auto-reply/thinking.js";
 import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "../../../auto-reply/tokens.js";
 import { formatToolAggregate } from "../../../auto-reply/tool-meta.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../../config/types.opnex.js";
 import { isCronSessionKey } from "../../../routing/session-key.js";
 import { extractAssistantTextForPhase } from "../../../shared/chat-message-content.js";
 import {
@@ -170,7 +170,7 @@ export function buildEmbeddedRunPayloads(params: {
   toolMetas: ToolMetaEntry[];
   lastAssistant: AssistantMessage | undefined;
   lastToolError?: ToolErrorSummary;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   isCronTrigger?: boolean;
   sessionKey: string;
   provider?: string;

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   autoMigrateLegacyMatrixState,
   autoPrepareLegacyMatrixCrypto,
@@ -43,7 +43,7 @@ async function runBestEffortMatrixMigrationStep(params: {
 }
 
 export async function runMatrixStartupMaintenance(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   log: MatrixStartupLogger;
   trigger?: string;

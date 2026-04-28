@@ -1,16 +1,16 @@
 import type { StreamFn } from "@mariozechner/pi-agent-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolvePluginConfigObject } from "opnex/plugin-sdk/plugin-config-runtime";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/plugin-entry";
 import {
   ANTHROPIC_BY_MODEL_REPLAY_HOOKS,
   normalizeProviderId,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "opnex/plugin-sdk/provider-model-shared";
 import {
   createBedrockNoCacheWrapper,
   isAnthropicBedrockModel,
   streamWithPayloadPatch,
-} from "openclaw/plugin-sdk/provider-stream-shared";
+} from "opnex/plugin-sdk/provider-stream-shared";
 import { mergeImplicitBedrockProvider, resolveBedrockConfigApiKey } from "./discovery-shared.js";
 import { bedrockMemoryEmbeddingProviderAdapter } from "./memory-embedding-adapter.js";
 
@@ -104,7 +104,7 @@ function isBedrockAppInferenceProfile(modelId: string): boolean {
 /**
  * pi-ai's internal `supportsPromptCaching` checks `model.id` for specific Claude
  * model name patterns, which fails for application inference profile ARNs (opaque
- * IDs that may not contain the model name). When OpenClaw's `isAnthropicBedrockModel`
+ * IDs that may not contain the model name). When OPNEX's `isAnthropicBedrockModel`
  * identifies the model but pi-ai won't inject cache points, we do it via onPayload.
  *
  * Gated to application inference profile ARNs only — regular Claude model IDs and
@@ -119,7 +119,7 @@ function needsCachePointInjection(modelId: string): boolean {
   if (piAiWouldInjectCachePoints(modelId)) {
     return false;
   }
-  // Check if OpenClaw identifies this as an Anthropic model via the ARN heuristic.
+  // Check if OPNEX identifies this as an Anthropic model via the ARN heuristic.
   if (isAnthropicBedrockModel(modelId)) {
     return true;
   }
@@ -150,7 +150,7 @@ function resolvedModelSupportsCaching(modelArn: string): boolean {
  * profile ARN. Returns true if the underlying model supports prompt caching.
  *
  * Region is extracted from the profile ARN itself to avoid mismatches when
- * the OpenClaw config region differs from the profile's home region.
+ * the OPNEX config region differs from the profile's home region.
  */
 const appProfileCacheEligibleCache = new Map<string, boolean>();
 
@@ -266,7 +266,7 @@ function injectBedrockCachePoints(
   }
 }
 
-export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
+export function registerAmazonBedrockPlugin(api: OPNEXPluginApi): void {
   // Keep registration-local constants inside the function so partial module
   // initialization during test bootstrap cannot trip TDZ reads.
   const providerId = "amazon-bedrock";
@@ -283,7 +283,7 @@ export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
   const startupPluginConfig = (api.pluginConfig ?? {}) as AmazonBedrockPluginConfig;
 
   function resolveCurrentPluginConfig(
-    config: OpenClawConfig | undefined,
+    config: OPNEXConfig | undefined,
   ): AmazonBedrockPluginConfig | undefined {
     const runtimePluginConfig = resolvePluginConfigObject(config, providerId);
     return (

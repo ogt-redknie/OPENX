@@ -17,7 +17,7 @@ export type GatewayTlsConfig = {
 
 export type WideAreaDiscoveryConfig = {
   enabled?: boolean;
-  /** Optional unicast DNS-SD domain (e.g. "openclaw.internal"). */
+  /** Optional unicast DNS-SD domain (e.g. "opnex.internal"). */
   domain?: string;
 };
 
@@ -40,7 +40,7 @@ export type DiscoveryConfig = {
 
 export type CanvasHostConfig = {
   enabled?: boolean;
-  /** Directory to serve (default: ~/.openclaw/workspace/canvas). */
+  /** Directory to serve (default: ~/.opnex/workspace/canvas). */
   root?: string;
   /** HTTP port to listen on (default: 18793). */
   port?: number;
@@ -83,7 +83,7 @@ export type TalkConfigResponse = TalkConfig & {
 export type GatewayControlUiConfig = {
   /** If false, the Gateway will not serve the Control UI (default /). */
   enabled?: boolean;
-  /** Optional base path prefix for the Control UI (e.g. "/openclaw"). */
+  /** Optional base path prefix for the Control UI (e.g. "/opnex"). */
   basePath?: string;
   /** Optional filesystem root for Control UI assets (defaults to dist/control-ui). */
   root?: string;
@@ -96,7 +96,7 @@ export type GatewayControlUiConfig = {
   embedSandbox?: "strict" | "scripts" | "trusted";
   /**
    * DANGEROUS: Allow hosted embeds to load absolute external http(s) URLs.
-   * Default off; prefer hosted /__openclaw__/canvas or /__openclaw__/a2ui content.
+   * Default off; prefer hosted /__opnex__/canvas or /__opnex__/a2ui content.
    */
   allowExternalEmbedUrls?: boolean;
   /** Allowed browser origins for Control UI/WebChat websocket connections. */
@@ -218,7 +218,7 @@ export type GatewayReloadConfig = {
    * before forcing a restart. Absent or 0 waits indefinitely and logs periodic
    * still-pending warnings.
    * Lower positive values risk aborting active subagent LLM calls.
-   * @see https://github.com/openclaw/openclaw/issues/65485
+   * @see https://github.com/opnex/opnex/issues/65485
    */
   deferralTimeoutMs?: number;
 };

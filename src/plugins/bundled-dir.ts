@@ -2,14 +2,14 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveOPNEXPackageRootSync } from "../infra/opnex-root.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { resolveUserPath } from "../utils.js";
 
-const DISABLED_BUNDLED_PLUGINS_DIR = path.join(os.tmpdir(), "openclaw-empty-bundled-plugins");
+const DISABLED_BUNDLED_PLUGINS_DIR = path.join(os.tmpdir(), "opnex-empty-bundled-plugins");
 
 export function areBundledPluginsDisabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  const raw = normalizeOptionalLowercaseString(env.OPENCLAW_DISABLE_BUNDLED_PLUGINS);
+  const raw = normalizeOptionalLowercaseString(env.OPNEX_DISABLE_BUNDLED_PLUGINS);
   return raw === "1" || raw === "true";
 }
 
@@ -38,7 +38,7 @@ function hasUsableBundledPluginTree(pluginsDir: string): boolean {
       const pluginDir = path.join(pluginsDir, entry.name);
       return (
         fs.existsSync(path.join(pluginDir, "package.json")) ||
-        fs.existsSync(path.join(pluginDir, "openclaw.plugin.json"))
+        fs.existsSync(path.join(pluginDir, "opnex.plugin.json"))
       );
     });
   } catch {
@@ -113,7 +113,7 @@ export function resolveBundledPluginsDir(env: NodeJS.ProcessEnv = process.env): 
     return resolveDisabledBundledPluginsDir();
   }
 
-  const override = env.OPENCLAW_BUNDLED_PLUGINS_DIR?.trim();
+  const override = env.OPNEX_BUNDLED_PLUGINS_DIR?.trim();
   if (override) {
     const resolvedOverride = resolveUserPath(override, env);
     if (fs.existsSync(resolvedOverride)) {
@@ -123,7 +123,7 @@ export function resolveBundledPluginsDir(env: NodeJS.ProcessEnv = process.env): 
     // or debug sessions. Prefer the package that owns argv[1] over a broken
     // override so bundled providers keep working in packaged installs.
     try {
-      const argvPackageRoot = resolveOpenClawPackageRootSync({ argv1: process.argv[1] });
+      const argvPackageRoot = resolveOPNEXPackageRootSync({ argv1: process.argv[1] });
       if (argvPackageRoot && !isSourceCheckoutRoot(argvPackageRoot)) {
         const argvFallback = resolveBundledDirFromPackageRoot(argvPackageRoot, false);
         if (argvFallback) {
@@ -139,9 +139,9 @@ export function resolveBundledPluginsDir(env: NodeJS.ProcessEnv = process.env): 
   const preferSourceCheckout = Boolean(env.VITEST) || runningSourceTypeScriptProcess();
 
   try {
-    const argvRoot = resolveOpenClawPackageRootSync({ argv1: process.argv[1] });
-    const cwdRoot = resolveOpenClawPackageRootSync({ cwd: process.cwd() });
-    const moduleRoot = resolveOpenClawPackageRootSync({ moduleUrl: import.meta.url });
+    const argvRoot = resolveOPNEXPackageRootSync({ argv1: process.argv[1] });
+    const cwdRoot = resolveOPNEXPackageRootSync({ cwd: process.cwd() });
+    const moduleRoot = resolveOPNEXPackageRootSync({ moduleUrl: import.meta.url });
     const packageRoots = (
       preferSourceCheckout ? [cwdRoot, argvRoot, moduleRoot] : [argvRoot, cwdRoot, moduleRoot]
     ).filter(

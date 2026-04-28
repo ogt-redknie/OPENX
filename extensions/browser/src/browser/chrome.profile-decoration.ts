@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_OPNEX_BROWSER_COLOR,
+  DEFAULT_OPNEX_BROWSER_PROFILE_NAME,
 } from "./constants.js";
 
 function decoratedMarkerPath(userDataDir: string) {
-  return path.join(userDataDir, ".openclaw-profile-decorated");
+  return path.join(userDataDir, ".opnex-profile-decorated");
 }
 
 function safeReadJson(filePath: string): Record<string, unknown> | null {
@@ -111,15 +111,15 @@ export function isProfileDecorated(
 }
 
 /**
- * Best-effort profile decoration (name + lobster-orange). Chrome preference keys
+ * Best-effort profile decoration (name + opnex-orange). Chrome preference keys
  * vary by version; we keep this conservative and idempotent.
  */
-export function decorateOpenClawProfile(
+export function decorateOPNEXProfile(
   userDataDir: string,
   opts?: { name?: string; color?: string; downloadDir?: string },
 ) {
-  const desiredName = opts?.name ?? DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME;
-  const desiredColor = (opts?.color ?? DEFAULT_OPENCLAW_BROWSER_COLOR).toUpperCase();
+  const desiredName = opts?.name ?? DEFAULT_OPNEX_BROWSER_PROFILE_NAME;
+  const desiredColor = (opts?.color ?? DEFAULT_OPNEX_BROWSER_COLOR).toUpperCase();
   const desiredColorInt = parseHexRgbToSignedArgbInt(desiredColor);
 
   const localStatePath = path.join(userDataDir, "Local State");

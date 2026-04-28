@@ -1,5 +1,5 @@
 import type { AgentToolResult } from "@mariozechner/pi-agent-core";
-import { readBooleanParam } from "openclaw/plugin-sdk/boolean-param";
+import { readBooleanParam } from "opnex/plugin-sdk/boolean-param";
 import {
   jsonResult,
   readNumberParam,
@@ -9,14 +9,14 @@ import {
   readStringParam,
   resolvePollMaxSelections,
   resolveReactionMessageId,
-} from "openclaw/plugin-sdk/channel-actions";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-actions";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   normalizeMessagePresentation,
   presentationToInteractiveReply,
   renderMessagePresentationFallbackText,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import type { MessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
+} from "opnex/plugin-sdk/interactive-runtime";
+import type { MessagePresentation } from "opnex/plugin-sdk/interactive-runtime";
 import { createTelegramActionGate, resolveTelegramPollActionGateState } from "./accounts.js";
 import { resolveTelegramInlineButtons } from "./button-types.js";
 import {
@@ -178,7 +178,7 @@ function normalizeTelegramDeliveryPin(params: Record<string, unknown>) {
 
 async function maybePinTelegramActionSend(params: {
   args: Record<string, unknown>;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string;
   to: string;
   messageId?: string;
@@ -209,7 +209,7 @@ async function maybePinTelegramActionSend(params: {
 
 export async function handleTelegramAction(
   params: Record<string, unknown>,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   options?: {
     mediaLocalRoots?: readonly string[];
     mediaReadFile?: (filePath: string) => Promise<Buffer>;

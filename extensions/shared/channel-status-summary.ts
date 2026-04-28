@@ -2,4 +2,4 @@ export {
   buildPassiveChannelStatusSummary,
   buildPassiveProbedChannelStatusSummary,
   buildTrafficStatusSummary,
-} from "openclaw/plugin-sdk/extension-shared";
+} from "opnex/plugin-sdk/extension-shared";

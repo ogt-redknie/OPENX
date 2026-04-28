@@ -17,7 +17,7 @@ import {
 } from "./bundled-runtime-mirror.js";
 
 const bundledRuntimeDepsRetainSpecsByInstallRoot = new Map<string, readonly string[]>();
-const BUNDLED_RUNTIME_MIRROR_LOCK_DIR = ".openclaw-runtime-mirror.lock";
+const BUNDLED_RUNTIME_MIRROR_LOCK_DIR = ".opnex-runtime-mirror.lock";
 
 export function isBuiltBundledPluginRuntimeRoot(pluginRoot: string): boolean {
   const extensionsDir = path.dirname(pluginRoot);
@@ -174,7 +174,7 @@ function prepareBundledPluginRuntimeDistMirror(params: {
       precomputedSourceMetadata: params.precomputedCanonicalPluginRootMetadata,
     });
   }
-  ensureOpenClawPluginSdkAlias(mirrorDistRoot);
+  ensureOPNEXPluginSdkAlias(mirrorDistRoot);
   return mirrorExtensionsRoot;
 }
 
@@ -246,7 +246,7 @@ function mirrorCanonicalBundledRuntimeDistRoot(params: {
     sourceDistRoot: sourceCanonicalDistRoot,
     mirrorDistRoot: targetCanonicalDistRoot,
   });
-  ensureOpenClawPluginSdkAlias(targetCanonicalDistRoot);
+  ensureOPNEXPluginSdkAlias(targetCanonicalDistRoot);
 
   const pluginId = path.basename(params.pluginRoot);
   const sourceCanonicalPluginRoot = path.join(sourceCanonicalDistRoot, "extensions", pluginId);
@@ -336,16 +336,16 @@ function writeRuntimeModuleWrapper(sourcePath: string, targetPath: string): void
   fs.writeFileSync(targetPath, content, "utf8");
 }
 
-function ensureOpenClawPluginSdkAlias(distRoot: string): void {
+function ensureOPNEXPluginSdkAlias(distRoot: string): void {
   const pluginSdkDir = path.join(distRoot, "plugin-sdk");
   if (!fs.existsSync(pluginSdkDir)) {
     return;
   }
 
-  const aliasDir = path.join(distRoot, "extensions", "node_modules", "openclaw");
+  const aliasDir = path.join(distRoot, "extensions", "node_modules", "opnex");
   const pluginSdkAliasDir = path.join(aliasDir, "plugin-sdk");
   writeRuntimeJsonFile(path.join(aliasDir, "package.json"), {
-    name: "openclaw",
+    name: "opnex",
     type: "module",
     exports: {
       "./plugin-sdk": "./plugin-sdk/index.js",

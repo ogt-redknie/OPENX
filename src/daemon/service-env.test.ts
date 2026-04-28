@@ -492,28 +492,28 @@ describe("buildServiceEnvironment", () => {
     } else {
       expect(env.PATH).toContain("/usr/bin");
     }
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("18789");
-    expect(env.OPENCLAW_GATEWAY_TOKEN).toBeUndefined();
-    expect(env.OPENCLAW_SERVICE_MARKER).toBe("openclaw");
-    expect(env.OPENCLAW_SERVICE_KIND).toBe("gateway");
-    expect(typeof env.OPENCLAW_SERVICE_VERSION).toBe("string");
-    expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway.service");
-    expect(env.OPENCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway");
+    expect(env.OPNEX_GATEWAY_PORT).toBe("18789");
+    expect(env.OPNEX_GATEWAY_TOKEN).toBeUndefined();
+    expect(env.OPNEX_SERVICE_MARKER).toBe("opnex");
+    expect(env.OPNEX_SERVICE_KIND).toBe("gateway");
+    expect(typeof env.OPNEX_SERVICE_VERSION).toBe("string");
+    expect(env.OPNEX_SYSTEMD_UNIT).toBe("opnex-gateway.service");
+    expect(env.OPNEX_WINDOWS_TASK_NAME).toBe("OPNEX Gateway");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.gateway");
+      expect(env.OPNEX_LAUNCHD_LABEL).toBe("ai.opnex.gateway");
     }
   });
 
-  it("passes through OPENCLAW_WRAPPER for gateway services", () => {
+  it("passes through OPNEX_WRAPPER for gateway services", () => {
     const env = buildServiceEnvironment({
       env: {
         HOME: "/home/user",
-        OPENCLAW_WRAPPER: " /usr/local/bin/openclaw-doppler ",
+        OPNEX_WRAPPER: " /usr/local/bin/opnex-doppler ",
       },
       port: 18789,
     });
 
-    expect(env.OPENCLAW_WRAPPER).toBe("/usr/local/bin/openclaw-doppler");
+    expect(env.OPNEX_WRAPPER).toBe("/usr/local/bin/opnex-doppler");
   });
 
   it("forwards TMPDIR from the host environment on Linux", () => {
@@ -531,7 +531,7 @@ describe("buildServiceEnvironment", () => {
       port: 18789,
       platform: "darwin",
     });
-    expect(env.TMPDIR).toBe(path.join("/Users/user", ".openclaw", "tmp"));
+    expect(env.TMPDIR).toBe(path.join("/Users/user", ".opnex", "tmp"));
   });
 
   it("falls back to os.tmpdir when TMPDIR is not set on Linux", () => {
@@ -545,13 +545,13 @@ describe("buildServiceEnvironment", () => {
 
   it("uses profile-specific unit and label", () => {
     const env = buildServiceEnvironment({
-      env: { HOME: "/home/user", OPENCLAW_PROFILE: "work" },
+      env: { HOME: "/home/user", OPNEX_PROFILE: "work" },
       port: 18789,
     });
-    expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway-work.service");
-    expect(env.OPENCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway (work)");
+    expect(env.OPNEX_SYSTEMD_UNIT).toBe("opnex-gateway-work.service");
+    expect(env.OPNEX_WINDOWS_TASK_NAME).toBe("OPNEX Gateway (work)");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.work");
+      expect(env.OPNEX_LAUNCHD_LABEL).toBe("ai.opnex.work");
     }
   });
 
@@ -579,12 +579,12 @@ describe("buildServiceEnvironment", () => {
     const env = buildServiceEnvironment({
       env: {
         HOME: "/home/user",
-        OPENCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
+        OPNEX_PROXY_URL: " http://127.0.0.1:3128 ",
       },
       port: 18789,
     });
 
-    expect(env.OPENCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
+    expect(env.OPNEX_PROXY_URL).toBe("http://127.0.0.1:3128");
   });
 
   it("omits PATH on Windows so Scheduled Tasks can inherit the current shell path", () => {
@@ -598,7 +598,7 @@ describe("buildServiceEnvironment", () => {
     });
 
     expect(env).not.toHaveProperty("PATH");
-    expect(env.OPENCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway");
+    expect(env.OPNEX_WINDOWS_TASK_NAME).toBe("OPNEX Gateway");
   });
 
   it("prepends extra runtime directories to the gateway service PATH", () => {
@@ -623,28 +623,28 @@ describe("buildNodeServiceEnvironment", () => {
     expect(env.HOME).toBe("/home/user");
   });
 
-  it("passes through OPENCLAW_GATEWAY_TOKEN for node services", () => {
+  it("passes through OPNEX_GATEWAY_TOKEN for node services", () => {
     const env = buildNodeServiceEnvironment({
-      env: { HOME: "/home/user", OPENCLAW_GATEWAY_TOKEN: " node-token " },
+      env: { HOME: "/home/user", OPNEX_GATEWAY_TOKEN: " node-token " },
     });
-    expect(env.OPENCLAW_GATEWAY_TOKEN).toBe("node-token");
+    expect(env.OPNEX_GATEWAY_TOKEN).toBe("node-token");
   });
 
-  it("passes through OPENCLAW_ALLOW_INSECURE_PRIVATE_WS for node services", () => {
+  it("passes through OPNEX_ALLOW_INSECURE_PRIVATE_WS for node services", () => {
     const env = buildNodeServiceEnvironment({
-      env: { HOME: "/home/user", OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: " 1 " },
+      env: { HOME: "/home/user", OPNEX_ALLOW_INSECURE_PRIVATE_WS: " 1 " },
     });
-    expect(env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS).toBe("1");
+    expect(env.OPNEX_ALLOW_INSECURE_PRIVATE_WS).toBe("1");
   });
 
-  it("omits OPENCLAW_GATEWAY_TOKEN when the env var is empty", () => {
+  it("omits OPNEX_GATEWAY_TOKEN when the env var is empty", () => {
     const env = buildNodeServiceEnvironment({
       env: {
         HOME: "/home/user",
-        OPENCLAW_GATEWAY_TOKEN: "   ",
+        OPNEX_GATEWAY_TOKEN: "   ",
       },
     });
-    expect(env.OPENCLAW_GATEWAY_TOKEN).toBeUndefined();
+    expect(env.OPNEX_GATEWAY_TOKEN).toBeUndefined();
   });
 
   it("does not persist ambient proxy environment variables for node services", () => {
@@ -664,11 +664,11 @@ describe("buildNodeServiceEnvironment", () => {
     const env = buildNodeServiceEnvironment({
       env: {
         HOME: "/home/user",
-        OPENCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
+        OPNEX_PROXY_URL: " http://127.0.0.1:3128 ",
       },
     });
 
-    expect(env.OPENCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
+    expect(env.OPNEX_PROXY_URL).toBe("http://127.0.0.1:3128");
   });
 
   it("forwards TMPDIR for node services on Linux", () => {
@@ -684,7 +684,7 @@ describe("buildNodeServiceEnvironment", () => {
       env: { HOME: "/Users/user", TMPDIR: "/var/folders/xw/abc123/T/" },
       platform: "darwin",
     });
-    expect(env.TMPDIR).toBe(path.join("/Users/user", ".openclaw", "tmp"));
+    expect(env.TMPDIR).toBe(path.join("/Users/user", ".opnex", "tmp"));
   });
 
   it("falls back to os.tmpdir for node services when TMPDIR is not set on Linux", () => {
@@ -756,32 +756,32 @@ describe("shared Node TLS env defaults", () => {
 describe("resolveGatewayStateDir", () => {
   it("uses the default state dir when no overrides are set", () => {
     const env = { HOME: "/Users/test" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw"));
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".opnex"));
   });
 
   it("appends the profile suffix when set", () => {
-    const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "rescue" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw-rescue"));
+    const env = { HOME: "/Users/test", OPNEX_PROFILE: "rescue" };
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".opnex-rescue"));
   });
 
   it("treats default profiles as the base state dir", () => {
-    const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "Default" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw"));
+    const env = { HOME: "/Users/test", OPNEX_PROFILE: "Default" };
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".opnex"));
   });
 
-  it("uses OPENCLAW_STATE_DIR when provided", () => {
-    const env = { HOME: "/Users/test", OPENCLAW_STATE_DIR: "/var/lib/openclaw" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/openclaw"));
+  it("uses OPNEX_STATE_DIR when provided", () => {
+    const env = { HOME: "/Users/test", OPNEX_STATE_DIR: "/var/lib/opnex" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/opnex"));
   });
 
-  it("expands ~ in OPENCLAW_STATE_DIR", () => {
-    const env = { HOME: "/Users/test", OPENCLAW_STATE_DIR: "~/openclaw-state" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/openclaw-state"));
+  it("expands ~ in OPNEX_STATE_DIR", () => {
+    const env = { HOME: "/Users/test", OPNEX_STATE_DIR: "~/opnex-state" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/opnex-state"));
   });
 
   it("preserves Windows absolute paths without HOME", () => {
-    const env = { OPENCLAW_STATE_DIR: "C:\\State\\openclaw" };
-    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\openclaw");
+    const env = { OPNEX_STATE_DIR: "C:\\State\\opnex" };
+    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\opnex");
   });
 });
 

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { OPNEXConfig } from "./types.opnex.js";
 
 export type PluginAutoEnableCandidate =
   | {
@@ -45,7 +45,7 @@ export type PluginAutoEnableCandidate =
     };
 
 export type PluginAutoEnableResult = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   changes: string[];
   autoEnabledReasons: Record<string, string[]>;
 };

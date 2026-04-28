@@ -1,27 +1,27 @@
 import {
   createApproverRestrictedNativeApprovalCapability,
   splitChannelApprovalCapability,
-} from "openclaw/plugin-sdk/approval-delivery-runtime";
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
+} from "opnex/plugin-sdk/approval-delivery-runtime";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "opnex/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "opnex/plugin-sdk/approval-handler-runtime";
 import {
   createChannelApproverDmTargetResolver,
   createChannelNativeOriginTargetResolver,
   resolveApprovalRequestSessionConversation,
-} from "openclaw/plugin-sdk/approval-native-runtime";
+} from "opnex/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { ChannelApprovalCapability } from "openclaw/plugin-sdk/channel-contract";
+} from "opnex/plugin-sdk/approval-runtime";
+import type { ChannelApprovalCapability } from "opnex/plugin-sdk/channel-contract";
 import {
   channelRouteTargetsMatchExact,
   stringifyRouteThreadId,
-} from "openclaw/plugin-sdk/channel-route";
+} from "opnex/plugin-sdk/channel-route";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { listSlackAccountIds } from "./accounts.js";
 import { isSlackApprovalAuthorizedSender } from "./approval-auth.js";
 import {

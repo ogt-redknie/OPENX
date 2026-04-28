@@ -159,10 +159,10 @@ function mapManagerResolutionFailure(
 const DEFAULT_TIMEOUT_MS = 20 * 60_000;
 const MAX_LOG_CHARS = 8000;
 const PREFLIGHT_MAX_COMMITS = 10;
-const DEFAULT_PACKAGE_NAME = "openclaw";
+const DEFAULT_PACKAGE_NAME = "opnex";
 const CORE_PACKAGE_NAMES = new Set([DEFAULT_PACKAGE_NAME]);
 const PREFLIGHT_TEMP_PREFIX =
-  process.platform === "win32" ? "ocu-pf-" : "openclaw-update-preflight-";
+  process.platform === "win32" ? "ocu-pf-" : "opnex-update-preflight-";
 const PREFLIGHT_WORKTREE_DIRNAME = process.platform === "win32" ? "wt" : "worktree";
 const PREFLIGHT_CLEANUP_TIMEOUT_MS = 60_000;
 const WINDOWS_PREFLIGHT_BASE_DIR = "ocu";
@@ -407,7 +407,7 @@ async function runStep(opts: RunStepOptions): Promise<UpdateStepResult> {
 }
 
 function normalizeTag(tag?: string) {
-  return normalizePackageTagInput(tag, ["openclaw", DEFAULT_PACKAGE_NAME]) ?? "latest";
+  return normalizePackageTagInput(tag, ["opnex", DEFAULT_PACKAGE_NAME]) ?? "latest";
 }
 
 function normalizeDevTargetRef(value?: string | null): string | null {
@@ -569,7 +569,7 @@ function normalizeFallbackFailureReason(stepName: string): NonNullable<UpdateRun
     case "global install verify":
     case "global install swap":
       return "global-install-failed";
-    case "openclaw doctor":
+    case "opnex doctor":
       return "doctor-failed";
     case "ui:build (post-doctor repair)":
       return "ui-build-failed";
@@ -706,7 +706,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       status: "error",
       mode: "unknown",
       root: gitRoot,
-      reason: "not-openclaw-root",
+      reason: "not-opnex-root",
       steps: [],
       durationMs: Date.now() - startedAt,
     };
@@ -1262,14 +1262,14 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
         };
       }
 
-      const doctorEntry = path.join(gitRoot, "openclaw.mjs");
+      const doctorEntry = path.join(gitRoot, "opnex.mjs");
       const doctorEntryExists = await fs
         .stat(doctorEntry)
         .then(() => true)
         .catch(() => false);
       if (!doctorEntryExists) {
         steps.push({
-          name: "openclaw doctor entry",
+          name: "opnex doctor entry",
           command: `verify ${doctorEntry}`,
           cwd: gitRoot,
           durationMs: 0,
@@ -1292,7 +1292,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       const doctorNodePath = await resolveStableNodePath(process.execPath);
       const doctorArgv = [doctorNodePath, doctorEntry, "doctor", "--non-interactive", "--fix"];
       const doctorStep = await runStep(
-        step("openclaw doctor", doctorArgv, gitRoot, { OPENCLAW_UPDATE_IN_PROGRESS: "1" }),
+        step("opnex doctor", doctorArgv, gitRoot, { OPNEX_UPDATE_IN_PROGRESS: "1" }),
       );
       steps.push(doctorStep);
       if (doctorStep.exitCode !== 0) {
@@ -1392,7 +1392,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
     return {
       status: "error",
       mode: "unknown",
-      reason: "not-openclaw-root",
+      reason: "not-opnex-root",
       steps: [],
       durationMs: Date.now() - startedAt,
     };

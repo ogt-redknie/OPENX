@@ -9,8 +9,8 @@ const runGatewayUpdateMock = vi.fn<() => Promise<UpdateRunResult>>();
 const resolveUpdateInstallSurfaceMock = vi.fn<() => Promise<UpdateInstallSurface>>(async () => ({
   kind: "git",
   mode: "git",
-  root: "/tmp/openclaw",
-  packageRoot: "/tmp/openclaw",
+  root: "/tmp/opnex",
+  packageRoot: "/tmp/opnex",
 }));
 const getLatestUpdateRestartSentinelMock = vi.fn<() => RestartSentinelPayload | null>(() => null);
 const isRestartEnabledMock = vi.fn(() => true);
@@ -46,13 +46,13 @@ vi.mock("../../config/sessions.js", () => ({
   },
 }));
 
-vi.mock("../../infra/openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("../../infra/openclaw-root.js")>(
-    "../../infra/openclaw-root.js",
+vi.mock("../../infra/opnex-root.js", async () => {
+  const actual = await vi.importActual<typeof import("../../infra/opnex-root.js")>(
+    "../../infra/opnex-root.js",
   );
   return {
     ...actual,
-    resolveOpenClawPackageRoot: async () => "/tmp/openclaw",
+    resolveOPNEXPackageRoot: async () => "/tmp/opnex",
   };
 });
 
@@ -130,8 +130,8 @@ beforeEach(() => {
   resolveUpdateInstallSurfaceMock.mockResolvedValue({
     kind: "git",
     mode: "git",
-    root: "/tmp/openclaw",
-    packageRoot: "/tmp/openclaw",
+    root: "/tmp/opnex",
+    packageRoot: "/tmp/opnex",
   });
   getLatestUpdateRestartSentinelMock.mockClear();
   scheduleGatewaySigusr1RestartMock.mockClear();
@@ -282,8 +282,8 @@ describe("update.run restart scheduling", () => {
     resolveUpdateInstallSurfaceMock.mockResolvedValueOnce({
       kind: "global",
       mode: "npm",
-      root: "/tmp/openclaw-global",
-      packageRoot: "/tmp/openclaw-global",
+      root: "/tmp/opnex-global",
+      packageRoot: "/tmp/opnex-global",
     });
 
     let payload:

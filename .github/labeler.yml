@@ -257,10 +257,10 @@
   - changed-files:
       - any-glob-to-any-file:
           - "extensions/llm-task/**"
-"extensions: lobster":
+"extensions: opnex":
   - changed-files:
       - any-glob-to-any-file:
-          - "extensions/lobster/**"
+          - "extensions/opnex/**"
 "extensions: memory-core":
   - changed-files:
       - any-glob-to-any-file:

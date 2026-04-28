@@ -2,10 +2,10 @@ import {
   createAccountListHelpers,
   normalizeAccountId,
   resolveMergedAccountConfig,
-} from "openclaw/plugin-sdk/account-resolution";
-import { resolveChannelStreamingChunkMode } from "openclaw/plugin-sdk/channel-streaming";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/account-resolution";
+import { resolveChannelStreamingChunkMode } from "opnex/plugin-sdk/channel-streaming";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   normalizeBlueBubblesAccountsMap,
   normalizeBlueBubblesPrivateNetworkAliases,
@@ -31,7 +31,7 @@ const {
 export { listBlueBubblesAccountIds, resolveDefaultBlueBubblesAccountId };
 
 function mergeBlueBubblesAccountConfig(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   accountId: string,
 ): BlueBubblesAccountConfig {
   const channelConfig = normalizeBlueBubblesPrivateNetworkAliases(
@@ -57,7 +57,7 @@ function mergeBlueBubblesAccountConfig(
 }
 
 export function resolveBlueBubblesAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
 }): ResolvedBlueBubblesAccount {
   const accountId = normalizeAccountId(
@@ -93,7 +93,7 @@ export function resolveBlueBubblesEffectiveAllowPrivateNetwork(params: {
   return resolveBlueBubblesEffectiveAllowPrivateNetworkFromConfig(params);
 }
 
-export function listEnabledBlueBubblesAccounts(cfg: OpenClawConfig): ResolvedBlueBubblesAccount[] {
+export function listEnabledBlueBubblesAccounts(cfg: OPNEXConfig): ResolvedBlueBubblesAccount[] {
   return listBlueBubblesAccountIds(cfg)
     .map((accountId) => resolveBlueBubblesAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type {
@@ -357,7 +357,7 @@ function listBundledChannelPluginIdsForRoot(
 
 function shouldIncludeBundledChannelSetupFeatureForConfig(params: {
   metadata: BundledChannelPluginMetadata;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): boolean {
   if (!params.config) {
     return true;
@@ -398,7 +398,7 @@ function shouldIncludeBundledChannelSetupFeatureForConfig(params: {
 function listBundledChannelPluginIdsForSetupFeature(
   rootScope: BundledChannelRootScope,
   feature: keyof NonNullable<BundledChannelSetupEntryRuntimeContract["features"]>,
-  options: { config?: OpenClawConfig } = {},
+  options: { config?: OPNEXConfig } = {},
 ): readonly ChannelId[] {
   const hinted = listBundledChannelMetadata(rootScope)
     .filter(
@@ -696,7 +696,7 @@ export function listBundledChannelSetupPlugins(): readonly ChannelPlugin[] {
 
 export function listBundledChannelSetupPluginsByFeature(
   feature: keyof NonNullable<BundledChannelSetupEntryRuntimeContract["features"]>,
-  options: { config?: OpenClawConfig } = {},
+  options: { config?: OPNEXConfig } = {},
 ): readonly ChannelPlugin[] {
   const { rootScope, cacheContext } = resolveActiveBundledChannelCacheScope();
   return listBundledChannelPluginIdsForSetupFeature(rootScope, feature, {
@@ -713,7 +713,7 @@ export function listBundledChannelSetupPluginsByFeature(
 
 export function listBundledChannelLegacySessionSurfaces(
   options: {
-    config?: OpenClawConfig;
+    config?: OPNEXConfig;
   } = {},
 ): readonly BundledChannelLegacySessionSurface[] {
   const { rootScope, cacheContext } = resolveActiveBundledChannelCacheScope();
@@ -735,7 +735,7 @@ export function listBundledChannelLegacySessionSurfaces(
 
 export function listBundledChannelLegacyStateMigrationDetectors(
   options: {
-    config?: OpenClawConfig;
+    config?: OPNEXConfig;
   } = {},
 ): readonly BundledChannelLegacyStateMigrationDetector[] {
   const { rootScope, cacheContext } = resolveActiveBundledChannelCacheScope();

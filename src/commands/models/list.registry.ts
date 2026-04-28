@@ -1,6 +1,6 @@
 import type { Api, Model } from "@mariozechner/pi-ai";
 import type { ModelRegistry } from "@mariozechner/pi-coding-agent";
-import { resolveOpenClawAgentDir } from "../../agents/agent-paths.js";
+import { resolveOPNEXAgentDir } from "../../agents/agent-paths.js";
 import { listProfilesForProvider } from "../../agents/auth-profiles/profile-list.js";
 import type { AuthProfileStore } from "../../agents/auth-profiles/types.js";
 import {
@@ -13,7 +13,7 @@ import {
   shouldSuppressBuiltInModelFromManifest,
 } from "../../agents/model-suppression.js";
 import { discoverAuthStorage, discoverModels } from "../../agents/pi-model-discovery.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { resolveRuntimeSyntheticAuthProviderRefs } from "../../plugins/synthetic-auth.runtime.js";
 import {
   formatErrorWithStack,
@@ -26,7 +26,7 @@ import { modelKey } from "./shared.js";
 
 const hasAuthForProvider = (
   provider: string,
-  cfg?: OpenClawConfig,
+  cfg?: OPNEXConfig,
   authStore?: AuthProfileStore,
 ) => {
   if (!cfg || !authStore) {
@@ -90,7 +90,7 @@ function validateAvailableModels(availableModels: unknown): Model<Api>[] {
 
 function loadAvailableModels(
   registry: ModelRegistry,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   opts?: { runtimeSuppression?: boolean },
 ): Model<Api>[] {
   let availableModels: unknown;
@@ -120,11 +120,11 @@ function loadAvailableModels(
 }
 
 export async function loadModelRegistry(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   opts?: { providerFilter?: string; normalizeModels?: boolean },
 ) {
   const runtimeSuppression = opts?.normalizeModels !== false;
-  const agentDir = resolveOpenClawAgentDir();
+  const agentDir = resolveOPNEXAgentDir();
   const authStorage = discoverAuthStorage(agentDir, { readOnly: true });
   const registry = discoverModels(authStorage, agentDir, {
     providerFilter: opts?.providerFilter,

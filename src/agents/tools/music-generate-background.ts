@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { MUSIC_GENERATION_TASK_KIND } from "../music-generation-task-status.js";
 import {
   createMediaGenerationTaskLifecycle,
@@ -36,7 +36,7 @@ export const failMusicGenerationTaskRun = (
 ) => musicGenerationTaskLifecycle.failTaskRun(...params);
 
 export async function wakeMusicGenerationTaskCompletion(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   handle: MusicGenerationTaskHandle | null;
   status: "ok" | "error";
   statusLabel: string;

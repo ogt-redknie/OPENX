@@ -1,13 +1,13 @@
 ---
-summary: "Export OpenClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
+summary: "Export OPNEX diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send OpenClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send OPNEX model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-OpenClaw exports diagnostics through the bundled `diagnostics-otel` plugin
+OPNEX exports diagnostics through the bundled `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Any collector or backend that accepts OTLP/HTTP
 works without code changes. For local file logs and how to read them, see
 [Logging](/logging).
@@ -19,7 +19,7 @@ works without code changes. For local file logs and how to read them, see
   and exec.
 - **`diagnostics-otel` plugin** subscribes to those events and exports them as
   OpenTelemetry **metrics**, **traces**, and **logs** over OTLP/HTTP.
-- **Provider calls** receive a W3C `traceparent` header from OpenClaw's
+- **Provider calls** receive a W3C `traceparent` header from OPNEX's
   trusted model-call span context when the provider transport accepts custom
   headers. Plugin-emitted trace context is not propagated.
 - Exporters only attach when both the diagnostics surface and the plugin are
@@ -41,7 +41,7 @@ works without code changes. For local file logs and how to read them, see
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway",
+      serviceName: "opnex-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -55,7 +55,7 @@ works without code changes. For local file logs and how to read them, see
 You can also enable the plugin from the CLI:
 
 ```bash
-openclaw plugins enable diagnostics-otel
+opnex plugins enable diagnostics-otel
 ```
 
 <Note>
@@ -86,7 +86,7 @@ when `diagnostics.otel.enabled` is true.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf", // grpc is ignored
-      serviceName: "openclaw-gateway",
+      serviceName: "opnex-gateway",
       headers: { "x-collector-token": "..." },
       traces: true,
       metrics: true,
@@ -115,7 +115,7 @@ when `diagnostics.otel.enabled` is true.
 | `OTEL_SERVICE_NAME`                                                                                               | Override `diagnostics.otel.serviceName`.                                                                                                                                                                                                   |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                     | Override the wire protocol (only `http/protobuf` is honored today).                                                                                                                                                                        |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                   | Set to `gen_ai_latest_experimental` to emit the latest experimental GenAI span attribute (`gen_ai.provider.name`) instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality semantic attributes regardless. |
-| `OPENCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
+| `OPNEX_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
 
 ## Privacy and content capture
 
@@ -125,7 +125,7 @@ and never include prompt text, response text, tool inputs, tool outputs, or
 session keys.
 
 Outbound model requests may include a W3C `traceparent` header. That header is
-generated only from OpenClaw-owned diagnostic trace context for the active model
+generated only from OPNEX-owned diagnostic trace context for the active model
 call. Existing caller-supplied `traceparent` headers are replaced, so plugins or
 custom provider options cannot spoof cross-service trace ancestry.
 
@@ -140,7 +140,7 @@ text. Each subkey is opt-in independently:
 - `systemPrompt` — assembled system/developer prompt.
 
 When any subkey is enabled, model and tool spans get bounded, redacted
-`openclaw.content.*` attributes for that class only.
+`opnex.content.*` attributes for that class only.
 
 ## Sampling and flushing
 
@@ -163,97 +163,97 @@ When any subkey is enabled, model and tool spans get bounded, redacted
 
 ### Model usage
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.agent`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `opnex.tokens` (counter, attrs: `opnex.token`, `opnex.channel`, `opnex.provider`, `opnex.model`, `opnex.agent`)
+- `opnex.cost.usd` (counter, attrs: `opnex.channel`, `opnex.provider`, `opnex.model`)
+- `opnex.run.duration_ms` (histogram, attrs: `opnex.channel`, `opnex.provider`, `opnex.model`)
+- `opnex.context.tokens` (histogram, attrs: `opnex.context`, `opnex.channel`, `opnex.provider`, `opnex.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric, attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`)
-- `openclaw.model_call.duration_ms` (histogram, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, plus `openclaw.errorCategory` and `openclaw.failureKind` on classified errors)
-- `openclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
-- `openclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
-- `openclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
+- `opnex.model_call.duration_ms` (histogram, attrs: `opnex.provider`, `opnex.model`, `opnex.api`, `opnex.transport`, plus `opnex.errorCategory` and `opnex.failureKind` on classified errors)
+- `opnex.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
+- `opnex.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
+- `opnex.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
 
 ### Message flow
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.delivery.started` (counter, attrs: `openclaw.channel`, `openclaw.delivery.kind`)
-- `openclaw.message.delivery.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`)
+- `opnex.webhook.received` (counter, attrs: `opnex.channel`, `opnex.webhook`)
+- `opnex.webhook.error` (counter, attrs: `opnex.channel`, `opnex.webhook`)
+- `opnex.webhook.duration_ms` (histogram, attrs: `opnex.channel`, `opnex.webhook`)
+- `opnex.message.queued` (counter, attrs: `opnex.channel`, `opnex.source`)
+- `opnex.message.processed` (counter, attrs: `opnex.channel`, `opnex.outcome`)
+- `opnex.message.duration_ms` (histogram, attrs: `opnex.channel`, `opnex.outcome`)
+- `opnex.message.delivery.started` (counter, attrs: `opnex.channel`, `opnex.delivery.kind`)
+- `opnex.message.delivery.duration_ms` (histogram, attrs: `opnex.channel`, `opnex.delivery.kind`, `opnex.outcome`, `opnex.errorCategory`)
 
 ### Queues and sessions
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `opnex.queue.lane.enqueue` (counter, attrs: `opnex.lane`)
+- `opnex.queue.lane.dequeue` (counter, attrs: `opnex.lane`)
+- `opnex.queue.depth` (histogram, attrs: `opnex.lane` or `opnex.channel=heartbeat`)
+- `opnex.queue.wait_ms` (histogram, attrs: `opnex.lane`)
+- `opnex.session.state` (counter, attrs: `opnex.state`, `opnex.reason`)
+- `opnex.session.stuck` (counter, attrs: `opnex.state`)
+- `opnex.session.stuck_age_ms` (histogram, attrs: `opnex.state`)
+- `opnex.run.attempt` (counter, attrs: `opnex.attempt`)
 
 ### Harness lifecycle
 
-- `openclaw.harness.duration_ms` (histogram, attrs: `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.harness.phase` on errors)
+- `opnex.harness.duration_ms` (histogram, attrs: `opnex.harness.id`, `opnex.harness.plugin`, `opnex.outcome`, `opnex.harness.phase` on errors)
 
 ### Exec
 
-- `openclaw.exec.duration_ms` (histogram, attrs: `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`)
+- `opnex.exec.duration_ms` (histogram, attrs: `opnex.exec.target`, `opnex.exec.mode`, `opnex.outcome`, `opnex.failureKind`)
 
 ### Diagnostics internals (memory and tool loop)
 
-- `openclaw.memory.heap_used_bytes` (histogram, attrs: `openclaw.memory.kind`)
-- `openclaw.memory.rss_bytes` (histogram)
-- `openclaw.memory.pressure` (counter, attrs: `openclaw.memory.level`)
-- `openclaw.tool.loop.iterations` (counter, attrs: `openclaw.toolName`, `openclaw.outcome`)
-- `openclaw.tool.loop.duration_ms` (histogram, attrs: `openclaw.toolName`, `openclaw.outcome`)
+- `opnex.memory.heap_used_bytes` (histogram, attrs: `opnex.memory.kind`)
+- `opnex.memory.rss_bytes` (histogram)
+- `opnex.memory.pressure` (counter, attrs: `opnex.memory.level`)
+- `opnex.tool.loop.iterations` (counter, attrs: `opnex.toolName`, `opnex.outcome`)
+- `opnex.tool.loop.duration_ms` (histogram, attrs: `opnex.toolName`, `opnex.outcome`)
 
 ## Exported spans
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `opnex.model.usage`
+  - `opnex.channel`, `opnex.provider`, `opnex.model`
+  - `opnex.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
-- `openclaw.run`
-  - `openclaw.outcome`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.errorCategory`
-- `openclaw.model.call`
+- `opnex.run`
+  - `opnex.outcome`, `opnex.channel`, `opnex.provider`, `opnex.model`, `opnex.errorCategory`
+- `opnex.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`
-  - `openclaw.errorCategory` and optional `openclaw.failureKind` on errors
-  - `openclaw.model_call.request_bytes`, `openclaw.model_call.response_bytes`, `openclaw.model_call.time_to_first_byte_ms`
-  - `openclaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
-- `openclaw.harness.run`
-  - `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.provider`, `openclaw.model`, `openclaw.channel`
-  - On completion: `openclaw.harness.result_classification`, `openclaw.harness.yield_detected`, `openclaw.harness.items.started`, `openclaw.harness.items.completed`, `openclaw.harness.items.active`
-  - On error: `openclaw.harness.phase`, `openclaw.errorCategory`, optional `openclaw.harness.cleanup_failed`
-- `openclaw.tool.execution`
-  - `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.errorCategory`, `openclaw.tool.params.*`
-- `openclaw.exec`
-  - `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`, `openclaw.exec.command_length`, `openclaw.exec.exit_code`, `openclaw.exec.timed_out`
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.chatId`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.chatId`, `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.chatId`, `openclaw.messageId`, `openclaw.reason`
-- `openclaw.message.delivery`
-  - `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`, `openclaw.delivery.result_count`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`
-- `openclaw.context.assembled`
-  - `openclaw.prompt.size`, `openclaw.history.size`, `openclaw.context.tokens`, `openclaw.errorCategory` (no prompt, history, response, or session-key content)
-- `openclaw.tool.loop`
-  - `openclaw.toolName`, `openclaw.outcome`, `openclaw.iterations`, `openclaw.errorCategory` (no loop messages, params, or tool output)
-- `openclaw.memory.pressure`
-  - `openclaw.memory.level`, `openclaw.memory.heap_used_bytes`, `openclaw.memory.rss_bytes`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `opnex.provider`, `opnex.model`, `opnex.api`, `opnex.transport`
+  - `opnex.errorCategory` and optional `opnex.failureKind` on errors
+  - `opnex.model_call.request_bytes`, `opnex.model_call.response_bytes`, `opnex.model_call.time_to_first_byte_ms`
+  - `opnex.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
+- `opnex.harness.run`
+  - `opnex.harness.id`, `opnex.harness.plugin`, `opnex.outcome`, `opnex.provider`, `opnex.model`, `opnex.channel`
+  - On completion: `opnex.harness.result_classification`, `opnex.harness.yield_detected`, `opnex.harness.items.started`, `opnex.harness.items.completed`, `opnex.harness.items.active`
+  - On error: `opnex.harness.phase`, `opnex.errorCategory`, optional `opnex.harness.cleanup_failed`
+- `opnex.tool.execution`
+  - `gen_ai.tool.name`, `opnex.toolName`, `opnex.errorCategory`, `opnex.tool.params.*`
+- `opnex.exec`
+  - `opnex.exec.target`, `opnex.exec.mode`, `opnex.outcome`, `opnex.failureKind`, `opnex.exec.command_length`, `opnex.exec.exit_code`, `opnex.exec.timed_out`
+- `opnex.webhook.processed`
+  - `opnex.channel`, `opnex.webhook`, `opnex.chatId`
+- `opnex.webhook.error`
+  - `opnex.channel`, `opnex.webhook`, `opnex.chatId`, `opnex.error`
+- `opnex.message.processed`
+  - `opnex.channel`, `opnex.outcome`, `opnex.chatId`, `opnex.messageId`, `opnex.reason`
+- `opnex.message.delivery`
+  - `opnex.channel`, `opnex.delivery.kind`, `opnex.outcome`, `opnex.errorCategory`, `opnex.delivery.result_count`
+- `opnex.session.stuck`
+  - `opnex.state`, `opnex.ageMs`, `opnex.queueDepth`
+- `opnex.context.assembled`
+  - `opnex.prompt.size`, `opnex.history.size`, `opnex.context.tokens`, `opnex.errorCategory` (no prompt, history, response, or session-key content)
+- `opnex.tool.loop`
+  - `opnex.toolName`, `opnex.outcome`, `opnex.iterations`, `opnex.errorCategory` (no loop messages, params, or tool output)
+- `opnex.memory.pressure`
+  - `opnex.memory.level`, `opnex.memory.heap_used_bytes`, `opnex.memory.rss_bytes`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `openclaw.content.*` attributes for the specific
+include bounded, redacted `opnex.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -321,7 +321,7 @@ flags. Flags are case-insensitive and support wildcards (e.g. `telegram.*` or
 Or as a one-off env override:
 
 ```bash
-OPENCLAW_DIAGNOSTICS=telegram.http,telegram.payload openclaw gateway
+OPNEX_DIAGNOSTICS=telegram.http,telegram.payload opnex gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -337,7 +337,7 @@ redacted by `logging.redactSensitive`. Full guide:
 ```
 
 You can also leave `diagnostics-otel` out of `plugins.allow`, or run
-`openclaw plugins disable diagnostics-otel`.
+`opnex plugins disable diagnostics-otel`.
 
 ## Related
 

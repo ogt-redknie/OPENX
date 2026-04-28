@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { withOperatorApprovalsGatewayClient } from "../gateway/operator-approvals-client.js";
 import { isApprovalNotFoundError } from "./approval-errors.js";
 import type { ExecApprovalDecision } from "./exec-approvals.js";
 
 export type ResolveApprovalOverGatewayParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   approvalId: string;
   decision: ExecApprovalDecision;
   senderId?: string | null;

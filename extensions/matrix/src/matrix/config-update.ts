@@ -1,6 +1,6 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import { coerceSecretRef } from "openclaw/plugin-sdk/secret-ref-runtime";
-import { normalizeSecretInputString } from "openclaw/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "opnex/plugin-sdk/account-id";
+import { coerceSecretRef } from "opnex/plugin-sdk/secret-ref-runtime";
+import { normalizeSecretInputString } from "opnex/plugin-sdk/setup";
 import type { CoreConfig, MatrixConfig } from "../types.js";
 import { findMatrixAccountConfig } from "./account-config.js";
 import {

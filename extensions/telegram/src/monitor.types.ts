@@ -1,14 +1,14 @@
 import type {
   ChannelAccountSnapshot,
   ChannelRuntimeSurface,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/channel-contract";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
 
 export type MonitorTelegramOpts = {
   token?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   runtime?: RuntimeEnv;
   channelRuntime?: ChannelRuntimeSurface;
   abortSignal?: AbortSignal;

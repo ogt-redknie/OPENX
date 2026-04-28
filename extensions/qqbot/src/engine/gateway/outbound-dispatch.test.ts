@@ -143,7 +143,7 @@ function makeRuntime(params: {
     tts: {
       textToSpeech: vi.fn(async () => ({
         success: true,
-        audioPath: "/tmp/openclaw-qqbot/tts.wav",
+        audioPath: "/tmp/opnex-qqbot/tts.wav",
         provider: "test-tts",
         outputFormat: "wav",
       })),
@@ -192,7 +192,7 @@ describe("dispatchOutbound", () => {
       channel: "qqbot",
       accountId: "qq-main",
     });
-    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/openclaw-qqbot/tts.wav");
+    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/opnex-qqbot/tts.wav");
     expect(sendMediaMock).toHaveBeenCalledWith(
       expect.objectContaining({
         kind: "voice",

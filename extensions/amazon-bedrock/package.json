@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/amazon-bedrock-provider",
+  "name": "@opnex/amazon-bedrock-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Amazon Bedrock provider plugin",
+  "description": "OPNEX Amazon Bedrock provider plugin",
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-bedrock": "3.1037.0",
@@ -10,9 +10,9 @@
     "@aws-sdk/credential-provider-node": "3.972.36"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "bundle": {
       "stageRuntimeDependencies": true
     },

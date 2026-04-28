@@ -2,11 +2,11 @@ import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+} from "opnex/plugin-sdk/channel-policy";
+import type { OPNEXConfig } from "opnex/plugin-sdk/core";
 
 type IMessageGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderId?: string | null;

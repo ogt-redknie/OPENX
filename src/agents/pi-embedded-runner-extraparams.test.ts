@@ -504,13 +504,13 @@ describe("applyExtraParamsToAgent", () => {
       undefined,
       "high",
       "cass",
-      "/tmp/openclaw-workspace",
+      "/tmp/opnex-workspace",
       model,
-      "/tmp/openclaw-agent",
+      "/tmp/opnex-agent",
     );
 
-    expect(capturedContext?.agentDir).toBe("/tmp/openclaw-agent");
-    expect(capturedContext?.workspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(capturedContext?.agentDir).toBe("/tmp/opnex-agent");
+    expect(capturedContext?.workspaceDir).toBe("/tmp/opnex-workspace");
   });
 
   function runResponsesPayloadMutationCase(params: {

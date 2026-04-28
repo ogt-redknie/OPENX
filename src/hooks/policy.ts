@@ -1,4 +1,4 @@
-import type { OpenClawConfig, HookConfig } from "../config/config.js";
+import type { OPNEXConfig, HookConfig } from "../config/config.js";
 import { resolveHookKey } from "./frontmatter.js";
 import type { HookEntry, HookSource } from "./types.js";
 
@@ -24,33 +24,33 @@ export type HookResolutionCollision = {
 };
 
 const HOOK_SOURCE_POLICIES: Record<HookSource, HookSourcePolicy> = {
-  "openclaw-bundled": {
+  "opnex-bundled": {
     precedence: 10,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled"],
-    canBeOverriddenBy: ["openclaw-managed", "openclaw-plugin"],
+    canOverride: ["opnex-bundled"],
+    canBeOverriddenBy: ["opnex-managed", "opnex-plugin"],
   },
-  "openclaw-plugin": {
+  "opnex-plugin": {
     precedence: 20,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled", "openclaw-plugin"],
-    canBeOverriddenBy: ["openclaw-managed"],
+    canOverride: ["opnex-bundled", "opnex-plugin"],
+    canBeOverriddenBy: ["opnex-managed"],
   },
-  "openclaw-managed": {
+  "opnex-managed": {
     precedence: 30,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled", "openclaw-managed", "openclaw-plugin"],
-    canBeOverriddenBy: ["openclaw-managed"],
+    canOverride: ["opnex-bundled", "opnex-managed", "opnex-plugin"],
+    canBeOverriddenBy: ["opnex-managed"],
   },
-  "openclaw-workspace": {
+  "opnex-workspace": {
     precedence: 40,
     trustedLocalCode: true,
     defaultEnableMode: "explicit-opt-in",
-    canOverride: ["openclaw-workspace"],
-    canBeOverriddenBy: ["openclaw-workspace"],
+    canOverride: ["opnex-workspace"],
+    canBeOverriddenBy: ["opnex-workspace"],
   },
 };
 
@@ -59,7 +59,7 @@ export function getHookSourcePolicy(source: HookSource): HookSourcePolicy {
 }
 
 export function resolveHookConfig(
-  config: OpenClawConfig | undefined,
+  config: OPNEXConfig | undefined,
   hookKey: string,
 ): HookConfig | undefined {
   const hooks = config?.hooks?.internal?.entries;
@@ -75,14 +75,14 @@ export function resolveHookConfig(
 
 export function resolveHookEnableState(params: {
   entry: HookEntry;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   hookConfig?: HookConfig;
 }): HookEnableState {
   const { entry, config } = params;
   const hookKey = resolveHookKey(entry.hook.name, entry);
   const hookConfig = params.hookConfig ?? resolveHookConfig(config, hookKey);
 
-  if (entry.hook.source === "openclaw-plugin") {
+  if (entry.hook.source === "opnex-plugin") {
     return { enabled: true };
   }
   if (hookConfig?.enabled === false) {

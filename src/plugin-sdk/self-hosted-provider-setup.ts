@@ -1,6 +1,6 @@
 // Focused self-hosted provider setup helpers for OpenAI-compatible backends.
 export type {
-  OpenClawPluginApi,
+  OPNEXPluginApi,
   ProviderAuthContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthResult,

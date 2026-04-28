@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw plugins` (list, install, marketplace, uninstall, enable/disable, doctor)"
+summary: "CLI reference for `opnex plugins` (list, install, marketplace, uninstall, enable/disable, doctor)"
 read_when:
   - You want to install or manage Gateway plugins or compatible bundles
   - You want to debug plugin load failures
@@ -27,48 +27,48 @@ Manage Gateway plugins, hook packs, and compatible bundles.
 ## Commands
 
 ```bash
-openclaw plugins list
-openclaw plugins list --enabled
-openclaw plugins list --verbose
-openclaw plugins list --json
-openclaw plugins install <path-or-spec>
-openclaw plugins inspect <id>
-openclaw plugins inspect <id> --json
-openclaw plugins inspect --all
-openclaw plugins info <id>
-openclaw plugins enable <id>
-openclaw plugins disable <id>
-openclaw plugins registry
-openclaw plugins registry --refresh
-openclaw plugins uninstall <id>
-openclaw plugins doctor
-openclaw plugins update <id-or-npm-spec>
-openclaw plugins update --all
-openclaw plugins marketplace list <marketplace>
-openclaw plugins marketplace list <marketplace> --json
+opnex plugins list
+opnex plugins list --enabled
+opnex plugins list --verbose
+opnex plugins list --json
+opnex plugins install <path-or-spec>
+opnex plugins inspect <id>
+opnex plugins inspect <id> --json
+opnex plugins inspect --all
+opnex plugins info <id>
+opnex plugins enable <id>
+opnex plugins disable <id>
+opnex plugins registry
+opnex plugins registry --refresh
+opnex plugins uninstall <id>
+opnex plugins doctor
+opnex plugins update <id-or-npm-spec>
+opnex plugins update --all
+opnex plugins marketplace list <marketplace>
+opnex plugins marketplace list <marketplace> --json
 ```
 
 <Note>
-Bundled plugins ship with OpenClaw. Some are enabled by default (for example bundled model providers, bundled speech providers, and the bundled browser plugin); others require `plugins enable`.
+Bundled plugins ship with OPNEX. Some are enabled by default (for example bundled model providers, bundled speech providers, and the bundled browser plugin); others require `plugins enable`.
 
-Native OpenClaw plugins must ship `openclaw.plugin.json` with an inline JSON Schema (`configSchema`, even if empty). Compatible bundles use their own bundle manifests instead.
+Native OPNEX plugins must ship `opnex.plugin.json` with an inline JSON Schema (`configSchema`, even if empty). Compatible bundles use their own bundle manifests instead.
 
-`plugins list` shows `Format: openclaw` or `Format: bundle`. Verbose list/info output also shows the bundle subtype (`codex`, `claude`, or `cursor`) plus detected bundle capabilities.
+`plugins list` shows `Format: opnex` or `Format: bundle`. Verbose list/info output also shows the bundle subtype (`codex`, `claude`, or `cursor`) plus detected bundle capabilities.
 </Note>
 
 ### Install
 
 ```bash
-openclaw plugins install <package>                      # ClawHub first, then npm
-openclaw plugins install clawhub:<package>              # ClawHub only
-openclaw plugins install npm:<package>                  # npm only
-openclaw plugins install <package> --force              # overwrite existing install
-openclaw plugins install <package> --pin                # pin version
-openclaw plugins install <package> --dangerously-force-unsafe-install
-openclaw plugins install <path>                         # local path
-openclaw plugins install <plugin>@<marketplace>         # marketplace
-openclaw plugins install <plugin> --marketplace <name>  # marketplace (explicit)
-openclaw plugins install <plugin> --marketplace https://github.com/<owner>/<repo>
+opnex plugins install <package>                      # ClawHub first, then npm
+opnex plugins install clawhub:<package>              # ClawHub only
+opnex plugins install npm:<package>                  # npm only
+opnex plugins install <package> --force              # overwrite existing install
+opnex plugins install <package> --pin                # pin version
+opnex plugins install <package> --dangerously-force-unsafe-install
+opnex plugins install <path>                         # local path
+opnex plugins install <plugin>@<marketplace>         # marketplace
+opnex plugins install <plugin> --marketplace <name>  # marketplace (explicit)
+opnex plugins install <plugin> --marketplace https://github.com/<owner>/<repo>
 ```
 
 <Warning>
@@ -77,15 +77,15 @@ Bare package names are checked against ClawHub first, then npm. Treat plugin ins
 
 <AccordionGroup>
   <Accordion title="Config includes and invalid-config recovery">
-    If your `plugins` section is backed by a single-file `$include`, `plugins install/update/enable/disable/uninstall` write through to that included file and leave `openclaw.json` untouched. Root includes, include arrays, and includes with sibling overrides fail closed instead of flattening. See [Config includes](/gateway/configuration) for the supported shapes.
+    If your `plugins` section is backed by a single-file `$include`, `plugins install/update/enable/disable/uninstall` write through to that included file and leave `opnex.json` untouched. Root includes, include arrays, and includes with sibling overrides fail closed instead of flattening. See [Config includes](/gateway/configuration) for the supported shapes.
 
-    If config is invalid during install, `plugins install` normally fails closed and tells you to run `openclaw doctor --fix` first. During Gateway startup, invalid config for one plugin is isolated to that plugin so other channels and plugins can keep running; `openclaw doctor --fix` can quarantine the invalid plugin entry. The only documented install-time exception is a narrow bundled-plugin recovery path for plugins that explicitly opt into `openclaw.install.allowInvalidConfigRecovery`.
+    If config is invalid during install, `plugins install` normally fails closed and tells you to run `opnex doctor --fix` first. During Gateway startup, invalid config for one plugin is isolated to that plugin so other channels and plugins can keep running; `opnex doctor --fix` can quarantine the invalid plugin entry. The only documented install-time exception is a narrow bundled-plugin recovery path for plugins that explicitly opt into `opnex.install.allowInvalidConfigRecovery`.
 
   </Accordion>
   <Accordion title="--force and reinstall vs update">
-    `--force` reuses the existing install target and overwrites an already-installed plugin or hook pack in place. Use it when you are intentionally reinstalling the same id from a new local path, archive, ClawHub package, or npm artifact. For routine upgrades of an already tracked npm plugin, prefer `openclaw plugins update <id-or-npm-spec>`.
+    `--force` reuses the existing install target and overwrites an already-installed plugin or hook pack in place. Use it when you are intentionally reinstalling the same id from a new local path, archive, ClawHub package, or npm artifact. For routine upgrades of an already tracked npm plugin, prefer `opnex plugins update <id-or-npm-spec>`.
 
-    If you run `plugins install` for a plugin id that is already installed, OpenClaw stops and points you at `plugins update <id-or-npm-spec>` for a normal upgrade, or at `plugins install <package> --force` when you genuinely want to overwrite the current install from a different source.
+    If you run `plugins install` for a plugin id that is already installed, OPNEX stops and points you at `plugins update <id-or-npm-spec>` for a normal upgrade, or at `plugins install <package> --force` when you genuinely want to overwrite the current install from a different source.
 
   </Accordion>
   <Accordion title="--pin scope">
@@ -94,23 +94,23 @@ Bare package names are checked against ClawHub first, then npm. Treat plugin ins
   <Accordion title="--dangerously-force-unsafe-install">
     `--dangerously-force-unsafe-install` is a break-glass option for false positives in the built-in dangerous-code scanner. It allows the install to continue even when the built-in scanner reports `critical` findings, but it does **not** bypass plugin `before_install` hook policy blocks and does **not** bypass scan failures.
 
-    This CLI flag applies to plugin install/update flows. Gateway-backed skill dependency installs use the matching `dangerouslyForceUnsafeInstall` request override, while `openclaw skills install` remains a separate ClawHub skill download/install flow.
+    This CLI flag applies to plugin install/update flows. Gateway-backed skill dependency installs use the matching `dangerouslyForceUnsafeInstall` request override, while `opnex skills install` remains a separate ClawHub skill download/install flow.
 
   </Accordion>
   <Accordion title="Hook packs and npm specs">
-    `plugins install` is also the install surface for hook packs that expose `openclaw.hooks` in `package.json`. Use `openclaw hooks` for filtered hook visibility and per-hook enablement, not package installation.
+    `plugins install` is also the install surface for hook packs that expose `opnex.hooks` in `package.json`. Use `opnex hooks` for filtered hook visibility and per-hook enablement, not package installation.
 
     Npm specs are **registry-only** (package name + optional **exact version** or **dist-tag**). Git/URL/file specs and semver ranges are rejected. Dependency installs run project-local with `--ignore-scripts` for safety, even when your shell has global npm install settings.
 
     Use `npm:<package>` when you want to skip ClawHub lookup and install directly from npm. Bare package specs still prefer ClawHub and only fall back to npm when ClawHub does not have that package or version.
 
-    Bare specs and `@latest` stay on the stable track. If npm resolves either of those to a prerelease, OpenClaw stops and asks you to opt in explicitly with a prerelease tag such as `@beta`/`@rc` or an exact prerelease version such as `@1.2.3-beta.4`.
+    Bare specs and `@latest` stay on the stable track. If npm resolves either of those to a prerelease, OPNEX stops and asks you to opt in explicitly with a prerelease tag such as `@beta`/`@rc` or an exact prerelease version such as `@1.2.3-beta.4`.
 
-    If a bare install spec matches a bundled plugin id (for example `diffs`), OpenClaw installs the bundled plugin directly. To install an npm package with the same name, use an explicit scoped spec (for example `@scope/diffs`).
+    If a bare install spec matches a bundled plugin id (for example `diffs`), OPNEX installs the bundled plugin directly. To install an npm package with the same name, use an explicit scoped spec (for example `@scope/diffs`).
 
   </Accordion>
   <Accordion title="Archives">
-    Supported archives: `.zip`, `.tgz`, `.tar.gz`, `.tar`. Native OpenClaw plugin archives must contain a valid `openclaw.plugin.json` at the extracted plugin root; archives that only contain `package.json` are rejected before OpenClaw writes install records.
+    Supported archives: `.zip`, `.tgz`, `.tar.gz`, `.tar`. Native OPNEX plugin archives must contain a valid `opnex.plugin.json` at the extracted plugin root; archives that only contain `package.json` are rejected before OPNEX writes install records.
 
     Claude marketplace installs are also supported.
 
@@ -120,42 +120,42 @@ Bare package names are checked against ClawHub first, then npm. Treat plugin ins
 ClawHub installs use an explicit `clawhub:<package>` locator:
 
 ```bash
-openclaw plugins install clawhub:openclaw-codex-app-server
-openclaw plugins install clawhub:openclaw-codex-app-server@1.2.3
+opnex plugins install clawhub:opnex-codex-app-server
+opnex plugins install clawhub:opnex-codex-app-server@1.2.3
 ```
 
-OpenClaw now also prefers ClawHub for bare npm-safe plugin specs. It only falls back to npm if ClawHub does not have that package or version:
+OPNEX now also prefers ClawHub for bare npm-safe plugin specs. It only falls back to npm if ClawHub does not have that package or version:
 
 ```bash
-openclaw plugins install openclaw-codex-app-server
+opnex plugins install opnex-codex-app-server
 ```
 
 Use `npm:` to force npm-only resolution, for example when ClawHub is unreachable or you know the package exists only on npm:
 
 ```bash
-openclaw plugins install npm:openclaw-codex-app-server
-openclaw plugins install npm:@scope/plugin-name@1.0.1
+opnex plugins install npm:opnex-codex-app-server
+opnex plugins install npm:@scope/plugin-name@1.0.1
 ```
 
-OpenClaw downloads the package archive from ClawHub, checks the advertised plugin API / minimum gateway compatibility, then installs it through the normal archive path. Recorded installs keep their ClawHub source metadata for later updates.
-Unversioned ClawHub installs keep an unversioned recorded spec so `openclaw plugins update` can follow newer ClawHub releases; explicit version or tag selectors such as `clawhub:pkg@1.2.3` and `clawhub:pkg@beta` remain pinned to that selector.
+OPNEX downloads the package archive from ClawHub, checks the advertised plugin API / minimum gateway compatibility, then installs it through the normal archive path. Recorded installs keep their ClawHub source metadata for later updates.
+Unversioned ClawHub installs keep an unversioned recorded spec so `opnex plugins update` can follow newer ClawHub releases; explicit version or tag selectors such as `clawhub:pkg@1.2.3` and `clawhub:pkg@beta` remain pinned to that selector.
 
 #### Marketplace shorthand
 
 Use `plugin@marketplace` shorthand when the marketplace name exists in Claude's local registry cache at `~/.claude/plugins/known_marketplaces.json`:
 
 ```bash
-openclaw plugins marketplace list <marketplace-name>
-openclaw plugins install <plugin-name>@<marketplace-name>
+opnex plugins marketplace list <marketplace-name>
+opnex plugins install <plugin-name>@<marketplace-name>
 ```
 
 Use `--marketplace` when you want to pass the marketplace source explicitly:
 
 ```bash
-openclaw plugins install <plugin-name> --marketplace <marketplace-name>
-openclaw plugins install <plugin-name> --marketplace <owner/repo>
-openclaw plugins install <plugin-name> --marketplace https://github.com/<owner>/<repo>
-openclaw plugins install <plugin-name> --marketplace ./my-marketplace
+opnex plugins install <plugin-name> --marketplace <marketplace-name>
+opnex plugins install <plugin-name> --marketplace <owner/repo>
+opnex plugins install <plugin-name> --marketplace https://github.com/<owner>/<repo>
+opnex plugins install <plugin-name> --marketplace ./my-marketplace
 ```
 
 <Tabs>
@@ -168,13 +168,13 @@ openclaw plugins install <plugin-name> --marketplace ./my-marketplace
 
   </Tab>
   <Tab title="Remote marketplace rules">
-    For remote marketplaces loaded from GitHub or git, plugin entries must stay inside the cloned marketplace repo. OpenClaw accepts relative path sources from that repo and rejects HTTP(S), absolute-path, git, GitHub, and other non-path plugin sources from remote manifests.
+    For remote marketplaces loaded from GitHub or git, plugin entries must stay inside the cloned marketplace repo. OPNEX accepts relative path sources from that repo and rejects HTTP(S), absolute-path, git, GitHub, and other non-path plugin sources from remote manifests.
   </Tab>
 </Tabs>
 
-For local paths and archives, OpenClaw auto-detects:
+For local paths and archives, OPNEX auto-detects:
 
-- native OpenClaw plugins (`openclaw.plugin.json`)
+- native OPNEX plugins (`opnex.plugin.json`)
 - Codex-compatible bundles (`.codex-plugin/plugin.json`)
 - Claude-compatible bundles (`.claude-plugin/plugin.json` or the default Claude component layout)
 - Cursor-compatible bundles (`.cursor-plugin/plugin.json`)
@@ -186,10 +186,10 @@ Compatible bundles install into the normal plugin root and participate in the sa
 ### List
 
 ```bash
-openclaw plugins list
-openclaw plugins list --enabled
-openclaw plugins list --verbose
-openclaw plugins list --json
+opnex plugins list
+opnex plugins list --enabled
+opnex plugins list --verbose
+opnex plugins list --json
 ```
 
 <ParamField path="--enabled" type="boolean">
@@ -203,25 +203,25 @@ openclaw plugins list --json
 </ParamField>
 
 <Note>
-`plugins list` reads the persisted local plugin registry first, with a manifest-only derived fallback when the registry is missing or invalid. It is useful for checking whether a plugin is installed, enabled, and visible to cold startup planning, but it is not a live runtime probe of an already-running Gateway process. After changing plugin code, enablement, hook policy, or `plugins.load.paths`, restart the Gateway that serves the channel before expecting new `register(api)` code or hooks to run. For remote/container deployments, verify you are restarting the actual `openclaw gateway run` child, not only a wrapper process.
+`plugins list` reads the persisted local plugin registry first, with a manifest-only derived fallback when the registry is missing or invalid. It is useful for checking whether a plugin is installed, enabled, and visible to cold startup planning, but it is not a live runtime probe of an already-running Gateway process. After changing plugin code, enablement, hook policy, or `plugins.load.paths`, restart the Gateway that serves the channel before expecting new `register(api)` code or hooks to run. For remote/container deployments, verify you are restarting the actual `opnex gateway run` child, not only a wrapper process.
 </Note>
 
 For bundled plugin work inside a packaged Docker image, bind-mount the plugin
 source directory over the matching packaged source path, such as
-`/app/extensions/synology-chat`. OpenClaw will discover that mounted source
+`/app/extensions/synology-chat`. OPNEX will discover that mounted source
 overlay before `/app/dist/extensions/synology-chat`; a plain copied source
 directory remains inert so normal packaged installs still use compiled dist.
 
 For runtime hook debugging:
 
-- `openclaw plugins inspect <id> --json` shows registered hooks and diagnostics from a module-loaded inspection pass.
-- `openclaw gateway status --deep --require-rpc` confirms the reachable Gateway, service/process hints, config path, and RPC health.
+- `opnex plugins inspect <id> --json` shows registered hooks and diagnostics from a module-loaded inspection pass.
+- `opnex gateway status --deep --require-rpc` confirms the reachable Gateway, service/process hints, config path, and RPC health.
 - Non-bundled conversation hooks (`llm_input`, `llm_output`, `before_agent_finalize`, `agent_end`) require `plugins.entries.<id>.hooks.allowConversationAccess=true`.
 
 Use `--link` to avoid copying a local directory (adds to `plugins.load.paths`):
 
 ```bash
-openclaw plugins install -l ./my-plugin
+opnex plugins install -l ./my-plugin
 ```
 
 <Note>
@@ -232,19 +232,19 @@ Use `--pin` on npm installs to save the resolved exact spec (`name@version`) in 
 
 ### Plugin index
 
-Plugin install metadata is machine-managed state, not user config. Installs and updates write it to `plugins/installs.json` under the active OpenClaw state directory. Its top-level `installRecords` map is the durable source of install metadata, including records for broken or missing plugin manifests. The `plugins` array is the manifest-derived cold registry cache. The file includes a do-not-edit warning and is used by `openclaw plugins update`, uninstall, diagnostics, and the cold plugin registry.
+Plugin install metadata is machine-managed state, not user config. Installs and updates write it to `plugins/installs.json` under the active OPNEX state directory. Its top-level `installRecords` map is the durable source of install metadata, including records for broken or missing plugin manifests. The `plugins` array is the manifest-derived cold registry cache. The file includes a do-not-edit warning and is used by `opnex plugins update`, uninstall, diagnostics, and the cold plugin registry.
 
-When OpenClaw sees shipped legacy `plugins.installs` records in config, it moves them into the plugin index and removes the config key; if either write fails, the config records are kept so the install metadata is not lost.
+When OPNEX sees shipped legacy `plugins.installs` records in config, it moves them into the plugin index and removes the config key; if either write fails, the config records are kept so the install metadata is not lost.
 
 ### Uninstall
 
 ```bash
-openclaw plugins uninstall <id>
-openclaw plugins uninstall <id> --dry-run
-openclaw plugins uninstall <id> --keep-files
+opnex plugins uninstall <id>
+opnex plugins uninstall <id> --dry-run
+opnex plugins uninstall <id> --keep-files
 ```
 
-`uninstall` removes plugin records from `plugins.entries`, the persisted plugin index, plugin allow/deny list entries, and linked `plugins.load.paths` entries when applicable. Unless `--keep-files` is set, uninstall also removes the tracked managed install directory when it is inside OpenClaw's plugin extensions root. For active memory plugins, the memory slot resets to `memory-core`.
+`uninstall` removes plugin records from `plugins.entries`, the persisted plugin index, plugin allow/deny list entries, and linked `plugins.load.paths` entries when applicable. Unless `--keep-files` is set, uninstall also removes the tracked managed install directory when it is inside OPNEX's plugin extensions root. For active memory plugins, the memory slot resets to `memory-core`.
 
 <Note>
 `--keep-config` is supported as a deprecated alias for `--keep-files`.
@@ -253,28 +253,28 @@ openclaw plugins uninstall <id> --keep-files
 ### Update
 
 ```bash
-openclaw plugins update <id-or-npm-spec>
-openclaw plugins update --all
-openclaw plugins update <id-or-npm-spec> --dry-run
-openclaw plugins update @openclaw/voice-call@beta
-openclaw plugins update openclaw-codex-app-server --dangerously-force-unsafe-install
+opnex plugins update <id-or-npm-spec>
+opnex plugins update --all
+opnex plugins update <id-or-npm-spec> --dry-run
+opnex plugins update @opnex/voice-call@beta
+opnex plugins update opnex-codex-app-server --dangerously-force-unsafe-install
 ```
 
 Updates apply to tracked plugin installs in the managed plugin index and tracked hook-pack installs in `hooks.internal.installs`.
 
 <AccordionGroup>
   <Accordion title="Resolving plugin id vs npm spec">
-    When you pass a plugin id, OpenClaw reuses the recorded install spec for that plugin. That means previously stored dist-tags such as `@beta` and exact pinned versions continue to be used on later `update <id>` runs.
+    When you pass a plugin id, OPNEX reuses the recorded install spec for that plugin. That means previously stored dist-tags such as `@beta` and exact pinned versions continue to be used on later `update <id>` runs.
 
-    For npm installs, you can also pass an explicit npm package spec with a dist-tag or exact version. OpenClaw resolves that package name back to the tracked plugin record, updates that installed plugin, and records the new npm spec for future id-based updates.
+    For npm installs, you can also pass an explicit npm package spec with a dist-tag or exact version. OPNEX resolves that package name back to the tracked plugin record, updates that installed plugin, and records the new npm spec for future id-based updates.
 
     Passing the npm package name without a version or tag also resolves back to the tracked plugin record. Use this when a plugin was pinned to an exact version and you want to move it back to the registry's default release line.
 
   </Accordion>
   <Accordion title="Version checks and integrity drift">
-    Before a live npm update, OpenClaw checks the installed package version against the npm registry metadata. If the installed version and recorded artifact identity already match the resolved target, the update is skipped without downloading, reinstalling, or rewriting `openclaw.json`.
+    Before a live npm update, OPNEX checks the installed package version against the npm registry metadata. If the installed version and recorded artifact identity already match the resolved target, the update is skipped without downloading, reinstalling, or rewriting `opnex.json`.
 
-    When a stored integrity hash exists and the fetched artifact hash changes, OpenClaw treats that as npm artifact drift. The interactive `openclaw plugins update` command prints the expected and actual hashes and asks for confirmation before proceeding. Non-interactive update helpers fail closed unless the caller supplies an explicit continuation policy.
+    When a stored integrity hash exists and the fetched artifact hash changes, OPNEX treats that as npm artifact drift. The interactive `opnex plugins update` command prints the expected and actual hashes and asks for confirmation before proceeding. Non-interactive update helpers fail closed unless the caller supplies an explicit continuation policy.
 
   </Accordion>
   <Accordion title="--dangerously-force-unsafe-install on update">
@@ -285,8 +285,8 @@ Updates apply to tracked plugin installs in the managed plugin index and tracked
 ### Inspect
 
 ```bash
-openclaw plugins inspect <id>
-openclaw plugins inspect <id> --json
+opnex plugins inspect <id>
+opnex plugins inspect <id> --json
 ```
 
 Deep introspection for a single plugin. Shows identity, load status, source, registered capabilities, hooks, tools, commands, services, gateway methods, HTTP routes, policy flags, diagnostics, install metadata, bundle capabilities, and any detected MCP or LSP server support.
@@ -307,34 +307,34 @@ The `--json` flag outputs a machine-readable report suitable for scripting and a
 ### Doctor
 
 ```bash
-openclaw plugins doctor
+opnex plugins doctor
 ```
 
 `doctor` reports plugin load errors, manifest/discovery diagnostics, and compatibility notices. When everything is clean it prints `No plugin issues detected.`
 
-For module-shape failures such as missing `register`/`activate` exports, rerun with `OPENCLAW_PLUGIN_LOAD_DEBUG=1` to include a compact export-shape summary in the diagnostic output.
+For module-shape failures such as missing `register`/`activate` exports, rerun with `OPNEX_PLUGIN_LOAD_DEBUG=1` to include a compact export-shape summary in the diagnostic output.
 
 ### Registry
 
 ```bash
-openclaw plugins registry
-openclaw plugins registry --refresh
-openclaw plugins registry --json
+opnex plugins registry
+opnex plugins registry --refresh
+opnex plugins registry --json
 ```
 
-The local plugin registry is OpenClaw's persisted cold read model for installed plugin identity, enablement, source metadata, and contribution ownership. Normal startup, provider owner lookup, channel setup classification, and plugin inventory can read it without importing plugin runtime modules.
+The local plugin registry is OPNEX's persisted cold read model for installed plugin identity, enablement, source metadata, and contribution ownership. Normal startup, provider owner lookup, channel setup classification, and plugin inventory can read it without importing plugin runtime modules.
 
 Use `plugins registry` to inspect whether the persisted registry is present, current, or stale. Use `--refresh` to rebuild it from the persisted plugin index, config policy, and manifest/package metadata. This is a repair path, not a runtime activation path.
 
 <Warning>
-`OPENCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY=1` is a deprecated break-glass compatibility switch for registry read failures. Prefer `plugins registry --refresh` or `openclaw doctor --fix`; the env fallback is only for emergency startup recovery while the migration rolls out.
+`OPNEX_DISABLE_PERSISTED_PLUGIN_REGISTRY=1` is a deprecated break-glass compatibility switch for registry read failures. Prefer `plugins registry --refresh` or `opnex doctor --fix`; the env fallback is only for emergency startup recovery while the migration rolls out.
 </Warning>
 
 ### Marketplace
 
 ```bash
-openclaw plugins marketplace list <source>
-openclaw plugins marketplace list <source> --json
+opnex plugins marketplace list <source>
+opnex plugins marketplace list <source> --json
 ```
 
 Marketplace list accepts a local marketplace path, a `marketplace.json` path, a GitHub shorthand like `owner/repo`, a GitHub repo URL, or a git URL. `--json` prints the resolved source label plus the parsed marketplace manifest and plugin entries.

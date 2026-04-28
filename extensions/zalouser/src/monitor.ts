@@ -1,45 +1,45 @@
-import { mergeAllowlist, summarizeMapping } from "openclaw/plugin-sdk/allow-from";
+import { mergeAllowlist, summarizeMapping } from "opnex/plugin-sdk/allow-from";
 import {
   implicitMentionKindWhen,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
+} from "opnex/plugin-sdk/channel-inbound";
+import { createChannelPairingController } from "opnex/plugin-sdk/channel-pairing";
 import {
   DM_GROUP_ACCESS_REASON,
   resolveDmGroupAccessWithLists,
-} from "openclaw/plugin-sdk/channel-policy";
-import { createChannelReplyPipeline } from "openclaw/plugin-sdk/channel-reply-pipeline";
-import { resolveSenderCommandAuthorization } from "openclaw/plugin-sdk/command-auth";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/core";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+} from "opnex/plugin-sdk/channel-policy";
+import { createChannelReplyPipeline } from "opnex/plugin-sdk/channel-reply-pipeline";
+import { resolveSenderCommandAuthorization } from "opnex/plugin-sdk/command-auth";
+import type { MarkdownTableMode, OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { KeyedAsyncQueue } from "opnex/plugin-sdk/core";
+import { isDangerousNameMatchingEnabled } from "opnex/plugin-sdk/dangerous-name-runtime";
+import { createDeferred } from "opnex/plugin-sdk/extension-shared";
 import {
   evaluateGroupRouteAccessForPolicy,
   resolveSenderScopedGroupPolicy,
-} from "openclaw/plugin-sdk/group-access";
+} from "opnex/plugin-sdk/group-access";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   type HistoryEntry,
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
-} from "openclaw/plugin-sdk/reply-history";
+} from "opnex/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
   type OutboundReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+} from "opnex/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime";
 import {
   resolveDefaultGroupPolicy,
   resolveOpenProviderRuntimeGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "opnex/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import {
   buildZalouserGroupCandidates,
   findZalouserGroupEntry,
@@ -63,7 +63,7 @@ import {
 
 export type ZalouserMonitorOptions = {
   account: ResolvedZalouserAccount;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   runtime: RuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -138,14 +138,14 @@ function resolveInboundQueueKey(message: ZaloInboundMessage): string {
   return `direct:${senderId || threadId}`;
 }
 
-function resolveZalouserDmSessionScope(config: OpenClawConfig) {
+function resolveZalouserDmSessionScope(config: OPNEXConfig) {
   const configured = config.session?.dmScope;
   return configured === "main" || !configured ? "per-channel-peer" : configured;
 }
 
 function resolveZalouserInboundSessionKey(params: {
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   route: { agentId: string; accountId: string; sessionKey: string };
   storePath: string;
   isGroup: boolean;
@@ -251,7 +251,7 @@ async function sendZalouserDeliveryAcks(params: {
 async function processMessage(
   message: ZaloInboundMessage,
   account: ResolvedZalouserAccount,
-  config: OpenClawConfig,
+  config: OPNEXConfig,
   core: ZalouserCoreRuntime,
   runtime: RuntimeEnv,
   historyState: ZalouserGroupHistoryState,
@@ -709,7 +709,7 @@ async function deliverZalouserReply(params: {
   isGroup: boolean;
   runtime: RuntimeEnv;
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   accountId?: string;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
   tableMode?: MarkdownTableMode;
@@ -974,7 +974,7 @@ export const __testing = {
   processMessage: async (params: {
     message: ZaloInboundMessage;
     account: ResolvedZalouserAccount;
-    config: OpenClawConfig;
+    config: OPNEXConfig;
     runtime: RuntimeEnv;
     historyState?: {
       historyLimit?: number;

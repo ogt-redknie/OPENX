@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import type { InstalledPluginIndex, InstalledPluginIndexRecord } from "./installed-plugin-index.js";
 import type { PluginManifestRecord, PluginManifestRegistry } from "./manifest-registry.js";
 
 const listPotentialConfiguredChannelIds = vi.hoisted(() => vi.fn());
 const listExplicitlyDisabledChannelIdsForConfig = vi.hoisted(() =>
-  vi.fn((config: OpenClawConfig) => {
+  vi.fn((config: OPNEXConfig) => {
     return Object.entries(config.channels ?? {})
       .filter(([, value]) => {
         return (
@@ -91,7 +91,7 @@ function withManifestLoadPaths<T extends { id: string }>(plugin: T): T {
   return {
     rootDir: `/tmp/plugins/${plugin.id}`,
     source: `/tmp/plugins/${plugin.id}/index.ts`,
-    manifestPath: `/tmp/plugins/${plugin.id}/openclaw.plugin.json`,
+    manifestPath: `/tmp/plugins/${plugin.id}/opnex.plugin.json`,
     skills: [],
     hooks: [],
     ...plugin,
@@ -380,8 +380,8 @@ function filterManifestRegistryForInstalledIndex(params: {
 }
 
 function expectStartupPluginIds(params: {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: OPNEXConfig;
+  activationSourceConfig?: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   expected: readonly string[];
 }) {
@@ -399,8 +399,8 @@ function expectStartupPluginIds(params: {
 }
 
 function expectStartupPluginIdsCase(params: {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: OPNEXConfig;
+  activationSourceConfig?: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   expected: readonly string[];
 }) {
@@ -519,12 +519,12 @@ function createStartupConfig(params: {
             },
           }
         : {}),
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 describe("resolveGatewayStartupPluginIds", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OpenClawConfig) => {
+    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OPNEXConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {});
       }
@@ -532,13 +532,13 @@ describe("resolveGatewayStartupPluginIds", () => {
     });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: OpenClawConfig) => {
+      .mockImplementation((config: OPNEXConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
         }));
       });
-    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: OpenClawConfig) => {
+    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: OPNEXConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {}).length > 0;
       }
@@ -567,7 +567,7 @@ describe("resolveGatewayStartupPluginIds", () => {
     ],
     [
       "keeps bundled startup sidecars with enabledByDefault at idle startup",
-      {} as OpenClawConfig,
+      {} as OPNEXConfig,
       ["demo-channel", "browser", "memory-core"],
     ],
     [
@@ -620,7 +620,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expectStartupPluginIdsCase({
       config: effectiveConfig,
@@ -640,7 +640,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const runtimeConfig = {
       ...activationSourceConfig,
       plugins: {
@@ -656,7 +656,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expectStartupPluginIdsCase({
       config: runtimeConfig,
@@ -687,7 +687,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       }),
       env: {
         ...process.env,
-        OPENCLAW_DISABLE_LEGACY_IMPLICIT_STARTUP_SIDECARS: "1",
+        OPNEX_DISABLE_LEGACY_IMPLICIT_STARTUP_SIDECARS: "1",
       },
       expected: [],
     });
@@ -715,7 +715,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       }),
       env: {
         ...process.env,
-        OPENCLAW_DISABLE_LEGACY_IMPLICIT_STARTUP_SIDECARS: "1",
+        OPNEX_DISABLE_LEGACY_IMPLICIT_STARTUP_SIDECARS: "1",
       },
       expected: ["demo-global-explicit-startup"],
     });
@@ -728,7 +728,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         defaultProfile: "docker-cdp",
       },
       channels: {},
-    } satisfies OpenClawConfig;
+    } satisfies OPNEXConfig;
     const effectiveConfig = {
       ...rawConfig,
       plugins: {
@@ -738,7 +738,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies OPNEXConfig;
 
     expectStartupPluginIdsCase({
       config: effectiveConfig,
@@ -786,7 +786,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       { channelId: "demo-channel", source: "env" },
     ]);
 
-    const config = {} as OpenClawConfig;
+    const config = {} as OPNEXConfig;
 
     expectStartupPluginIdsCase({
       config,
@@ -821,7 +821,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -839,7 +839,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         plugins: {
           allow: ["browser"],
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       env: {},
       expected: ["demo-channel", "browser"],
     });
@@ -854,7 +854,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             token: "stale",
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       env: {},
       expected: ["browser", "memory-core"],
     });
@@ -863,16 +863,16 @@ describe("resolveGatewayStartupPluginIds", () => {
   it("does not treat persisted auth alone as gateway startup intent", () => {
     listPotentialConfiguredChannelIds.mockImplementation(
       (
-        _config: OpenClawConfig,
+        _config: OPNEXConfig,
         _env: NodeJS.ProcessEnv,
         options?: { includePersistedAuthState?: boolean },
       ) => (options?.includePersistedAuthState === false ? [] : ["demo-channel"]),
     );
 
     expectStartupPluginIdsCase({
-      config: {} as OpenClawConfig,
+      config: {} as OPNEXConfig,
       env: {
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-with-persisted-demo-channel",
+        OPNEX_STATE_DIR: "/tmp/opnex-with-persisted-demo-channel",
       } as NodeJS.ProcessEnv,
       expected: ["browser", "memory-core"],
     });
@@ -884,7 +884,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       .mockReturnValue(createManifestRegistryFixtureWithWorkspaceDemoChannel());
     listPotentialConfiguredChannelIds.mockImplementation(
       (
-        _config: OpenClawConfig,
+        _config: OPNEXConfig,
         _env: NodeJS.ProcessEnv,
         options?: { includePersistedAuthState?: boolean },
       ) => (options?.includePersistedAuthState === false ? [] : ["demo-channel"]),
@@ -896,10 +896,10 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-with-persisted-demo-channel",
+          OPNEX_STATE_DIR: "/tmp/opnex-with-persisted-demo-channel",
         } as NodeJS.ProcessEnv,
       }),
     ).toEqual([]);
@@ -922,7 +922,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -993,7 +993,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       config: createStartupConfig({
         enabledPluginIds: ["codex"],
       }),
-      env: { OPENCLAW_AGENT_RUNTIME: "codex" },
+      env: { OPNEX_AGENT_RUNTIME: "codex" },
       expected: ["demo-channel", "browser", "codex", "memory-core"],
     });
   });
@@ -1039,7 +1039,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1062,7 +1062,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1070,7 +1070,7 @@ describe("resolveGatewayStartupPluginIds", () => {
 
 describe("resolveConfiguredChannelPluginIds", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OpenClawConfig) => {
+    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OPNEXConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {});
       }
@@ -1078,13 +1078,13 @@ describe("resolveConfiguredChannelPluginIds", () => {
     });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: OpenClawConfig) => {
+      .mockImplementation((config: OPNEXConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
         }));
       });
-    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: OpenClawConfig) => {
+    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: OPNEXConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {}).length > 0;
       }
@@ -1130,7 +1130,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             allow: ["browser"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -1147,7 +1147,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             deny: ["activation-only-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1164,7 +1164,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1231,7 +1231,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1254,7 +1254,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1283,7 +1283,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1298,7 +1298,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1320,7 +1320,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1354,7 +1354,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1373,7 +1373,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1396,7 +1396,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1412,7 +1412,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           token: "stale-token",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(listExplicitConfiguredChannelIdsForConfig(config)).toEqual([]);
     expect(
@@ -1453,7 +1453,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -1498,7 +1498,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -1517,7 +1517,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1537,7 +1537,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
       plugins: {
         allow: ["browser"],
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -1579,7 +1579,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               token: "configured",
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1604,7 +1604,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1622,7 +1622,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             deny: ["demo-channel"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1644,7 +1644,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
             enabled: false,
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toEqual(["demo-channel"]);
   });
 
@@ -1670,7 +1670,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "ambient",
@@ -1697,7 +1697,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["demo-other-channel"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "ambient",
@@ -1722,7 +1722,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           ACTIVATION_ONLY_CHANNEL_TOKEN: "ambient",
@@ -1747,7 +1747,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1760,7 +1760,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
   it("ignores manifest env vars from untrusted external plugins", () => {
     expect(
       listConfiguredChannelIdsForReadOnlyScope({
-        config: {} as OpenClawConfig,
+        config: {} as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1771,7 +1771,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
 
     expect(
       hasConfiguredChannelsForReadOnlyScope({
-        config: {} as OpenClawConfig,
+        config: {} as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1788,7 +1788,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["ambient-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           HOME: "/tmp/user",
@@ -1807,7 +1807,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           external_env_channel_token: "token",
@@ -1837,7 +1837,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1871,7 +1871,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",

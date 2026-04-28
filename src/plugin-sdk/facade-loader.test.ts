@@ -22,11 +22,11 @@ import {
 } from "./test-helpers.js";
 
 const { createTempDirSync } = createPluginSdkTestHarness();
-const originalBundledPluginsDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-const originalDisableBundledPlugins = process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
-const originalPluginStageDir = process.env.OPENCLAW_PLUGIN_STAGE_DIR;
-const FACADE_LOADER_GLOBAL = "__openclawTestLoadBundledPluginPublicSurfaceModuleSync";
-const STAGED_RUNTIME_DEP_NAME = "openclaw-facade-loader-runtime-dep";
+const originalBundledPluginsDir = process.env.OPNEX_BUNDLED_PLUGINS_DIR;
+const originalDisableBundledPlugins = process.env.OPNEX_DISABLE_BUNDLED_PLUGINS;
+const originalPluginStageDir = process.env.OPNEX_PLUGIN_STAGE_DIR;
+const FACADE_LOADER_GLOBAL = "__opnexTestLoadBundledPluginPublicSurfaceModuleSync";
+const STAGED_RUNTIME_DEP_NAME = "opnex-facade-loader-runtime-dep";
 type FacadeLoaderJitiFactory = NonNullable<Parameters<typeof setFacadeLoaderJitiFactoryForTest>[0]>;
 
 function forceNodeRuntimeVersionsForTest(): () => void {
@@ -107,18 +107,18 @@ function createPackagedBundledPluginDirWithStagedRuntimeDep(params: {
   const stageRoot = path.join(packageRoot, "stage");
   const env = {
     ...process.env,
-    OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(packageRoot, "dist", "extensions"),
-    OPENCLAW_PLUGIN_STAGE_DIR: stageRoot,
+    OPNEX_BUNDLED_PLUGINS_DIR: path.join(packageRoot, "dist", "extensions"),
+    OPNEX_PLUGIN_STAGE_DIR: stageRoot,
   };
   fs.mkdirSync(pluginRoot, { recursive: true });
 
   writeJsonFile(path.join(packageRoot, "package.json"), {
-    name: "openclaw",
+    name: "opnex",
     version: "0.0.0",
     type: "module",
   });
   writeJsonFile(path.join(pluginRoot, "package.json"), {
-    name: "@openclaw/plugin-demo",
+    name: "@opnex/plugin-demo",
     version: "0.0.0",
     type: "module",
     dependencies: {
@@ -170,35 +170,35 @@ afterEach(() => {
   clearBundledRuntimeDependencyNodePaths();
   delete (globalThis as typeof globalThis & Record<string, unknown>)[FACADE_LOADER_GLOBAL];
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.OPNEX_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
   if (originalDisableBundledPlugins === undefined) {
-    delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+    delete process.env.OPNEX_DISABLE_BUNDLED_PLUGINS;
   } else {
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
+    process.env.OPNEX_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
   }
   if (originalPluginStageDir === undefined) {
-    delete process.env.OPENCLAW_PLUGIN_STAGE_DIR;
+    delete process.env.OPNEX_PLUGIN_STAGE_DIR;
   } else {
-    process.env.OPENCLAW_PLUGIN_STAGE_DIR = originalPluginStageDir;
+    process.env.OPNEX_PLUGIN_STAGE_DIR = originalPluginStageDir;
   }
 });
 
 describe("plugin-sdk facade loader", () => {
   it("honors bundled plugin dir overrides outside the package root", () => {
-    const overrideA = createBundledPluginDir("openclaw-facade-loader-a-", "override-a");
-    const overrideB = createBundledPluginDir("openclaw-facade-loader-b-", "override-b");
+    const overrideA = createBundledPluginDir("opnex-facade-loader-a-", "override-a");
+    const overrideB = createBundledPluginDir("opnex-facade-loader-b-", "override-b");
 
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = overrideA;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = overrideA;
     const fromA = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: "demo",
       artifactBasename: "api.js",
     });
     expect(fromA.marker).toBe("override-a");
 
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = overrideB;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = overrideB;
     const fromB = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: "demo",
       artifactBasename: "api.js",
@@ -207,7 +207,7 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("falls back to package source surfaces when an override dir lacks a bundled plugin", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = createTempDirSync("openclaw-facade-loader-empty-");
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = createTempDirSync("opnex-facade-loader-empty-");
 
     const loaded = loadBundledPluginPublicSurfaceModuleSync<{
       closeTrackedBrowserTabsForSessions: unknown;
@@ -220,8 +220,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("keeps bundled facade loads disabled when bundled plugins are disabled", () => {
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    process.env.OPNEX_DISABLE_BUNDLED_PLUGINS = "1";
+    delete process.env.OPNEX_BUNDLED_PLUGINS_DIR;
 
     expect(() =>
       loadBundledPluginPublicSurfaceModuleSync({
@@ -232,8 +232,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("shares loaded facade ids with facade-runtime", () => {
-    const dir = createBundledPluginDir("openclaw-facade-loader-ids-", "identity-check");
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = dir;
+    const dir = createBundledPluginDir("opnex-facade-loader-ids-", "identity-check");
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = dir;
 
     const first = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: "demo",
@@ -251,7 +251,7 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("uses the runtime-supported Jiti boundary for Windows dist facade loads", () => {
-    const dir = createTempDirSync("openclaw-facade-loader-windows-dist-");
+    const dir = createTempDirSync("opnex-facade-loader-windows-dist-");
     const bundledPluginsDir = path.join(dir, "dist");
     fs.mkdirSync(path.join(bundledPluginsDir, "demo"), { recursive: true });
     fs.writeFileSync(
@@ -259,7 +259,7 @@ describe("plugin-sdk facade loader", () => {
       'export const marker = "windows-dist-ok";\n',
       "utf8",
     );
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
 
     const createJitiCalls: Parameters<FacadeLoaderJitiFactory>[] = [];
     setFacadeLoaderJitiFactoryForTest(((...args) => {
@@ -294,10 +294,10 @@ describe("plugin-sdk facade loader", () => {
   it("loads built bundled sync public surfaces through staged runtime deps", async () => {
     const fixture = createPackagedBundledPluginDirWithStagedRuntimeDep({
       marker: "staged",
-      prefix: "openclaw-facade-loader-runtime-deps-",
+      prefix: "opnex-facade-loader-runtime-deps-",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
-    process.env.OPENCLAW_PLUGIN_STAGE_DIR = fixture.stageRoot;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
+    process.env.OPNEX_PLUGIN_STAGE_DIR = fixture.stageRoot;
 
     await expect(import(pathToFileURL(fixture.modulePath).href)).rejects.toMatchObject({
       code: "ERR_MODULE_NOT_FOUND",
@@ -321,7 +321,7 @@ describe("plugin-sdk facade loader", () => {
   it("loads built bundled async public surfaces through staged runtime deps", async () => {
     const fixture = createPackagedBundledPluginDirWithStagedRuntimeDep({
       marker: "async-staged",
-      prefix: "openclaw-facade-loader-built-async-",
+      prefix: "opnex-facade-loader-built-async-",
     });
 
     const loaded = await loadBundledPluginPublicSurfaceModule<{
@@ -340,8 +340,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("breaks circular facade re-entry during module evaluation", () => {
-    const dir = createCircularPluginDir("openclaw-facade-loader-circular-");
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = dir;
+    const dir = createCircularPluginDir("opnex-facade-loader-circular-");
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = dir;
     (globalThis as typeof globalThis & Record<string, unknown>)[FACADE_LOADER_GLOBAL] =
       loadBundledPluginPublicSurfaceModuleSync;
 
@@ -354,8 +354,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("clears the cache on load failure so retries re-execute", () => {
-    const dir = createThrowingPluginDir("openclaw-facade-loader-throw-");
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = dir;
+    const dir = createThrowingPluginDir("opnex-facade-loader-throw-");
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = dir;
 
     expect(() =>
       loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({

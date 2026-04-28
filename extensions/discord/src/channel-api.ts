@@ -1,13 +1,13 @@
-export { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
+export { DEFAULT_ACCOUNT_ID } from "opnex/plugin-sdk/account-id";
 export {
   buildTokenChannelStatusSummary,
   PAIRING_APPROVED_MESSAGE,
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
-} from "openclaw/plugin-sdk/channel-status";
-export { createScopedChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-status";
+export { createScopedChannelConfigAdapter } from "opnex/plugin-sdk/channel-config-helpers";
+export type { ChannelPlugin } from "opnex/plugin-sdk/channel-core";
+export type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
 const DISCORD_CHANNEL_META = {
   id: "discord",

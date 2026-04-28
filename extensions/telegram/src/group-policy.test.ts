@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect, it } from "vitest";
 import {
   resolveTelegramGroupRequireMention,
@@ -24,7 +24,7 @@ describe("resolveTelegramGroupRequireMention", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       resolveTelegramGroupRequireMention({
@@ -48,7 +48,7 @@ describe("resolveTelegramGroupToolPolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       resolveTelegramGroupToolPolicy({

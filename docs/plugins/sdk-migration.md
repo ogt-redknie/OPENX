@@ -3,14 +3,14 @@ summary: "Migrate from the legacy backwards-compatibility layer to the modern pl
 title: "Plugin SDK migration"
 sidebarTitle: "Migrate to SDK"
 read_when:
-  - You see the OPENCLAW_PLUGIN_SDK_COMPAT_DEPRECATED warning
-  - You see the OPENCLAW_EXTENSION_API_DEPRECATED warning
-  - You used api.registerEmbeddedExtensionFactory before OpenClaw 2026.4.25
+  - You see the OPNEX_PLUGIN_SDK_COMPAT_DEPRECATED warning
+  - You see the OPNEX_EXTENSION_API_DEPRECATED warning
+  - You used api.registerEmbeddedExtensionFactory before OPNEX 2026.4.25
   - You are updating a plugin to the modern plugin architecture
-  - You maintain an external OpenClaw plugin
+  - You maintain an external OPNEX plugin
 ---
 
-OpenClaw has moved from a broad backwards-compatibility layer to a modern plugin
+OPNEX has moved from a broad backwards-compatibility layer to a modern plugin
 architecture with focused, documented imports. If your plugin was built before
 the new architecture, this guide helps you migrate.
 
@@ -19,16 +19,16 @@ the new architecture, this guide helps you migrate.
 The old plugin system provided two wide-open surfaces that let plugins import
 anything they needed from a single entry point:
 
-- **`openclaw/plugin-sdk/compat`** — a single import that re-exported dozens of
+- **`opnex/plugin-sdk/compat`** — a single import that re-exported dozens of
   helpers. It was introduced to keep older hook-based plugins working while the
   new plugin architecture was being built.
-- **`openclaw/plugin-sdk/infra-runtime`** — a broad runtime helper barrel that
+- **`opnex/plugin-sdk/infra-runtime`** — a broad runtime helper barrel that
   mixed system events, heartbeat state, delivery queues, fetch/proxy helpers,
   file helpers, approval types, and unrelated utilities.
-- **`openclaw/plugin-sdk/config-runtime`** — a broad config compatibility barrel
+- **`opnex/plugin-sdk/config-runtime`** — a broad config compatibility barrel
   that still carries deprecated direct load/write helpers during the migration
   window.
-- **`openclaw/extension-api`** — a bridge that gave plugins direct access to
+- **`opnex/extension-api`** — a bridge that gave plugins direct access to
   host-side helpers like the embedded agent runner.
 - **`api.registerEmbeddedExtensionFactory(...)`** — a removed Pi-only bundled
   extension hook that could observe embedded-runner events such as
@@ -39,7 +39,7 @@ but new plugins must not use them, and existing plugins should migrate before
 the next major release removes them. The Pi-only embedded extension factory
 registration API has been removed; use tool-result middleware instead.
 
-OpenClaw does not remove or reinterpret documented plugin behavior in the same
+OPNEX does not remove or reinterpret documented plugin behavior in the same
 change that introduces a replacement. Breaking contract changes must first go
 through a compatibility adapter, diagnostics, docs, and a deprecation window.
 That applies to SDK imports, manifest fields, setup APIs, hooks, and runtime
@@ -59,7 +59,7 @@ The old approach caused problems:
 - **Circular dependencies** — broad re-exports made it easy to create import cycles
 - **Unclear API surface** — no way to tell which exports were stable vs internal
 
-The modern plugin SDK fixes this: each import path (`openclaw/plugin-sdk/\<subpath\>`)
+The modern plugin SDK fixes this: each import path (`opnex/plugin-sdk/\<subpath\>`)
 is a small, self-contained module with a clear purpose and documented contract.
 
 Legacy provider convenience seams for bundled channels are also gone.
@@ -148,20 +148,20 @@ releases.
     zero allowed ambient `loadConfig()` calls.
 
     New plugin code should also avoid importing the broad
-    `openclaw/plugin-sdk/config-runtime` compatibility barrel. Use the narrow
+    `opnex/plugin-sdk/config-runtime` compatibility barrel. Use the narrow
     SDK subpath that matches the job:
 
     | Need | Import |
     | --- | --- |
-    | Config types such as `OpenClawConfig` | `openclaw/plugin-sdk/config-types` |
-    | Already-loaded config assertions and plugin-entry config lookup | `openclaw/plugin-sdk/plugin-config-runtime` |
-    | Current runtime snapshot reads | `openclaw/plugin-sdk/runtime-config-snapshot` |
-    | Config writes | `openclaw/plugin-sdk/config-mutation` |
-    | Session store helpers | `openclaw/plugin-sdk/session-store-runtime` |
-    | Markdown table config | `openclaw/plugin-sdk/markdown-table-runtime` |
-    | Group policy runtime helpers | `openclaw/plugin-sdk/runtime-group-policy` |
-    | Secret input resolution | `openclaw/plugin-sdk/secret-input-runtime` |
-    | Model/session overrides | `openclaw/plugin-sdk/model-session-runtime` |
+    | Config types such as `OPNEXConfig` | `opnex/plugin-sdk/config-types` |
+    | Already-loaded config assertions and plugin-entry config lookup | `opnex/plugin-sdk/plugin-config-runtime` |
+    | Current runtime snapshot reads | `opnex/plugin-sdk/runtime-config-snapshot` |
+    | Config writes | `opnex/plugin-sdk/config-mutation` |
+    | Session store helpers | `opnex/plugin-sdk/session-store-runtime` |
+    | Markdown table config | `opnex/plugin-sdk/markdown-table-runtime` |
+    | Group policy runtime helpers | `opnex/plugin-sdk/runtime-group-policy` |
+    | Secret input resolution | `opnex/plugin-sdk/secret-input-runtime` |
+    | Model/session overrides | `opnex/plugin-sdk/model-session-runtime` |
 
     Bundled plugins and their tests are scanner-guarded against the broad
     barrel so imports and mocks stay local to the behavior they need. The broad
@@ -214,7 +214,7 @@ releases.
     - `plugin.auth` remains for channel login/logout flows only; approval auth
       hooks there are no longer read by core
     - Register channel-owned runtime objects such as clients, tokens, or Bolt
-      apps through `openclaw/plugin-sdk/channel-runtime-context`
+      apps through `opnex/plugin-sdk/channel-runtime-context`
     - Do not send plugin-owned reroute notices from native approval handlers;
       core now owns routed-elsewhere notices from actual delivery results
     - When passing `channelRuntime` into `createChannelManager(...)`, provide a
@@ -226,7 +226,7 @@ releases.
   </Step>
 
   <Step title="Audit Windows wrapper fallback behavior">
-    If your plugin uses `openclaw/plugin-sdk/windows-spawn`, unresolved Windows
+    If your plugin uses `opnex/plugin-sdk/windows-spawn`, unresolved Windows
     `.cmd`/`.bat` wrappers now fail closed unless you explicitly pass
     `allowShellFallback: true`.
 
@@ -255,7 +255,7 @@ releases.
     grep -r "plugin-sdk/compat" my-plugin/
     grep -r "plugin-sdk/infra-runtime" my-plugin/
     grep -r "plugin-sdk/config-runtime" my-plugin/
-    grep -r "openclaw/extension-api" my-plugin/
+    grep -r "opnex/extension-api" my-plugin/
     ```
 
   </Step>
@@ -269,12 +269,12 @@ releases.
       createChannelReplyPipeline,
       createPluginRuntimeStore,
       resolveControlCommandGate,
-    } from "openclaw/plugin-sdk/compat";
+    } from "opnex/plugin-sdk/compat";
 
     // After (modern focused imports)
-    import { createChannelReplyPipeline } from "openclaw/plugin-sdk/channel-reply-pipeline";
-    import { createPluginRuntimeStore } from "openclaw/plugin-sdk/runtime-store";
-    import { resolveControlCommandGate } from "openclaw/plugin-sdk/command-auth";
+    import { createChannelReplyPipeline } from "opnex/plugin-sdk/channel-reply-pipeline";
+    import { createPluginRuntimeStore } from "opnex/plugin-sdk/runtime-store";
+    import { resolveControlCommandGate } from "opnex/plugin-sdk/command-auth";
     ```
 
     For host-side helpers, use the injected plugin runtime instead of importing
@@ -282,7 +282,7 @@ releases.
 
     ```typescript
     // Before (deprecated extension-api bridge)
-    import { runEmbeddedPiAgent } from "openclaw/extension-api";
+    import { runEmbeddedPiAgent } from "opnex/extension-api";
     const result = await runEmbeddedPiAgent({ sessionId, prompt });
 
     // After (injected runtime)
@@ -304,30 +304,30 @@ releases.
   </Step>
 
   <Step title="Replace broad infra-runtime imports">
-    `openclaw/plugin-sdk/infra-runtime` still exists for external
+    `opnex/plugin-sdk/infra-runtime` still exists for external
     compatibility, but new code should import the focused helper surface it
     actually needs:
 
     | Need | Import |
     | --- | --- |
-    | System event queue helpers | `openclaw/plugin-sdk/system-event-runtime` |
-    | Heartbeat event and visibility helpers | `openclaw/plugin-sdk/heartbeat-runtime` |
-    | Pending delivery queue drain | `openclaw/plugin-sdk/delivery-queue-runtime` |
-    | Channel activity telemetry | `openclaw/plugin-sdk/channel-activity-runtime` |
-    | In-memory dedupe caches | `openclaw/plugin-sdk/dedupe-runtime` |
-    | Safe local-file/media path helpers | `openclaw/plugin-sdk/file-access-runtime` |
-    | Dispatcher-aware fetch | `openclaw/plugin-sdk/runtime-fetch` |
-    | Proxy and guarded fetch helpers | `openclaw/plugin-sdk/fetch-runtime` |
-    | SSRF dispatcher policy types | `openclaw/plugin-sdk/ssrf-dispatcher` |
-    | Approval request/resolution types | `openclaw/plugin-sdk/approval-runtime` |
-    | Approval reply payload and command helpers | `openclaw/plugin-sdk/approval-reply-runtime` |
-    | Error formatting helpers | `openclaw/plugin-sdk/error-runtime` |
-    | Transport readiness waits | `openclaw/plugin-sdk/transport-ready-runtime` |
-    | Secure token helpers | `openclaw/plugin-sdk/secure-random-runtime` |
-    | Bounded async task concurrency | `openclaw/plugin-sdk/concurrency-runtime` |
-    | Numeric coercion | `openclaw/plugin-sdk/number-runtime` |
-    | Process-local async lock | `openclaw/plugin-sdk/async-lock-runtime` |
-    | File locks | `openclaw/plugin-sdk/file-lock` |
+    | System event queue helpers | `opnex/plugin-sdk/system-event-runtime` |
+    | Heartbeat event and visibility helpers | `opnex/plugin-sdk/heartbeat-runtime` |
+    | Pending delivery queue drain | `opnex/plugin-sdk/delivery-queue-runtime` |
+    | Channel activity telemetry | `opnex/plugin-sdk/channel-activity-runtime` |
+    | In-memory dedupe caches | `opnex/plugin-sdk/dedupe-runtime` |
+    | Safe local-file/media path helpers | `opnex/plugin-sdk/file-access-runtime` |
+    | Dispatcher-aware fetch | `opnex/plugin-sdk/runtime-fetch` |
+    | Proxy and guarded fetch helpers | `opnex/plugin-sdk/fetch-runtime` |
+    | SSRF dispatcher policy types | `opnex/plugin-sdk/ssrf-dispatcher` |
+    | Approval request/resolution types | `opnex/plugin-sdk/approval-runtime` |
+    | Approval reply payload and command helpers | `opnex/plugin-sdk/approval-reply-runtime` |
+    | Error formatting helpers | `opnex/plugin-sdk/error-runtime` |
+    | Transport readiness waits | `opnex/plugin-sdk/transport-ready-runtime` |
+    | Secure token helpers | `opnex/plugin-sdk/secure-random-runtime` |
+    | Bounded async task concurrency | `opnex/plugin-sdk/concurrency-runtime` |
+    | Numeric coercion | `opnex/plugin-sdk/number-runtime` |
+    | Process-local async lock | `opnex/plugin-sdk/async-lock-runtime` |
+    | File locks | `opnex/plugin-sdk/file-lock` |
 
     Bundled plugins are scanner-guarded against `infra-runtime`, so repo code
     cannot regress to the broad barrel.
@@ -335,7 +335,7 @@ releases.
   </Step>
 
   <Step title="Migrate channel route helpers">
-    New channel route code should use `openclaw/plugin-sdk/channel-route`.
+    New channel route code should use `opnex/plugin-sdk/channel-route`.
     The older route-key and comparable-target names remain as compatibility
     aliases during the migration window, but new plugins should use the route
     names that describe the behavior directly:
@@ -373,7 +373,7 @@ releases.
   | --- | --- | --- |
   | `plugin-sdk/plugin-entry` | Canonical plugin entry helper | `definePluginEntry` |
   | `plugin-sdk/core` | Legacy umbrella re-export for channel entry definitions/builders | `defineChannelPluginEntry`, `createChatChannelPlugin` |
-  | `plugin-sdk/config-schema` | Root config schema export | `OpenClawSchema` |
+  | `plugin-sdk/config-schema` | Root config schema export | `OPNEXSchema` |
   | `plugin-sdk/provider-entry` | Single-provider entry helper | `defineSingleProviderPluginEntry` |
   | `plugin-sdk/channel-core` | Focused channel entry definitions and builders | `defineChannelPluginEntry`, `defineSetupPluginEntry`, `createChatChannelPlugin`, `createChannelPluginBase` |
   | `plugin-sdk/setup` | Shared setup wizard helpers | Allowlist prompts, setup status builders |
@@ -389,7 +389,7 @@ releases.
   | `plugin-sdk/channel-reply-pipeline` | Reply prefix, typing, and source-delivery wiring | `createChannelReplyPipeline`, `resolveChannelSourceReplyDeliveryMode` |
   | `plugin-sdk/channel-config-helpers` | Config adapter factories | `createHybridChannelConfigAdapter` |
   | `plugin-sdk/channel-config-schema` | Config schema builders | Shared channel config schema primitives and the generic builder only |
-  | `plugin-sdk/bundled-channel-config-schema` | Bundled config schemas | OpenClaw-maintained bundled plugins only; new plugins must define plugin-local schemas |
+  | `plugin-sdk/bundled-channel-config-schema` | Bundled config schemas | OPNEX-maintained bundled plugins only; new plugins must define plugin-local schemas |
   | `plugin-sdk/channel-config-schema-legacy` | Deprecated bundled config schemas | Compatibility alias only; use `plugin-sdk/bundled-channel-config-schema` for maintained bundled plugins |
   | `plugin-sdk/telegram-command-config` | Telegram command config helpers | Command-name normalization, description trimming, duplicate/conflict validation |
   | `plugin-sdk/channel-policy` | Group/DM policy resolution | `resolveChannelGroupRequireMention` |
@@ -563,19 +563,19 @@ canonical replacement.
 
 <AccordionGroup>
   <Accordion title="command-auth help builders → command-status">
-    **Old (`openclaw/plugin-sdk/command-auth`)**: `buildCommandsMessage`,
+    **Old (`opnex/plugin-sdk/command-auth`)**: `buildCommandsMessage`,
     `buildCommandsMessagePaginated`, `buildHelpMessage`.
 
-    **New (`openclaw/plugin-sdk/command-status`)**: same signatures, same
+    **New (`opnex/plugin-sdk/command-status`)**: same signatures, same
     exports — just imported from the narrower subpath. `command-auth`
     re-exports them as compat stubs.
 
     ```typescript
     // Before
-    import { buildHelpMessage } from "openclaw/plugin-sdk/command-auth";
+    import { buildHelpMessage } from "opnex/plugin-sdk/command-auth";
 
     // After
-    import { buildHelpMessage } from "openclaw/plugin-sdk/command-status";
+    import { buildHelpMessage } from "opnex/plugin-sdk/command-status";
     ```
 
   </Accordion>
@@ -583,8 +583,8 @@ canonical replacement.
   <Accordion title="Mention gating helpers → resolveInboundMentionDecision">
     **Old**: `resolveInboundMentionRequirement({ facts, policy })` and
     `shouldDropInboundForMention(...)` from
-    `openclaw/plugin-sdk/channel-inbound` or
-    `openclaw/plugin-sdk/channel-mention-gating`.
+    `opnex/plugin-sdk/channel-inbound` or
+    `opnex/plugin-sdk/channel-mention-gating`.
 
     **New**: `resolveInboundMentionDecision({ facts, policy })` — returns a
     single decision object instead of two split calls.
@@ -595,12 +595,12 @@ canonical replacement.
   </Accordion>
 
   <Accordion title="Channel runtime shim and channel actions helpers">
-    `openclaw/plugin-sdk/channel-runtime` is a compatibility shim for older
+    `opnex/plugin-sdk/channel-runtime` is a compatibility shim for older
     channel plugins. Do not import it from new code; use
-    `openclaw/plugin-sdk/channel-runtime-context` for registering runtime
+    `opnex/plugin-sdk/channel-runtime-context` for registering runtime
     objects.
 
-    `channelActions*` helpers in `openclaw/plugin-sdk/channel-actions` are
+    `channelActions*` helpers in `opnex/plugin-sdk/channel-actions` are
     deprecated alongside raw "actions" channel exports. Expose capabilities
     through the semantic `presentation` surface instead — channel plugins
     declare what they render (cards, buttons, selects) rather than which raw
@@ -609,10 +609,10 @@ canonical replacement.
   </Accordion>
 
   <Accordion title="Web search provider tool() helper → createTool() on the plugin">
-    **Old**: `tool()` factory from `openclaw/plugin-sdk/provider-web-search`.
+    **Old**: `tool()` factory from `opnex/plugin-sdk/provider-web-search`.
 
     **New**: implement `createTool(...)` directly on the provider plugin.
-    OpenClaw no longer needs the SDK helper to register the tool wrapper.
+    OPNEX no longer needs the SDK helper to register the tool wrapper.
 
   </Accordion>
 
@@ -657,7 +657,7 @@ canonical replacement.
 
     **New**: a single `resolveThinkingProfile(ctx)` that returns a
     `ProviderThinkingProfile` with the canonical `id`, optional `label`, and
-    ranked level list. OpenClaw downgrades stale stored values by profile
+    ranked level list. OPNEX downgrades stale stored values by profile
     rank automatically.
 
     Implement one hook instead of three. The legacy hooks keep working during
@@ -749,15 +749,15 @@ canonical replacement.
     list in `contracts.agentToolResultMiddleware`.
   </Accordion>
 
-  <Accordion title="OpenClawSchemaType alias → OpenClawConfig">
-    `OpenClawSchemaType` re-exported from `openclaw/plugin-sdk` is now a
-    one-line alias for `OpenClawConfig`. Prefer the canonical name.
+  <Accordion title="OPNEXSchemaType alias → OPNEXConfig">
+    `OPNEXSchemaType` re-exported from `opnex/plugin-sdk` is now a
+    one-line alias for `OPNEXConfig`. Prefer the canonical name.
 
     ```typescript
     // Before
-    import type { OpenClawSchemaType } from "openclaw/plugin-sdk";
+    import type { OPNEXSchemaType } from "opnex/plugin-sdk";
     // After
-    import type { OpenClawConfig } from "openclaw/plugin-sdk/config-schema";
+    import type { OPNEXConfig } from "opnex/plugin-sdk/config-schema";
     ```
 
   </Accordion>
@@ -786,8 +786,8 @@ before the next major release.
 Set these environment variables while you work on migrating:
 
 ```bash
-OPENCLAW_SUPPRESS_PLUGIN_SDK_COMPAT_WARNING=1 openclaw gateway run
-OPENCLAW_SUPPRESS_EXTENSION_API_WARNING=1 openclaw gateway run
+OPNEX_SUPPRESS_PLUGIN_SDK_COMPAT_WARNING=1 opnex gateway run
+OPNEX_SUPPRESS_EXTENSION_API_WARNING=1 opnex gateway run
 ```
 
 This is a temporary escape hatch, not a permanent solution.

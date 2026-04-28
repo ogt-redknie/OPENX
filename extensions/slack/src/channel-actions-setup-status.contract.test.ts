@@ -2,8 +2,8 @@ import {
   installChannelActionsContractSuite,
   installChannelSetupContractSuite,
   installChannelStatusContractSuite,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-test-helpers";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect } from "vitest";
 import { slackPlugin } from "../api.js";
 import { slackSetupPlugin } from "../setup-plugin-api.js";
@@ -38,7 +38,7 @@ describe("slack actions contract", () => {
               appToken: "xapp-test",
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         expectedActions: slackDefaultActions,
         expectedCapabilities: ["presentation"],
       },
@@ -54,7 +54,7 @@ describe("slack actions contract", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         expectedActions: slackDefaultActions,
         expectedCapabilities: ["presentation"],
       },
@@ -66,7 +66,7 @@ describe("slack actions contract", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         expectedActions: [],
         expectedCapabilities: [],
       },
@@ -80,7 +80,7 @@ describe("slack setup contract", () => {
     cases: [
       {
         name: "default account stores tokens and enables the channel",
-        cfg: {} as OpenClawConfig,
+        cfg: {} as OPNEXConfig,
         input: {
           botToken: "xoxb-test",
           appToken: "xapp-test",
@@ -94,7 +94,7 @@ describe("slack setup contract", () => {
       },
       {
         name: "non-default env setup is rejected",
-        cfg: {} as OpenClawConfig,
+        cfg: {} as OPNEXConfig,
         accountId: "ops",
         input: {
           useEnv: true,
@@ -119,7 +119,7 @@ describe("slack status contract", () => {
               appToken: "xapp-test",
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         runtime: {
           accountId: "default",
           connected: true,

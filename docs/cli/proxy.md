@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw proxy`, the local debug proxy and capture inspector"
+summary: "CLI reference for `opnex proxy`, the local debug proxy and capture inspector"
 read_when:
-  - You need to capture OpenClaw transport traffic locally for debugging
+  - You need to capture OPNEX transport traffic locally for debugging
   - You want to inspect debug proxy sessions, blobs, or built-in query presets
 title: "Proxy"
 ---
 
-# `openclaw proxy`
+# `opnex proxy`
 
 Run the local explicit debug proxy and inspect captured traffic.
 
@@ -18,18 +18,18 @@ data.
 ## Commands
 
 ```bash
-openclaw proxy start [--host <host>] [--port <port>]
-openclaw proxy run [--host <host>] [--port <port>] -- <cmd...>
-openclaw proxy coverage
-openclaw proxy sessions [--limit <count>]
-openclaw proxy query --preset <name> [--session <id>]
-openclaw proxy blob --id <blobId>
-openclaw proxy purge
+opnex proxy start [--host <host>] [--port <port>]
+opnex proxy run [--host <host>] [--port <port>] -- <cmd...>
+opnex proxy coverage
+opnex proxy sessions [--limit <count>]
+opnex proxy query --preset <name> [--session <id>]
+opnex proxy blob --id <blobId>
+opnex proxy purge
 ```
 
 ## Query presets
 
-`openclaw proxy query --preset <name>` accepts:
+`opnex proxy query --preset <name>` accepts:
 
 - `double-sends`
 - `retry-storms`
@@ -42,7 +42,7 @@ openclaw proxy purge
 
 - `start` defaults to `127.0.0.1` unless `--host` is set.
 - `run` starts a local debug proxy and then runs the command after `--`.
-- Captures are local debugging data; use `openclaw proxy purge` when finished.
+- Captures are local debugging data; use `opnex proxy purge` when finished.
 
 ## Related
 

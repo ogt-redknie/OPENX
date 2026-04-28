@@ -1,7 +1,7 @@
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-export { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+export type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+export { definePluginEntry, type OPNEXPluginApi } from "opnex/plugin-sdk/plugin-entry";
 export {
   fetchWithSsrFGuard,
   ssrfPolicyFromAllowPrivateNetwork,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "opnex/plugin-sdk/ssrf-runtime";

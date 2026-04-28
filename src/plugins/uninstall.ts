@@ -1,7 +1,7 @@
 import { realpathSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolvePluginInstallDir } from "./install.js";
@@ -79,7 +79,7 @@ export function formatUninstallSlotResetPreview(slotKey: "memory" | "contextEngi
 export type UninstallPluginResult =
   | {
       ok: true;
-      config: OpenClawConfig;
+      config: OPNEXConfig;
       pluginId: string;
       actions: UninstallActions;
       warnings: string[];
@@ -93,7 +93,7 @@ export type PluginUninstallDirectoryRemoval = {
 export type PluginUninstallPlanResult =
   | {
       ok: true;
-      config: OpenClawConfig;
+      config: OPNEXConfig;
       pluginId: string;
       actions: UninstallActions;
       directoryRemoval: PluginUninstallDirectoryRemoval | null;
@@ -231,10 +231,10 @@ function isPathInsideOrEqual(parent: string, child: string): boolean {
  * and owned channel config.
  */
 export function removePluginFromConfig(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   pluginId: string,
   opts?: { channelIds?: string[] },
-): { config: OpenClawConfig; actions: Omit<UninstallActions, "directory"> } {
+): { config: OPNEXConfig; actions: Omit<UninstallActions, "directory"> } {
   const actions = createEmptyConfigUninstallActions();
 
   const pluginsConfig = cfg.plugins ?? {};
@@ -363,17 +363,17 @@ export function removePluginFromConfig(
     }
   }
 
-  const config: OpenClawConfig = {
+  const config: OPNEXConfig = {
     ...cfg,
     plugins: Object.keys(cleanedPlugins).length > 0 ? cleanedPlugins : undefined,
-    channels: channels as OpenClawConfig["channels"],
+    channels: channels as OPNEXConfig["channels"],
   };
 
   return { config, actions };
 }
 
 export type UninstallPluginParams = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   pluginId: string;
   channelIds?: string[];
   deleteFiles?: boolean;

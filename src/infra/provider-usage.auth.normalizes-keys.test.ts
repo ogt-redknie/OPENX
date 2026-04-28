@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { NON_ENV_SECRETREF_MARKER } from "../agents/model-auth-markers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
 import { createSuiteTempRootTracker } from "../test-helpers/temp-dir.js";
 
@@ -267,7 +267,7 @@ let resolveProviderAuths: typeof import("./provider-usage.auth.js").resolveProvi
 let clearRuntimeAuthProfileStoreSnapshots: typeof import("../agents/auth-profiles.js").clearRuntimeAuthProfileStoreSnapshots;
 let clearConfigCache: typeof import("../config/config.js").clearConfigCache;
 let clearRuntimeConfigSnapshot: typeof import("../config/config.js").clearRuntimeConfigSnapshot;
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-provider-auth-suite-" });
+const suiteRootTracker = createSuiteTempRootTracker({ prefix: "opnex-provider-auth-suite-" });
 
 describe("resolveProviderAuths key normalization", () => {
   const EMPTY_PROVIDER_ENV = {
@@ -305,7 +305,7 @@ describe("resolveProviderAuths key normalization", () => {
 
   async function withSuiteHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
     const base = await suiteRootTracker.make("case");
-    const stateDir = path.join(base, ".openclaw");
+    const stateDir = path.join(base, ".opnex");
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     nodeFs.mkdirSync(path.join(stateDir, "agents", "main", "sessions"), { recursive: true });
     nodeFs.mkdirSync(agentDir, { recursive: true });
@@ -318,7 +318,7 @@ describe("resolveProviderAuths key normalization", () => {
   }
 
   function agentDirForHome(home: string): string {
-    return path.join(home, ".openclaw", "agents", "main", "agent");
+    return path.join(home, ".opnex", "agents", "main", "agent");
   }
 
   function buildSuiteEnv(
@@ -329,7 +329,7 @@ describe("resolveProviderAuths key normalization", () => {
       ...EMPTY_PROVIDER_ENV,
       HOME: home,
       USERPROFILE: home,
-      OPENCLAW_STATE_DIR: path.join(home, ".openclaw"),
+      OPNEX_STATE_DIR: path.join(home, ".opnex"),
       ...env,
     };
     const match = home.match(/^([A-Za-z]:)(.*)$/);
@@ -351,10 +351,10 @@ describe("resolveProviderAuths key normalization", () => {
   }
 
   async function writeConfig(home: string, config: Record<string, unknown>) {
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".opnex");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
-      path.join(stateDir, "openclaw.json"),
+      path.join(stateDir, "opnex.json"),
       `${JSON.stringify(config, null, 2)}\n`,
       "utf8",
     );
@@ -407,7 +407,7 @@ describe("resolveProviderAuths key normalization", () => {
             },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies OPNEXConfig;
       await writeConfig(home, config);
 
       return await resolveProviderAuths({
@@ -423,7 +423,7 @@ describe("resolveProviderAuths key normalization", () => {
     providers: Parameters<typeof resolveProviderAuths>[0]["providers"];
     expected: Awaited<ReturnType<typeof resolveProviderAuths>>;
     env?: Record<string, string | undefined>;
-    config?: OpenClawConfig;
+    config?: OPNEXConfig;
     setup?: (home: string) => Promise<void>;
   }) {
     await withSuiteHome(async (home) => {
@@ -589,7 +589,7 @@ describe("resolveProviderAuths key normalization", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies OPNEXConfig;
     await expectResolvedAuthsFromSuiteHome({
       providers: ["zai", "minimax", "xiaomi"],
       setup: async (home) => {
@@ -641,7 +641,7 @@ describe("resolveProviderAuths key normalization", () => {
             "anthropic:default": { provider: "anthropic", mode: "token" },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies OPNEXConfig;
       await writeConfig(home, config);
       await writeAuthProfiles(home, {
         "anthropic:default": {

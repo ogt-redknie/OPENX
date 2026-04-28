@@ -198,9 +198,9 @@ describe("config footprint guardrails", () => {
       expect(source).not.toContain(schemaName);
     }
     expect(bundledSource).toContain("Bundled-channel config schemas");
-    expect(bundledSource).toContain("openclaw/plugin-sdk/channel-config-schema");
+    expect(bundledSource).toContain("opnex/plugin-sdk/channel-config-schema");
     expect(legacySource).toContain("Deprecated bundled-channel compatibility surface");
-    expect(legacySource).toContain("openclaw/plugin-sdk/bundled-channel-config-schema");
+    expect(legacySource).toContain("opnex/plugin-sdk/bundled-channel-config-schema");
     expect(legacySource).toContain('export * from "./bundled-channel-config-schema.js";');
   });
 });

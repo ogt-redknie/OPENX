@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/diagnostics-prometheus",
+  "name": "@opnex/diagnostics-prometheus",
   "version": "2026.4.25",
-  "description": "OpenClaw diagnostics Prometheus exporter",
+  "description": "OPNEX diagnostics Prometheus exporter",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -14,7 +14,7 @@
       "pluginApi": ">=2026.4.25"
     },
     "build": {
-      "openclawVersion": "2026.4.25"
+      "opnexVersion": "2026.4.25"
     },
     "release": {
       "publishToClawHub": true,

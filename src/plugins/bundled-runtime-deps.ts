@@ -5,7 +5,7 @@ import { Module } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { resolveStateDir } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { createLowDiskSpaceWarning } from "../infra/disk-space.js";
 import { resolveHomeRelativePath } from "../infra/home-dir.js";
 import { createNpmProjectInstallEnv } from "../infra/npm-install-env.js";
@@ -52,7 +52,7 @@ export type BundledRuntimeDepsInstallRootPlan = BundledRuntimeDepsInstallRoot & 
 };
 
 type JsonObject = Record<string, unknown>;
-const RETAINED_RUNTIME_DEPS_MANIFEST = ".openclaw-runtime-deps.json";
+const RETAINED_RUNTIME_DEPS_MANIFEST = ".opnex-runtime-deps.json";
 // Packaged bundled plugins (Docker image, npm global install) keep their
 // `package.json` next to their entry point; running `npm install <specs>` with
 // `cwd: pluginRoot` would make npm resolve the plugin's own `workspace:*`
@@ -60,8 +60,8 @@ const RETAINED_RUNTIME_DEPS_MANIFEST = ".openclaw-runtime-deps.json";
 // install inside this sub-directory and move the produced `node_modules/` back
 // to the plugin root. Source-checkout installs already have their own cache
 // path and keep using it.
-const PLUGIN_ROOT_INSTALL_STAGE_DIR = ".openclaw-install-stage";
-const BUNDLED_RUNTIME_DEPS_LOCK_DIR = ".openclaw-runtime-deps.lock";
+const PLUGIN_ROOT_INSTALL_STAGE_DIR = ".opnex-install-stage";
+const BUNDLED_RUNTIME_DEPS_LOCK_DIR = ".opnex-runtime-deps.lock";
 const BUNDLED_RUNTIME_DEPS_LOCK_OWNER_FILE = "owner.json";
 const BUNDLED_RUNTIME_DEPS_LOCK_WAIT_MS = 100;
 const BUNDLED_RUNTIME_DEPS_LOCK_TIMEOUT_MS = 5 * 60_000;
@@ -71,7 +71,7 @@ const BUNDLED_RUNTIME_DEPS_INSTALL_PROGRESS_INTERVAL_MS = 5_000;
 const BUNDLED_RUNTIME_MIRROR_MATERIALIZED_EXTENSIONS = new Set([".cjs", ".js", ".mjs"]);
 const BUNDLED_EXTENSION_DIST_DIR = "extensions";
 const MIRRORED_CORE_RUNTIME_DEP_NAMES = ["semver", "tslog"] as const;
-const MIRRORED_PACKAGE_RUNTIME_DEP_PLUGIN_ID = "openclaw-core";
+const MIRRORED_PACKAGE_RUNTIME_DEP_PLUGIN_ID = "opnex-core";
 const BUNDLED_RUNTIME_MIRROR_PLUGIN_REGION_RE = /(?:^|\n)\/\/#region extensions\/[^/\s]+(?:\/|$)/u;
 const BUNDLED_RUNTIME_MIRROR_IMPORT_SPECIFIER_RE =
   /(?:^|[;\n])\s*(?:import|export)\s+(?:[^'"()]+?\s+from\s+)?["']([^"']+)["']|\bimport\(\s*["']([^"']+)["']\s*\)|\brequire\(\s*["']([^"']+)["']\s*\)/g;
@@ -398,7 +398,7 @@ function formatRuntimeDepsLockTimeoutMessage(params: {
     `Timed out waiting for bundled runtime deps lock at ${params.lockDir} ` +
     `(waited=${formatDurationMs(params.waitedMs)}, ownerFile=${params.owner.ownerFileState}, ownerFileSymlink=${ownerFileSymlink}, ` +
     `${pidDetail}, ownerAge=${formatDurationMs(ownerAgeMs)}, ownerFileAge=${formatDurationMs(ownerFileAgeMs)}, lockAge=${formatDurationMs(lockAgeMs)}, ` +
-    `ownerFilePath=${params.owner.ownerFilePath}). If no OpenClaw/npm install is running, remove the lock directory and retry.`
+    `ownerFilePath=${params.owner.ownerFilePath}). If no OPNEX/npm install is running, remove the lock directory and retry.`
   );
 }
 
@@ -894,7 +894,7 @@ function pruneRetainedRuntimeDepsManifestSpecs(params: {
 function collectAlreadyStagedBundledRuntimeDepSpecs(params: {
   pluginRoot: string;
   installRoot: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): string[] {
   const packageRoot = resolveBundledPluginPackageRoot(params.pluginRoot);
   if (!packageRoot) {
@@ -929,7 +929,7 @@ function shouldPersistRetainedRuntimeDepsManifest(params: {
 export function isWritableDirectory(dir: string): boolean {
   let probeDir: string | null = null;
   try {
-    probeDir = fs.mkdtempSync(path.join(dir, ".openclaw-write-probe-"));
+    probeDir = fs.mkdtempSync(path.join(dir, ".opnex-write-probe-"));
     fs.writeFileSync(path.join(probeDir, "probe"), "", "utf8");
     return true;
   } catch {
@@ -956,7 +956,7 @@ function resolveSystemdStateDirectory(env: NodeJS.ProcessEnv): string | null {
 }
 
 function resolveBundledRuntimeDepsExternalBaseDirs(env: NodeJS.ProcessEnv): string[] {
-  const explicit = env.OPENCLAW_PLUGIN_STAGE_DIR?.trim();
+  const explicit = env.OPNEX_PLUGIN_STAGE_DIR?.trim();
   if (explicit) {
     const roots = explicit
       .split(path.delimiter)
@@ -1004,7 +1004,7 @@ function resolveExternalBundledRuntimeDepsInstallRoots(params: {
     return existingExternalRoots;
   }
   const version = sanitizePathSegment(readPackageVersion(packageRoot));
-  const packageKey = `openclaw-${version}-${createPathHash(packageRoot)}`;
+  const packageKey = `opnex-${version}-${createPathHash(packageRoot)}`;
   return resolveBundledRuntimeDepsExternalBaseDirs(params.env).map((baseDir) =>
     path.join(baseDir, packageKey),
   );
@@ -1022,7 +1022,7 @@ function resolveExistingExternalBundledRuntimeDepsRoots(params: {
       continue;
     }
     const packageKey = relative.split(path.sep)[0];
-    if (!packageKey || !packageKey.startsWith("openclaw-")) {
+    if (!packageKey || !packageKey.startsWith("opnex-")) {
       continue;
     }
     return externalBaseDirs.map((baseDir) => path.join(baseDir, packageKey));
@@ -1174,7 +1174,7 @@ function assertBundledRuntimeDepsInstalled(rootDir: string, specs: readonly stri
 
 function replaceNodeModulesDir(targetDir: string, sourceDir: string): void {
   const parentDir = path.dirname(targetDir);
-  const tempDir = fs.mkdtempSync(path.join(parentDir, ".openclaw-runtime-deps-copy-"));
+  const tempDir = fs.mkdtempSync(path.join(parentDir, ".opnex-runtime-deps-copy-"));
   const stagedDir = path.join(tempDir, "node_modules");
   try {
     fs.cpSync(sourceDir, stagedDir, { recursive: true });
@@ -1192,7 +1192,7 @@ function replaceNodeModulesDir(targetDir: string, sourceDir: string): void {
 
 function linkNodeModulesDir(targetDir: string, sourceDir: string): boolean {
   const parentDir = path.dirname(targetDir);
-  const tempLink = path.join(parentDir, `.openclaw-runtime-deps-link-${process.pid}-${Date.now()}`);
+  const tempLink = path.join(parentDir, `.opnex-runtime-deps-link-${process.pid}-${Date.now()}`);
   try {
     fs.symlinkSync(sourceDir, tempLink, process.platform === "win32" ? "junction" : "dir");
     fs.rmSync(targetDir, { recursive: true, force: true });
@@ -1365,7 +1365,7 @@ function readBundledPluginRuntimeDepsManifest(
   if (cached) {
     return cached;
   }
-  const manifest = readJsonObject(path.join(pluginDir, "openclaw.plugin.json"));
+  const manifest = readJsonObject(path.join(pluginDir, "opnex.plugin.json"));
   const channels = manifest?.channels;
   const runtimeDepsManifest = {
     channels: Array.isArray(channels)
@@ -1378,7 +1378,7 @@ function readBundledPluginRuntimeDepsManifest(
 }
 
 function isBundledPluginConfiguredForRuntimeDeps(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   pluginId: string;
   pluginDir: string;
   includeConfiguredChannels?: boolean;
@@ -1448,7 +1448,7 @@ function isBundledPluginConfiguredForRuntimeDeps(params: {
 }
 
 function shouldIncludeBundledPluginRuntimeDeps(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   pluginIds?: ReadonlySet<string>;
   selectedPluginIds?: ReadonlySet<string>;
   pluginId: string;
@@ -1490,7 +1490,7 @@ function shouldIncludeBundledPluginRuntimeDeps(params: {
 
 function collectBundledPluginRuntimeDeps(params: {
   extensionsDir: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   pluginIds?: ReadonlySet<string>;
   selectedPluginIds?: ReadonlySet<string>;
   includeConfiguredChannels?: boolean;
@@ -1590,7 +1590,7 @@ function normalizePluginIdSet(
 
 export function scanBundledPluginRuntimeDeps(params: {
   packageRoot: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   pluginIds?: readonly string[];
   selectedPluginIds?: readonly string[];
   includeConfiguredChannels?: boolean;
@@ -1654,7 +1654,7 @@ export function resolveBundledRuntimeDependencyPackageInstallRootPlan(
   });
   if (
     options.forceExternal ||
-    env.OPENCLAW_PLUGIN_STAGE_DIR?.trim() ||
+    env.OPNEX_PLUGIN_STAGE_DIR?.trim() ||
     env.STATE_DIRECTORY?.trim() ||
     !isSourceCheckoutRoot(packageRoot)
   ) {
@@ -1703,7 +1703,7 @@ export function resolveBundledRuntimeDependencyInstallRootPlan(
   const externalRoots = resolveExternalBundledRuntimeDepsInstallRoots({ pluginRoot, env });
   if (
     options.forceExternal ||
-    env.OPENCLAW_PLUGIN_STAGE_DIR?.trim() ||
+    env.OPNEX_PLUGIN_STAGE_DIR?.trim() ||
     env.STATE_DIRECTORY?.trim() ||
     isPackagedBundledPluginRoot(pluginRoot)
   ) {
@@ -1804,7 +1804,7 @@ function createNpmInstallExecutionManifest(installSpecs: readonly string[]): Jso
     Object.entries(dependencies).toSorted(([left], [right]) => left.localeCompare(right)),
   );
   return {
-    name: "openclaw-runtime-deps-install",
+    name: "opnex-runtime-deps-install",
     private: true,
     ...(Object.keys(sortedDependencies).length > 0 ? { dependencies: sortedDependencies } : {}),
   };
@@ -1962,7 +1962,7 @@ export function installBundledRuntimeDeps(params: {
     if (diskWarning) {
       params.warn?.(diskWarning);
     }
-    // Always make npm see an OpenClaw-owned package root. The package-level
+    // Always make npm see an OPNEX-owned package root. The package-level
     // doctor repair path installs directly in the external stage dir; without a
     // manifest, npm can honor a user's global prefix config and write under
     // $HOME/node_modules instead of our managed stage.
@@ -1976,7 +1976,7 @@ export function installBundledRuntimeDeps(params: {
       params.installSpecs ?? params.missingSpecs,
     );
     const installEnv = createBundledRuntimeDepsInstallEnv(params.env, {
-      cacheDir: path.join(installExecutionRoot, ".openclaw-npm-cache"),
+      cacheDir: path.join(installExecutionRoot, ".opnex-npm-cache"),
     });
     const npmRunner = resolveBundledRuntimeDepsNpmRunner({
       env: installEnv,
@@ -2047,7 +2047,7 @@ export async function installBundledRuntimeDepsAsync(params: {
       params.installSpecs ?? params.missingSpecs,
     );
     const installEnv = createBundledRuntimeDepsInstallEnv(params.env, {
-      cacheDir: path.join(installExecutionRoot, ".openclaw-npm-cache"),
+      cacheDir: path.join(installExecutionRoot, ".opnex-npm-cache"),
     });
     const npmRunner = resolveBundledRuntimeDepsNpmRunner({
       env: installEnv,
@@ -2236,7 +2236,7 @@ export function ensureBundledPluginRuntimeDeps(params: {
   pluginId: string;
   pluginRoot: string;
   env: NodeJS.ProcessEnv;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   retainSpecs?: readonly string[];
   installDeps?: (params: BundledRuntimeDepsInstallParams) => void;
 }): BundledRuntimeDepsEnsureResult {

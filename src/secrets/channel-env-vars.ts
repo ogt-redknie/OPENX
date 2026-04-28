@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { loadPluginManifestRegistryForPluginRegistry } from "../plugins/plugin-registry.js";
 export { isSafeChannelEnvVarTriggerName } from "./channel-env-var-names.js";
 
 type ChannelEnvVarLookupParams = {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 };

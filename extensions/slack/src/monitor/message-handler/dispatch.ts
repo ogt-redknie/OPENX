@@ -1,4 +1,4 @@
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "opnex/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
@@ -6,25 +6,25 @@ import {
   logTypingFailure,
   removeAckReactionAfterReply,
   type StatusReactionAdapter,
-} from "openclaw/plugin-sdk/channel-feedback";
-import { deliverFinalizableDraftPreview } from "openclaw/plugin-sdk/channel-lifecycle";
+} from "opnex/plugin-sdk/channel-feedback";
+import { deliverFinalizableDraftPreview } from "opnex/plugin-sdk/channel-lifecycle";
 import {
   createChannelReplyPipeline,
   resolveChannelSourceReplyDeliveryMode,
-} from "openclaw/plugin-sdk/channel-reply-pipeline";
+} from "opnex/plugin-sdk/channel-reply-pipeline";
 import {
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingNativeTransport,
   resolveChannelStreamingPreviewToolProgress,
-} from "openclaw/plugin-sdk/channel-streaming";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveAgentOutboundIdentity } from "openclaw/plugin-sdk/outbound-runtime";
-import { clearHistoryEntriesIfEnabled } from "openclaw/plugin-sdk/reply-history";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyDispatchKind, ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { danger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/channel-streaming";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import { resolveAgentOutboundIdentity } from "opnex/plugin-sdk/outbound-runtime";
+import { clearHistoryEntriesIfEnabled } from "opnex/plugin-sdk/reply-history";
+import { resolveSendableOutboundReplyParts } from "opnex/plugin-sdk/reply-payload";
+import type { ReplyDispatchKind, ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import { danger, logVerbose, shouldLogVerbose } from "opnex/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "opnex/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "opnex/plugin-sdk/text-runtime";
 import { reactSlackMessage, removeSlackReaction } from "../../actions.js";
 import { createSlackDraftStream } from "../../draft-stream.js";
 import { normalizeSlackOutboundText } from "../../format.js";

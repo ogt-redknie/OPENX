@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveGatewayReloadSettings } from "./config-reload.js";
 
 export type SharedGatewayAuthClient = {
@@ -69,7 +69,7 @@ export function setCurrentSharedGatewaySessionGeneration(
 
 export function enforceSharedGatewaySessionGenerationForConfigWrite(params: {
   state: SharedGatewaySessionGenerationState;
-  nextConfig: OpenClawConfig;
+  nextConfig: OPNEXConfig;
   resolveRuntimeSnapshotGeneration: () => string | undefined;
   clients: Iterable<SharedGatewayAuthClient>;
 }): void {

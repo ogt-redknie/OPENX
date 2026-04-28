@@ -1,5 +1,5 @@
 import { loadSessionStore, updateSessionStore } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { parseSessionLabel } from "../sessions/session-label.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import {
@@ -36,7 +36,7 @@ function noSessionFoundResult(key: string): SessionsResolveResult {
 
 /** Rejects sessions whose owning agent no longer exists in config (#65524). */
 function validateSessionAgentExists(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   key: string,
 ): SessionsResolveResult | null {
   const deletedAgentId = resolveDeletedAgentIdFromSessionKey(cfg, key);
@@ -53,7 +53,7 @@ function validateSessionAgentExists(
 }
 
 function isResolvedSessionKeyVisible(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   p: SessionsResolveParams;
   storePath: string;
   store: ReturnType<typeof loadSessionStore>;
@@ -71,7 +71,7 @@ function isResolvedSessionKeyVisible(params: {
 }
 
 export async function resolveSessionKeyFromResolveParams(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   p: SessionsResolveParams;
 }): Promise<SessionsResolveResult> {
   const { cfg, p } = params;

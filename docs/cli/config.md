@@ -1,17 +1,17 @@
 ---
-summary: "CLI reference for `openclaw config` (get/set/unset/file/schema/validate)"
+summary: "CLI reference for `opnex config` (get/set/unset/file/schema/validate)"
 read_when:
   - You want to read or edit config non-interactively
 title: "Config"
 sidebarTitle: "Config"
 ---
 
-Config helpers for non-interactive edits in `openclaw.json`: get/set/unset/file/schema/validate values by path and print the active config file. Run without a subcommand to open the configure wizard (same as `openclaw configure`).
+Config helpers for non-interactive edits in `opnex.json`: get/set/unset/file/schema/validate values by path and print the active config file. Run without a subcommand to open the configure wizard (same as `opnex configure`).
 
 ## Root options
 
 <ParamField path="--section <section>" type="string">
-  Repeatable guided-setup section filter when you run `openclaw config` without a subcommand.
+  Repeatable guided-setup section filter when you run `opnex config` without a subcommand.
 </ParamField>
 
 Supported guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `channels`, `plugins`, `skills`, `health`.
@@ -19,27 +19,27 @@ Supported guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `ch
 ## Examples
 
 ```bash
-openclaw config file
-openclaw config --section model
-openclaw config --section gateway --section daemon
-openclaw config schema
-openclaw config get browser.executablePath
-openclaw config set browser.executablePath "/usr/bin/google-chrome"
-openclaw config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-openclaw config set agents.defaults.heartbeat.every "2h"
-openclaw config set agents.list[0].tools.exec.node "node-id-or-name"
-openclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-openclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
-openclaw config set secrets.providers.vaultfile --provider-source file --provider-path /etc/openclaw/secrets.json --provider-mode json
-openclaw config unset plugins.entries.brave.config.webSearch.apiKey
-openclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
-openclaw config validate
-openclaw config validate --json
+opnex config file
+opnex config --section model
+opnex config --section gateway --section daemon
+opnex config schema
+opnex config get browser.executablePath
+opnex config set browser.executablePath "/usr/bin/google-chrome"
+opnex config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+opnex config set agents.defaults.heartbeat.every "2h"
+opnex config set agents.list[0].tools.exec.node "node-id-or-name"
+opnex config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+opnex config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
+opnex config set secrets.providers.vaultfile --provider-source file --provider-path /etc/opnex/secrets.json --provider-mode json
+opnex config unset plugins.entries.brave.config.webSearch.apiKey
+opnex config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
+opnex config validate
+opnex config validate --json
 ```
 
 ### `config schema`
 
-Print the generated JSON schema for `openclaw.json` to stdout as JSON.
+Print the generated JSON schema for `opnex.json` to stdout as JSON.
 
 <AccordionGroup>
   <Accordion title="What it includes">
@@ -57,13 +57,13 @@ Print the generated JSON schema for `openclaw.json` to stdout as JSON.
 </AccordionGroup>
 
 ```bash
-openclaw config schema
+opnex config schema
 ```
 
 Pipe it into a file when you want to inspect or validate it with other tools:
 
 ```bash
-openclaw config schema > openclaw.schema.json
+opnex config schema > opnex.schema.json
 ```
 
 ### Paths
@@ -71,15 +71,15 @@ openclaw config schema > openclaw.schema.json
 Paths use dot or bracket notation:
 
 ```bash
-openclaw config get agents.defaults.workspace
-openclaw config get agents.list[0].id
+opnex config get agents.defaults.workspace
+opnex config get agents.list[0].id
 ```
 
 Use the agent list index to target a specific agent:
 
 ```bash
-openclaw config get agents.list
-openclaw config set agents.list[1].tools.exec.node "node-id-or-name"
+opnex config get agents.list
+opnex config set agents.list[1].tools.exec.node "node-id-or-name"
 ```
 
 ## Values
@@ -87,9 +87,9 @@ openclaw config set agents.list[1].tools.exec.node "node-id-or-name"
 Values are parsed as JSON5 when possible; otherwise they are treated as strings. Use `--strict-json` to require JSON5 parsing. `--json` remains supported as a legacy alias.
 
 ```bash
-openclaw config set agents.defaults.heartbeat.every "0m"
-openclaw config set gateway.port 19001 --strict-json
-openclaw config set channels.whatsapp.groups '["*"]' --strict-json
+opnex config set agents.defaults.heartbeat.every "0m"
+opnex config set gateway.port 19001 --strict-json
+opnex config set channels.whatsapp.groups '["*"]' --strict-json
 ```
 
 `config get <path> --json` prints the raw value as JSON instead of terminal-formatted text.
@@ -101,25 +101,25 @@ Object assignment replaces the target path by default. Protected map/list paths 
 Use `--merge` when adding entries to those maps:
 
 ```bash
-openclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-openclaw config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
+opnex config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+opnex config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
 ```
 
 Use `--replace` only when you intentionally want the provided value to become the complete target value.
 
 ## `config set` modes
 
-`openclaw config set` supports four assignment styles:
+`opnex config set` supports four assignment styles:
 
 <Tabs>
   <Tab title="Value mode">
     ```bash
-    openclaw config set <path> <value>
+    opnex config set <path> <value>
     ```
   </Tab>
   <Tab title="SecretRef builder mode">
     ```bash
-    openclaw config set channels.discord.token \
+    opnex config set channels.discord.token \
       --ref-provider default \
       --ref-source env \
       --ref-id DISCORD_BOT_TOKEN
@@ -129,9 +129,9 @@ Use `--replace` only when you intentionally want the provided value to become th
     Provider builder mode targets `secrets.providers.<alias>` paths only:
 
     ```bash
-    openclaw config set secrets.providers.vault \
+    opnex config set secrets.providers.vault \
       --provider-source exec \
-      --provider-command /usr/local/bin/openclaw-vault \
+      --provider-command /usr/local/bin/opnex-vault \
       --provider-arg read \
       --provider-arg openai/api-key \
       --provider-timeout-ms 5000
@@ -140,7 +140,7 @@ Use `--replace` only when you intentionally want the provided value to become th
   </Tab>
   <Tab title="Batch mode">
     ```bash
-    openclaw config set --batch-json '[
+    opnex config set --batch-json '[
       {
         "path": "secrets.providers.default",
         "provider": { "source": "env" }
@@ -153,7 +153,7 @@ Use `--replace` only when you intentionally want the provided value to become th
     ```
 
     ```bash
-    openclaw config set --batch-file ./config-set.batch.json --dry-run
+    opnex config set --batch-file ./config-set.batch.json --dry-run
     ```
 
   </Tab>
@@ -168,12 +168,12 @@ Batch parsing always uses the batch payload (`--batch-json`/`--batch-file`) as t
 JSON path/value mode remains supported for both SecretRefs and providers:
 
 ```bash
-openclaw config set channels.discord.token \
+opnex config set channels.discord.token \
   '{"source":"env","provider":"default","id":"DISCORD_BOT_TOKEN"}' \
   --strict-json
 
-openclaw config set secrets.providers.vaultfile \
-  '{"source":"file","path":"/etc/openclaw/secrets.json","mode":"json"}' \
+opnex config set secrets.providers.vaultfile \
+  '{"source":"file","path":"/etc/opnex/secrets.json","mode":"json"}' \
   --strict-json
 ```
 
@@ -216,9 +216,9 @@ Provider builder targets must use `secrets.providers.<alias>` as the path.
 Hardened exec provider example:
 
 ```bash
-openclaw config set secrets.providers.vault \
+opnex config set secrets.providers.vault \
   --provider-source exec \
-  --provider-command /usr/local/bin/openclaw-vault \
+  --provider-command /usr/local/bin/opnex-vault \
   --provider-arg read \
   --provider-arg openai/api-key \
   --provider-json-only \
@@ -229,23 +229,23 @@ openclaw config set secrets.providers.vault \
 
 ## Dry run
 
-Use `--dry-run` to validate changes without writing `openclaw.json`.
+Use `--dry-run` to validate changes without writing `opnex.json`.
 
 ```bash
-openclaw config set channels.discord.token \
+opnex config set channels.discord.token \
   --ref-provider default \
   --ref-source env \
   --ref-id DISCORD_BOT_TOKEN \
   --dry-run
 
-openclaw config set channels.discord.token \
+opnex config set channels.discord.token \
   --ref-provider default \
   --ref-source env \
   --ref-id DISCORD_BOT_TOKEN \
   --dry-run \
   --json
 
-openclaw config set channels.discord.token \
+opnex config set channels.discord.token \
   --ref-provider vault \
   --ref-source exec \
   --ref-id discord/token \
@@ -309,7 +309,7 @@ openclaw config set channels.discord.token \
     {
       "ok": true,
       "operations": 1,
-      "configPath": "~/.openclaw/openclaw.json",
+      "configPath": "~/.opnex/opnex.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -326,7 +326,7 @@ openclaw config set channels.discord.token \
     {
       "ok": false,
       "operations": 1,
-      "configPath": "~/.openclaw/openclaw.json",
+      "configPath": "~/.opnex/opnex.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -360,35 +360,35 @@ openclaw config set channels.discord.token \
 
 ## Write safety
 
-`openclaw config set` and other OpenClaw-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `openclaw.json.rejected.*`.
+`opnex config set` and other OPNEX-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `opnex.json.rejected.*`.
 
 <Warning>
-The active config path must be a regular file. Symlinked `openclaw.json` layouts are unsupported for writes; use `OPENCLAW_CONFIG_PATH` to point directly at the real file instead.
+The active config path must be a regular file. Symlinked `opnex.json` layouts are unsupported for writes; use `OPNEX_CONFIG_PATH` to point directly at the real file instead.
 </Warning>
 
 Prefer CLI writes for small edits:
 
 ```bash
-openclaw config set gateway.reload.mode hybrid --dry-run
-openclaw config set gateway.reload.mode hybrid
-openclaw config validate
+opnex config set gateway.reload.mode hybrid --dry-run
+opnex config set gateway.reload.mode hybrid
+opnex config validate
 ```
 
 If a write is rejected, inspect the saved payload and fix the full config shape:
 
 ```bash
-CONFIG="$(openclaw config file)"
+CONFIG="$(opnex config file)"
 ls -lt "$CONFIG".rejected.* 2>/dev/null | head
-openclaw config validate
+opnex config validate
 ```
 
 Direct editor writes are still allowed, but the running Gateway treats them as untrusted until they validate. Invalid direct edits can be restored from the last-known-good backup during startup or hot reload. See [Gateway troubleshooting](/gateway/troubleshooting#gateway-restored-last-known-good-config).
 
-Whole-file recovery is reserved for globally broken config, such as parse errors, root-level schema failures, legacy migration failures, or mixed plugin and root failures. If validation fails only under `plugins.entries.<id>...`, OpenClaw keeps the active `openclaw.json` in place and reports the plugin-local issue instead of restoring `.last-good`. This prevents plugin schema changes or `minHostVersion` skew from rolling back unrelated user settings such as models, providers, auth profiles, channels, gateway exposure, tools, memory, browser, or cron config.
+Whole-file recovery is reserved for globally broken config, such as parse errors, root-level schema failures, legacy migration failures, or mixed plugin and root failures. If validation fails only under `plugins.entries.<id>...`, OPNEX keeps the active `opnex.json` in place and reports the plugin-local issue instead of restoring `.last-good`. This prevents plugin schema changes or `minHostVersion` skew from rolling back unrelated user settings such as models, providers, auth profiles, channels, gateway exposure, tools, memory, browser, or cron config.
 
 ## Subcommands
 
-- `config file`: Print the active config file path (resolved from `OPENCLAW_CONFIG_PATH` or default location). The path should name a regular file, not a symlink.
+- `config file`: Print the active config file path (resolved from `OPNEX_CONFIG_PATH` or default location). The path should name a regular file, not a symlink.
 
 Restart the gateway after edits.
 
@@ -397,27 +397,27 @@ Restart the gateway after edits.
 Validate the current config against the active schema without starting the gateway.
 
 ```bash
-openclaw config validate
-openclaw config validate --json
+opnex config validate
+opnex config validate --json
 ```
 
-After `openclaw config validate` is passing, you can use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
+After `opnex config validate` is passing, you can use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
 
 <Note>
-If validation is already failing, start with `openclaw configure` or `openclaw doctor --fix`. `openclaw chat` does not bypass the invalid-config guard.
+If validation is already failing, start with `opnex configure` or `opnex doctor --fix`. `opnex chat` does not bypass the invalid-config guard.
 </Note>
 
 ```bash
-openclaw chat
+opnex chat
 ```
 
 Then inside the TUI:
 
 ```text
-!openclaw config file
-!openclaw docs gateway auth token secretref
-!openclaw config validate
-!openclaw doctor
+!opnex config file
+!opnex docs gateway auth token secretref
+!opnex config validate
+!opnex doctor
 ```
 
 Typical repair loop:
@@ -427,13 +427,13 @@ Typical repair loop:
     Ask the agent to compare your current config with the relevant docs page and suggest the smallest fix.
   </Step>
   <Step title="Apply targeted edits">
-    Apply targeted edits with `openclaw config set` or `openclaw configure`.
+    Apply targeted edits with `opnex config set` or `opnex configure`.
   </Step>
   <Step title="Re-validate">
-    Rerun `openclaw config validate` after each change.
+    Rerun `opnex config validate` after each change.
   </Step>
   <Step title="Doctor for runtime issues">
-    If validation passes but the runtime is still unhealthy, run `openclaw doctor` or `openclaw doctor --fix` for migration and repair help.
+    If validation passes but the runtime is still unhealthy, run `opnex doctor` or `opnex doctor --fix` for migration and repair help.
   </Step>
 </Steps>
 

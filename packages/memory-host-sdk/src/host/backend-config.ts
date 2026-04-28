@@ -8,7 +8,7 @@ import {
   type MemoryQmdIndexPath,
   type MemoryQmdMcporterConfig,
   type MemoryQmdSearchMode,
-  type OpenClawConfig,
+  type OPNEXConfig,
   parseDurationMs,
   resolveAgentWorkspaceDir,
   normalizeAgentId,
@@ -341,7 +341,7 @@ function resolveDefaultCollections(
 }
 
 export function resolveMemoryBackendConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
 }): ResolvedMemoryBackendConfig {
   const normalizedAgentId = normalizeAgentId(params.agentId);

@@ -1,8 +1,8 @@
 import {
   getProviderHttpMocks,
   installProviderHttpMockCleanup,
-} from "openclaw/plugin-sdk/provider-http-test-mocks";
-import { expectExplicitVideoGenerationCapabilities } from "openclaw/plugin-sdk/provider-test-contracts";
+} from "opnex/plugin-sdk/provider-http-test-mocks";
+import { expectExplicitVideoGenerationCapabilities } from "opnex/plugin-sdk/provider-test-contracts";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 const { postJsonRequestMock, fetchWithTimeoutMock } = getProviderHttpMocks();
@@ -105,7 +105,7 @@ describe("byteplus video generation provider", () => {
     await provider.generateVideo({
       provider: "byteplus",
       model: "seedance-1-0-pro-250528",
-      prompt: "A cinematic lobster montage",
+      prompt: "A cinematic opnex montage",
       providerOptions: {
         seed: 42,
         draft: true,

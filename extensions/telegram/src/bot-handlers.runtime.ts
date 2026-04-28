@@ -1,35 +1,35 @@
 import type { Message, ReactionTypeEmoji } from "@grammyjs/types";
-import { parseExecApprovalCommandText } from "openclaw/plugin-sdk/approval-reply-runtime";
-import { resolveChannelConfigWrites } from "openclaw/plugin-sdk/channel-config-helpers";
-import { shouldDebounceTextInbound } from "openclaw/plugin-sdk/channel-inbound";
+import { parseExecApprovalCommandText } from "opnex/plugin-sdk/approval-reply-runtime";
+import { resolveChannelConfigWrites } from "opnex/plugin-sdk/channel-config-helpers";
+import { shouldDebounceTextInbound } from "opnex/plugin-sdk/channel-inbound";
 import {
   createInboundDebouncer,
   resolveInboundDebounceMs,
-} from "openclaw/plugin-sdk/channel-inbound-debounce";
-import { resolveStoredModelOverride } from "openclaw/plugin-sdk/command-auth";
+} from "opnex/plugin-sdk/channel-inbound-debounce";
+import { resolveStoredModelOverride } from "opnex/plugin-sdk/command-auth";
 import {
   resolveCommandAuthorization,
   resolveCommandAuthorizedFromAuthorizers,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { buildCommandsMessagePaginated } from "openclaw/plugin-sdk/command-status";
-import { replaceConfigFile } from "openclaw/plugin-sdk/config-mutation";
-import type { DmPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { TelegramGroupConfig, TelegramTopicConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/command-auth-native";
+import { buildCommandsMessagePaginated } from "opnex/plugin-sdk/command-status";
+import { replaceConfigFile } from "opnex/plugin-sdk/config-mutation";
+import type { DmPolicy, OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { TelegramGroupConfig, TelegramTopicConfig } from "opnex/plugin-sdk/config-types";
 import {
   buildPluginBindingResolvedText,
   parsePluginBindingApprovalCustomId,
   resolvePluginConversationBindingApproval,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { applyModelOverrideToSessionEntry } from "openclaw/plugin-sdk/model-session-runtime";
-import { formatModelsAvailableHeader } from "openclaw/plugin-sdk/models-provider-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { applyModelOverrideToSessionEntry } from "opnex/plugin-sdk/model-session-runtime";
+import { formatModelsAvailableHeader } from "opnex/plugin-sdk/models-provider-runtime";
+import { resolveAgentRoute } from "opnex/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "opnex/plugin-sdk/routing";
+import { danger, logVerbose, warn } from "opnex/plugin-sdk/runtime-env";
 import {
   loadSessionStore,
   resolveSessionStoreEntry,
   updateSessionStore,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "opnex/plugin-sdk/session-store-runtime";
 import { resolveTelegramMediaRuntimeOptions } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import {
@@ -796,7 +796,7 @@ export const registerTelegramHandlers = ({
     senderId: string;
     senderUsername: string;
     context: TelegramEventAuthorizationContext;
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
   }): boolean => {
     const { chatId, isGroup, senderId, senderUsername, context, cfg } = params;
     const useAccessGroups = cfg.commands?.useAccessGroups !== false;

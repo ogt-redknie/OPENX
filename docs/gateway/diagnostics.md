@@ -7,26 +7,26 @@ read_when:
   - Reviewing what diagnostics data is recorded or redacted
 ---
 
-OpenClaw can create a local diagnostics zip that is safe to attach to bug
+OPNEX can create a local diagnostics zip that is safe to attach to bug
 reports. It combines sanitized Gateway status, health, logs, config shape, and
 recent payload-free stability events.
 
 ## Quick start
 
 ```bash
-openclaw gateway diagnostics export
+opnex gateway diagnostics export
 ```
 
 The command prints the written zip path. To choose a path:
 
 ```bash
-openclaw gateway diagnostics export --output openclaw-diagnostics.zip
+opnex gateway diagnostics export --output opnex-diagnostics.zip
 ```
 
 For automation:
 
 ```bash
-openclaw gateway diagnostics export --json
+opnex gateway diagnostics export --json
 ```
 
 ## What the export contains
@@ -80,31 +80,31 @@ not restart the Gateway by themselves.
 Inspect the live recorder:
 
 ```bash
-openclaw gateway stability
-openclaw gateway stability --type payload.large
-openclaw gateway stability --json
+opnex gateway stability
+opnex gateway stability --type payload.large
+opnex gateway stability --json
 ```
 
 Inspect the newest persisted stability bundle after a fatal exit, shutdown
 timeout, or restart startup failure:
 
 ```bash
-openclaw gateway stability --bundle latest
+opnex gateway stability --bundle latest
 ```
 
 Create a diagnostics zip from the newest persisted bundle:
 
 ```bash
-openclaw gateway stability --bundle latest --export
+opnex gateway stability --bundle latest --export
 ```
 
-Persisted bundles live under `~/.openclaw/logs/stability/` when events exist.
+Persisted bundles live under `~/.opnex/logs/stability/` when events exist.
 
 ## Useful options
 
 ```bash
-openclaw gateway diagnostics export \
-  --output openclaw-diagnostics.zip \
+opnex gateway diagnostics export \
+  --output opnex-diagnostics.zip \
   --log-lines 5000 \
   --log-bytes 1000000
 ```

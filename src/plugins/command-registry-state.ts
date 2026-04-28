@@ -1,8 +1,8 @@
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
-import type { OpenClawPluginCommandDefinition } from "./types.js";
+import type { OPNEXPluginCommandDefinition } from "./types.js";
 
-export type RegisteredPluginCommand = OpenClawPluginCommandDefinition & {
+export type RegisteredPluginCommand = OPNEXPluginCommandDefinition & {
   pluginId: string;
   pluginName?: string;
   pluginRoot?: string;
@@ -13,7 +13,7 @@ type PluginCommandState = {
   registryLocked: boolean;
 };
 
-const PLUGIN_COMMAND_STATE_KEY = Symbol.for("openclaw.pluginCommandsState");
+const PLUGIN_COMMAND_STATE_KEY = Symbol.for("opnex.pluginCommandsState");
 
 const getState = () =>
   resolveGlobalSingleton<PluginCommandState>(PLUGIN_COMMAND_STATE_KEY, () => ({

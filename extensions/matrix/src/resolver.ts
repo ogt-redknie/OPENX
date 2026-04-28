@@ -1,5 +1,5 @@
-import type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+import type { ChannelPlugin } from "opnex/plugin-sdk/channel-core";
+import { createLazyRuntimeNamedExport } from "opnex/plugin-sdk/lazy-runtime";
 import type { ResolvedMatrixAccount } from "./matrix/accounts.js";
 
 const loadMatrixChannelRuntime = createLazyRuntimeNamedExport(

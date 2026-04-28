@@ -72,7 +72,7 @@ describe("resolveImplicitProviders startup discovery scope", () => {
 
   it("passes startup provider scopes as plugin owner filters", async () => {
     await resolveImplicitProviders({
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/opnex-agent",
       config: {},
       env: {} as NodeJS.ProcessEnv,
       explicitProviders: {},

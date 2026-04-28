@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/stepfun-provider",
+  "name": "@opnex/stepfun-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw StepFun provider plugin",
+  "description": "OPNEX StepFun provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

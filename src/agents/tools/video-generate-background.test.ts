@@ -51,14 +51,14 @@ describe("video generate background helpers", () => {
         channel: "discord",
         to: "channel:1",
       },
-      prompt: "friendly lobster surfing",
+      prompt: "friendly opnex surfing",
       providerId: "openai",
     });
 
     expect(handle).toMatchObject({
       taskId: "task-123",
       requesterSessionKey: "agent:main:discord:direct:123",
-      taskLabel: "friendly lobster surfing",
+      taskLabel: "friendly opnex surfing",
     });
     expectQueuedTaskRun({
       taskExecutorMocks,
@@ -74,7 +74,7 @@ describe("video generate background helpers", () => {
         taskId: "task-123",
         runId: "tool:video_generate:abc",
         requesterSessionKey: "agent:main:discord:direct:123",
-        taskLabel: "friendly lobster surfing",
+        taskLabel: "friendly opnex surfing",
       },
       progressSummary: "Saving generated video",
     });
@@ -93,7 +93,7 @@ describe("video generate background helpers", () => {
 
     const handle = createVideoGenerationTaskRun({
       sessionKey: "agent:main:discord:channel:123",
-      prompt: "friendly lobster surfing",
+      prompt: "friendly opnex surfing",
       providerId: "fal",
     });
     if (!handle) {
@@ -131,7 +131,7 @@ describe("video generate background helpers", () => {
         taskId: "task-123",
         runId: "tool:video_generate:abc",
         requesterSessionKey: "agent:main:discord:direct:123",
-        taskLabel: "friendly lobster surfing",
+        taskLabel: "friendly opnex surfing",
       },
       progressSummary: "Generating video",
       run: () => runPromise,
@@ -165,9 +165,9 @@ describe("video generate background helpers", () => {
     await wakeVideoGenerationTaskCompletion({
       ...createMediaCompletionFixture({
         runId: "tool:video_generate:abc",
-        taskLabel: "friendly lobster surfing",
-        result: "Generated 1 video.\nMEDIA:/tmp/generated-lobster.mp4",
-        mediaUrls: ["/tmp/generated-lobster.mp4"],
+        taskLabel: "friendly opnex surfing",
+        result: "Generated 1 video.\nMEDIA:/tmp/generated-opnex.mp4",
+        mediaUrls: ["/tmp/generated-opnex.mp4"],
       }),
     });
 
@@ -185,8 +185,8 @@ describe("video generate background helpers", () => {
       ...createMediaCompletionFixture({
         directSend: true,
         runId: "tool:video_generate:abc",
-        taskLabel: "friendly lobster surfing",
-        result: "Generated 1 video.\nMEDIA:/tmp/generated-lobster.mp4",
+        taskLabel: "friendly opnex surfing",
+        result: "Generated 1 video.\nMEDIA:/tmp/generated-opnex.mp4",
       }),
     });
 
@@ -196,7 +196,7 @@ describe("video generate background helpers", () => {
       to: "channel:1",
       threadId: "thread-1",
       content: "Generated 1 video.",
-      mediaUrls: ["/tmp/generated-lobster.mp4"],
+      mediaUrls: ["/tmp/generated-opnex.mp4"],
     });
     expect(announceDeliveryMocks.deliverSubagentAnnouncement).not.toHaveBeenCalled();
   });
@@ -212,9 +212,9 @@ describe("video generate background helpers", () => {
       ...createMediaCompletionFixture({
         directSend: true,
         runId: "tool:video_generate:abc",
-        taskLabel: "friendly lobster surfing",
-        result: "Generated 1 video.\nMEDIA:/tmp/generated-lobster.mp4",
-        mediaUrls: ["/tmp/generated-lobster.mp4"],
+        taskLabel: "friendly opnex surfing",
+        result: "Generated 1 video.\nMEDIA:/tmp/generated-opnex.mp4",
+        mediaUrls: ["/tmp/generated-opnex.mp4"],
       }),
     });
 
@@ -225,8 +225,8 @@ describe("video generate background helpers", () => {
       to: "channel:1",
       source: "video_generation",
       announceType: "video generation task",
-      resultMediaPath: "MEDIA:/tmp/generated-lobster.mp4",
-      mediaUrls: ["/tmp/generated-lobster.mp4"],
+      resultMediaPath: "MEDIA:/tmp/generated-opnex.mp4",
+      mediaUrls: ["/tmp/generated-opnex.mp4"],
     });
   });
 });

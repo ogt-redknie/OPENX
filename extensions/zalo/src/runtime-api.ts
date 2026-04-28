@@ -38,7 +38,7 @@ export {
   normalizeAccountId,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-  type OpenClawConfig,
+  type OPNEXConfig,
   type OutboundReplyPayload,
   PAIRING_APPROVED_MESSAGE,
   type PluginRuntime,

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { getBundledChannelAccountInspector } from "./plugins/bundled.js";
 import { getLoadedChannelPlugin } from "./plugins/registry.js";
 import type { ChannelId } from "./plugins/types.public.js";
@@ -7,7 +7,7 @@ export type ReadOnlyInspectedAccount = Record<string, unknown>;
 
 export async function inspectReadOnlyChannelAccount(params: {
   channelId: ChannelId;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
 }): Promise<ReadOnlyInspectedAccount | null> {
   const inspectAccount =

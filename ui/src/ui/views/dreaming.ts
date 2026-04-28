@@ -19,8 +19,8 @@ type DiaryEntryNav = {
   page: number;
 };
 
-const DIARY_START_RE = /<!--\s*openclaw:dreaming:diary:start\s*-->/;
-const DIARY_END_RE = /<!--\s*openclaw:dreaming:diary:end\s*-->/;
+const DIARY_START_RE = /<!--\s*opnex:dreaming:diary:start\s*-->/;
+const DIARY_END_RE = /<!--\s*opnex:dreaming:diary:end\s*-->/;
 
 function parseDiaryEntries(raw: string): DiaryEntry[] {
   // Extract content between diary markers, or use full content.
@@ -246,7 +246,7 @@ const STARS: {
   { top: 88, left: 18, size: 2, delay: 2.3, hue: "neutral" },
 ];
 
-const sleepingLobster = html`
+const sleepingOPNEX = html`
   <svg viewBox="0 0 120 120" fill="none">
     <defs>
       <linearGradient id="dream-lob-g" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -405,7 +405,7 @@ function renderScene(props: DreamingProps, idle: boolean, dreamText: string) {
         : nothing}
 
       <div class="dreams__glow"></div>
-      <div class="dreams__lobster">${sleepingLobster}</div>
+      <div class="dreams__opnex">${sleepingOPNEX}</div>
       <span class="dreams__z">z</span>
       <span class="dreams__z">z</span>
       <span class="dreams__z">Z</span>

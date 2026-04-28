@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
 export const TALK_TEST_PROVIDER_ID = "acme-speech";
 export const TALK_TEST_PROVIDER_LABEL = "Acme Speech";
@@ -10,7 +10,7 @@ export const TALK_TEST_PROVIDER_API_KEY_PATH_SEGMENTS = [
   "apiKey",
 ] as const;
 
-export function buildTalkTestProviderConfig(apiKey: unknown): OpenClawConfig {
+export function buildTalkTestProviderConfig(apiKey: unknown): OPNEXConfig {
   return {
     talk: {
       providers: {
@@ -19,9 +19,9 @@ export function buildTalkTestProviderConfig(apiKey: unknown): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
-export function readTalkTestProviderApiKey(config: OpenClawConfig): unknown {
+export function readTalkTestProviderApiKey(config: OPNEXConfig): unknown {
   return config.talk?.providers?.[TALK_TEST_PROVIDER_ID]?.apiKey;
 }

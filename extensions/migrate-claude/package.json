@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/migrate-claude",
+  "name": "@opnex/migrate-claude",
   "version": "2026.4.26",
   "private": true,
-  "description": "Claude to OpenClaw migration provider",
+  "description": "Claude to OPNEX migration provider",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.26"
+    "opnex": ">=2026.4.26"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

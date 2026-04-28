@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   coerceSecretRef,
   ensureAuthProfileStore,
   listProfilesForProvider,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveRequiredConfiguredSecretRefInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+} from "opnex/plugin-sdk/provider-auth";
+import { resolveRequiredConfiguredSecretRefInputString } from "opnex/plugin-sdk/secret-input-runtime";
 import { PROVIDER_ID } from "./models.js";
 
 export async function resolveFirstGithubToken(params: {
   agentDir?: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<{
   githubToken: string;

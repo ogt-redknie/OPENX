@@ -11,7 +11,7 @@ import type {
   MemoryQmdMcporterConfig,
   MemoryQmdSearchMode,
 } from "../../config/types.memory.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { CANONICAL_ROOT_MEMORY_FILENAME } from "../../memory/root-memory-files.js";
 import { normalizeAgentId } from "../../routing/session-key.js";
 import {
@@ -348,7 +348,7 @@ function resolveDefaultCollections(
 }
 
 export function resolveMemoryBackendConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
 }): ResolvedMemoryBackendConfig {
   const normalizedAgentId = normalizeAgentId(params.agentId);

@@ -10,13 +10,13 @@ export {
   resolveThreadFlag,
   resolveChannelResetConfig,
   updateLastRoute,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "opnex/plugin-sdk/session-store-runtime";
 export {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
-export { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "opnex/plugin-sdk/runtime-config-snapshot";
+export { resolveChannelContextVisibilityMode } from "opnex/plugin-sdk/context-visibility-runtime";
 export {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "opnex/plugin-sdk/channel-policy";

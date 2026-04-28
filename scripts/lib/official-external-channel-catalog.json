@@ -1,11 +1,11 @@
 {
   "entries": [
     {
-      "name": "@wecom/wecom-openclaw-plugin",
-      "description": "OpenClaw WeCom channel plugin by the Tencent WeCom team.",
+      "name": "@wecom/wecom-opnex-plugin",
+      "description": "OPNEX WeCom channel plugin by the Tencent WeCom team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "opnex": {
         "channel": {
           "id": "wecom",
           "label": "WeCom",
@@ -18,20 +18,20 @@
           "order": 45
         },
         "install": {
-          "npmSpec": "@wecom/wecom-openclaw-plugin@2026.4.23",
+          "npmSpec": "@wecom/wecom-opnex-plugin@2026.4.23",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-bnzfdIEEu1/LFvcdyjaTkyxt27w6c7dqhkPezU62OWaqmcdFsUGR3T55USK/O9pIKsNcnL1Tnu1pqKYCWHFgWQ=="
         }
       }
     },
     {
-      "name": "openclaw-plugin-yuanbao",
-      "description": "OpenClaw Yuanbao channel plugin by the Tencent Yuanbao team.",
+      "name": "opnex-plugin-yuanbao",
+      "description": "OPNEX Yuanbao channel plugin by the Tencent Yuanbao team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "opnex": {
         "channel": {
-          "id": "openclaw-plugin-yuanbao",
+          "id": "opnex-plugin-yuanbao",
           "label": "Yuanbao",
           "selectionLabel": "Yuanbao (元宝)",
           "detailLabel": "Yuanbao",
@@ -42,7 +42,7 @@
           "order": 85
         },
         "install": {
-          "npmSpec": "openclaw-plugin-yuanbao@2.11.0",
+          "npmSpec": "opnex-plugin-yuanbao@2.11.0",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-lYmBrU71ox3v7dzRqaltvzTXPcMjjgYrNqpBj5HIBkXgEFkXRRG8wplXg9Fub41/FjsSPn3WAbYpdTc+k+jsHg=="
         }

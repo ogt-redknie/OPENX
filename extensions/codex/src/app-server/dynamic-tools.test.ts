@@ -1,15 +1,15 @@
 import type { AgentToolResult } from "@mariozechner/pi-agent-core";
-import type { AnyAgentTool } from "openclaw/plugin-sdk/agent-harness";
-import { wrapToolWithBeforeToolCallHook } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AnyAgentTool } from "opnex/plugin-sdk/agent-harness";
+import { wrapToolWithBeforeToolCallHook } from "opnex/plugin-sdk/agent-harness-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
+} from "opnex/plugin-sdk/hook-runtime";
 import {
   createEmptyPluginRegistry,
   createMockPluginRegistry,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "opnex/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createCodexDynamicToolBridge } from "./dynamic-tools.js";
 import type { JsonValue } from "./protocol.js";

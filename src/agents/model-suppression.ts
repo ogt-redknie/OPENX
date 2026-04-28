@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveManifestBuiltInModelSuppression } from "../plugins/manifest-model-suppression.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { normalizeProviderId } from "./provider-id.js";
@@ -7,7 +7,7 @@ function resolveBuiltInModelSuppressionFromManifest(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }) {
   const provider = normalizeProviderId(params.provider ?? "");
   const modelId = normalizeLowercaseStringOrEmpty(params.id);
@@ -27,7 +27,7 @@ function resolveBuiltInModelSuppression(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }) {
   const manifestResult = resolveBuiltInModelSuppressionFromManifest(params);
   if (manifestResult?.suppress) {
@@ -44,7 +44,7 @@ function resolveBuiltInModelSuppression(params: {
 export function shouldSuppressBuiltInModelFromManifest(params: {
   provider?: string | null;
   id?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }) {
   return resolveBuiltInModelSuppressionFromManifest(params)?.suppress ?? false;
 }
@@ -53,7 +53,7 @@ export function shouldSuppressBuiltInModel(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }) {
   return resolveBuiltInModelSuppression(params)?.suppress ?? false;
 }
@@ -62,7 +62,7 @@ export function buildSuppressedBuiltInModelError(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): string | undefined {
   return resolveBuiltInModelSuppression(params)?.errorMessage;
 }

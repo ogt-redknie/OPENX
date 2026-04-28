@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import { resetLogger, setLoggerOverride } from "../logging/logger.js";
 
 type PiSdkModule = typeof import("./pi-model-discovery.js");
@@ -11,7 +11,7 @@ let loadModelCatalog: typeof import("./model-catalog.js").loadModelCatalog;
 let modelSupportsInput: typeof import("./model-catalog.js").modelSupportsInput;
 let resetModelCatalogCacheForTest: typeof import("./model-catalog.js").resetModelCatalogCacheForTest;
 let augmentCatalogMock: ReturnType<typeof vi.fn>;
-let ensureOpenClawModelsJsonMock: ReturnType<typeof vi.fn>;
+let ensureOPNEXModelsJsonMock: ReturnType<typeof vi.fn>;
 
 vi.mock("./model-suppression.runtime.js", () => ({
   shouldSuppressBuiltInModel: (params: { provider?: string; id?: string }) =>
@@ -62,12 +62,12 @@ function mockSingleOpenAiCatalogModel() {
 
 describe("loadModelCatalog", () => {
   beforeAll(async () => {
-    ensureOpenClawModelsJsonMock = vi.fn().mockResolvedValue({ agentDir: "/tmp", wrote: false });
+    ensureOPNEXModelsJsonMock = vi.fn().mockResolvedValue({ agentDir: "/tmp", wrote: false });
     vi.doMock("./models-config.js", () => ({
-      ensureOpenClawModelsJson: ensureOpenClawModelsJsonMock,
+      ensureOPNEXModelsJson: ensureOPNEXModelsJsonMock,
     }));
     vi.doMock("./agent-paths.js", () => ({
-      resolveOpenClawAgentDir: () => "/tmp/openclaw",
+      resolveOPNEXAgentDir: () => "/tmp/opnex",
     }));
     vi.doMock("../plugins/provider-runtime.runtime.js", () => ({
       augmentModelCatalogWithProviderPlugins: vi.fn().mockResolvedValue([]),
@@ -87,7 +87,7 @@ describe("loadModelCatalog", () => {
 
   beforeEach(() => {
     resetModelCatalogCacheForTest();
-    ensureOpenClawModelsJsonMock.mockClear();
+    ensureOPNEXModelsJsonMock.mockClear();
   });
 
   afterEach(() => {
@@ -107,7 +107,7 @@ describe("loadModelCatalog", () => {
     try {
       const getCallCount = mockCatalogImportFailThenRecover();
 
-      const cfg = {} as OpenClawConfig;
+      const cfg = {} as OPNEXConfig;
       const first = await loadModelCatalog({ config: cfg });
       expect(first).toEqual([]);
 
@@ -145,7 +145,7 @@ describe("loadModelCatalog", () => {
           }) as unknown as PiSdkModule,
       );
 
-      const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+      const result = await loadModelCatalog({ config: {} as OPNEXConfig });
       expect(result).toEqual([{ id: "gpt-4.1", name: "GPT-4.1", provider: "openai" }]);
     } finally {
       setLoggerOverride(null);
@@ -168,11 +168,11 @@ describe("loadModelCatalog", () => {
         }) as unknown as PiSdkModule,
     );
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig, readOnly: true });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig, readOnly: true });
 
     expect(result).toEqual([{ id: "gpt-4.1", name: "GPT-4.1", provider: "openai" }]);
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
-    expect(discoverAuthStorage).toHaveBeenCalledWith("/tmp/openclaw", { readOnly: true });
+    expect(ensureOPNEXModelsJsonMock).not.toHaveBeenCalled();
+    expect(discoverAuthStorage).toHaveBeenCalledWith("/tmp/opnex", { readOnly: true });
   });
 
   it("does not synthesize stale openai-codex/gpt-5.3-codex-spark entries from gpt-5.4", async () => {
@@ -192,7 +192,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
     expect(result).not.toContainEqual(
       expect.objectContaining({
         provider: "openai-codex",
@@ -236,7 +236,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
     expect(result).not.toContainEqual(
       expect.objectContaining({
         provider: "openai",
@@ -301,7 +301,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
 
     expect(
       result.some((entry) => entry.provider === "openai" && entry.id.startsWith("gpt-5.4")),
@@ -331,7 +331,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
 
     expect(result).toContainEqual(
       expect.objectContaining({
@@ -360,7 +360,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
 
     expect(result).toContainEqual(
       expect.objectContaining({ provider: "ollama", id: "llama3.2", name: "Llama 3.2" }),
@@ -393,7 +393,7 @@ describe("loadModelCatalog", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(result).toContainEqual(
@@ -431,7 +431,7 @@ describe("loadModelCatalog", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     const matches = result.filter((entry) => findModelInCatalog([entry], "z-ai", "glm-5"));
@@ -442,7 +442,7 @@ describe("loadModelCatalog", () => {
   it("does not add unrelated models when provider plugins return nothing", async () => {
     mockSingleOpenAiCatalogModel();
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
 
     expect(
       result.some((entry) => entry.provider === "qianfan" && entry.id === "deepseek-v3.2"),
@@ -468,7 +468,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as OpenClawConfig });
+    const result = await loadModelCatalog({ config: {} as OPNEXConfig });
 
     const matches = result.filter(
       (entry) => entry.provider === "kilocode" && entry.id === "kilo/auto",

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
   normalizePluginsConfig,
@@ -20,7 +20,7 @@ export type PluginHookDirEntry = {
 
 export function resolvePluginHookDirs(params: {
   workspaceDir: string | undefined;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): PluginHookDirEntry[] {
   const workspaceDir = (params.workspaceDir ?? "").trim();
   if (!workspaceDir) {

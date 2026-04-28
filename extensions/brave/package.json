@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/brave-plugin",
+  "name": "@opnex/brave-plugin",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Brave plugin",
+  "description": "OPNEX Brave plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.33"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

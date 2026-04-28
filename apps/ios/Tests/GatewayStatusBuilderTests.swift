@@ -1,6 +1,6 @@
-import OpenClawKit
+import OPNEXKit
 import Testing
-@testable import OpenClaw
+@testable import OPNEX
 
 @Suite struct GatewayStatusBuilderTests {
     @Test func pausedProblemKeepsErrorStatus() {

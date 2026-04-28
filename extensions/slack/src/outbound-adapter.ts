@@ -2,20 +2,20 @@ import {
   attachChannelToResult,
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
+} from "opnex/plugin-sdk/channel-send-result";
 import {
   resolveInteractiveTextFallback,
   type InteractiveReply,
   type MessagePresentation,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import type { OutboundIdentity } from "openclaw/plugin-sdk/outbound-runtime";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/outbound-send-deps";
+} from "opnex/plugin-sdk/interactive-runtime";
+import type { OutboundIdentity } from "opnex/plugin-sdk/outbound-runtime";
+import { resolveOutboundSendDep } from "opnex/plugin-sdk/outbound-send-deps";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { parseSlackBlocksInput } from "./blocks-input.js";
 import {
   buildSlackInteractiveBlocks,

@@ -1,14 +1,14 @@
 ---
-summary: "Export redacted trajectory bundles for debugging an OpenClaw agent session"
+summary: "Export redacted trajectory bundles for debugging an OPNEX agent session"
 read_when:
   - Debugging why an agent answered, failed, or called tools a certain way
-  - Exporting a support bundle for an OpenClaw session
+  - Exporting a support bundle for an OPNEX session
   - Investigating prompt context, tool calls, runtime errors, or usage metadata
   - Disabling or relocating trajectory capture
 title: "Trajectory bundles"
 ---
 
-Trajectory capture is OpenClaw's per-session flight recorder. It records a
+Trajectory capture is OPNEX's per-session flight recorder. It records a
 structured timeline for each agent run, then `/export-trajectory` packages the
 current session into a redacted support bundle.
 
@@ -34,10 +34,10 @@ Alias:
 /trajectory
 ```
 
-OpenClaw writes the bundle under the workspace:
+OPNEX writes the bundle under the workspace:
 
 ```text
-.openclaw/trajectory-exports/openclaw-trajectory-<session>-<timestamp>/
+.opnex/trajectory-exports/opnex-trajectory-<session>-<timestamp>/
 ```
 
 You can choose a relative output directory name:
@@ -46,7 +46,7 @@ You can choose a relative output directory name:
 /export-trajectory bug-1234
 ```
 
-The custom path is resolved inside `.openclaw/trajectory-exports/`. Absolute
+The custom path is resolved inside `.opnex/trajectory-exports/`. Absolute
 paths and `~` paths are rejected.
 
 ## Access
@@ -56,7 +56,7 @@ authorization checks and owner checks for the channel.
 
 ## What gets recorded
 
-Trajectory capture is on by default for OpenClaw agent runs.
+Trajectory capture is on by default for OPNEX agent runs.
 
 Runtime events include:
 
@@ -83,7 +83,7 @@ Events are written as JSON Lines with this schema marker:
 
 ```json
 {
-  "traceSchema": "openclaw-trajectory",
+  "traceSchema": "opnex-trajectory",
   "schemaVersion": 1
 }
 ```
@@ -97,7 +97,7 @@ An exported bundle can contain:
 | `manifest.json`       | Bundle schema, source files, event counts, and generated file list                             |
 | `events.jsonl`        | Ordered runtime and transcript timeline                                                        |
 | `session-branch.json` | Redacted active transcript branch and session header                                           |
-| `metadata.json`       | OpenClaw version, OS/runtime, model, config snapshot, plugins, skills, and prompt metadata     |
+| `metadata.json`       | OPNEX version, OS/runtime, model, config snapshot, plugins, skills, and prompt metadata     |
 | `artifacts.json`      | Final status, errors, usage, prompt cache, compaction count, assistant text, and tool metadata |
 | `prompts.json`        | Submitted prompts and selected prompt-building details                                         |
 | `system-prompt.txt`   | Latest compiled system prompt, when captured                                                   |
@@ -114,20 +114,20 @@ By default, runtime trajectory events are written beside the session file:
 <session>.trajectory.jsonl
 ```
 
-OpenClaw also writes a best-effort pointer file beside the session:
+OPNEX also writes a best-effort pointer file beside the session:
 
 ```text
 <session>.trajectory-path.json
 ```
 
-Set `OPENCLAW_TRAJECTORY_DIR` to store runtime trajectory sidecars in a
+Set `OPNEX_TRAJECTORY_DIR` to store runtime trajectory sidecars in a
 dedicated directory:
 
 ```bash
-export OPENCLAW_TRAJECTORY_DIR=/var/lib/openclaw/trajectories
+export OPNEX_TRAJECTORY_DIR=/var/lib/opnex/trajectories
 ```
 
-When this variable is set, OpenClaw writes one JSONL file per session id in that
+When this variable is set, OPNEX writes one JSONL file per session id in that
 directory.
 
 Session maintenance removes trajectory sidecars when their owning session entry
@@ -137,10 +137,10 @@ belongs to that session.
 
 ## Disable capture
 
-Set `OPENCLAW_TRAJECTORY=0` before starting OpenClaw:
+Set `OPNEX_TRAJECTORY=0` before starting OPNEX:
 
 ```bash
-export OPENCLAW_TRAJECTORY=0
+export OPNEX_TRAJECTORY=0
 ```
 
 This disables runtime trajectory capture. `/export-trajectory` can still export
@@ -150,7 +150,7 @@ provider artifacts, and prompt metadata may be missing.
 ## Privacy and limits
 
 Trajectory bundles are designed for support and debugging, not public posting.
-OpenClaw redacts sensitive values before writing export files:
+OPNEX redacts sensitive values before writing export files:
 
 - credentials and known secret-like payload fields
 - image data
@@ -173,8 +173,8 @@ and cannot know every application-specific secret.
 
 If the export has no runtime events:
 
-- confirm OpenClaw was started without `OPENCLAW_TRAJECTORY=0`
-- check whether `OPENCLAW_TRAJECTORY_DIR` points to a writable directory
+- confirm OPNEX was started without `OPNEX_TRAJECTORY=0`
+- check whether `OPNEX_TRAJECTORY_DIR` points to a writable directory
 - run another message in the session, then export again
 - inspect `manifest.json` for `runtimeEventCount`
 
@@ -182,7 +182,7 @@ If the command rejects the output path:
 
 - use a relative name like `bug-1234`
 - do not pass `/tmp/...` or `~/...`
-- keep the export inside `.openclaw/trajectory-exports/`
+- keep the export inside `.opnex/trajectory-exports/`
 
 If the export fails with a size error, the session or sidecar exceeded the
 export safety limits. Start a new session or export a smaller reproduction.

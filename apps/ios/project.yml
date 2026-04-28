@@ -1,6 +1,6 @@
-name: OpenClaw
+name: OPNEX
 options:
-  bundleIdPrefix: ai.openclaw
+  bundleIdPrefix: ai.opnex
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.0"
@@ -11,32 +11,32 @@ settings:
     ENABLE_APP_INTENTS_METADATA_GENERATION: NO
 
 packages:
-  OpenClawKit:
-    path: ../shared/OpenClawKit
+  OPNEXKit:
+    path: ../shared/OPNEXKit
   Swabble:
     path: ../../Swabble
 
 schemes:
-  OpenClaw:
+  OPNEX:
     shared: true
     build:
       targets:
-        OpenClaw: all
+        OPNEX: all
     test:
       targets:
-        - OpenClawTests
-        - OpenClawLogicTests
-  OpenClawLogicTests:
+        - OPNEXTests
+        - OPNEXLogicTests
+  OPNEXLogicTests:
     shared: true
     build:
       targets:
-        OpenClawLogicTests: all
+        OPNEXLogicTests: all
     test:
       targets:
-        - OpenClawLogicTests
+        - OPNEXLogicTests
 
 targets:
-  OpenClaw:
+  OPNEX:
     type: application
     platform: iOS
     configFiles:
@@ -45,16 +45,16 @@ targets:
     sources:
       - path: Sources
     dependencies:
-      - target: OpenClawShareExtension
+      - target: OPNEXShareExtension
         embed: true
-      - target: OpenClawActivityWidget
+      - target: OPNEXActivityWidget
         embed: true
-      - target: OpenClawWatchApp
-      - package: OpenClawKit
-      - package: OpenClawKit
-        product: OpenClawChatUI
-      - package: OpenClawKit
-        product: OpenClawProtocol
+      - target: OPNEXWatchApp
+      - package: OPNEXKit
+      - package: OPNEXKit
+        product: OPNEXChatUI
+      - package: OPNEXKit
+        product: OPNEXProtocol
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
@@ -71,7 +71,7 @@ targets:
             exit 1
           fi
           swiftformat --lint --config "$SRCROOT/../../.swiftformat" \
-            --unexclude "$SRCROOT/Sources,$SRCROOT/ShareExtension,$SRCROOT/ActivityWidget,$SRCROOT/WatchExtension,$SRCROOT/../shared/OpenClawKit,$SRCROOT/../../Swabble" \
+            --unexclude "$SRCROOT/Sources,$SRCROOT/ShareExtension,$SRCROOT/ActivityWidget,$SRCROOT/WatchExtension,$SRCROOT/../shared/OPNEXKit,$SRCROOT/../../Swabble" \
             --filelist "$SRCROOT/SwiftSources.input.xcfilelist"
       - name: SwiftLint
         basedOnDependencyAnalysis: false
@@ -88,11 +88,11 @@ targets:
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_ENTITLEMENTS: Sources/OpenClaw.entitlements
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_APP_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_APP_PROFILE)"
+        CODE_SIGN_ENTITLEMENTS: Sources/OPNEX.entitlements
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(OPNEX_APP_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(OPNEX_APP_PROFILE)"
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -101,27 +101,27 @@ targets:
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
       configs:
         Debug:
-          OPENCLAW_PUSH_TRANSPORT: direct
-          OPENCLAW_PUSH_DISTRIBUTION: local
-          OPENCLAW_PUSH_RELAY_BASE_URL: ""
-          OPENCLAW_PUSH_APNS_ENVIRONMENT: sandbox
+          OPNEX_PUSH_TRANSPORT: direct
+          OPNEX_PUSH_DISTRIBUTION: local
+          OPNEX_PUSH_RELAY_BASE_URL: ""
+          OPNEX_PUSH_APNS_ENVIRONMENT: sandbox
         Release:
-          OPENCLAW_PUSH_TRANSPORT: direct
-          OPENCLAW_PUSH_DISTRIBUTION: local
-          OPENCLAW_PUSH_RELAY_BASE_URL: ""
-          OPENCLAW_PUSH_APNS_ENVIRONMENT: production
+          OPNEX_PUSH_TRANSPORT: direct
+          OPNEX_PUSH_DISTRIBUTION: local
+          OPNEX_PUSH_RELAY_BASE_URL: ""
+          OPNEX_PUSH_APNS_ENVIRONMENT: production
     info:
       path: Sources/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
+        CFBundleDisplayName: OPNEX
         CFBundleIconName: AppIcon
         CFBundleURLTypes:
-          - CFBundleURLName: ai.openclaw.ios
+          - CFBundleURLName: ai.opnex.ios
             CFBundleURLSchemes:
-              - openclaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        OpenClawCanonicalVersion: "$(OPENCLAW_IOS_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+              - opnex
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        OPNEXCanonicalVersion: "$(OPNEX_IOS_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
@@ -129,25 +129,25 @@ targets:
           - audio
           - remote-notification
         BGTaskSchedulerPermittedIdentifiers:
-          - ai.openclaw.ios.bgrefresh
-        NSLocalNetworkUsageDescription: OpenClaw discovers and connects to your OpenClaw gateway on the local network.
+          - ai.opnex.ios.bgrefresh
+        NSLocalNetworkUsageDescription: OPNEX discovers and connects to your OPNEX gateway on the local network.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoadsInWebContent: true
         NSBonjourServices:
-          - _openclaw-gw._tcp
-        NSCameraUsageDescription: OpenClaw can capture photos or short video clips when requested via the gateway.
-        NSLocationWhenInUseUsageDescription: OpenClaw uses your location when you allow location sharing.
-        NSLocationAlwaysAndWhenInUseUsageDescription: OpenClaw can share your location in the background when you enable Always.
-        NSMicrophoneUsageDescription: OpenClaw needs microphone access for voice wake.
-        NSMotionUsageDescription: OpenClaw may use motion data to support device-aware interactions and automations.
-        NSPhotoLibraryUsageDescription: OpenClaw needs photo library access when you choose existing photos to share with your assistant.
-        NSSpeechRecognitionUsageDescription: OpenClaw uses on-device speech recognition for voice wake.
+          - _opnex-gw._tcp
+        NSCameraUsageDescription: OPNEX can capture photos or short video clips when requested via the gateway.
+        NSLocationWhenInUseUsageDescription: OPNEX uses your location when you allow location sharing.
+        NSLocationAlwaysAndWhenInUseUsageDescription: OPNEX can share your location in the background when you enable Always.
+        NSMicrophoneUsageDescription: OPNEX needs microphone access for voice wake.
+        NSMotionUsageDescription: OPNEX may use motion data to support device-aware interactions and automations.
+        NSPhotoLibraryUsageDescription: OPNEX needs photo library access when you choose existing photos to share with your assistant.
+        NSSpeechRecognitionUsageDescription: OPNEX uses on-device speech recognition for voice wake.
         NSSupportsLiveActivities: true
         ITSAppUsesNonExemptEncryption: false
-        OpenClawPushTransport: "$(OPENCLAW_PUSH_TRANSPORT)"
-        OpenClawPushDistribution: "$(OPENCLAW_PUSH_DISTRIBUTION)"
-        OpenClawPushRelayBaseURL: "$(OPENCLAW_PUSH_RELAY_BASE_URL)"
-        OpenClawPushAPNsEnvironment: "$(OPENCLAW_PUSH_APNS_ENVIRONMENT)"
+        OPNEXPushTransport: "$(OPNEX_PUSH_TRANSPORT)"
+        OPNEXPushDistribution: "$(OPNEX_PUSH_DISTRIBUTION)"
+        OPNEXPushRelayBaseURL: "$(OPNEX_PUSH_RELAY_BASE_URL)"
+        OPNEXPushAPNsEnvironment: "$(OPNEX_PUSH_APNS_ENVIRONMENT)"
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
@@ -159,7 +159,7 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
 
-  OpenClawShareExtension:
+  OPNEXShareExtension:
     type: app-extension
     platform: iOS
     configFiles:
@@ -168,25 +168,25 @@ targets:
     sources:
       - path: ShareExtension
     dependencies:
-      - package: OpenClawKit
+      - package: OPNEXKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_SHARE_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_SHARE_PROFILE)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(OPNEX_SHARE_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(OPNEX_SHARE_PROFILE)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
     info:
       path: ShareExtension/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw Share
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: OPNEX Share
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
@@ -197,7 +197,7 @@ targets:
               NSExtensionActivationSupportsImageWithMaxCount: 10
               NSExtensionActivationSupportsMovieWithMaxCount: 1
 
-  OpenClawActivityWidget:
+  OPNEXActivityWidget:
     type: app-extension
     platform: iOS
     configFiles:
@@ -205,63 +205,63 @@ targets:
       Release: Signing.xcconfig
     sources:
       - path: ActivityWidget
-      - path: Sources/LiveActivity/OpenClawActivityAttributes.swift
+      - path: Sources/LiveActivity/OPNEXActivityAttributes.swift
     dependencies:
       - sdk: WidgetKit.framework
       - sdk: ActivityKit.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID)"
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(OPNEX_ACTIVITY_WIDGET_BUNDLE_ID)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         SUPPORTS_LIVE_ACTIVITIES: YES
     info:
       path: ActivityWidget/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw Activity
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: OPNEX Activity
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
         NSSupportsLiveActivities: true
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
-  OpenClawWatchApp:
+  OPNEXWatchApp:
     type: application.watchapp2
     platform: watchOS
     deploymentTarget: "11.0"
     sources:
       - path: WatchApp
     dependencies:
-      - target: OpenClawWatchExtension
+      - target: OPNEXWatchExtension
     configFiles:
       Debug: Config/Signing.xcconfig
       Release: Config/Signing.xcconfig
     attributes:
-      DevelopmentTeam: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-      ProvisioningStyle: "$(OPENCLAW_CODE_SIGN_STYLE)"
+      DevelopmentTeam: "$(OPNEX_DEVELOPMENT_TEAM)"
+      ProvisioningStyle: "$(OPNEX_CODE_SIGN_STYLE)"
     settings:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_WATCH_APP_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_WATCH_APP_PROFILE)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(OPNEX_WATCH_APP_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(OPNEX_WATCH_APP_PROFILE)"
     info:
       path: WatchApp/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
-        WKCompanionAppBundleIdentifier: "$(OPENCLAW_APP_BUNDLE_ID)"
+        CFBundleDisplayName: OPNEX
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
+        WKCompanionAppBundleIdentifier: "$(OPNEX_APP_BUNDLE_ID)"
         WKWatchKitApp: true
 
-  OpenClawWatchExtension:
+  OPNEXWatchExtension:
     type: watchkit2-extension
     platform: watchOS
     deploymentTarget: "11.0"
@@ -275,27 +275,27 @@ targets:
       Debug: Config/Signing.xcconfig
       Release: Config/Signing.xcconfig
     attributes:
-      DevelopmentTeam: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-      ProvisioningStyle: "$(OPENCLAW_CODE_SIGN_STYLE)"
+      DevelopmentTeam: "$(OPNEX_DEVELOPMENT_TEAM)"
+      ProvisioningStyle: "$(OPNEX_CODE_SIGN_STYLE)"
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_WATCH_EXTENSION_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_WATCH_EXTENSION_PROFILE)"
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(OPNEX_WATCH_EXTENSION_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(OPNEX_WATCH_EXTENSION_PROFILE)"
     info:
       path: WatchExtension/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: OPNEX
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
         NSExtension:
           NSExtensionAttributes:
-            WKAppBundleIdentifier: "$(OPENCLAW_WATCH_APP_BUNDLE_ID)"
+            WKAppBundleIdentifier: "$(OPNEX_WATCH_APP_BUNDLE_ID)"
           NSExtensionPointIdentifier: com.apple.watchkit
 
-  OpenClawTests:
+  OPNEXTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -306,29 +306,29 @@ targets:
         excludes:
           - Logic
     dependencies:
-      - target: OpenClaw
+      - target: OPNEX
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.openclaw.ios.tests
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.opnex.ios.tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/OpenClaw.app/OpenClaw"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/OPNEX.app/OPNEX"
         BUNDLE_LOADER: "$(TEST_HOST)"
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: OpenClawTests
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: OPNEXTests
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"
 
-  OpenClawLogicTests:
+  OPNEXLogicTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -337,13 +337,13 @@ targets:
     sources:
       - path: Tests/Logic
     dependencies:
-      - package: OpenClawKit
+      - package: OPNEXKit
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.openclaw.ios.logic-tests
+        CODE_SIGN_STYLE: "$(OPNEX_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(OPNEX_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.opnex.ios.logic-tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_EMIT_CONST_VALUE_PROTOCOLS: ""
         SWIFT_VERSION: "6.0"
@@ -351,6 +351,6 @@ targets:
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: OpenClawLogicTests
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: OPNEXLogicTests
+        CFBundleShortVersionString: "$(OPNEX_MARKETING_VERSION)"
+        CFBundleVersion: "$(OPNEX_BUILD_VERSION)"

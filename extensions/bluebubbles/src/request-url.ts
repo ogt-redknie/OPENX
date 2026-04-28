@@ -1,1 +1,1 @@
-export { resolveRequestUrl } from "openclaw/plugin-sdk/request-url";
+export { resolveRequestUrl } from "opnex/plugin-sdk/request-url";

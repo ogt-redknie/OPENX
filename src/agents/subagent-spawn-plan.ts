@@ -1,5 +1,5 @@
 import { formatThinkingLevels } from "../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveSubagentSpawnModelSelection } from "./model-selection.js";
 import { resolveSubagentThinkingOverride } from "./subagent-spawn-thinking.js";
 
@@ -26,7 +26,7 @@ export function splitModelRef(ref?: string) {
 }
 
 export function resolveConfiguredSubagentRunTimeoutSeconds(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   runTimeoutSeconds?: number;
 }) {
   const cfgSubagentTimeout =
@@ -40,7 +40,7 @@ export function resolveConfiguredSubagentRunTimeoutSeconds(params: {
 }
 
 export function resolveSubagentModelAndThinkingPlan(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   targetAgentId: string;
   targetAgentConfig?: unknown;
   modelOverride?: string;

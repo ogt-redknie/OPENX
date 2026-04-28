@@ -7,16 +7,16 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "darwin",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
-          OPENCLAW_LOG_PREFIX: "gateway",
+          OPNEX_STATE_DIR: "/tmp/opnex-state",
+          OPNEX_LOG_PREFIX: "gateway",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "opnex-gateway",
+        windowsTaskName: "OPNEX Gateway",
       }),
     ).toEqual([
-      "Launchd stdout (if installed): /tmp/openclaw-state/logs/gateway.log",
-      "Launchd stderr (if installed): /tmp/openclaw-state/logs/gateway.err.log",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Launchd stdout (if installed): /tmp/opnex-state/logs/gateway.log",
+      "Launchd stderr (if installed): /tmp/opnex-state/logs/gateway.err.log",
+      "Restart attempts: /tmp/opnex-state/logs/gateway-restart.log",
     ]);
   });
 
@@ -25,27 +25,27 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "linux",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          OPNEX_STATE_DIR: "/tmp/opnex-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "opnex-gateway",
+        windowsTaskName: "OPNEX Gateway",
       }),
     ).toEqual([
-      "Logs: journalctl --user -u openclaw-gateway.service -n 200 --no-pager",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Logs: journalctl --user -u opnex-gateway.service -n 200 --no-pager",
+      "Restart attempts: /tmp/opnex-state/logs/gateway-restart.log",
     ]);
     expect(
       buildPlatformRuntimeLogHints({
         platform: "win32",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          OPNEX_STATE_DIR: "/tmp/opnex-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "opnex-gateway",
+        windowsTaskName: "OPNEX Gateway",
       }),
     ).toEqual([
-      'Logs: schtasks /Query /TN "OpenClaw Gateway" /V /FO LIST',
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      'Logs: schtasks /Query /TN "OPNEX Gateway" /V /FO LIST',
+      "Restart attempts: /tmp/opnex-state/logs/gateway-restart.log",
     ]);
   });
 });
@@ -55,30 +55,30 @@ describe("buildPlatformServiceStartHints", () => {
     expect(
       buildPlatformServiceStartHints({
         platform: "darwin",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "opnex gateway install",
+        startCommand: "opnex gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.opnex.gateway.plist",
+        systemdServiceName: "opnex-gateway",
+        windowsTaskName: "OPNEX Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.openclaw.gateway.plist",
+      "opnex gateway install",
+      "opnex gateway",
+      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.opnex.gateway.plist",
     ]);
     expect(
       buildPlatformServiceStartHints({
         platform: "linux",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "opnex gateway install",
+        startCommand: "opnex gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.opnex.gateway.plist",
+        systemdServiceName: "opnex-gateway",
+        windowsTaskName: "OPNEX Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "systemctl --user start openclaw-gateway.service",
+      "opnex gateway install",
+      "opnex gateway",
+      "systemctl --user start opnex-gateway.service",
     ]);
   });
 });

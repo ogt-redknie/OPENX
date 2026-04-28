@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
 export type RealtimeVoiceProviderId = string;
 
@@ -66,12 +66,12 @@ export type RealtimeVoiceBridgeCallbacks = {
 export type RealtimeVoiceProviderConfig = Record<string, unknown>;
 
 export type RealtimeVoiceProviderResolveConfigContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   rawConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceProviderConfiguredContext = {
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   providerConfig: RealtimeVoiceProviderConfig;
 };
 

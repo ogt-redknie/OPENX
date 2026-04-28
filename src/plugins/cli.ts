@@ -1,6 +1,6 @@
 import type { Command } from "commander";
 import { getRuntimeConfig, readConfigFileSnapshot } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   createPluginCliLogger,
   loadPluginCliDescriptors,
@@ -8,7 +8,7 @@ import {
   type PluginCliLoaderOptions,
 } from "./cli-registry-loader.js";
 import { registerPluginCliCommandGroups } from "./register-plugin-cli-command-groups.js";
-import type { OpenClawPluginCliCommandDescriptor } from "./types.js";
+import type { OPNEXPluginCliCommandDescriptor } from "./types.js";
 
 type PluginCliRegistrationMode = "eager" | "lazy";
 
@@ -20,7 +20,7 @@ type RegisterPluginCliOptions = {
 const logger = createPluginCliLogger();
 
 export const loadValidatedConfigForPluginRegistration =
-  async (): Promise<OpenClawConfig | null> => {
+  async (): Promise<OPNEXConfig | null> => {
     const snapshot = await readConfigFileSnapshot();
     if (!snapshot.valid) {
       return null;
@@ -29,16 +29,16 @@ export const loadValidatedConfigForPluginRegistration =
   };
 
 export async function getPluginCliCommandDescriptors(
-  cfg?: OpenClawConfig,
+  cfg?: OPNEXConfig,
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
-): Promise<OpenClawPluginCliCommandDescriptor[]> {
+): Promise<OPNEXPluginCliCommandDescriptor[]> {
   return loadPluginCliDescriptors({ cfg, env, loaderOptions });
 }
 
 export async function registerPluginCliCommands(
   program: Command,
-  cfg?: OpenClawConfig,
+  cfg?: OPNEXConfig,
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
   options?: RegisterPluginCliOptions,
@@ -68,7 +68,7 @@ export async function registerPluginCliCommandsFromValidatedConfig(
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
   options?: RegisterPluginCliOptions,
-): Promise<OpenClawConfig | null> {
+): Promise<OPNEXConfig | null> {
   const config = await loadValidatedConfigForPluginRegistration();
   if (!config) {
     return null;

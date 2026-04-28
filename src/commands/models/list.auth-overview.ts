@@ -10,7 +10,7 @@ import {
   resolveEnvApiKey,
   resolveUsableCustomProviderApiKey,
 } from "../../agents/model-auth.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -44,7 +44,7 @@ function formatProfileSecretLabel(params: {
 
 export function resolveProviderAuthOverview(params: {
   provider: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   store: AuthProfileStore;
   modelsPath: string;
   syntheticAuth?: { value: string; source: string };

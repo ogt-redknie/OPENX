@@ -38,7 +38,7 @@ function resolveAgentRuntimeMetadata(
   cfg: ReturnType<typeof getRuntimeConfig>,
   agentId: string,
 ): NonNullable<AgentListEntry["agentRuntime"]> {
-  const envRuntime = normalizeRuntimeValue(process.env.OPENCLAW_AGENT_RUNTIME);
+  const envRuntime = normalizeRuntimeValue(process.env.OPNEX_AGENT_RUNTIME);
   if (envRuntime) {
     return {
       id: envRuntime,
@@ -82,7 +82,7 @@ export function createAgentsListTool(opts?: {
     label: "Agents",
     name: "agents_list",
     description:
-      'List OpenClaw agent ids you can target with `sessions_spawn` when `runtime="subagent"` (based on subagent allowlists).',
+      'List OPNEX agent ids you can target with `sessions_spawn` when `runtime="subagent"` (based on subagent allowlists).',
     parameters: AgentsListToolSchema,
     execute: async () => {
       const cfg = getRuntimeConfig();

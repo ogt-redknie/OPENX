@@ -1,8 +1,8 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { formatAllowFromLowercase } from "openclaw/plugin-sdk/allow-from";
-import { adaptScopedAccountAccessor } from "openclaw/plugin-sdk/channel-config-helpers";
-import { createScopedChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-import type { ChannelDoctorAdapter } from "openclaw/plugin-sdk/channel-contract";
+import { describeAccountSnapshot } from "opnex/plugin-sdk/account-helpers";
+import { formatAllowFromLowercase } from "opnex/plugin-sdk/allow-from";
+import { adaptScopedAccountAccessor } from "opnex/plugin-sdk/channel-config-helpers";
+import { createScopedChannelConfigAdapter } from "opnex/plugin-sdk/channel-config-helpers";
+import type { ChannelDoctorAdapter } from "opnex/plugin-sdk/channel-contract";
 import { inspectDiscordAccount } from "./account-inspect.js";
 import {
   listDiscordAccountIds,

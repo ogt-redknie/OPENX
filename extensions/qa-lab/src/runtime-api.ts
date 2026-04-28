@@ -1,8 +1,8 @@
 export type { Command } from "commander";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-export { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-export { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-export type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
+export type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+export { definePluginEntry } from "opnex/plugin-sdk/plugin-entry";
+export { callGatewayFromCli } from "opnex/plugin-sdk/gateway-runtime";
+export type { PluginRuntime } from "opnex/plugin-sdk/runtime-store";
 export { defaultQaRuntimeModelForMode } from "./model-selection.runtime.js";
 export {
   buildQaTarget,

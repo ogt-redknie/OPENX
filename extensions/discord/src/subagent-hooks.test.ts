@@ -1,8 +1,8 @@
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
+} from "opnex/plugin-sdk/channel-test-helpers";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 type ThreadBindingRecord = {
@@ -60,7 +60,7 @@ function registerHandlersForTest(
     },
   },
 ) {
-  return registerHookHandlersForTest<OpenClawPluginApi>({
+  return registerHookHandlersForTest<OPNEXPluginApi>({
     config,
     register: registerDiscordSubagentHooks,
   });

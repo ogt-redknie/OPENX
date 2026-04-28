@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@opnex/telegram",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "OPNEX Telegram channel plugin",
   "type": "module",
   "dependencies": {
     "@grammyjs/runner": "^2.0.3",
@@ -12,9 +12,9 @@
     "undici": "8.1.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -35,7 +35,7 @@
       "selectionDocsPrefix": "",
       "selectionDocsOmitLabel": true,
       "selectionExtras": [
-        "https://openclaw.ai"
+        "https://opnex.ai"
       ],
       "markdownCapable": true,
       "commands": {

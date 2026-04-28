@@ -9,13 +9,13 @@ title: "Credits"
 
 ## The name
 
-OpenClaw = CLAW + TARDIS, because every space lobster needs a time and space machine.
+OPNEX = CLAW + TARDIS, because every space OPNEX needs a time and space machine.
 
 ## Credits
 
-- **Peter Steinberger** ([@steipete](https://x.com/steipete)) - Creator, lobster whisperer
+- **Peter Steinberger** ([@steipete](https://x.com/steipete)) - Creator, OPNEX whisperer
 - **Mario Zechner** ([@badlogicc](https://x.com/badlogicgames)) - Pi creator, security pen tester
-- **Clawd** - The space lobster who demanded a better name
+- **Clawd** - The space OPNEX who demanded a better name
 
 ## Core contributors
 
@@ -25,7 +25,7 @@ OpenClaw = CLAW + TARDIS, because every space lobster needs a time and space mac
 
 ## License
 
-MIT - Free as a lobster in the ocean.
+MIT - Free as a OPNEX in the ocean.
 
 > "We are all just playing with our own prompts." (An AI, probably high on tokens)
 

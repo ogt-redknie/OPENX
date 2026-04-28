@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { captureEnv } from "openclaw/plugin-sdk/test-env";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { captureEnv } from "opnex/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { handleTelegramAction, telegramActionRuntime } from "./action-runtime.js";
 
@@ -50,13 +50,13 @@ describe("handleTelegramAction", () => {
     emoji: "✅",
   } as const;
 
-  function reactionConfig(reactionLevel: "minimal" | "extensive" | "off" | "ack"): OpenClawConfig {
+  function reactionConfig(reactionLevel: "minimal" | "extensive" | "off" | "ack"): OPNEXConfig {
     return {
       channels: { telegram: { botToken: "tok", reactionLevel } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
   }
 
-  function telegramConfig(overrides?: Record<string, unknown>): OpenClawConfig {
+  function telegramConfig(overrides?: Record<string, unknown>): OPNEXConfig {
     return {
       channels: {
         telegram: {
@@ -64,7 +64,7 @@ describe("handleTelegramAction", () => {
           ...overrides,
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
   }
 
   async function sendInlineButtonsMessage(params: {
@@ -180,7 +180,7 @@ describe("handleTelegramAction", () => {
   it("soft-fails when messageId is missing", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", reactionLevel: "minimal" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const result = await handleTelegramAction(
       {
         action: "react",
@@ -215,7 +215,7 @@ describe("handleTelegramAction", () => {
   });
 
   it("rejects sticker actions when disabled by default", async () => {
-    const cfg = { channels: { telegram: { botToken: "tok" } } } as OpenClawConfig;
+    const cfg = { channels: { telegram: { botToken: "tok" } } } as OPNEXConfig;
     await expect(
       handleTelegramAction(
         {
@@ -232,7 +232,7 @@ describe("handleTelegramAction", () => {
   it("sends stickers when enabled", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", actions: { sticker: true } } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await handleTelegramAction(
       {
         action: "sendSticker",
@@ -251,7 +251,7 @@ describe("handleTelegramAction", () => {
   it("accepts shared sticker action aliases", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", actions: { sticker: true } } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await handleTelegramAction(
       {
         action: "sticker",
@@ -321,7 +321,7 @@ describe("handleTelegramAction", () => {
           actions: { reactions: false },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const result = await handleTelegramAction(
       {
         action: "react",
@@ -750,7 +750,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { sendMessage: false } },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await expect(
       handleTelegramAction(
         {
@@ -768,7 +768,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { poll: false } },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await expect(
       handleTelegramAction(
         {
@@ -785,7 +785,7 @@ describe("handleTelegramAction", () => {
   it("deletes a message", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await handleTelegramAction(
       {
         action: "deleteMessage",
@@ -806,7 +806,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { deleteMessage: false } },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await expect(
       handleTelegramAction(
         {
@@ -821,7 +821,7 @@ describe("handleTelegramAction", () => {
 
   it("throws on missing bot token for sendMessage", async () => {
     delete process.env.TELEGRAM_BOT_TOKEN;
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as OPNEXConfig;
     await expect(
       handleTelegramAction(
         {
@@ -837,7 +837,7 @@ describe("handleTelegramAction", () => {
   it("allows inline buttons by default (allowlist)", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     await handleTelegramAction(
       {
         action: "sendMessage",
@@ -954,7 +954,7 @@ describe("handleTelegramAction per-account gating", () => {
     >;
     topLevelBotToken?: string;
     topLevelActions?: { reactions?: boolean };
-  }): OpenClawConfig {
+  }): OPNEXConfig {
     return {
       channels: {
         telegram: {
@@ -963,10 +963,10 @@ describe("handleTelegramAction per-account gating", () => {
           accounts: params.accounts,
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
   }
 
-  async function expectAccountStickerSend(cfg: OpenClawConfig, accountId = "media") {
+  async function expectAccountStickerSend(cfg: OPNEXConfig, accountId = "media") {
     await handleTelegramAction(
       { action: "sendSticker", to: "123", fileId: "sticker-id", accountId },
       cfg,
@@ -996,7 +996,7 @@ describe("handleTelegramAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await expect(
       handleTelegramAction(

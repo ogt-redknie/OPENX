@@ -1,4 +1,4 @@
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "opnex/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearActiveEmbeddedRun,
@@ -1015,8 +1015,8 @@ describe("runPreparedReply media-only handling", () => {
     const call = vi.mocked(runReplyAgent).mock.calls.at(-1)?.[0];
     expect(call?.commandBody).toContain(heartbeatPrompt);
     expect(call?.followupRun.prompt).toContain(heartbeatPrompt);
-    expect(call?.transcriptCommandBody).toBe("[OpenClaw heartbeat poll]");
-    expect(call?.followupRun.transcriptPrompt).toBe("[OpenClaw heartbeat poll]");
+    expect(call?.transcriptCommandBody).toBe("[OPNEX heartbeat poll]");
+    expect(call?.followupRun.transcriptPrompt).toBe("[OPNEX heartbeat poll]");
   });
 
   it("uses a non-empty transcript marker while keeping bare reset startup instructions out of visible transcript prompt", async () => {
@@ -1053,8 +1053,8 @@ describe("runPreparedReply media-only handling", () => {
     const call = vi.mocked(runReplyAgent).mock.calls.at(-1)?.[0];
     expect(call?.commandBody).toContain("A new session was started via /new or /reset.");
     expect(call?.followupRun.prompt).toContain("A new session was started via /new or /reset.");
-    expect(call?.transcriptCommandBody).toBe("[OpenClaw session new]");
-    expect(call?.followupRun.transcriptPrompt).toBe("[OpenClaw session new]");
+    expect(call?.transcriptCommandBody).toBe("[OPNEX session new]");
+    expect(call?.followupRun.transcriptPrompt).toBe("[OPNEX session new]");
   });
 
   it("keeps reset user notes visible while hiding startup instructions", async () => {

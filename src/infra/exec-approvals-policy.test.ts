@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import { DEFAULT_AGENT_ID } from "../routing/session-key.js";
 import {
   collectExecPolicyScopeSnapshots,
@@ -47,7 +47,7 @@ function expectMalformedAgentAskUsesDefaults(agentAsk: unknown): void {
   expect(summary.ask).toMatchObject({
     requested: "off",
     host: "always",
-    hostSource: "~/.openclaw/exec-approvals.json defaults.ask",
+    hostSource: "~/.opnex/exec-approvals.json defaults.ask",
     effective: "always",
     note: "more aggressive ask wins",
   });
@@ -263,19 +263,19 @@ describe("exec approvals policy helpers", () => {
       requested: "full",
       host: "allowlist",
       effective: "allowlist",
-      hostSource: "~/.openclaw/exec-approvals.json defaults.security",
+      hostSource: "~/.opnex/exec-approvals.json defaults.security",
       note: "stricter host security wins",
     });
     expect(summary.ask).toMatchObject({
       requested: "off",
       host: "always",
       effective: "always",
-      hostSource: "~/.openclaw/exec-approvals.json defaults.ask",
+      hostSource: "~/.opnex/exec-approvals.json defaults.ask",
       note: "more aggressive ask wins",
     });
     expect(summary.askFallback).toEqual({
       effective: "deny",
-      source: "~/.openclaw/exec-approvals.json defaults.askFallback",
+      source: "~/.opnex/exec-approvals.json defaults.askFallback",
     });
   });
 
@@ -349,7 +349,7 @@ describe("exec approvals policy helpers", () => {
 
     expect(summary.askFallback).toEqual({
       effective: "allowlist",
-      source: "~/.openclaw/exec-approvals.json defaults.askFallback",
+      source: "~/.opnex/exec-approvals.json defaults.askFallback",
     });
   });
 
@@ -393,15 +393,15 @@ describe("exec approvals policy helpers", () => {
 
     expect(summary.security).toMatchObject({
       host: "allowlist",
-      hostSource: "~/.openclaw/exec-approvals.json agents.*.security",
+      hostSource: "~/.opnex/exec-approvals.json agents.*.security",
     });
     expect(summary.ask).toMatchObject({
       host: "always",
-      hostSource: "~/.openclaw/exec-approvals.json agents.*.ask",
+      hostSource: "~/.opnex/exec-approvals.json agents.*.ask",
     });
     expect(summary.askFallback).toEqual({
       effective: "deny",
-      source: "~/.openclaw/exec-approvals.json agents.*.askFallback",
+      source: "~/.opnex/exec-approvals.json agents.*.askFallback",
     });
   });
 
@@ -439,7 +439,7 @@ describe("exec approvals policy helpers", () => {
     });
   });
 
-  it("reports askFallback from the OpenClaw default when approvals omit it", () => {
+  it("reports askFallback from the OPNEX default when approvals omit it", () => {
     const summary = resolveExecPolicyScopeSummary({
       approvals: {
         version: 1,
@@ -451,7 +451,7 @@ describe("exec approvals policy helpers", () => {
 
     expect(summary.askFallback).toEqual({
       effective: "full",
-      source: "OpenClaw default (full)",
+      source: "OPNEX default (full)",
     });
   });
 
@@ -467,7 +467,7 @@ describe("exec approvals policy helpers", () => {
         agents: {
           list: [{ id: "runner" }],
         },
-      } satisfies OpenClawConfig,
+      } satisfies OPNEXConfig,
       approvals: {
         version: 1,
         agents: {
@@ -509,7 +509,7 @@ describe("exec approvals policy helpers", () => {
             ask: "off",
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies OPNEXConfig,
       approvals: {
         version: 1,
         agents: {
@@ -524,11 +524,11 @@ describe("exec approvals policy helpers", () => {
     expect(snapshots.map((snapshot) => snapshot.scopeLabel)).toEqual(["tools.exec"]);
     expect(snapshots[0]?.security).toMatchObject({
       host: "allowlist",
-      hostSource: "~/.openclaw/exec-approvals.json agents.main.security",
+      hostSource: "~/.opnex/exec-approvals.json agents.main.security",
     });
     expect(snapshots[0]?.ask).toMatchObject({
       host: "always",
-      hostSource: "~/.openclaw/exec-approvals.json agents.main.ask",
+      hostSource: "~/.opnex/exec-approvals.json agents.main.ask",
     });
   });
 
@@ -553,7 +553,7 @@ describe("exec approvals policy helpers", () => {
             },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies OPNEXConfig,
       approvals: {
         version: 1,
       },

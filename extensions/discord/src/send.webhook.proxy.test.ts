@@ -1,12 +1,12 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sendWebhookMessageDiscord } from "./send.outbound.js";
 
 const makeProxyFetchMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/fetch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/fetch-runtime")>(
-    "openclaw/plugin-sdk/fetch-runtime",
+vi.mock("opnex/plugin-sdk/fetch-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/fetch-runtime")>(
+    "opnex/plugin-sdk/fetch-runtime",
   );
   return {
     ...actual,
@@ -35,7 +35,7 @@ describe("sendWebhookMessageDiscord proxy support", () => {
           proxy: "bad-proxy",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await sendWebhookMessageDiscord("hello", {
       cfg,
@@ -63,7 +63,7 @@ describe("sendWebhookMessageDiscord proxy support", () => {
           proxy: "http://127.0.0.1:8080",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await sendWebhookMessageDiscord("hello", {
       cfg,
@@ -89,7 +89,7 @@ describe("sendWebhookMessageDiscord proxy support", () => {
           proxy: "http://proxy.test:8080",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await sendWebhookMessageDiscord("hello", {
       cfg,
@@ -116,7 +116,7 @@ describe("sendWebhookMessageDiscord proxy support", () => {
           token: "Bot test-token",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await sendWebhookMessageDiscord("hello", {
       cfg,

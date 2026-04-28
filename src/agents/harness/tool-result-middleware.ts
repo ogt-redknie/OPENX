@@ -3,7 +3,7 @@ import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareContext,
   AgentToolResultMiddlewareEvent,
-  OpenClawAgentToolResult,
+  OPNEXAgentToolResult,
 } from "../../plugins/agent-tool-result-middleware-types.js";
 import { truncateUtf16Safe } from "../../utils.js";
 
@@ -92,7 +92,7 @@ function isValidMiddlewareDetails(
   return true;
 }
 
-function isValidMiddlewareToolResult(value: unknown): value is OpenClawAgentToolResult {
+function isValidMiddlewareToolResult(value: unknown): value is OPNEXAgentToolResult {
   if (!isRecord(value) || !Array.isArray(value.content)) {
     return false;
   }
@@ -104,7 +104,7 @@ function isValidMiddlewareToolResult(value: unknown): value is OpenClawAgentTool
   );
 }
 
-function buildMiddlewareFailureResult(): OpenClawAgentToolResult {
+function buildMiddlewareFailureResult(): OPNEXAgentToolResult {
   return {
     content: [
       {
@@ -142,7 +142,7 @@ export function createAgentToolResultMiddlewareRunner(
   return {
     async applyToolResultMiddleware(
       event: AgentToolResultMiddlewareEvent,
-    ): Promise<OpenClawAgentToolResult> {
+    ): Promise<OPNEXAgentToolResult> {
       let current = event.result;
       for (const handler of await resolveHandlers()) {
         try {

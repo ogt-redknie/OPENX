@@ -1,5 +1,5 @@
 import { normalizeProviderId } from "../agents/model-selection.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
@@ -89,10 +89,10 @@ export function mergeConfigPatch<T>(base: T, patch: unknown): T {
 }
 
 export function applyProviderAuthConfigPatch(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   patch: unknown,
   options?: { replaceDefaultModels?: boolean },
-): OpenClawConfig {
+): OPNEXConfig {
   const merged = mergeConfigPatch(cfg, patch);
   if (!options?.replaceDefaultModels || !isPlainRecord(patch)) {
     return merged;
@@ -112,7 +112,7 @@ export function applyProviderAuthConfigPatch(
         ...merged.agents?.defaults,
         // Opt-in replacement for migrations that rename/remove model keys.
         models: sanitizeConfigPatchValue(patchModels) as NonNullable<
-          NonNullable<OpenClawConfig["agents"]>["defaults"]
+          NonNullable<OPNEXConfig["agents"]>["defaults"]
         >["models"],
       },
     },
@@ -120,10 +120,10 @@ export function applyProviderAuthConfigPatch(
 }
 
 export function applyDefaultModel(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   model: string,
   opts?: { preserveExistingPrimary?: boolean },
-): OpenClawConfig {
+): OPNEXConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[model] = models[model] ?? {};
 

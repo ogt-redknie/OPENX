@@ -4,7 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { promisify } from "node:util";
 import { danger, shouldLogVerbose } from "../globals.js";
-import { markOpenClawExecEnv } from "../infra/openclaw-exec-env.js";
+import { markOPNEXExecEnv } from "../infra/opnex-exec-env.js";
 import {
   decodeWindowsOutputBuffer,
   resolveWindowsConsoleEncoding,
@@ -267,7 +267,7 @@ export function resolveCommandEnv(params: {
       resolvedEnv.npm_config_fund = "false";
     }
   }
-  return markOpenClawExecEnv(resolvedEnv);
+  return markOPNEXExecEnv(resolvedEnv);
 }
 
 export async function runCommandWithTimeout(

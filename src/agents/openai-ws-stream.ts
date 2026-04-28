@@ -224,8 +224,8 @@ function resolveWsSessionPoolConfig(env: NodeJS.ProcessEnv = process.env): {
   idleMs: number;
 } {
   const enabled =
-    env.OPENCLAW_OPENAI_WS_POOL === "1" || env.OPENCLAW_OPENAI_WS_SESSION_POOL === "1";
-  const rawIdleMs = Number(env.OPENCLAW_OPENAI_WS_SESSION_POOL_IDLE_MS);
+    env.OPNEX_OPENAI_WS_POOL === "1" || env.OPNEX_OPENAI_WS_SESSION_POOL === "1";
+  const rawIdleMs = Number(env.OPNEX_OPENAI_WS_SESSION_POOL_IDLE_MS);
   const idleMs = Number.isFinite(rawIdleMs)
     ? Math.min(300_000, Math.max(1_000, Math.trunc(rawIdleMs)))
     : 30_000;
@@ -479,7 +479,7 @@ function resolveNativeOpenAISessionHeaders(params: {
   }
   return {
     "x-client-request-id": sessionId,
-    "x-openclaw-session-id": sessionId,
+    "x-opnex-session-id": sessionId,
   };
 }
 
@@ -504,14 +504,14 @@ function resolveNativeOpenAITransportTurnState(params: {
   return {
     headers: {
       ...sessionHeaders,
-      "x-openclaw-turn-id": turnId,
-      "x-openclaw-turn-attempt": attempt,
+      "x-opnex-turn-id": turnId,
+      "x-opnex-turn-attempt": attempt,
     },
     metadata: {
-      openclaw_session_id: sessionHeaders["x-openclaw-session-id"] ?? "",
-      openclaw_turn_id: turnId,
-      openclaw_turn_attempt: attempt,
-      openclaw_transport: params.transport,
+      opnex_session_id: sessionHeaders["x-opnex-session-id"] ?? "",
+      opnex_turn_id: turnId,
+      opnex_turn_attempt: attempt,
+      opnex_transport: params.transport,
     },
   };
 }

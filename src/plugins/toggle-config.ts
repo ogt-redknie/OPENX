@@ -1,16 +1,16 @@
 import { normalizeChatChannelId } from "../channels/ids.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
 export function setPluginEnabledInConfig(
-  config: OpenClawConfig,
+  config: OPNEXConfig,
   pluginId: string,
   enabled: boolean,
   options: { updateChannelConfig?: boolean } = {},
-): OpenClawConfig {
+): OPNEXConfig {
   const builtInChannelId = normalizeChatChannelId(pluginId);
   const resolvedId = builtInChannelId ?? pluginId;
 
-  const next: OpenClawConfig = {
+  const next: OPNEXConfig = {
     ...config,
     plugins: {
       ...config.plugins,

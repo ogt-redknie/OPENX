@@ -1,4 +1,4 @@
-import { resolveOpenClawAgentDir } from "../agents/agent-paths.js";
+import { resolveOPNEXAgentDir } from "../agents/agent-paths.js";
 import {
   resolveDefaultAgentId,
   resolveAgentDir,
@@ -6,7 +6,7 @@ import {
 } from "../agents/agent-scope.js";
 import { upsertAuthProfile } from "../agents/auth-profiles.js";
 import { resolveDefaultAgentWorkspaceDir } from "../agents/workspace.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { sanitizeTerminalText } from "../terminal/safe-text.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -29,7 +29,7 @@ import type { ProviderAuthMethod, ProviderAuthOptionBag, ProviderPlugin } from "
 
 export type ApplyProviderAuthChoiceParams = {
   authChoice: string;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
@@ -41,7 +41,7 @@ export type ApplyProviderAuthChoiceParams = {
 };
 
 export type ApplyProviderAuthChoiceResult = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   agentModelOverride?: string;
   retrySelection?: boolean;
 };
@@ -55,9 +55,9 @@ export type PluginProviderAuthChoiceOptions = {
 };
 
 function restoreConfiguredPrimaryModel(
-  nextConfig: OpenClawConfig,
-  originalConfig: OpenClawConfig,
-): OpenClawConfig {
+  nextConfig: OPNEXConfig,
+  originalConfig: OPNEXConfig,
+): OPNEXConfig {
   const originalModel = originalConfig.agents?.defaults?.model;
   const nextAgents = nextConfig.agents;
   const nextDefaults = nextAgents?.defaults;
@@ -86,7 +86,7 @@ function restoreConfiguredPrimaryModel(
   };
 }
 
-function resolveConfiguredDefaultModelPrimary(cfg: OpenClawConfig): string | undefined {
+function resolveConfiguredDefaultModelPrimary(cfg: OPNEXConfig): string | undefined {
   const model = cfg.agents?.defaults?.model;
   if (typeof model === "string") {
     return model;
@@ -119,12 +119,12 @@ async function noteDefaultModelResult(params: {
 }
 
 async function applyDefaultModelFromAuthChoice(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   selectedModel: string;
   preserveExistingDefaultModel: boolean | undefined;
   prompter: WizardPrompter;
-  runSelectedModelHook: (config: OpenClawConfig) => Promise<void>;
-}): Promise<OpenClawConfig> {
+  runSelectedModelHook: (config: OPNEXConfig) => Promise<void>;
+}): Promise<OPNEXConfig> {
   const previousPrimary = resolveConfiguredDefaultModelPrimary(params.config);
   const preservesDifferentPrimary =
     params.preserveExistingDefaultModel === true &&
@@ -160,7 +160,7 @@ async function loadPluginProviderRuntime() {
 
 function resolveManifestAuthChoiceScope(params: {
   authChoice: string;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   workspaceDir: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderAuthChoiceMetadata | undefined {
@@ -189,7 +189,7 @@ export const __testing = {
 } as const;
 
 export async function runProviderPluginAuthMethod(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;
@@ -201,13 +201,13 @@ export async function runProviderPluginAuthMethod(params: {
   secretInputMode?: ProviderAuthOptionBag["secretInputMode"];
   allowSecretRefPrompt?: boolean;
   opts?: Partial<ProviderAuthOptionBag>;
-}): Promise<{ config: OpenClawConfig; defaultModel?: string }> {
+}): Promise<{ config: OPNEXConfig; defaultModel?: string }> {
   const agentId = params.agentId ?? resolveDefaultAgentId(params.config);
   const defaultAgentId = resolveDefaultAgentId(params.config);
   const agentDir =
     params.agentDir ??
     (agentId === defaultAgentId
-      ? resolveOpenClawAgentDir()
+      ? resolveOPNEXAgentDir()
       : resolveAgentDir(params.config, agentId));
   const workspaceDir =
     params.workspaceDir ??
@@ -309,7 +309,7 @@ export async function applyAuthChoiceLoadedPluginProvider(
     enabledConfig = enableResult.config;
   }
 
-  const resolveScopedRuntimeProviders = (config: OpenClawConfig): ProviderPlugin[] =>
+  const resolveScopedRuntimeProviders = (config: OPNEXConfig): ProviderPlugin[] =>
     resolvePluginProviders({
       config,
       workspaceDir,
@@ -445,7 +445,7 @@ export async function applyAuthChoicePluginProvider(
   const defaultAgentId = resolveDefaultAgentId(nextConfig);
   const agentDir =
     params.agentDir ??
-    (agentId === defaultAgentId ? resolveOpenClawAgentDir() : resolveAgentDir(nextConfig, agentId));
+    (agentId === defaultAgentId ? resolveOPNEXAgentDir() : resolveAgentDir(nextConfig, agentId));
   const workspaceDir =
     resolveAgentWorkspaceDir(nextConfig, agentId) ?? resolveDefaultAgentWorkspaceDir();
 

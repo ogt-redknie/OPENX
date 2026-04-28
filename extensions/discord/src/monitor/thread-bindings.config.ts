@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   resolveThreadBindingIdleTimeoutMs,
   resolveThreadBindingMaxAgeMs,
   resolveThreadBindingsEnabled,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { normalizeAccountId } from "opnex/plugin-sdk/routing";
 
 export {
   resolveThreadBindingIdleTimeoutMs,
@@ -13,7 +13,7 @@ export {
 };
 
 export function resolveDiscordThreadBindingIdleTimeoutMs(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string;
 }): number {
   const accountId = normalizeAccountId(params.accountId);
@@ -26,7 +26,7 @@ export function resolveDiscordThreadBindingIdleTimeoutMs(params: {
 }
 
 export function resolveDiscordThreadBindingMaxAgeMs(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string;
 }): number {
   const accountId = normalizeAccountId(params.accountId);

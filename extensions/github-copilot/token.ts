@@ -1,8 +1,8 @@
 import path from "node:path";
-import { loadJsonFile, saveJsonFile } from "openclaw/plugin-sdk/json-store";
-import { resolveProviderEndpoint } from "openclaw/plugin-sdk/provider-model-shared";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { loadJsonFile, saveJsonFile } from "opnex/plugin-sdk/json-store";
+import { resolveProviderEndpoint } from "opnex/plugin-sdk/provider-model-shared";
+import { resolveStateDir } from "opnex/plugin-sdk/state-paths";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/string-coerce-runtime";
 
 const COPILOT_TOKEN_URL = "https://api.github.com/copilot_internal/v2/token";
 const COPILOT_EDITOR_VERSION = "vscode/1.96.2";

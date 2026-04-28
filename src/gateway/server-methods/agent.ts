@@ -37,7 +37,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { registerAgentRunContext } from "../../infra/agent-events.js";
 import {
   resolveAgentDeliveryPlan,
@@ -158,7 +158,7 @@ async function runSessionResetFromAgent(params: {
 }
 
 function resolveSessionRuntimeWorkspace(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   sessionKey: string;
   sessionEntry?: SessionEntry;
   spawnedBy?: string;
@@ -687,7 +687,7 @@ export const agentHandlers: GatewayRequestHandlers = {
     let resolvedSessionId = requestedSessionId;
     let sessionEntry: SessionEntry | undefined;
     let bestEffortDeliver = requestedBestEffortDeliver ?? false;
-    let cfgForAgent: OpenClawConfig | undefined;
+    let cfgForAgent: OPNEXConfig | undefined;
     let resolvedSessionKey = requestedSessionKey;
     let isNewSession = false;
     let skipTimestampInjection = false;
@@ -773,7 +773,7 @@ export const agentHandlers: GatewayRequestHandlers = {
     // Inject timestamp into user-authored messages that don't already have one.
     // Channel messages (Discord, Telegram, etc.) get timestamps via envelope
     // formatting in a separate code path — they never reach this handler.
-    // See: https://github.com/openclaw/openclaw/issues/3658
+    // See: https://github.com/opnex/opnex/issues/3658
     if (!skipTimestampInjection && !isRawModelRun) {
       message = injectTimestamp(message, timestampOptsFromConfig(cfg));
     }

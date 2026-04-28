@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/elevenlabs-speech",
+  "name": "@opnex/elevenlabs-speech",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw ElevenLabs speech plugin",
+  "description": "OPNEX ElevenLabs speech plugin",
   "type": "module",
   "dependencies": {
     "ws": "^8.20.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

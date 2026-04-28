@@ -49,7 +49,7 @@ vi.mock("../../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (a: unknown) => applyPluginAutoEnable(a as { config: unknown }),
 }));
 vi.mock("../../plugins/loader.js", () => ({
-  loadOpenClawPlugins: vi.fn(),
+  loadOPNEXPlugins: vi.fn(),
 }));
 
 import { resolveChannelSetupEntries } from "./discovery.js";
@@ -102,9 +102,9 @@ function createManifestChannelPlugin(id: string, channels: string[]): PluginMani
     skills: [],
     hooks: [],
     origin: "workspace",
-    rootDir: `/tmp/openclaw-test/${id}`,
-    source: `/tmp/openclaw-test/${id}/index.ts`,
-    manifestPath: `/tmp/openclaw-test/${id}/openclaw.plugin.json`,
+    rootDir: `/tmp/opnex-test/${id}`,
+    source: `/tmp/opnex-test/${id}/index.ts`,
+    manifestPath: `/tmp/opnex-test/${id}/opnex.plugin.json`,
   };
 }
 
@@ -136,10 +136,10 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
     };
     const bundledEntry = {
       id: "telegram",
-      pluginId: "@openclaw/telegram",
+      pluginId: "@opnex/telegram",
       origin: "bundled",
       meta: workspaceEntry.meta,
-      install: { npmSpec: "@openclaw/telegram" },
+      install: { npmSpec: "@opnex/telegram" },
     };
     listChannelPluginCatalogEntries.mockImplementation((opts?: unknown) =>
       (opts as { excludeWorkspace?: boolean } | undefined)?.excludeWorkspace
@@ -162,7 +162,7 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
   it("still returns bundled-origin entries", () => {
     const bundledEntry = {
       id: "telegram",
-      pluginId: "@openclaw/telegram",
+      pluginId: "@opnex/telegram",
       origin: "bundled",
       meta: {
         id: "telegram",
@@ -172,7 +172,7 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
         blurb: "t",
         order: 1,
       },
-      install: { npmSpec: "@openclaw/telegram" },
+      install: { npmSpec: "@opnex/telegram" },
     };
     listChannelPluginCatalogEntries.mockReturnValue([bundledEntry]);
 

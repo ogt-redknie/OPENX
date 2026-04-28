@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../../config/config.js";
+import type { OPNEXConfig } from "../../../../config/config.js";
 import type { ChannelId } from "../../channel-id.types.js";
 import type { ChannelPlugin } from "../../types.js";
 import {
@@ -38,7 +38,7 @@ type DirectoryContractEntry = {
   id: string;
   plugin: Pick<ChannelPlugin, "id" | "directory">;
   coverage: "lookups" | "presence";
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   accountId?: string;
 };
 

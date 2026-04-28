@@ -5,10 +5,10 @@ import {
   type RequestClient,
 } from "@buape/carbon";
 import { ChannelType, Routes } from "discord-api-types/v10";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
+import { recordChannelActivity } from "opnex/plugin-sdk/channel-activity-runtime";
+import type { MarkdownTableMode, OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { requireRuntimeConfig } from "opnex/plugin-sdk/plugin-config-runtime";
+import type { ChunkMode } from "opnex/plugin-sdk/reply-chunking";
 import { resolveDiscordAccount } from "./accounts.js";
 import { registerDiscordComponentEntries } from "./components-registry.js";
 import {
@@ -143,7 +143,7 @@ function collapseClassicComponentText(spec: DiscordComponentMessageSpec): string
 }
 
 type DiscordComponentSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string;
   token?: string;
   rest?: RequestClient;

@@ -1,4 +1,4 @@
-export type { AuthProfileStore } from "openclaw/plugin-sdk/image-generation-core";
+export type { AuthProfileStore } from "opnex/plugin-sdk/image-generation-core";
 export {
   buildNoCapabilityModelConfiguredMessage,
   createSubsystemLogger,
@@ -16,7 +16,7 @@ export {
   resolveApiKeyForProvider,
   resolveCapabilityModelCandidates,
   throwCapabilityGenerationFailure,
-} from "openclaw/plugin-sdk/image-generation-core";
+} from "opnex/plugin-sdk/image-generation-core";
 export type {
   FallbackAttempt,
   GeneratedImageAsset,
@@ -27,5 +27,5 @@ export type {
   ImageGenerationResolution,
   ImageGenerationResult,
   ImageGenerationSourceImage,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/image-generation-core";
+  OPNEXConfig,
+} from "opnex/plugin-sdk/image-generation-core";

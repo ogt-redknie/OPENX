@@ -2,7 +2,7 @@
 // Runs after install to keep packaged dist safe and compatible.
 // Bundled extension runtime dependencies are extension-owned. Do not install
 // every bundled extension dependency during core package install unless the
-// legacy eager-install escape hatch is explicitly enabled; `openclaw doctor
+// legacy eager-install escape hatch is explicitly enabled; `opnex doctor
 // --fix` owns the repair path for extensions that are actually used.
 import { spawnSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
@@ -30,9 +30,9 @@ export const BUNDLED_PLUGIN_INSTALL_TARGETS = [];
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_EXTENSIONS_DIR = join(__dirname, "..", "dist", "extensions");
 const DEFAULT_PACKAGE_ROOT = join(__dirname, "..");
-const DISABLE_POSTINSTALL_ENV = "OPENCLAW_DISABLE_BUNDLED_PLUGIN_POSTINSTALL";
-const DISABLE_PLUGIN_REGISTRY_MIGRATION_ENV = "OPENCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION";
-const EAGER_BUNDLED_PLUGIN_DEPS_ENV = "OPENCLAW_EAGER_BUNDLED_PLUGIN_DEPS";
+const DISABLE_POSTINSTALL_ENV = "OPNEX_DISABLE_BUNDLED_PLUGIN_POSTINSTALL";
+const DISABLE_PLUGIN_REGISTRY_MIGRATION_ENV = "OPNEX_DISABLE_PLUGIN_REGISTRY_MIGRATION";
+const EAGER_BUNDLED_PLUGIN_DEPS_ENV = "OPNEX_EAGER_BUNDLED_PLUGIN_DEPS";
 const DIST_INVENTORY_PATH = "dist/postinstall-inventory.json";
 const BAILEYS_MEDIA_FILE = join(
   "node_modules",
@@ -175,7 +175,7 @@ function assertSafeInstalledDistPath(relativePath, params) {
 }
 
 function isStagedRuntimeDependencyPath(relativePath) {
-  return /^dist\/extensions\/[^/]+\/(?:node_modules|\.openclaw-install-stage(?:-[^/]+)?)(?:\/|$)/u.test(
+  return /^dist\/extensions\/[^/]+\/(?:node_modules|\.opnex-install-stage(?:-[^/]+)?)(?:\/|$)/u.test(
     normalizeRelativePath(relativePath),
   );
 }
@@ -481,7 +481,7 @@ export function applyBaileysEncryptedStreamFinishHotfix(params = {}) {
     ((unsafeTargetPath) =>
       join(
         dirname(unsafeTargetPath),
-        `.${basename(unsafeTargetPath)}.openclaw-hotfix-${randomUUID()}`,
+        `.${basename(unsafeTargetPath)}.opnex-hotfix-${randomUUID()}`,
       ));
   const writeFile =
     params.writeFileSync ?? ((filePath, value) => writeFileSync(filePath, value, "utf8"));

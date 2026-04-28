@@ -4,13 +4,13 @@ import type { PluginGatewayDiscoveryServiceRegistration } from "../plugins/regis
 const mocks = vi.hoisted(() => ({
   pickPrimaryTailnetIPv4: vi.fn(() => "100.64.0.10"),
   pickPrimaryTailnetIPv6: vi.fn(() => undefined as string | undefined),
-  resolveWideAreaDiscoveryDomain: vi.fn(() => "openclaw.internal."),
+  resolveWideAreaDiscoveryDomain: vi.fn(() => "opnex.internal."),
   writeWideAreaGatewayZone: vi.fn(async () => ({
     changed: true,
-    zonePath: "/tmp/openclaw.internal.db",
+    zonePath: "/tmp/opnex.internal.db",
   })),
-  formatBonjourInstanceName: vi.fn((name: string) => `${name} (OpenClaw)`),
-  resolveBonjourCliPath: vi.fn(() => "/usr/local/bin/openclaw"),
+  formatBonjourInstanceName: vi.fn((name: string) => `${name} (OPNEX)`),
+  resolveBonjourCliPath: vi.fn(() => "/usr/local/bin/opnex"),
   resolveTailnetDnsHint: vi.fn(async () => "gateway.tailnet.example.ts.net"),
 }));
 
@@ -71,7 +71,7 @@ describe("startGatewayDiscovery", () => {
   it("starts registered local discovery services with gateway advertisement context", async () => {
     process.env.NODE_ENV = "development";
     delete process.env.VITEST;
-    process.env.OPENCLAW_SSH_PORT = "2222";
+    process.env.OPNEX_SSH_PORT = "2222";
 
     const stopped: string[] = [];
     const bonjour = makeDiscoveryService({
@@ -110,7 +110,7 @@ describe("startGatewayDiscovery", () => {
       canvasPort: 18789,
       sshPort: 2222,
       tailnetDns: "gateway.tailnet.example.ts.net",
-      cliPath: "/usr/local/bin/openclaw",
+      cliPath: "/usr/local/bin/opnex",
       minimal: false,
     });
     expect(peer.service.advertise).toHaveBeenCalledTimes(1);
@@ -140,10 +140,10 @@ describe("startGatewayDiscovery", () => {
     expect(result.bonjourStop).toBeNull();
   });
 
-  it("skips local discovery services for truthy OPENCLAW_DISABLE_BONJOUR values", async () => {
+  it("skips local discovery services for truthy OPNEX_DISABLE_BONJOUR values", async () => {
     process.env.NODE_ENV = "development";
     delete process.env.VITEST;
-    process.env.OPENCLAW_DISABLE_BONJOUR = "yes";
+    process.env.OPNEX_DISABLE_BONJOUR = "yes";
 
     const service = makeDiscoveryService({ id: "bonjour" });
     const result = await startGatewayDiscovery({
@@ -172,7 +172,7 @@ describe("startGatewayDiscovery", () => {
       port: 18789,
       gatewayTls: { enabled: false },
       wideAreaDiscoveryEnabled: true,
-      wideAreaDiscoveryDomain: "openclaw.internal.",
+      wideAreaDiscoveryDomain: "opnex.internal.",
       tailscaleMode: "serve",
       mdnsMode: "off",
       gatewayDiscoveryServices: [service],
@@ -183,9 +183,9 @@ describe("startGatewayDiscovery", () => {
     expect(mocks.resolveTailnetDnsHint).toHaveBeenCalledWith({ enabled: true });
     expect(mocks.writeWideAreaGatewayZone).toHaveBeenCalledWith(
       expect.objectContaining({
-        domain: "openclaw.internal.",
+        domain: "opnex.internal.",
         gatewayPort: 18789,
-        displayName: "Lab Mac (OpenClaw)",
+        displayName: "Lab Mac (OPNEX)",
         tailnetIPv4: "100.64.0.10",
         tailnetDns: "gateway.tailnet.example.ts.net",
       }),

@@ -1,12 +1,12 @@
 import {
   normalizeAccountId,
   resolveAccountEntry,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/account-core";
-import type { TelegramAccountConfig } from "openclaw/plugin-sdk/config-types";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/account-core";
+import type { TelegramAccountConfig } from "opnex/plugin-sdk/config-types";
 
 export function resolveTelegramAccountConfig(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   accountId: string,
 ): TelegramAccountConfig | undefined {
   const normalized = normalizeAccountId(accountId);
@@ -14,7 +14,7 @@ export function resolveTelegramAccountConfig(
 }
 
 export function mergeTelegramAccountConfig(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   accountId: string,
 ): TelegramAccountConfig {
   const {

@@ -51,8 +51,8 @@ function barnacleContext(
 ) {
   return {
     repo: {
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "opnex",
+      repo: "opnex",
     },
     payload: {
       action: options.action ?? "opened",
@@ -215,7 +215,7 @@ describe("barnacle-auto-response", () => {
       pr(
         "Fix duplicate plugin auto-enable entries",
         [
-          "- Problem: openclaw doctor --fix adds duplicate installed plugin entries",
+          "- Problem: opnex doctor --fix adds duplicate installed plugin entries",
           "- Why it matters: users get noisy config churn",
           "- What changed: respect manifest-provided channel auto-loads",
           "",
@@ -316,7 +316,7 @@ describe("barnacle-auto-response", () => {
   });
 
   it("actions manually applied candidate labels", async () => {
-    const { calls, github } = barnacleGithub([file("extensions/example/openclaw.plugin.json")]);
+    const { calls, github } = barnacleGithub([file("extensions/example/opnex.plugin.json")]);
 
     await runBarnacleAutoResponse({
       github,
@@ -339,14 +339,14 @@ describe("barnacle-auto-response", () => {
   });
 
   it("keeps bot-applied candidate labels passive", async () => {
-    const { calls, github } = barnacleGithub([file("extensions/example/openclaw.plugin.json")]);
+    const { calls, github } = barnacleGithub([file("extensions/example/opnex.plugin.json")]);
 
     await runBarnacleAutoResponse({
       github,
       context: barnacleContext({}, [candidateLabels.externalPluginCandidate], {
         action: "labeled",
         label: { name: candidateLabels.externalPluginCandidate },
-        sender: { login: "openclaw-bot[bot]", type: "Bot" },
+        sender: { login: "opnex-bot[bot]", type: "Bot" },
       }),
       core: {
         info: () => undefined,

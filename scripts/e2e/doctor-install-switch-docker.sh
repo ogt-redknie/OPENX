@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Verifies doctor/daemon repair switches service entrypoints between package and
-# git installs. Both fixtures come from the same prepared OpenClaw npm tarball.
+# git installs. Both fixtures come from the same prepared OPNEX npm tarball.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 source "$ROOT_DIR/scripts/lib/docker-e2e-package.sh"
-IMAGE_NAME="$(docker_e2e_resolve_image "openclaw-doctor-install-switch-e2e" OPENCLAW_DOCTOR_INSTALL_SWITCH_E2E_IMAGE)"
-PACKAGE_TGZ="$(docker_e2e_prepare_package_tgz doctor-switch "${OPENCLAW_CURRENT_PACKAGE_TGZ:-}")"
+IMAGE_NAME="$(docker_e2e_resolve_image "opnex-doctor-install-switch-e2e" OPNEX_DOCTOR_INSTALL_SWITCH_E2E_IMAGE)"
+PACKAGE_TGZ="$(docker_e2e_prepare_package_tgz doctor-switch "${OPNEX_CURRENT_PACKAGE_TGZ:-}")"
 # Bare lanes mount the package artifact instead of baking app sources into the image.
 docker_e2e_package_mount_args "$PACKAGE_TGZ"
 
@@ -25,13 +25,13 @@ docker run --rm \
   export npm_config_loglevel=error
   export npm_config_fund=false
   export npm_config_audit=false
-  export OPENCLAW_DISABLE_BUNDLED_PLUGINS=1
+  export OPNEX_DISABLE_BUNDLED_PLUGINS=1
 
   # Stub systemd/loginctl so doctor + daemon flows work in Docker.
-  export PATH="/tmp/openclaw-bin:$PATH"
-  mkdir -p /tmp/openclaw-bin
+  export PATH="/tmp/opnex-bin:$PATH"
+  mkdir -p /tmp/opnex-bin
 
-  cat > /tmp/openclaw-bin/systemctl <<"SYSTEMCTL"
+  cat > /tmp/opnex-bin/systemctl <<"SYSTEMCTL"
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -71,9 +71,9 @@ case "$cmd" in
     ;;
 esac
 SYSTEMCTL
-  chmod +x /tmp/openclaw-bin/systemctl
+  chmod +x /tmp/opnex-bin/systemctl
 
-  cat > /tmp/openclaw-bin/loginctl <<"LOGINCTL"
+  cat > /tmp/opnex-bin/loginctl <<"LOGINCTL"
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -86,31 +86,31 @@ if [[ "$*" == *"enable-linger"* ]]; then
 fi
 exit 0
 LOGINCTL
-  chmod +x /tmp/openclaw-bin/loginctl
+  chmod +x /tmp/opnex-bin/loginctl
 
-  package_tgz="${OPENCLAW_CURRENT_PACKAGE_TGZ:?missing OPENCLAW_CURRENT_PACKAGE_TGZ}"
-  git_root="/tmp/openclaw-git"
+  package_tgz="${OPNEX_CURRENT_PACKAGE_TGZ:?missing OPNEX_CURRENT_PACKAGE_TGZ}"
+  git_root="/tmp/opnex-git"
   mkdir -p "$git_root"
   # The git-style install fixture is unpacked from the tarball so this lane does
   # not depend on checkout source files being present in the Docker image.
   tar -xzf "$package_tgz" -C "$git_root" --strip-components=1
   (
     cd "$git_root"
-    npm install --omit=optional --no-fund --no-audit >/tmp/openclaw-git-install.log 2>&1
+    npm install --omit=optional --no-fund --no-audit >/tmp/opnex-git-install.log 2>&1
     git init -q
-    git config user.email "docker-e2e@openclaw.local"
-    git config user.name "OpenClaw Docker E2E"
+    git config user.email "docker-e2e@opnex.local"
+    git config user.name "OPNEX Docker E2E"
     git add -A
     git commit -qm "test fixture"
   )
-  npm_log="/tmp/openclaw-doctor-switch-npm-install.log"
+  npm_log="/tmp/opnex-doctor-switch-npm-install.log"
   if ! npm install -g --prefix /tmp/npm-prefix "$package_tgz" >"$npm_log" 2>&1; then
     cat "$npm_log"
     exit 1
   fi
 
-	  npm_bin="/tmp/npm-prefix/bin/openclaw"
-	  npm_root="/tmp/npm-prefix/lib/node_modules/openclaw"
+	  npm_bin="/tmp/npm-prefix/bin/opnex"
+	  npm_root="/tmp/npm-prefix/lib/node_modules/opnex"
 	  if [ -f "$npm_root/dist/index.mjs" ]; then
 	    npm_entry="$npm_root/dist/index.mjs"
 	  else
@@ -122,7 +122,7 @@ LOGINCTL
 	  else
 	    git_entry="$git_root/dist/index.js"
 	  fi
-	  git_cli="$git_root/openclaw.mjs"
+	  git_cli="$git_root/opnex.mjs"
 
   package_version="$(node -p "require(\"$npm_root/package.json\").version")"
   is_legacy_package_acceptance_compat() {
@@ -210,12 +210,12 @@ NODE
     local install_expected="$3"
     local doctor_cmd="$4"
     local doctor_expected="$5"
-    local install_log="/tmp/openclaw-doctor-switch-${name}-install.log"
-    local doctor_log="/tmp/openclaw-doctor-switch-${name}-doctor.log"
-    local command_timeout="${OPENCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
+    local install_log="/tmp/opnex-doctor-switch-${name}-install.log"
+    local doctor_log="/tmp/opnex-doctor-switch-${name}-doctor.log"
+    local command_timeout="${OPNEX_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
 
     echo "== Flow: $name =="
-    home_dir=$(mktemp -d "/tmp/openclaw-switch-${name}.XXXXXX")
+    home_dir=$(mktemp -d "/tmp/opnex-switch-${name}.XXXXXX")
     export HOME="$home_dir"
     export USER="testuser"
 
@@ -226,7 +226,7 @@ NODE
     rm -f "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.bash_profile"
     rm -rf "$HOME/.config/fish" "$HOME/.config/powershell"
 
-    unit_path="$HOME/.config/systemd/user/openclaw-gateway.service"
+    unit_path="$HOME/.config/systemd/user/opnex-gateway.service"
     if [ ! -f "$unit_path" ]; then
       echo "Missing unit file: $unit_path"
       exit 1
@@ -257,16 +257,16 @@ NODE
 
   run_proxy_env_flow() {
     local name="proxy-env-cleanup"
-    local install_log="/tmp/openclaw-doctor-switch-${name}-install.log"
-    local doctor_log="/tmp/openclaw-doctor-switch-${name}-doctor.log"
-    local command_timeout="${OPENCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
+    local install_log="/tmp/opnex-doctor-switch-${name}-install.log"
+    local doctor_log="/tmp/opnex-doctor-switch-${name}-doctor.log"
+    local command_timeout="${OPNEX_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
 
     echo "== Flow: $name =="
-    home_dir=$(mktemp -d "/tmp/openclaw-switch-${name}.XXXXXX")
+    home_dir=$(mktemp -d "/tmp/opnex-switch-${name}.XXXXXX")
     export HOME="$home_dir"
     export USER="testuser"
 
-    unit_path="$HOME/.config/systemd/user/openclaw-gateway.service"
+    unit_path="$HOME/.config/systemd/user/opnex-gateway.service"
     if ! timeout "$command_timeout" env \
       HTTP_PROXY="http://proxy.local:7890" \
       HTTPS_PROXY="https://proxy.local:7890" \
@@ -295,28 +295,28 @@ NODE
 
   run_wrapper_flow() {
     local name="wrapper-persistence"
-    local install_log="/tmp/openclaw-doctor-switch-${name}-install.log"
-    local reinstall_log="/tmp/openclaw-doctor-switch-${name}-reinstall.log"
-    local env_repair_log="/tmp/openclaw-doctor-switch-${name}-env-repair.log"
-    local doctor_log="/tmp/openclaw-doctor-switch-${name}-doctor.log"
-    local clear_log="/tmp/openclaw-doctor-switch-${name}-clear.log"
-    local command_timeout="${OPENCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
+    local install_log="/tmp/opnex-doctor-switch-${name}-install.log"
+    local reinstall_log="/tmp/opnex-doctor-switch-${name}-reinstall.log"
+    local env_repair_log="/tmp/opnex-doctor-switch-${name}-env-repair.log"
+    local doctor_log="/tmp/opnex-doctor-switch-${name}-doctor.log"
+    local clear_log="/tmp/opnex-doctor-switch-${name}-clear.log"
+    local command_timeout="${OPNEX_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-300s}"
 
     echo "== Flow: $name =="
-    home_dir=$(mktemp -d "/tmp/openclaw-switch-${name}.XXXXXX")
+    home_dir=$(mktemp -d "/tmp/opnex-switch-${name}.XXXXXX")
     export HOME="$home_dir"
     export USER="testuser"
     mkdir -p "$HOME/.local/bin"
-    local wrapper="$HOME/.local/bin/openclaw-wrapper"
+    local wrapper="$HOME/.local/bin/opnex-wrapper"
     cat > "$wrapper" <<WRAPPER
 #!/usr/bin/env bash
 set -euo pipefail
-printf "%s\n" "\$@" >> "$HOME/openclaw-wrapper-argv.log"
+printf "%s\n" "\$@" >> "$HOME/opnex-wrapper-argv.log"
 exec "$npm_bin" "\$@"
 WRAPPER
     chmod +x "$wrapper"
 
-    local unit_path="$HOME/.config/systemd/user/openclaw-gateway.service"
+    local unit_path="$HOME/.config/systemd/user/opnex-gateway.service"
 
     if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" --force >"$install_log" 2>&1; then
       cat "$install_log"
@@ -324,7 +324,7 @@ WRAPPER
     fi
     assert_exec_arg "$unit_path" 1 "$wrapper"
     assert_exec_arg "$unit_path" 2 "gateway"
-    assert_env_value "$unit_path" "OPENCLAW_WRAPPER" "$wrapper"
+    assert_env_value "$unit_path" "OPNEX_WRAPPER" "$wrapper"
 
     if ! timeout "$command_timeout" "$npm_bin" gateway install --force >"$reinstall_log" 2>&1; then
       cat "$reinstall_log"
@@ -332,41 +332,41 @@ WRAPPER
     fi
     assert_exec_arg "$unit_path" 1 "$wrapper"
     assert_exec_arg "$unit_path" 2 "gateway"
-    assert_env_value "$unit_path" "OPENCLAW_WRAPPER" "$wrapper"
+    assert_env_value "$unit_path" "OPNEX_WRAPPER" "$wrapper"
 
-    sed -i "/^Environment=OPENCLAW_WRAPPER=/d" "$unit_path"
+    sed -i "/^Environment=OPNEX_WRAPPER=/d" "$unit_path"
     if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" >"$env_repair_log" 2>&1; then
       cat "$env_repair_log"
       exit 1
     fi
     assert_exec_arg "$unit_path" 1 "$wrapper"
-    assert_env_value "$unit_path" "OPENCLAW_WRAPPER" "$wrapper"
+    assert_env_value "$unit_path" "OPNEX_WRAPPER" "$wrapper"
 
-    sed -i "s#^Environment=OPENCLAW_WRAPPER=.*#Environment=OPENCLAW_WRAPPER=/tmp/stale-openclaw-wrapper#" "$unit_path"
+    sed -i "s#^Environment=OPNEX_WRAPPER=.*#Environment=OPNEX_WRAPPER=/tmp/stale-opnex-wrapper#" "$unit_path"
     if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" >"$env_repair_log" 2>&1; then
       cat "$env_repair_log"
       exit 1
     fi
     assert_exec_arg "$unit_path" 1 "$wrapper"
-    assert_env_value "$unit_path" "OPENCLAW_WRAPPER" "$wrapper"
+    assert_env_value "$unit_path" "OPNEX_WRAPPER" "$wrapper"
 
     if ! timeout "$command_timeout" node "$git_cli" doctor --repair --force --yes >"$doctor_log" 2>&1; then
       cat "$doctor_log"
       exit 1
     fi
-    if ! grep -Fq "Gateway service invokes OPENCLAW_WRAPPER:" "$doctor_log"; then
+    if ! grep -Fq "Gateway service invokes OPNEX_WRAPPER:" "$doctor_log"; then
       echo "Expected doctor to report active wrapper"
       cat "$doctor_log"
       exit 1
     fi
     assert_exec_arg "$unit_path" 1 "$wrapper"
-    assert_env_value "$unit_path" "OPENCLAW_WRAPPER" "$wrapper"
+    assert_env_value "$unit_path" "OPNEX_WRAPPER" "$wrapper"
 
-    if ! timeout "$command_timeout" env OPENCLAW_WRAPPER= "$npm_bin" gateway install --force >"$clear_log" 2>&1; then
+    if ! timeout "$command_timeout" env OPNEX_WRAPPER= "$npm_bin" gateway install --force >"$clear_log" 2>&1; then
       cat "$clear_log"
       exit 1
     fi
-    assert_no_env_key "$unit_path" "OPENCLAW_WRAPPER"
+    assert_no_env_key "$unit_path" "OPNEX_WRAPPER"
     assert_entrypoint "$unit_path" "$npm_entry"
   }
 

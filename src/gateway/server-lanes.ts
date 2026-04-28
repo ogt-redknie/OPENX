@@ -1,9 +1,9 @@
 import { resolveAgentMaxConcurrent, resolveSubagentMaxConcurrent } from "../config/agent-limits.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { setCommandLaneConcurrency } from "../process/command-queue.js";
 import { CommandLane } from "../process/lanes.js";
 
-export function applyGatewayLaneConcurrency(cfg: OpenClawConfig) {
+export function applyGatewayLaneConcurrency(cfg: OPNEXConfig) {
   const cronMaxConcurrentRuns = cfg.cron?.maxConcurrentRuns ?? 1;
   setCommandLaneConcurrency(CommandLane.Cron, cronMaxConcurrentRuns);
   // Cron isolated agent turns remap inner LLM work to this lane.

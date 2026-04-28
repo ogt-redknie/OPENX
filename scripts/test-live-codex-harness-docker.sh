@@ -2,37 +2,37 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${OPENCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${OPNEX_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${OPENCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-${OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}}"
+TRUSTED_HARNESS_DIR="${OPNEX_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-${OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted Codex harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
 fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
-IMAGE_NAME="${OPENCLAW_IMAGE:-openclaw:local}"
-LIVE_IMAGE_NAME="${OPENCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$HOME/.openclaw}"
-WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}"
-PROFILE_FILE="${OPENCLAW_PROFILE_FILE:-$HOME/.profile}"
-CODEX_HARNESS_AUTH_MODE="${OPENCLAW_LIVE_CODEX_HARNESS_AUTH:-codex-auth}"
+IMAGE_NAME="${OPNEX_IMAGE:-opnex:local}"
+LIVE_IMAGE_NAME="${OPNEX_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${OPNEX_CONFIG_DIR:-$HOME/.opnex}"
+WORKSPACE_DIR="${OPNEX_WORKSPACE_DIR:-$HOME/.opnex/workspace}"
+PROFILE_FILE="${OPNEX_PROFILE_FILE:-$HOME/.profile}"
+CODEX_HARNESS_AUTH_MODE="${OPNEX_LIVE_CODEX_HARNESS_AUTH:-codex-auth}"
 TEMP_DIRS=()
-DOCKER_USER="${OPENCLAW_DOCKER_USER:-node}"
+DOCKER_USER="${OPNEX_DOCKER_USER:-node}"
 DOCKER_HOME_MOUNT=()
 DOCKER_TRUSTED_HARNESS_MOUNT=()
 DOCKER_TRUSTED_HARNESS_CONTAINER_DIR=""
 DOCKER_EXTRA_ENV_FILES=()
 DOCKER_AUTH_PRESTAGED=0
 
-openclaw_live_codex_harness_append_build_extension() {
+opnex_live_codex_harness_append_build_extension() {
   local extension="${1:?extension required}"
-  local current="${OPENCLAW_DOCKER_BUILD_EXTENSIONS:-${OPENCLAW_EXTENSIONS:-}}"
+  local current="${OPNEX_DOCKER_BUILD_EXTENSIONS:-${OPNEX_EXTENSIONS:-}}"
   case " $current " in
     *" $extension "*)
       ;;
     *)
-      export OPENCLAW_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
+      export OPNEX_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
       ;;
   esac
 }
@@ -41,13 +41,13 @@ case "$CODEX_HARNESS_AUTH_MODE" in
   codex-auth | api-key)
     ;;
   *)
-    echo "ERROR: OPENCLAW_LIVE_CODEX_HARNESS_AUTH must be one of: codex-auth, api-key." >&2
+    echo "ERROR: OPNEX_LIVE_CODEX_HARNESS_AUTH must be one of: codex-auth, api-key." >&2
     exit 1
     ;;
 esac
 
 if [[ "$CODEX_HARNESS_AUTH_MODE" == "api-key" && -z "${OPENAI_API_KEY:-}" ]]; then
-  echo "ERROR: OPENCLAW_LIVE_CODEX_HARNESS_AUTH=api-key requires OPENAI_API_KEY." >&2
+  echo "ERROR: OPNEX_LIVE_CODEX_HARNESS_AUTH=api-key requires OPENAI_API_KEY." >&2
   exit 1
 fi
 
@@ -58,28 +58,28 @@ cleanup_temp_dirs() {
 }
 trap cleanup_temp_dirs EXIT
 
-if [[ -n "${OPENCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
-  CLI_TOOLS_DIR="${OPENCLAW_DOCKER_CLI_TOOLS_DIR}"
+if [[ -n "${OPNEX_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
+  CLI_TOOLS_DIR="${OPNEX_DOCKER_CLI_TOOLS_DIR}"
 elif [[ "${CI:-}" == "true" || "${GITHUB_ACTIONS:-}" == "true" ]]; then
-  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-cli-tools.XXXXXX")"
+  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opnex-docker-cli-tools.XXXXXX")"
   TEMP_DIRS+=("$CLI_TOOLS_DIR")
 else
-  CLI_TOOLS_DIR="$HOME/.cache/openclaw/docker-cli-tools"
+  CLI_TOOLS_DIR="$HOME/.cache/opnex/docker-cli-tools"
 fi
-if [[ -n "${OPENCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
-  CACHE_HOME_DIR="${OPENCLAW_DOCKER_CACHE_HOME_DIR}"
+if [[ -n "${OPNEX_DOCKER_CACHE_HOME_DIR:-}" ]]; then
+  CACHE_HOME_DIR="${OPNEX_DOCKER_CACHE_HOME_DIR}"
 elif [[ "${CI:-}" == "true" || "${GITHUB_ACTIONS:-}" == "true" ]]; then
-  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-cache.XXXXXX")"
+  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opnex-docker-cache.XXXXXX")"
   TEMP_DIRS+=("$CACHE_HOME_DIR")
 else
-  CACHE_HOME_DIR="$HOME/.cache/openclaw/docker-cache"
+  CACHE_HOME_DIR="$HOME/.cache/opnex/docker-cache"
 fi
 
 mkdir -p "$CLI_TOOLS_DIR"
 mkdir -p "$CACHE_HOME_DIR"
 if [[ "${CI:-}" == "true" || "${GITHUB_ACTIONS:-}" == "true" ]]; then
   DOCKER_USER="$(id -u):$(id -g)"
-  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-home.XXXXXX")"
+  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opnex-docker-home.XXXXXX")"
   TEMP_DIRS+=("$DOCKER_HOME_DIR")
   DOCKER_HOME_MOUNT=(-v "$DOCKER_HOME_DIR":/home/node)
 fi
@@ -99,23 +99,23 @@ if [[ "$CODEX_HARNESS_AUTH_MODE" != "api-key" ]]; then
   while IFS= read -r auth_file; do
     [[ -n "$auth_file" ]] || continue
     AUTH_FILES+=("$auth_file")
-  done < <(openclaw_live_collect_auth_files_from_csv "openai-codex")
+  done < <(opnex_live_collect_auth_files_from_csv "openai-codex")
 fi
 
 AUTH_FILES_CSV=""
 if ((${#AUTH_FILES[@]} > 0)); then
-  AUTH_FILES_CSV="$(openclaw_live_join_csv "${AUTH_FILES[@]}")"
+  AUTH_FILES_CSV="$(opnex_live_join_csv "${AUTH_FILES[@]}")"
 fi
 
 if [[ -n "${DOCKER_HOME_DIR:-}" ]]; then
-  openclaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" --files "${AUTH_FILES[@]}"
+  opnex_live_stage_auth_into_home "$DOCKER_HOME_DIR" --files "${AUTH_FILES[@]}"
   DOCKER_AUTH_PRESTAGED=1
 fi
 
 EXTERNAL_AUTH_MOUNTS=()
 if ((${#AUTH_FILES[@]} > 0)); then
   for auth_file in "${AUTH_FILES[@]}"; do
-    auth_file="$(openclaw_live_validate_relative_home_path "$auth_file")"
+    auth_file="$(opnex_live_validate_relative_home_path "$auth_file")"
     host_path="$HOME/$auth_file"
     if [[ -f "$host_path" ]]; then
       EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth-files/"$auth_file":ro)
@@ -125,7 +125,7 @@ fi
 
 DOCKER_AUTH_ENV=()
 if [[ "$CODEX_HARNESS_AUTH_MODE" == "api-key" ]]; then
-  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-codex-harness-env.XXXXXX")"
+  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opnex-codex-harness-env.XXXXXX")"
   TEMP_DIRS+=("$docker_env_dir")
   docker_env_file="$docker_env_dir/openai.env"
   {
@@ -149,14 +149,14 @@ export npm_config_cache="$NPM_CONFIG_CACHE"
 # Force the Codex harness to use the staged `~/.codex` auth files. This lane
 # is not meant to exercise raw OpenAI API-key routing unless the lane
 # explicitly opts into API-key auth for CI.
-if [ "${OPENCLAW_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ]; then
+if [ "${OPNEX_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ]; then
   unset OPENAI_API_KEY OPENAI_BASE_URL
 fi
 mkdir -p "$NPM_CONFIG_PREFIX" "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE"
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
-if [ "${OPENCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
-  IFS=',' read -r -a auth_files <<<"${OPENCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
+if [ "${OPNEX_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
+  IFS=',' read -r -a auth_files <<<"${OPNEX_DOCKER_AUTH_FILES_RESOLVED:-}"
   if ((${#auth_files[@]} > 0)); then
     for auth_file in "${auth_files[@]}"; do
       [ -n "$auth_file" ] || continue
@@ -168,37 +168,37 @@ if [ "${OPENCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
     done
   fi
 fi
-if [ "${OPENCLAW_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ] && [ ! -s "$HOME/.codex/auth.json" ]; then
+if [ "${OPNEX_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ] && [ ! -s "$HOME/.codex/auth.json" ]; then
   echo "ERROR: missing ~/.codex/auth.json for Codex harness live test." >&2
   exit 1
 fi
-trusted_scripts_dir="${OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
-if [ "${OPENCLAW_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ]; then
+trusted_scripts_dir="${OPNEX_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+if [ "${OPNEX_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" != "api-key" ]; then
   node --import tsx "$trusted_scripts_dir/prepare-codex-ci-auth.ts" "$HOME/.codex/auth.json"
 fi
 if [ ! -x "$NPM_CONFIG_PREFIX/bin/codex" ]; then
   npm install -g @openai/codex
 fi
-if [ "${OPENCLAW_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" = "api-key" ]; then
+if [ "${OPNEX_LIVE_CODEX_HARNESS_AUTH:-codex-auth}" = "api-key" ]; then
   printf '%s\n' "$OPENAI_API_KEY" | "$NPM_CONFIG_PREFIX/bin/codex" login --with-api-key >/dev/null
 fi
 tmp_dir="$(mktemp -d)"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-openclaw_live_stage_source_tree "$tmp_dir"
-openclaw_live_stage_node_modules "$tmp_dir"
-openclaw_live_link_runtime_tree "$tmp_dir"
-openclaw_live_stage_state_dir "$tmp_dir/.openclaw-state"
-if [ -n "${OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR:-}" ] && [ -d "$OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR" ]; then
+opnex_live_stage_source_tree "$tmp_dir"
+opnex_live_stage_node_modules "$tmp_dir"
+opnex_live_link_runtime_tree "$tmp_dir"
+opnex_live_stage_state_dir "$tmp_dir/.opnex-state"
+if [ -n "${OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR:-}" ] && [ -d "$OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR" ]; then
   for harness_file in src/gateway/gateway-codex-harness.live-helpers.ts; do
-    if [ -f "$OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR/$harness_file" ]; then
+    if [ -f "$OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR/$harness_file" ]; then
       mkdir -p "$(dirname "$tmp_dir/$harness_file")"
-      cp "$OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR/$harness_file" "$tmp_dir/$harness_file"
+      cp "$OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR/$harness_file" "$tmp_dir/$harness_file"
     fi
   done
 fi
-openclaw_live_prepare_staged_config
+opnex_live_prepare_staged_config
 cd "$tmp_dir"
-if [ "${OPENCLAW_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}" = "1" ]; then
+if [ "${OPNEX_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}" = "1" ]; then
   node --import tsx "$trusted_scripts_dir/prepare-codex-ci-config.ts" "$HOME/.codex/config.toml" "$tmp_dir"
 fi
 codex_preflight_log="$tmp_dir/codex-preflight.log"
@@ -215,23 +215,23 @@ if ! "$NPM_CONFIG_PREFIX/bin/codex" exec \
   cat "$codex_preflight_log" >&2
   exit 1
 fi
-pnpm test:live ${OPENCLAW_LIVE_CODEX_TEST_FILES:-src/gateway/gateway-codex-harness.live.test.ts}
+pnpm test:live ${OPNEX_LIVE_CODEX_TEST_FILES:-src/gateway/gateway-codex-harness.live.test.ts}
 EOF
 
-openclaw_live_codex_harness_append_build_extension codex
-OPENCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+opnex_live_codex_harness_append_build_extension codex
+OPNEX_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
 
 echo "==> Run Codex harness live test in Docker"
-echo "==> Model: ${OPENCLAW_LIVE_CODEX_HARNESS_MODEL:-codex/gpt-5.5}"
-echo "==> Image probe: ${OPENCLAW_LIVE_CODEX_HARNESS_IMAGE_PROBE:-1}"
-echo "==> MCP probe: ${OPENCLAW_LIVE_CODEX_HARNESS_MCP_PROBE:-1}"
-echo "==> Subagent probe: ${OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_PROBE:-1}"
-echo "==> Subagent-only fast path: ${OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_ONLY:-auto}"
-echo "==> Guardian probe: ${OPENCLAW_LIVE_CODEX_HARNESS_GUARDIAN_PROBE:-1}"
+echo "==> Model: ${OPNEX_LIVE_CODEX_HARNESS_MODEL:-codex/gpt-5.5}"
+echo "==> Image probe: ${OPNEX_LIVE_CODEX_HARNESS_IMAGE_PROBE:-1}"
+echo "==> MCP probe: ${OPNEX_LIVE_CODEX_HARNESS_MCP_PROBE:-1}"
+echo "==> Subagent probe: ${OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_PROBE:-1}"
+echo "==> Subagent-only fast path: ${OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_ONLY:-auto}"
+echo "==> Guardian probe: ${OPNEX_LIVE_CODEX_HARNESS_GUARDIAN_PROBE:-1}"
 echo "==> Auth mode: $CODEX_HARNESS_AUTH_MODE"
 echo "==> Profile file: $PROFILE_STATUS"
-echo "==> CI-safe Codex config: ${OPENCLAW_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}"
-echo "==> Test files: ${OPENCLAW_LIVE_CODEX_TEST_FILES:-src/gateway/gateway-codex-harness.live.test.ts}"
+echo "==> CI-safe Codex config: ${OPNEX_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}"
+echo "==> Test files: ${OPNEX_LIVE_CODEX_TEST_FILES:-src/gateway/gateway-codex-harness.live.test.ts}"
 echo "==> Harness fallback: none"
 echo "==> Auth files: ${AUTH_FILES_CSV:-none}"
 DOCKER_RUN_ARGS=(docker run --rm -t \
@@ -240,43 +240,43 @@ DOCKER_RUN_ARGS=(docker run --rm -t \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
   -e HOME=/home/node \
   -e NODE_OPTIONS=--disable-warning=ExperimentalWarning \
-  -e OPENCLAW_AGENT_HARNESS_FALLBACK=none \
-  -e OPENCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
-  -e OPENCLAW_CODEX_APP_SERVER_BIN="${OPENCLAW_CODEX_APP_SERVER_BIN:-codex}" \
-  -e OPENCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
-  -e OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_AUTH="$CODEX_HARNESS_AUTH_MODE" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS=1 \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_DEBUG="${OPENCLAW_LIVE_CODEX_HARNESS_DEBUG:-}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_GUARDIAN_PROBE="${OPENCLAW_LIVE_CODEX_HARNESS_GUARDIAN_PROBE:-1}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_IMAGE_PROBE="${OPENCLAW_LIVE_CODEX_HARNESS_IMAGE_PROBE:-1}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_MCP_PROBE="${OPENCLAW_LIVE_CODEX_HARNESS_MCP_PROBE:-1}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_MODEL="${OPENCLAW_LIVE_CODEX_HARNESS_MODEL:-codex/gpt-5.5}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_REQUIRE_GUARDIAN_EVENTS="${OPENCLAW_LIVE_CODEX_HARNESS_REQUIRE_GUARDIAN_EVENTS:-1}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_REQUEST_TIMEOUT_MS="${OPENCLAW_LIVE_CODEX_HARNESS_REQUEST_TIMEOUT_MS:-}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_ONLY="${OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_ONLY:-}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_PROBE="${OPENCLAW_LIVE_CODEX_HARNESS_SUBAGENT_PROBE:-1}" \
-  -e OPENCLAW_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG="${OPENCLAW_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}" \
-  -e OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-  -e OPENCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR="$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR" \
-  -e OPENCLAW_LIVE_CODEX_TRUSTED_HARNESS_DIR="$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR" \
-  -e OPENCLAW_LIVE_CODEX_BIND="${OPENCLAW_LIVE_CODEX_BIND:-}" \
-  -e OPENCLAW_LIVE_CODEX_BIND_MODEL="${OPENCLAW_LIVE_CODEX_BIND_MODEL:-}" \
-  -e OPENCLAW_LIVE_CODEX_TEST_FILES="${OPENCLAW_LIVE_CODEX_TEST_FILES:-}" \
-  -e OPENCLAW_LIVE_TEST=1 \
-  -e OPENCLAW_VITEST_FS_MODULE_CACHE=0)
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+  -e OPNEX_AGENT_HARNESS_FALLBACK=none \
+  -e OPNEX_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
+  -e OPNEX_CODEX_APP_SERVER_BIN="${OPNEX_CODEX_APP_SERVER_BIN:-codex}" \
+  -e OPNEX_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
+  -e OPNEX_LIVE_DOCKER_SOURCE_STAGE_MODE="${OPNEX_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_AUTH="$CODEX_HARNESS_AUTH_MODE" \
+  -e OPNEX_LIVE_CODEX_HARNESS=1 \
+  -e OPNEX_LIVE_CODEX_HARNESS_DEBUG="${OPNEX_LIVE_CODEX_HARNESS_DEBUG:-}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_GUARDIAN_PROBE="${OPNEX_LIVE_CODEX_HARNESS_GUARDIAN_PROBE:-1}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_IMAGE_PROBE="${OPNEX_LIVE_CODEX_HARNESS_IMAGE_PROBE:-1}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_MCP_PROBE="${OPNEX_LIVE_CODEX_HARNESS_MCP_PROBE:-1}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_MODEL="${OPNEX_LIVE_CODEX_HARNESS_MODEL:-codex/gpt-5.5}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_REQUIRE_GUARDIAN_EVENTS="${OPNEX_LIVE_CODEX_HARNESS_REQUIRE_GUARDIAN_EVENTS:-1}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_REQUEST_TIMEOUT_MS="${OPNEX_LIVE_CODEX_HARNESS_REQUEST_TIMEOUT_MS:-}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_ONLY="${OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_ONLY:-}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_PROBE="${OPNEX_LIVE_CODEX_HARNESS_SUBAGENT_PROBE:-1}" \
+  -e OPNEX_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG="${OPNEX_LIVE_CODEX_HARNESS_USE_CI_SAFE_CODEX_CONFIG:-1}" \
+  -e OPNEX_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+  -e OPNEX_LIVE_DOCKER_TRUSTED_HARNESS_DIR="$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR" \
+  -e OPNEX_LIVE_CODEX_TRUSTED_HARNESS_DIR="$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR" \
+  -e OPNEX_LIVE_CODEX_BIND="${OPNEX_LIVE_CODEX_BIND:-}" \
+  -e OPNEX_LIVE_CODEX_BIND_MODEL="${OPNEX_LIVE_CODEX_BIND_MODEL:-}" \
+  -e OPNEX_LIVE_CODEX_TEST_FILES="${OPNEX_LIVE_CODEX_TEST_FILES:-}" \
+  -e OPNEX_LIVE_TEST=1 \
+  -e OPNEX_VITEST_FS_MODULE_CACHE=0)
+opnex_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
+opnex_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
+opnex_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+opnex_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
 DOCKER_RUN_ARGS+=(\
   -v "$CACHE_HOME_DIR":/home/node/.cache \
   -v "$ROOT_DIR":/src:ro \
-  -v "$CONFIG_DIR":/home/node/.openclaw \
-  -v "$WORKSPACE_DIR":/home/node/.openclaw/workspace \
+  -v "$CONFIG_DIR":/home/node/.opnex \
+  -v "$WORKSPACE_DIR":/home/node/.opnex/workspace \
   -v "$CLI_TOOLS_DIR":/home/node/.npm-global)
-openclaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
-openclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+opnex_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
+opnex_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
 DOCKER_RUN_ARGS+=(\
   "$LIVE_IMAGE_NAME" \
   -lc "$LIVE_TEST_CMD")

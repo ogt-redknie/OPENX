@@ -13,13 +13,13 @@ Debugging helpers for streaming output, especially when a provider mixes reasoni
 
 Use `/debug` in chat to set **runtime-only** config overrides (memory, not disk).
 `/debug` is disabled by default; enable with `commands.debug: true`.
-This is handy when you need to toggle obscure settings without editing `openclaw.json`.
+This is handy when you need to toggle obscure settings without editing `opnex.json`.
 
 Examples:
 
 ```
 /debug show
-/debug set messages.responsePrefix="[openclaw]"
+/debug set messages.responsePrefix="[opnex]"
 /debug unset messages.responsePrefix
 /debug reset
 ```
@@ -45,7 +45,7 @@ Keep using `/verbose` for normal verbose status/tool output, and keep using
 
 ## Temporary CLI debug timing
 
-OpenClaw keeps `src/cli/debug-timing.ts` as a small helper for local
+OPNEX keeps `src/cli/debug-timing.ts` as a small helper for local
 investigation. It is intentionally not wired into CLI startup, command routing,
 or any command by default. Use it only while debugging a slow command, then
 remove the import and spans before landing the behavior change.
@@ -56,7 +56,7 @@ deciding whether to use a CPU profiler or fix a specific subsystem.
 ### Add temporary spans
 
 Add the helper near the code you are investigating. For example, while debugging
-`openclaw models list`, a temporary patch in
+`opnex models list`, a temporary patch in
 `src/commands/models/list.list-command.ts` might look like this:
 
 ```ts
@@ -95,13 +95,13 @@ Guidelines:
 Readable mode is best for live debugging:
 
 ```bash
-OPENCLAW_DEBUG_TIMING=1 pnpm openclaw models list --all --provider moonshot
+OPNEX_DEBUG_TIMING=1 pnpm opnex models list --all --provider moonshot
 ```
 
 Example output from a temporary `models list` investigation:
 
 ```text
-OpenClaw CLI debug timing: models list
+OPNEX CLI debug timing: models list
      0ms     +0ms start all=true json=false local=false plain=false provider="moonshot"
      2ms     +2ms debug:models:list:import_runtime duration=2ms
     17ms    +14ms debug:models:list:load_config duration=14ms sourceConfig=true
@@ -146,7 +146,7 @@ production paths.
 Use JSON mode when you want to save or compare timing data:
 
 ```bash
-OPENCLAW_DEBUG_TIMING=json pnpm openclaw models list --all --provider moonshot \
+OPNEX_DEBUG_TIMING=json pnpm opnex models list --all --provider moonshot \
   2> .artifacts/models-list-timing.jsonl
 ```
 
@@ -197,7 +197,7 @@ node scripts/watch-node.mjs gateway --force
 ```
 
 The watcher restarts on build-relevant files under `src/`, extension source files,
-extension `package.json` and `openclaw.plugin.json` metadata, `tsconfig.json`,
+extension `package.json` and `opnex.plugin.json` metadata, `tsconfig.json`,
 `package.json`, and `tsdown.config.ts`. Extension metadata changes restart the
 gateway without forcing a `tsdown` rebuild; source and config changes still
 rebuild `dist` first.
@@ -211,7 +211,7 @@ replaces the older watcher instead of leaving duplicate watcher parents behind.
 Use the dev profile to isolate state and spin up a safe, disposable setup for
 debugging. There are **two** `--dev` flags:
 
-- **Global `--dev` (profile):** isolates state under `~/.openclaw-dev` and
+- **Global `--dev` (profile):** isolates state under `~/.opnex-dev` and
   defaults the gateway port to `19001` (derived ports shift with it).
 - **`gateway --dev`: tells the Gateway to auto-create a default config +
   workspace** when missing (and skip BOOTSTRAP.md).
@@ -220,18 +220,18 @@ Recommended flow (dev profile + dev bootstrap):
 
 ```bash
 pnpm gateway:dev
-OPENCLAW_PROFILE=dev openclaw tui
+OPNEX_PROFILE=dev opnex tui
 ```
 
-If you don’t have a global install yet, run the CLI via `pnpm openclaw ...`.
+If you don’t have a global install yet, run the CLI via `pnpm opnex ...`.
 
 What this does:
 
 1. **Profile isolation** (global `--dev`)
-   - `OPENCLAW_PROFILE=dev`
-   - `OPENCLAW_STATE_DIR=~/.openclaw-dev`
-   - `OPENCLAW_CONFIG_PATH=~/.openclaw-dev/openclaw.json`
-   - `OPENCLAW_GATEWAY_PORT=19001` (browser/canvas shift accordingly)
+   - `OPNEX_PROFILE=dev`
+   - `OPNEX_STATE_DIR=~/.opnex-dev`
+   - `OPNEX_CONFIG_PATH=~/.opnex-dev/opnex.json`
+   - `OPNEX_GATEWAY_PORT=19001` (browser/canvas shift accordingly)
 
 2. **Dev bootstrap** (`gateway --dev`)
    - Writes a minimal config if missing (`gateway.mode=local`, bind loopback).
@@ -240,7 +240,7 @@ What this does:
    - Seeds the workspace files if missing:
      `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `IDENTITY.md`, `USER.md`, `HEARTBEAT.md`.
    - Default identity: **C3‑PO** (protocol droid).
-   - Skips channel providers in dev mode (`OPENCLAW_SKIP_CHANNELS=1`).
+   - Skips channel providers in dev mode (`OPNEX_SKIP_CHANNELS=1`).
 
 Reset flow (fresh start):
 
@@ -252,7 +252,7 @@ pnpm gateway:dev:reset
 `--dev` is a **global** profile flag and gets eaten by some runners. If you need to spell it out, use the env var form:
 
 ```bash
-OPENCLAW_PROFILE=dev openclaw gateway --dev --reset
+OPNEX_PROFILE=dev opnex gateway --dev --reset
 ```
 
 </Note>
@@ -264,14 +264,14 @@ OPENCLAW_PROFILE=dev openclaw gateway --dev --reset
 If a non-dev gateway is already running (launchd or systemd), stop it first:
 
 ```bash
-openclaw gateway stop
+opnex gateway stop
 ```
 
 </Tip>
 
-## Raw stream logging (OpenClaw)
+## Raw stream logging (OPNEX)
 
-OpenClaw can log the **raw assistant stream** before any filtering/formatting.
+OPNEX can log the **raw assistant stream** before any filtering/formatting.
 This is the best way to see whether reasoning is arriving as plain text deltas
 (or as separate thinking blocks).
 
@@ -284,19 +284,19 @@ pnpm gateway:watch --raw-stream
 Optional path override:
 
 ```bash
-pnpm gateway:watch --raw-stream --raw-stream-path ~/.openclaw/logs/raw-stream.jsonl
+pnpm gateway:watch --raw-stream --raw-stream-path ~/.opnex/logs/raw-stream.jsonl
 ```
 
 Equivalent env vars:
 
 ```bash
-OPENCLAW_RAW_STREAM=1
-OPENCLAW_RAW_STREAM_PATH=~/.openclaw/logs/raw-stream.jsonl
+OPNEX_RAW_STREAM=1
+OPNEX_RAW_STREAM_PATH=~/.opnex/logs/raw-stream.jsonl
 ```
 
 Default file:
 
-`~/.openclaw/logs/raw-stream.jsonl`
+`~/.opnex/logs/raw-stream.jsonl`
 
 ## Raw chunk logging (pi-mono)
 

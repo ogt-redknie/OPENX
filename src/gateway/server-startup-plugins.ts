@@ -2,8 +2,8 @@ import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent
 import { initSubagentRegistry } from "../agents/subagent-registry.js";
 import { runChannelPluginStartupMaintenance } from "../channels/plugins/lifecycle-startup.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
+import { resolveOPNEXPackageRootSync } from "../infra/opnex-root.js";
 import {
   repairBundledRuntimeDepsInstallRootAsync,
   resolveBundledRuntimeDependencyPackageInstallRoot,
@@ -26,9 +26,9 @@ type GatewayPluginBootstrapLog = {
 };
 
 export function resolveGatewayStartupMaintenanceConfig(params: {
-  cfgAtStart: OpenClawConfig;
-  startupRuntimeConfig: OpenClawConfig;
-}): OpenClawConfig {
+  cfgAtStart: OPNEXConfig;
+  startupRuntimeConfig: OPNEXConfig;
+}): OPNEXConfig {
   return params.cfgAtStart.channels === undefined &&
     params.startupRuntimeConfig.channels !== undefined
     ? {
@@ -39,14 +39,14 @@ export function resolveGatewayStartupMaintenanceConfig(params: {
 }
 
 async function prestageGatewayBundledRuntimeDeps(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   pluginIds: readonly string[];
   log: GatewayPluginBootstrapLog;
 }): Promise<void> {
   if (params.pluginIds.length === 0) {
     return;
   }
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveOPNEXPackageRootSync({
     argv1: process.argv[1],
     cwd: process.cwd(),
     moduleUrl: import.meta.url,
@@ -106,9 +106,9 @@ async function prestageGatewayBundledRuntimeDeps(params: {
 }
 
 export async function prepareGatewayPluginBootstrap(params: {
-  cfgAtStart: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
-  startupRuntimeConfig: OpenClawConfig;
+  cfgAtStart: OPNEXConfig;
+  activationSourceConfig?: OPNEXConfig;
+  startupRuntimeConfig: OPNEXConfig;
   pluginMetadataSnapshot?: PluginMetadataSnapshot;
   minimalTestGateway: boolean;
   log: GatewayPluginBootstrapLog;

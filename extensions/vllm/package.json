@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/vllm-provider",
+  "name": "@opnex/vllm-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw vLLM provider plugin",
+  "description": "OPNEX vLLM provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

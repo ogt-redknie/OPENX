@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { isRecord } from "../utils.js";
 import {
@@ -14,10 +14,10 @@ import {
   type ProviderConfig,
 } from "./models-config.providers.js";
 
-type ModelsConfig = NonNullable<OpenClawConfig["models"]>;
+type ModelsConfig = NonNullable<OPNEXConfig["models"]>;
 export type ResolveImplicitProvidersForModelsJson = (params: {
   agentDir: string;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
   explicitProviders: Record<string, ProviderConfig>;
@@ -40,7 +40,7 @@ export type ModelsJsonPlan =
 
 export async function resolveProvidersForModelsJsonWithDeps(
   params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     agentDir: string;
     env: NodeJS.ProcessEnv;
     workspaceDir?: string;
@@ -101,10 +101,10 @@ function resolveProvidersForMode(params: {
   });
 }
 
-export async function planOpenClawModelsJsonWithDeps(
+export async function planOPNEXModelsJsonWithDeps(
   params: {
-    cfg: OpenClawConfig;
-    sourceConfigForSecrets?: OpenClawConfig;
+    cfg: OPNEXConfig;
+    sourceConfigForSecrets?: OPNEXConfig;
     agentDir: string;
     env: NodeJS.ProcessEnv;
     workspaceDir?: string;
@@ -180,8 +180,8 @@ export async function planOpenClawModelsJsonWithDeps(
   };
 }
 
-export async function planOpenClawModelsJson(
-  params: Parameters<typeof planOpenClawModelsJsonWithDeps>[0],
+export async function planOPNEXModelsJson(
+  params: Parameters<typeof planOPNEXModelsJsonWithDeps>[0],
 ): Promise<ModelsJsonPlan> {
-  return planOpenClawModelsJsonWithDeps(params);
+  return planOPNEXModelsJsonWithDeps(params);
 }

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { LegacyConfigRule } from "../config/legacy.shared.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { OPNEXConfig } from "../config/types.js";
 import { asNullableRecord } from "../shared/record-coerce.js";
 import { getCachedPluginJitiLoader, type PluginJitiLoaderCache } from "./jiti-loader-cache.js";
 import type { PluginManifestRegistry } from "./manifest-registry.js";
@@ -22,12 +22,12 @@ type PluginDoctorContractModule = {
 };
 
 type PluginDoctorCompatibilityMutation = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   changes: string[];
 };
 
 type PluginDoctorCompatibilityNormalizer = (params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 }) => PluginDoctorCompatibilityMutation;
 
 type PluginDoctorContractEntry = {
@@ -326,14 +326,14 @@ export function listPluginDoctorLegacyConfigRules(params?: {
 }
 
 export function applyPluginDoctorCompatibilityMigrations(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   params?: {
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     pluginIds?: readonly string[];
   },
 ): {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   changes: string[];
 } {
   let nextCfg = cfg;

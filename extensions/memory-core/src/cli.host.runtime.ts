@@ -11,16 +11,16 @@ export {
   withManager,
   withProgress,
   withProgressTotals,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-cli";
+} from "opnex/plugin-sdk/memory-core-host-runtime-cli";
 export {
   getRuntimeConfig,
   resolveDefaultAgentId,
   resolveSessionTranscriptsDirForAgent,
   resolveStateDir,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/memory-core-host-runtime-core";
 export {
   listMemoryFiles,
   normalizeExtraMemoryPaths,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+} from "opnex/plugin-sdk/memory-core-host-runtime-files";
 export { getMemorySearchManager } from "./memory/index.js";

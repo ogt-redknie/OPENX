@@ -1,12 +1,12 @@
-import { resolveApprovalOverGateway } from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { isApprovalNotFoundError } from "openclaw/plugin-sdk/error-runtime";
+import { resolveApprovalOverGateway } from "opnex/plugin-sdk/approval-gateway-runtime";
+import type { ExecApprovalReplyDecision } from "opnex/plugin-sdk/approval-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { isApprovalNotFoundError } from "opnex/plugin-sdk/error-runtime";
 
 export { isApprovalNotFoundError };
 
 export async function resolveMatrixApproval(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   senderId?: string | null;

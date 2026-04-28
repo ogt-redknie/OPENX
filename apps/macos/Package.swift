@@ -1,18 +1,18 @@
 // swift-tools-version: 6.2
-// Package manifest for the OpenClaw macOS companion (menu bar app + IPC library).
+// Package manifest for the OPNEX macOS companion (menu bar app + IPC library).
 
 import PackageDescription
 
 let package = Package(
-    name: "OpenClaw",
+    name: "OPNEX",
     platforms: [
         .macOS(.v15),
     ],
     products: [
-        .library(name: "OpenClawIPC", targets: ["OpenClawIPC"]),
-        .library(name: "OpenClawDiscovery", targets: ["OpenClawDiscovery"]),
-        .executable(name: "OpenClaw", targets: ["OpenClaw"]),
-        .executable(name: "openclaw-mac", targets: ["OpenClawMacCLI"]),
+        .library(name: "OPNEXIPC", targets: ["OPNEXIPC"]),
+        .library(name: "OPNEXDiscovery", targets: ["OPNEXDiscovery"]),
+        .executable(name: "OPNEX", targets: ["OPNEX"]),
+        .executable(name: "opnex-mac", targets: ["OPNEXMacCLI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/orchetect/MenuBarExtraAccess", exact: "1.3.0"),
@@ -20,33 +20,33 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log.git", from: "1.10.1"),
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.9.0"),
         .package(url: "https://github.com/steipete/Peekaboo.git", exact: "3.0.0-beta4"),
-        .package(path: "../shared/OpenClawKit"),
+        .package(path: "../shared/OPNEXKit"),
         .package(path: "../../Swabble"),
     ],
     targets: [
         .target(
-            name: "OpenClawIPC",
+            name: "OPNEXIPC",
             dependencies: [],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawDiscovery",
+            name: "OPNEXDiscovery",
             dependencies: [
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
+                .product(name: "OPNEXKit", package: "OPNEXKit"),
             ],
-            path: "Sources/OpenClawDiscovery",
+            path: "Sources/OPNEXDiscovery",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "OpenClaw",
+            name: "OPNEX",
             dependencies: [
-                "OpenClawIPC",
-                "OpenClawDiscovery",
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
-                .product(name: "OpenClawChatUI", package: "OpenClawKit"),
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "OPNEXIPC",
+                "OPNEXDiscovery",
+                .product(name: "OPNEXKit", package: "OPNEXKit"),
+                .product(name: "OPNEXChatUI", package: "OPNEXKit"),
+                .product(name: "OPNEXProtocol", package: "OPNEXKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
                 .product(name: "MenuBarExtraAccess", package: "MenuBarExtraAccess"),
                 .product(name: "Subprocess", package: "swift-subprocess"),
@@ -59,30 +59,30 @@ let package = Package(
                 "Resources/Info.plist",
             ],
             resources: [
-                .copy("Resources/OpenClaw.icns"),
+                .copy("Resources/OPNEX.icns"),
                 .copy("Resources/DeviceModels"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "OpenClawMacCLI",
+            name: "OPNEXMacCLI",
             dependencies: [
-                "OpenClawDiscovery",
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "OPNEXDiscovery",
+                .product(name: "OPNEXKit", package: "OPNEXKit"),
+                .product(name: "OPNEXProtocol", package: "OPNEXKit"),
             ],
-            path: "Sources/OpenClawMacCLI",
+            path: "Sources/OPNEXMacCLI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "OpenClawIPCTests",
+            name: "OPNEXIPCTests",
             dependencies: [
-                "OpenClawIPC",
-                "OpenClaw",
-                "OpenClawDiscovery",
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "OPNEXIPC",
+                "OPNEX",
+                "OPNEXDiscovery",
+                .product(name: "OPNEXProtocol", package: "OPNEXKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
             ],
             swiftSettings: [

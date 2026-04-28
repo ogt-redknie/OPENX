@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { SecurityAuditFinding } from "./audit.types.js";
 
 let auditDeepModulePromise: Promise<typeof import("./audit.deep.runtime.js")> | undefined;
@@ -9,7 +9,7 @@ async function loadAuditDeepModule() {
 }
 
 export async function collectDeepCodeSafetyFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   stateDir: string;
   deep: boolean;
   summaryCache?: Map<string, Promise<unknown>>;

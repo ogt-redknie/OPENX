@@ -1,5 +1,5 @@
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import type { SessionSendPolicyDecision } from "../../sessions/send-policy.js";
 import type { SourceReplyDeliveryMode } from "../get-reply-options.types.js";
 
@@ -8,7 +8,7 @@ export type SourceReplyDeliveryModeContext = {
 };
 
 export function resolveSourceReplyDeliveryMode(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   ctx: SourceReplyDeliveryModeContext;
   requested?: SourceReplyDeliveryMode;
 }): SourceReplyDeliveryMode {
@@ -36,7 +36,7 @@ export type SourceReplyVisibilityPolicy = {
 };
 
 export function resolveSourceReplyVisibilityPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   ctx: SourceReplyDeliveryModeContext;
   requested?: SourceReplyDeliveryMode;
   sendPolicy: SessionSendPolicyDecision;

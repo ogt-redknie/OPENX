@@ -6,7 +6,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { startQaLabServer } from "./lab-server.js";
 
-vi.mock("@openclaw/qa-channel/api.js", async () => await import("../../qa-channel/api.js"));
+vi.mock("@opnex/qa-channel/api.js", async () => await import("../../qa-channel/api.js"));
 
 const captureMock = vi.hoisted(() => {
   const sessions: Array<Record<string, unknown>> = [];
@@ -112,16 +112,16 @@ const captureMock = vi.hoisted(() => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/proxy-capture", () => ({
+vi.mock("opnex/plugin-sdk/proxy-capture", () => ({
   acquireDebugProxyCaptureStore: () => ({
     store: captureMock.store,
     release: captureMock.store.close,
   }),
   getDebugProxyCaptureStore: () => captureMock.store,
   resolveDebugProxySettings: () => ({
-    dbPath: process.env.OPENCLAW_DEBUG_PROXY_DB_PATH ?? "",
-    blobDir: process.env.OPENCLAW_DEBUG_PROXY_BLOB_DIR ?? "",
-    proxyUrl: process.env.OPENCLAW_DEBUG_PROXY_URL ?? "",
+    dbPath: process.env.OPNEX_DEBUG_PROXY_DB_PATH ?? "",
+    blobDir: process.env.OPNEX_DEBUG_PROXY_BLOB_DIR ?? "",
+    proxyUrl: process.env.OPNEX_DEBUG_PROXY_URL ?? "",
     sessionId: "qa-lab-test",
   }),
 }));
@@ -275,7 +275,7 @@ describe("qa-lab server", () => {
     expect(bootstrap.defaults.senderId).toBe("qa-operator");
     expect(bootstrap.controlUiUrl).toBe("http://127.0.0.1:18789/");
     expect(bootstrap.controlUiEmbeddedUrl).toBe("http://127.0.0.1:18789/#token=qa-token");
-    expect(bootstrap.kickoffTask).toContain("Lobster Invaders");
+    expect(bootstrap.kickoffTask).toContain("OPNEX Invaders");
     expect(bootstrap.scenarios.length).toBeGreaterThanOrEqual(10);
     expect(bootstrap.scenarios.some((scenario) => scenario.id === "dm-chat-baseline")).toBe(true);
     expect(bootstrap.runner.status).toBe("idle");
@@ -368,7 +368,7 @@ describe("qa-lab server", () => {
       messages: Array<{ text: string }>;
     };
     expect(
-      manualSnapshot.messages.some((message) => message.text.includes("Lobster Invaders")),
+      manualSnapshot.messages.some((message) => message.text.includes("OPNEX Invaders")),
     ).toBe(true);
   });
 
@@ -568,7 +568,7 @@ describe("qa-lab server", () => {
         `  fs.writeFileSync(${JSON.stringify(stoppedPath)}, "terminated", "utf8");`,
         "  process.exit(0);",
         "});",
-        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.OPENCLAW_CODEX_DISCOVERY_LIVE || "", "utf8");`,
+        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.OPNEX_CODEX_DISCOVERY_LIVE || "", "utf8");`,
         "setInterval(() => {}, 1000);",
       ].join("\n"),
       "utf8",
@@ -703,23 +703,23 @@ describe("qa-lab server", () => {
     cleanups.push(async () => {
       await rm(tempDir, { recursive: true, force: true });
     });
-    process.env.OPENCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
-    process.env.OPENCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
+    process.env.OPNEX_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
+    process.env.OPNEX_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
     const store = captureMock.store;
     store.upsertSession({
       id: "qa-capture-session",
       startedAt: Date.now(),
       mode: "proxy-run",
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
-      dbPath: process.env.OPENCLAW_DEBUG_PROXY_DB_PATH,
-      blobDir: process.env.OPENCLAW_DEBUG_PROXY_BLOB_DIR,
+      sourceScope: "opnex",
+      sourceProcess: "opnex",
+      dbPath: process.env.OPNEX_DEBUG_PROXY_DB_PATH,
+      blobDir: process.env.OPNEX_DEBUG_PROXY_BLOB_DIR,
     });
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now(),
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "opnex",
+      sourceProcess: "opnex",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -739,8 +739,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 1,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "opnex",
+      sourceProcess: "opnex",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -760,8 +760,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 2,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "opnex",
+      sourceProcess: "opnex",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -781,8 +781,8 @@ describe("qa-lab server", () => {
       port: 0,
     });
     cleanups.push(async () => {
-      delete process.env.OPENCLAW_DEBUG_PROXY_DB_PATH;
-      delete process.env.OPENCLAW_DEBUG_PROXY_BLOB_DIR;
+      delete process.env.OPNEX_DEBUG_PROXY_DB_PATH;
+      delete process.env.OPNEX_DEBUG_PROXY_BLOB_DIR;
       await lab.stop();
     });
 

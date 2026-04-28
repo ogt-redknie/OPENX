@@ -20,7 +20,7 @@ function createScan() {
     sourceConfig: { gateway: {} },
     summary: { ok: true },
     update: {
-      root: "/tmp/openclaw",
+      root: "/tmp/opnex",
       installKind: "package",
       packageManager: "npm",
     },

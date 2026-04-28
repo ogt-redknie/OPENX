@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   DEFAULT_MEMORY_DREAMING_FREQUENCY as DEFAULT_MEMORY_DREAMING_CRON_EXPR,
   DEFAULT_MEMORY_DEEP_DREAMING_LIMIT as DEFAULT_MEMORY_DREAMING_LIMIT,
@@ -18,10 +18,10 @@ import {
   resolveMemoryCorePluginConfig,
   resolveMemoryDeepDreamingConfig,
   resolveMemoryDreamingWorkspaces,
-} from "openclaw/plugin-sdk/memory-core-host-status";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { peekSystemEventEntries } from "openclaw/plugin-sdk/system-event-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/memory-core-host-status";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/plugin-entry";
+import { peekSystemEventEntries } from "opnex/plugin-sdk/system-event-runtime";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { writeDeepDreamingReport } from "./dreaming-markdown.js";
 import {
   generateAndAppendDreamNarrative,
@@ -43,7 +43,7 @@ import {
 const RUNTIME_CRON_RECONCILE_INTERVAL_MS = 60_000;
 const HEARTBEAT_ISOLATED_SESSION_SUFFIX = ":heartbeat";
 
-type Logger = Pick<OpenClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<OPNEXPluginApi["logger"], "info" | "warn" | "error">;
 
 type CronSchedule = { kind: "cron"; expr: string; tz?: string };
 type CronPayload =
@@ -384,7 +384,7 @@ function hasPendingManagedDreamingCronEvent(sessionKey?: string): boolean {
 
 export function resolveShortTermPromotionDreamingConfig(params: {
   pluginConfig?: Record<string, unknown>;
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
 }): ShortTermPromotionDreamingConfig {
   const resolved = resolveMemoryDeepDreamingConfig(params);
   return {
@@ -492,7 +492,7 @@ export async function runShortTermDreamingPromotionIfTriggered(params: {
   cleanedBody: string;
   trigger?: string;
   workspaceDir?: string;
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   config: ShortTermPromotionDreamingConfig;
   logger: Logger;
   subagent?: Parameters<typeof generateAndAppendDreamNarrative>[0]["subagent"];
@@ -670,7 +670,7 @@ export async function runShortTermDreamingPromotionIfTriggered(params: {
   return { handled: true, reason: "memory-core: short-term dreaming processed" };
 }
 
-export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void {
+export function registerShortTermPromotionDreaming(api: OPNEXPluginApi): void {
   let resolveStartupCron: (() => CronServiceLike | null) | null = null;
   // Hold a live reference to the gateway context so we can retry cron resolution at runtime.
   // The startup capture may fail if the cron service isn't available yet (race condition in
@@ -683,8 +683,8 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
   let lastRuntimeConfigKey: string | null = null;
   let lastRuntimeCronRef: CronServiceLike | null = null;
 
-  const resolveCurrentConfig = (): OpenClawConfig =>
-    (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+  const resolveCurrentConfig = (): OPNEXConfig =>
+    (api.runtime.config?.current?.() ?? api.config) as OPNEXConfig;
 
   const runtimeConfigKey = (config: ShortTermPromotionDreamingConfig): string =>
     [
@@ -704,7 +704,7 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
 
   const reconcileManagedDreamingCron = async (params: {
     reason: "startup" | "runtime";
-    startupConfig?: OpenClawConfig;
+    startupConfig?: OPNEXConfig;
     startupCron?: (() => CronServiceLike | null) | null;
   }): Promise<ShortTermPromotionDreamingConfig> => {
     const startupCfg =

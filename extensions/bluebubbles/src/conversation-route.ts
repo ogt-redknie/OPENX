@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   resolveConfiguredBindingRoute,
   resolveRuntimeConversationBindingRoute,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { resolveAgentRoute } from "opnex/plugin-sdk/routing";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
 import { resolveBlueBubblesInboundConversationId } from "./conversation-id.js";
 
 export function resolveBlueBubblesConversationRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   isGroup: boolean;
   peerId: string;

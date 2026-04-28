@@ -1,10 +1,10 @@
 import {
   type ChannelDoctorAdapter,
   type ChannelDoctorEmptyAllowlistAccountContext,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/channel-contract";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { inspectTelegramAccount } from "./account-inspect.js";
 import { listTelegramAccountIds, resolveTelegramAccount } from "./accounts.js";
 import { isNumericTelegramSenderUserId, normalizeTelegramAllowFromEntry } from "./allow-from.js";
@@ -46,7 +46,7 @@ function hasAllowFromEntries(values?: DoctorAllowFromList): boolean {
 }
 
 function collectTelegramAccountScopes(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
 ): Array<{ prefix: string; pathSegments: string[]; account: Record<string, unknown> }> {
   const scopes: Array<{
     prefix: string;
@@ -121,7 +121,7 @@ function collectTelegramAllowFromLists(
 }
 
 export function scanTelegramInvalidAllowFromEntries(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
 ): TelegramAllowFromInvalidHit[] {
   const hits: TelegramAllowFromInvalidHit[] = [];
   const scanList = (pathLabel: string, list: unknown) => {
@@ -160,7 +160,7 @@ export function collectTelegramInvalidAllowFromWarnings(params: {
 }
 
 export function scanTelegramBotEndpointApiRoots(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
 ): TelegramApiRootBotEndpointHit[] {
   const hits: TelegramApiRootBotEndpointHit[] = [];
   for (const scope of collectTelegramAccountScopes(cfg)) {
@@ -192,8 +192,8 @@ export function collectTelegramApiRootWarnings(params: {
   ];
 }
 
-export function maybeRepairTelegramApiRoots(cfg: OpenClawConfig): {
-  config: OpenClawConfig;
+export function maybeRepairTelegramApiRoots(cfg: OPNEXConfig): {
+  config: OPNEXConfig;
   changes: string[];
 } {
   const hits = scanTelegramBotEndpointApiRoots(cfg);
@@ -224,8 +224,8 @@ export function maybeRepairTelegramApiRoots(cfg: OpenClawConfig): {
   };
 }
 
-async function repairTelegramConfig(params: { cfg: OpenClawConfig }): Promise<{
-  config: OpenClawConfig;
+async function repairTelegramConfig(params: { cfg: OPNEXConfig }): Promise<{
+  config: OPNEXConfig;
   changes: string[];
 }> {
   const apiRootRepair = maybeRepairTelegramApiRoots(params.cfg);
@@ -236,8 +236,8 @@ async function repairTelegramConfig(params: { cfg: OpenClawConfig }): Promise<{
   };
 }
 
-export async function maybeRepairTelegramAllowFromUsernames(cfg: OpenClawConfig): Promise<{
-  config: OpenClawConfig;
+export async function maybeRepairTelegramAllowFromUsernames(cfg: OPNEXConfig): Promise<{
+  config: OPNEXConfig;
   changes: string[];
 }> {
   const hits = scanTelegramInvalidAllowFromEntries(cfg);
@@ -263,7 +263,7 @@ export async function maybeRepairTelegramAllowFromUsernames(cfg: OpenClawConfig)
   }
 
   const { getChannelsCommandSecretTargetIds, resolveCommandSecretRefsViaGateway } =
-    await import("openclaw/plugin-sdk/runtime-secret-resolution");
+    await import("opnex/plugin-sdk/runtime-secret-resolution");
 
   const { resolvedConfig } = await resolveCommandSecretRefsViaGateway({
     config: cfg,

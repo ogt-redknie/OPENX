@@ -1,1 +1,1 @@
-export { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+export { logVerbose } from "opnex/plugin-sdk/runtime-env";

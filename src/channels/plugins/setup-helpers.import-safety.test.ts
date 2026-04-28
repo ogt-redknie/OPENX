@@ -1,4 +1,4 @@
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "opnex/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearSetupPromotionRuntimeModuleCache } from "./setup-helpers.js";
 

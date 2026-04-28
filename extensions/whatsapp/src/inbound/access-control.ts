@@ -1,12 +1,12 @@
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
-import { warnMissingProviderGroupPolicyFallbackOnce } from "openclaw/plugin-sdk/runtime-group-policy";
+import { createChannelPairingChallengeIssuer } from "opnex/plugin-sdk/channel-pairing";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { upsertChannelPairingRequest } from "opnex/plugin-sdk/conversation-runtime";
+import { defaultRuntime } from "opnex/plugin-sdk/runtime-env";
+import { warnMissingProviderGroupPolicyFallbackOnce } from "opnex/plugin-sdk/runtime-group-policy";
 import {
   readStoreAllowFromForDmPolicy,
   resolveDmGroupAccessWithLists,
-} from "openclaw/plugin-sdk/security-runtime";
+} from "opnex/plugin-sdk/security-runtime";
 import { resolveWhatsAppInboundPolicy } from "../inbound-policy.js";
 
 export type InboundAccessControlResult = {
@@ -26,7 +26,7 @@ function logWhatsAppVerbose(enabled: boolean | undefined, message: string) {
 }
 
 export async function checkInboundAccessControl(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   from: string;
   selfE164: string | null;

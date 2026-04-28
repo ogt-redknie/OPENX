@@ -25,7 +25,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
     packageJson: Record<string, unknown>;
     pluginId?: string;
   }) {
-    const repoRoot = createTempDir("openclaw-runtime-deps-");
+    const repoRoot = createTempDir("opnex-runtime-deps-");
     const pluginId = params.pluginId ?? "fixture-plugin";
     const pluginDir = path.join(repoRoot, "dist", "extensions", pluginId);
     fs.mkdirSync(pluginDir, { recursive: true });
@@ -49,7 +49,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("pins fallback install specs to exact installed versions", () => {
     const { repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: {
           direct: "^1.0.0",
@@ -99,7 +99,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
   });
 
   it("writes required and optional fallback deps into one manifest", () => {
-    const rootNodeModulesDir = createTempDir("openclaw-runtime-deps-manifest-");
+    const rootNodeModulesDir = createTempDir("opnex-runtime-deps-manifest-");
     fs.mkdirSync(path.join(rootNodeModulesDir, "direct"), { recursive: true });
     fs.mkdirSync(path.join(rootNodeModulesDir, "optional"), { recursive: true });
     fs.writeFileSync(
@@ -122,7 +122,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
         { pluginId: "fixture-plugin", rootNodeModulesDir },
       ),
     ).toEqual({
-      name: "openclaw-runtime-deps-fixture-plugin",
+      name: "opnex-runtime-deps-fixture-plugin",
       private: true,
       version: "0.0.0",
       dependencies: { direct: "1.2.3" },
@@ -134,7 +134,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
     const spawnSyncImpl = vi.fn(() => ({ status: 0, stderr: "", stdout: "" }));
 
     stageBundledPluginRuntimeDepsTesting.runNpmInstall({
-      cwd: "C:\\openclaw\\dist\\extensions\\telegram\\.openclaw-install-stage",
+      cwd: "C:\\opnex\\dist\\extensions\\telegram\\.opnex-install-stage",
       npmRunner: {
         command: "npm.cmd",
         args: ["install", "--silent"],
@@ -159,7 +159,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
     const spawnSyncImpl = vi.fn(() => ({ status: 0, stderr: "", stdout: "" }));
 
     stageBundledPluginRuntimeDepsTesting.runNpmInstall({
-      cwd: "/tmp/openclaw-runtime-deps",
+      cwd: "/tmp/opnex-runtime-deps",
       npmRunner: {
         command: "npm",
         args: ["install"],
@@ -183,25 +183,25 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("skips restaging when runtime deps stamp matches the sanitized manifest", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
         peerDependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
-          openclaw: "^1.0.0",
+          "@opnex/plugin-sdk": "workspace:*",
+          opnex: "^1.0.0",
           react: "^19.0.0",
         },
         peerDependenciesMeta: {
-          "@openclaw/plugin-sdk": { optional: true },
-          openclaw: { optional: true },
+          "@opnex/plugin-sdk": { optional: true },
+          opnex: { optional: true },
           react: { optional: true },
         },
         devDependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
-          openclaw: "^1.0.0",
+          "@opnex/plugin-sdk": "workspace:*",
+          opnex: "^1.0.0",
           typescript: "^5.9.0",
         },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const nodeModulesDir = path.join(pluginDir, "node_modules");
@@ -226,20 +226,20 @@ describe("stageBundledPluginRuntimeDeps", () => {
     expect(installCount).toBe(1);
     expect(fs.existsSync(path.join(nodeModulesDir, "marker.txt"))).toBe(true);
     expect(JSON.parse(fs.readFileSync(path.join(pluginDir, "package.json"), "utf8"))).toEqual({
-      name: "@openclaw/fixture-plugin",
+      name: "@opnex/fixture-plugin",
       version: "1.0.0",
       dependencies: { "left-pad": "1.3.0" },
-      openclaw: { bundle: { stageRuntimeDependencies: true } },
+      opnex: { bundle: { stageRuntimeDependencies: true } },
     });
   });
 
   it("restages when the manifest-owned runtime deps change", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
 
@@ -275,10 +275,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("restages when the root pnpm lockfile changes", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     fs.writeFileSync(path.join(repoRoot, "pnpm-lock.yaml"), "lockfileVersion: '9.0'\n", "utf8");
@@ -311,13 +311,13 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("retries stale temp dir cleanup races before staging runtime deps", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
-    const staleTempDir = path.join(pluginDir, ".openclaw-runtime-deps-copy-stale");
+    const staleTempDir = path.join(pluginDir, ".opnex-runtime-deps-copy-stale");
     fs.mkdirSync(staleTempDir, { recursive: true });
     fs.writeFileSync(path.join(staleTempDir, "marker.txt"), "stale\n", "utf8");
     const realRmSync = fs.rmSync.bind(fs);
@@ -355,13 +355,13 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("keeps runtime deps temp dirs owned by a live build process", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
-    const activeTempDir = path.join(pluginDir, ".openclaw-runtime-deps-stage-active");
+    const activeTempDir = path.join(pluginDir, ".opnex-runtime-deps-stage-active");
     fs.mkdirSync(activeTempDir, { recursive: true });
     stageBundledPluginRuntimeDepsTesting.writeRuntimeDepsTempOwner(activeTempDir);
     fs.writeFileSync(path.join(activeTempDir, "marker.txt"), "active\n", "utf8");
@@ -383,7 +383,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
   });
 
   it("restores atomically replaced dirs when concurrent cleanup runs during rename failure", () => {
-    const parentDir = createTempDir("openclaw-runtime-deps-replace-");
+    const parentDir = createTempDir("opnex-runtime-deps-replace-");
     const targetPath = path.join(parentDir, "node_modules");
     const sourcePath = path.join(parentDir, "source-node_modules");
     fs.mkdirSync(targetPath, { recursive: true });
@@ -398,7 +398,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
       const newPathString = String(newPath);
       if (
         oldPathString === targetPath &&
-        path.basename(newPathString).startsWith(".openclaw-runtime-deps-backup-")
+        path.basename(newPathString).startsWith(".opnex-runtime-deps-backup-")
       ) {
         backupPath = newPathString;
         return realRenameSync(oldPath, newPath);
@@ -423,10 +423,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("restages when installed root runtime dependency contents change", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -454,10 +454,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("fingerprints regular files when readdir reports symlink-like entries", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -512,10 +512,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("refuses to replace a symlinked plugin node_modules directory", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -539,10 +539,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("refuses to write a runtime deps stamp through a symlink", () => {
     const { repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -567,10 +567,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("stages runtime deps from the root node_modules when already installed", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootDepDir = path.join(repoRoot, "node_modules", "left-pad");
@@ -587,21 +587,21 @@ describe("stageBundledPluginRuntimeDeps", () => {
     expect(
       fs.readFileSync(path.join(pluginDir, "node_modules", "left-pad", "index.js"), "utf8"),
     ).toBe("module.exports = 1;\n");
-    expect(fs.existsSync(path.join(pluginDir, ".openclaw-runtime-deps-stamp.json"))).toBe(false);
+    expect(fs.existsSync(path.join(pluginDir, ".opnex-runtime-deps-stamp.json"))).toBe(false);
     expect(fs.existsSync(runtimeDepsStampPath(repoRoot))).toBe(true);
   });
 
   it("removes legacy runtime dependency stamps from dist", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootDepDir = path.join(repoRoot, "node_modules", "left-pad");
-    const legacyStampPath = path.join(pluginDir, ".openclaw-runtime-deps-stamp.json");
+    const legacyStampPath = path.join(pluginDir, ".opnex-runtime-deps-stamp.json");
     fs.mkdirSync(rootDepDir, { recursive: true });
     fs.writeFileSync(
       path.join(rootDepDir, "package.json"),
@@ -619,11 +619,11 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("skips missing optional runtime deps when copying the installed closure", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
         optionalDependencies: { missingOptional: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -656,10 +656,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("prunes staged test cargo from copied runtime dependencies", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -709,10 +709,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("preserves nested runtime dependencies named test or tests", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -770,10 +770,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("stages hoisted transitive runtime deps from the root node_modules", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -810,10 +810,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("stages nested dependency trees from installed direct package roots", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -848,10 +848,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back to install when a dependency tree contains an unowned symlinked directory", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -892,10 +892,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("dedupes cyclic dependency aliases by canonical root", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { a: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootNodeModulesDir = path.join(repoRoot, "node_modules");
@@ -938,10 +938,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back to install when a dependency name escapes node_modules", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "../escape": "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
 
@@ -967,10 +967,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back to install when a staged dependency tree contains a symlink outside copied roots", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -1012,10 +1012,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back to install when the root transitive closure is incomplete", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -1057,10 +1057,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("removes global non-runtime suffixes from staged runtime dependencies", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const directDir = path.join(repoRoot, "node_modules", "direct");
@@ -1086,10 +1086,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("applies package-specific cargo prune rules after staging", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "rule-target": "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const depDir = path.join(repoRoot, "node_modules", "rule-target");
@@ -1135,10 +1135,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
     // load with `Cannot find module '../rules/tests/bun-test.json'`.
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "keep-target": "1.0.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const depDir = path.join(repoRoot, "node_modules", "keep-target");
@@ -1191,7 +1191,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("applies default prune rules for known heavy non-runtime package cargo", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: {
           "@cloudflare/workers-types": "1.0.0",
@@ -1199,7 +1199,7 @@ describe("stageBundledPluginRuntimeDeps", () => {
           gifwrap: "1.0.0",
           "playwright-core": "1.0.0",
         },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootNodeModules = path.join(repoRoot, "node_modules");
@@ -1256,10 +1256,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back to staging installs when the root dependency version is incompatible", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "^1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootDepDir = path.join(repoRoot, "node_modules", "left-pad");
@@ -1301,10 +1301,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back when a ^0.0.x root dependency exceeds the patch ceiling", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { tiny: "^0.0.3" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootDepDir = path.join(repoRoot, "node_modules", "tiny");
@@ -1337,10 +1337,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("falls back when a stable caret range only matches a prerelease root build", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { direct: "^1.2.3" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
     const rootDepDir = path.join(repoRoot, "node_modules", "direct");
@@ -1373,10 +1373,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("retries transient runtime dependency staging failures before surfacing an error", () => {
     const { pluginDir, repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
 
@@ -1404,10 +1404,10 @@ describe("stageBundledPluginRuntimeDeps", () => {
   it("surfaces the last staging error after exhausting retries", () => {
     const { repoRoot } = createBundledPluginFixture({
       packageJson: {
-        name: "@openclaw/fixture-plugin",
+        name: "@opnex/fixture-plugin",
         version: "1.0.0",
         dependencies: { "left-pad": "1.3.0" },
-        openclaw: { bundle: { stageRuntimeDependencies: true } },
+        opnex: { bundle: { stageRuntimeDependencies: true } },
       },
     });
 

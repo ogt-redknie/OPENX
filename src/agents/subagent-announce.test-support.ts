@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { callGateway } from "../gateway/call.js";
 
 type DeliveryRuntimeMockOptions = {
   callGateway: (request: unknown) => Promise<unknown>;
-  getRuntimeConfig: () => OpenClawConfig;
+  getRuntimeConfig: () => OPNEXConfig;
   loadSessionStore: (storePath: string) => unknown;
   resolveAgentIdFromSessionKey: (sessionKey: string) => string;
   resolveMainSessionKey: (cfg: unknown) => string;

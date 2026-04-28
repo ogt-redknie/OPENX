@@ -6,7 +6,7 @@ import {
   type ConfigMcpServers,
 } from "./mcp-config-normalize.js";
 import { replaceConfigFile } from "./mutate.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { OPNEXConfig } from "./types.opnex.js";
 import { validateConfigObjectWithPlugins } from "./validation.js";
 
 export { normalizeConfiguredMcpServers, type ConfigMcpServers } from "./mcp-config-normalize.js";
@@ -15,7 +15,7 @@ type ConfigMcpReadResult =
   | {
       ok: true;
       path: string;
-      config: OpenClawConfig;
+      config: OPNEXConfig;
       mcpServers: ConfigMcpServers;
       baseHash?: string;
     }
@@ -25,7 +25,7 @@ type ConfigMcpWriteResult =
   | {
       ok: true;
       path: string;
-      config: OpenClawConfig;
+      config: OPNEXConfig;
       mcpServers: ConfigMcpServers;
       removed?: boolean;
     }

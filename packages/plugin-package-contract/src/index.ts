@@ -2,7 +2,7 @@ export type JsonObject = Record<string, unknown>;
 
 export type ExternalPluginCompatibility = {
   pluginApiRange?: string;
-  builtWithOpenClawVersion?: string;
+  builtWithOPNEXVersion?: string;
   pluginSdkVersion?: string;
   minGatewayVersion?: string;
 };
@@ -18,8 +18,8 @@ export type ExternalCodePluginValidationResult = {
 };
 
 export const EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS = [
-  "openclaw.compat.pluginApi",
-  "openclaw.build.openclawVersion",
+  "opnex.compat.pluginApi",
+  "opnex.build.opnexVersion",
 ] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -34,19 +34,19 @@ function normalizeOptionalString(value: unknown): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-function readOpenClawBlock(packageJson: unknown) {
+function readOPNEXBlock(packageJson: unknown) {
   const root = isRecord(packageJson) ? packageJson : undefined;
-  const openclaw = isRecord(root?.openclaw) ? root.openclaw : undefined;
-  const compat = isRecord(openclaw?.compat) ? openclaw.compat : undefined;
-  const build = isRecord(openclaw?.build) ? openclaw.build : undefined;
-  const install = isRecord(openclaw?.install) ? openclaw.install : undefined;
-  return { root, openclaw, compat, build, install };
+  const opnex = isRecord(root?.opnex) ? root.opnex : undefined;
+  const compat = isRecord(opnex?.compat) ? opnex.compat : undefined;
+  const build = isRecord(opnex?.build) ? opnex.build : undefined;
+  const install = isRecord(opnex?.install) ? opnex.install : undefined;
+  return { root, opnex, compat, build, install };
 }
 
 export function normalizeExternalPluginCompatibility(
   packageJson: unknown,
 ): ExternalPluginCompatibility | undefined {
-  const { root, compat, build, install } = readOpenClawBlock(packageJson);
+  const { root, compat, build, install } = readOPNEXBlock(packageJson);
   const version = normalizeOptionalString(root?.version);
   const minHostVersion = normalizeOptionalString(install?.minHostVersion);
   const compatibility: ExternalPluginCompatibility = {};
@@ -61,9 +61,9 @@ export function normalizeExternalPluginCompatibility(
     compatibility.minGatewayVersion = minGatewayVersion;
   }
 
-  const builtWithOpenClawVersion = normalizeOptionalString(build?.openclawVersion) ?? version;
-  if (builtWithOpenClawVersion) {
-    compatibility.builtWithOpenClawVersion = builtWithOpenClawVersion;
+  const builtWithOPNEXVersion = normalizeOptionalString(build?.opnexVersion) ?? version;
+  if (builtWithOPNEXVersion) {
+    compatibility.builtWithOPNEXVersion = builtWithOPNEXVersion;
   }
 
   const pluginSdkVersion = normalizeOptionalString(build?.pluginSdkVersion);
@@ -75,13 +75,13 @@ export function normalizeExternalPluginCompatibility(
 }
 
 export function listMissingExternalCodePluginFieldPaths(packageJson: unknown): string[] {
-  const { compat, build } = readOpenClawBlock(packageJson);
+  const { compat, build } = readOPNEXBlock(packageJson);
   const missing: string[] = [];
   if (!normalizeOptionalString(compat?.pluginApi)) {
-    missing.push("openclaw.compat.pluginApi");
+    missing.push("opnex.compat.pluginApi");
   }
-  if (!normalizeOptionalString(build?.openclawVersion)) {
-    missing.push("openclaw.build.openclawVersion");
+  if (!normalizeOptionalString(build?.opnexVersion)) {
+    missing.push("opnex.build.opnexVersion");
   }
   return missing;
 }

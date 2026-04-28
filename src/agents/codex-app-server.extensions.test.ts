@@ -6,7 +6,7 @@ import {
 } from "../plugin-sdk/agent-harness.js";
 import { listAgentToolResultMiddlewares } from "../plugins/agent-tool-result-middleware.js";
 import { listCodexAppServerExtensionFactories } from "../plugins/codex-app-server-extension-factory.js";
-import { loadOpenClawPlugins } from "../plugins/loader.js";
+import { loadOPNEXPlugins } from "../plugins/loader.js";
 import {
   cleanupTempPluginTestEnvironment,
   createTempPluginDir,
@@ -14,11 +14,11 @@ import {
   writeTempPlugin,
 } from "./test-helpers/temp-plugin-extension-fixtures.js";
 
-const originalBundledPluginsDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+const originalBundledPluginsDir = process.env.OPNEX_BUNDLED_PLUGINS_DIR;
 const tempDirs: string[] = [];
 
 function createTempDir(): string {
-  return createTempPluginDir(tempDirs, "openclaw-codex-ext-");
+  return createTempPluginDir(tempDirs, "opnex-codex-ext-");
 }
 
 afterEach(() => {
@@ -29,7 +29,7 @@ afterEach(() => {
 describe("agent tool result middleware", () => {
   it("includes plugin-registered middleware and restores it from cache", async () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -59,14 +59,14 @@ describe("agent tool result middleware", () => {
       },
     };
 
-    loadOpenClawPlugins(options);
+    loadOPNEXPlugins(options);
     expect(listAgentToolResultMiddlewares("codex")).toHaveLength(1);
     expect(listAgentToolResultMiddlewares("pi")).toHaveLength(0);
 
     resetActivePluginRegistryForTest();
     expect(listAgentToolResultMiddlewares("codex")).toHaveLength(0);
 
-    loadOpenClawPlugins(options);
+    loadOPNEXPlugins(options);
     const runner = createAgentToolResultMiddlewareRunner({ runtime: "codex" });
     const result = await runner.applyToolResultMiddleware({
       threadId: "thread-1",
@@ -82,7 +82,7 @@ describe("agent tool result middleware", () => {
 
   it("rejects middleware when the manifest omits the runtime contract", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -98,7 +98,7 @@ describe("agent tool result middleware", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadOPNEXPlugins({
       config: {
         plugins: {
           entries: {
@@ -122,7 +122,7 @@ describe("agent tool result middleware", () => {
 
   it("rejects middleware from non-bundled plugins even when they declare the contract", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginFile = writeTempPlugin({
       dir: tmp,
@@ -137,7 +137,7 @@ describe("agent tool result middleware", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadOPNEXPlugins({
       workspaceDir: tmp,
       config: {
         plugins: {
@@ -159,7 +159,7 @@ describe("agent tool result middleware", () => {
 
   it("merges runtimes when a plugin registers the same middleware function twice", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -177,7 +177,7 @@ export default { id: "tool-result-middleware", register(api) {
 } };`,
     });
 
-    loadOpenClawPlugins({
+    loadOPNEXPlugins({
       config: {
         plugins: {
           entries: {
@@ -195,7 +195,7 @@ export default { id: "tool-result-middleware", register(api) {
 
   it("lazily loads bundled middleware owners from manifest contracts", async () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -247,7 +247,7 @@ export default { id: "tool-result-middleware", register(api) {
 describe("Codex app-server extension factories", () => {
   it("includes plugin-registered Codex app-server extension factories and restores them from cache", async () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -279,13 +279,13 @@ describe("Codex app-server extension factories", () => {
       },
     };
 
-    loadOpenClawPlugins(options);
+    loadOPNEXPlugins(options);
     expect(listCodexAppServerExtensionFactories()).toHaveLength(1);
 
     resetActivePluginRegistryForTest();
     expect(listCodexAppServerExtensionFactories()).toHaveLength(0);
 
-    loadOpenClawPlugins(options);
+    loadOPNEXPlugins(options);
     const runner = createCodexAppServerToolResultExtensionRunner({});
     const result = await runner.applyToolResultExtensions({
       threadId: "thread-1",
@@ -301,7 +301,7 @@ describe("Codex app-server extension factories", () => {
 
   it("rejects Codex app-server extension factories from non-bundled plugins even when they declare the contract", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginFile = writeTempPlugin({
       dir: tmp,
@@ -316,7 +316,7 @@ describe("Codex app-server extension factories", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadOPNEXPlugins({
       workspaceDir: tmp,
       config: {
         plugins: {
@@ -338,7 +338,7 @@ describe("Codex app-server extension factories", () => {
 
   it("rejects bundled plugins that omit the Codex app-server extension contract", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -349,7 +349,7 @@ describe("Codex app-server extension factories", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadOPNEXPlugins({
       config: {
         plugins: {
           entries: {
@@ -374,7 +374,7 @@ describe("Codex app-server extension factories", () => {
 
   it("rejects non-function Codex app-server extension factories from bundled plugins", () => {
     const tmp = createTempDir();
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tmp;
+    process.env.OPNEX_BUNDLED_PLUGINS_DIR = tmp;
 
     writeTempPlugin({
       dir: tmp,
@@ -390,7 +390,7 @@ describe("Codex app-server extension factories", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadOPNEXPlugins({
       config: {
         plugins: {
           entries: {

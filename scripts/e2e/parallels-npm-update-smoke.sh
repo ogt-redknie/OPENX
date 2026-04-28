@@ -19,10 +19,10 @@ PACKAGE_SPEC=""
 UPDATE_TARGET=""
 RUN_PLATFORMS="all"
 JSON_OUTPUT=0
-RUN_DIR="$(mktemp -d /tmp/openclaw-parallels-npm-update.XXXXXX)"
+RUN_DIR="$(mktemp -d /tmp/opnex-parallels-npm-update.XXXXXX)"
 MAIN_TGZ_DIR="$(mktemp -d)"
 MAIN_TGZ_PATH=""
-BUILD_LOCK_DIR="${TMPDIR:-/tmp}/openclaw-parallels-build.lock"
+BUILD_LOCK_DIR="${TMPDIR:-/tmp}/opnex-parallels-build.lock"
 WINDOWS_UPDATE_SCRIPT_PATH=""
 SERVER_PID=""
 HOST_IP=""
@@ -35,7 +35,7 @@ UPDATE_EXPECTED_NEEDLE=""
 API_KEY_VALUE=""
 PROGRESS_INTERVAL_S=15
 PROGRESS_STALE_S=60
-TIMEOUT_UPDATE_S="${OPENCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S:-1200}"
+TIMEOUT_UPDATE_S="${OPNEX_PARALLELS_NPM_UPDATE_TIMEOUT_S:-1200}"
 TIMEOUT_UPDATE_POLL_GRACE_S=60
 
 child_job_running() {
@@ -113,10 +113,10 @@ usage() {
 Usage: bash scripts/e2e/parallels-npm-update-smoke.sh [options]
 
 Options:
-  --package-spec <npm-spec>  Baseline npm package spec. Default: openclaw@latest
-  --update-target <target>    Target passed to guest 'openclaw update --tag'.
+  --package-spec <npm-spec>  Baseline npm package spec. Default: opnex@latest
+  --update-target <target>    Target passed to guest 'opnex update --tag'.
                              Default: host-served tgz packed from current checkout.
-                             Examples: latest, beta, 2026.4.10, http://host/openclaw.tgz
+                             Examples: latest, beta, 2026.4.10, http://host/opnex.tgz
   --platform <list>           Comma-separated platforms to run: all, macos, windows, linux.
                              Default: all
   --provider <openai|anthropic|minimax>
@@ -214,19 +214,19 @@ case "$PROVIDER" in
   openai)
     AUTH_CHOICE="openai-api-key"
     AUTH_KEY_FLAG="openai-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_OPENAI_MODEL:-openai/gpt-5.5}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_OPENAI_MODEL:-openai/gpt-5.5}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="OPENAI_API_KEY"
     ;;
   anthropic)
     AUTH_CHOICE="apiKey"
     AUTH_KEY_FLAG="anthropic-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_ANTHROPIC_MODEL:-anthropic/claude-sonnet-4-6}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_ANTHROPIC_MODEL:-anthropic/claude-sonnet-4-6}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="ANTHROPIC_API_KEY"
     ;;
   minimax)
     AUTH_CHOICE="minimax-global-api"
     AUTH_KEY_FLAG="minimax-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_MINIMAX_MODEL:-minimax/MiniMax-M2.7}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_MINIMAX_MODEL:-minimax/MiniMax-M2.7}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="MINIMAX_API_KEY"
     ;;
   *)
@@ -305,7 +305,7 @@ PY
 }
 
 resolve_latest_version() {
-  npm view openclaw version --userconfig "$(mktemp)"
+  npm view opnex version --userconfig "$(mktemp)"
 }
 
 vm_status() {
@@ -436,7 +436,7 @@ pack_main_tgz() {
   set -e
   parallels_package_release_build_lock "$BUILD_LOCK_DIR"
   [[ $rc -eq 0 ]] || return "$rc"
-  MAIN_TGZ_PATH="$MAIN_TGZ_DIR/openclaw-main-$CURRENT_HEAD_SHORT.tgz"
+  MAIN_TGZ_PATH="$MAIN_TGZ_DIR/opnex-main-$CURRENT_HEAD_SHORT.tgz"
   cp "$MAIN_TGZ_DIR/$pkg" "$MAIN_TGZ_PATH"
 }
 
@@ -448,8 +448,8 @@ resolve_current_head() {
 resolve_registry_target_version() {
   local target="$1"
   local spec="$target"
-  if [[ "$spec" != openclaw@* ]]; then
-    spec="openclaw@$spec"
+  if [[ "$spec" != opnex@* ]]; then
+    spec="opnex@$spec"
   fi
   npm view "$spec" version 2>/dev/null | tail -n 1 | tr -d '\r' || true
 }
@@ -468,12 +468,12 @@ preflight_registry_update_target() {
   target_version="$(resolve_registry_target_version "$UPDATE_TARGET")"
   [[ -n "$baseline_version" && -n "$target_version" ]] || return 0
   if [[ "$baseline_version" == "$target_version" ]]; then
-    die "--update-target $UPDATE_TARGET resolves to openclaw@$target_version, same as baseline $PACKAGE_SPEC; publish or choose a newer --update-target before running VM update coverage"
+    die "--update-target $UPDATE_TARGET resolves to opnex@$target_version, same as baseline $PACKAGE_SPEC; publish or choose a newer --update-target before running VM update coverage"
   fi
 }
 
 write_windows_update_script() {
-  WINDOWS_UPDATE_SCRIPT_PATH="$MAIN_TGZ_DIR/openclaw-main-update.ps1"
+  WINDOWS_UPDATE_SCRIPT_PATH="$MAIN_TGZ_DIR/opnex-main-update.ps1"
   cat >"$WINDOWS_UPDATE_SCRIPT_PATH" <<'EOF'
 param(
   [Parameter(Mandatory = $true)][string]$UpdateTarget,
@@ -508,7 +508,7 @@ function Invoke-Logged {
   try {
     $ErrorActionPreference = 'Continue'
     $PSNativeCommandUseErrorActionPreference = $false
-    # Merge native stderr into stdout before logging so npm/openclaw warnings do not
+    # Merge native stderr into stdout before logging so npm/opnex warnings do not
     # surface as PowerShell error records and abort a healthy in-place update.
     $output = & $Command *>&1
     $exitCode = $LASTEXITCODE
@@ -561,11 +561,11 @@ function Test-GatewayListenerReady {
 }
 
 function Test-GatewayLogReady {
-  $logDir = Join-Path $env:LOCALAPPDATA 'Temp\openclaw'
+  $logDir = Join-Path $env:LOCALAPPDATA 'Temp\opnex'
   if (-not (Test-Path $logDir)) {
     return $false
   }
-  $logFile = Get-ChildItem -Path $logDir -Filter 'openclaw-*.log' -File -ErrorAction SilentlyContinue |
+  $logFile = Get-ChildItem -Path $logDir -Filter 'opnex-*.log' -File -ErrorAction SilentlyContinue |
     Sort-Object LastWriteTime -Descending |
     Select-Object -First 1
   if (-not $logFile) {
@@ -581,7 +581,7 @@ function Test-GatewayLogReady {
 
 function Wait-GatewayRpcReady {
   param(
-    [Parameter(Mandatory = $true)][string]$OpenClawPath,
+    [Parameter(Mandatory = $true)][string]$OPNEXPath,
     [int]$Attempts = 20,
     [int]$SleepSeconds = 3
   )
@@ -593,12 +593,12 @@ function Wait-GatewayRpcReady {
       return $true
     }
     try {
-      $probeOutput = Invoke-CaptureLogged 'openclaw gateway probe' { & $OpenClawPath gateway probe --url ws://127.0.0.1:18789 --timeout 5000 --json }
+      $probeOutput = Invoke-CaptureLogged 'opnex gateway probe' { & $OPNEXPath gateway probe --url ws://127.0.0.1:18789 --timeout 5000 --json }
       $probe = $probeOutput | ConvertFrom-Json
       if (-not $probe.ok) {
         throw 'gateway probe returned without RPC readiness'
       }
-      Invoke-CaptureLogged 'openclaw gateway status' { & $OpenClawPath gateway status --deep --require-rpc } | Out-Null
+      Invoke-CaptureLogged 'opnex gateway status' { & $OPNEXPath gateway status --deep --require-rpc } | Out-Null
       return $true
     } catch {
       if ($attempt -ge $Attempts) {
@@ -615,21 +615,21 @@ function Stop-GatewayScheduledTaskIfPresent {
   $previousNativeErrorPreference = $PSNativeCommandUseErrorActionPreference
   try {
     $PSNativeCommandUseErrorActionPreference = $false
-    schtasks /End /TN 'OpenClaw Gateway' 2>$null | Out-Null
+    schtasks /End /TN 'OPNEX Gateway' 2>$null | Out-Null
   } catch {
   } finally {
     $PSNativeCommandUseErrorActionPreference = $previousNativeErrorPreference
   }
 }
 
-function Stop-OpenClawGatewayProcesses {
+function Stop-OPNEXGatewayProcesses {
   Write-ProgressLog 'update.stop-old-gateway'
   Stop-GatewayScheduledTaskIfPresent
   $patterns = @(
-    'openclaw-gateway',
-    'openclaw.*gateway --port 18789',
-    'openclaw.*gateway run',
-    'openclaw\.mjs gateway',
+    'opnex-gateway',
+    'opnex.*gateway --port 18789',
+    'opnex.*gateway run',
+    'opnex\.mjs gateway',
     'dist\\index\.js gateway --port 18789'
   )
   Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
@@ -673,11 +673,11 @@ function Stop-OpenClawGatewayProcesses {
   }
 }
 
-function Stop-OpenClawUpdateProcesses {
+function Stop-OPNEXUpdateProcesses {
   Write-ProgressLog 'update.stop-stale-update'
   $patterns = @(
-    'openclaw.* update --tag ',
-    'openclaw.* completion --write-state'
+    'opnex.* update --tag ',
+    'opnex.* completion --write-state'
   )
   Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
     Where-Object {
@@ -702,7 +702,7 @@ function Stop-OpenClawUpdateProcesses {
 }
 
 function Remove-FuturePluginEntries {
-  $configPath = Join-Path $env:USERPROFILE '.openclaw\openclaw.json'
+  $configPath = Join-Path $env:USERPROFILE '.opnex\opnex.json'
   if (-not (Test-Path $configPath)) {
     return
   }
@@ -730,31 +730,31 @@ function Remove-FuturePluginEntries {
   $config | ConvertTo-Json -Depth 100 | Set-Content -Path $configPath -Encoding UTF8
 }
 
-function Invoke-OpenClawUpdateWithTimeout {
+function Invoke-OPNEXUpdateWithTimeout {
   param(
-    [Parameter(Mandatory = $true)][string]$OpenClawPath,
+    [Parameter(Mandatory = $true)][string]$OPNEXPath,
     [Parameter(Mandatory = $true)][string]$UpdateTarget,
     [int]$TimeoutSeconds = 1200
   )
 
   $updateJob = Start-Job -ScriptBlock {
     param([string]$Path, [string]$Target)
-    $previousDisableBundledPlugins = $env:OPENCLAW_DISABLE_BUNDLED_PLUGINS
-    $env:OPENCLAW_DISABLE_BUNDLED_PLUGINS = '1'
+    $previousDisableBundledPlugins = $env:OPNEX_DISABLE_BUNDLED_PLUGINS
+    $env:OPNEX_DISABLE_BUNDLED_PLUGINS = '1'
     try {
       $output = & $Path update --tag $Target --yes --json *>&1
     } finally {
       if ($null -eq $previousDisableBundledPlugins) {
-        Remove-Item Env:OPENCLAW_DISABLE_BUNDLED_PLUGINS -ErrorAction SilentlyContinue
+        Remove-Item Env:OPNEX_DISABLE_BUNDLED_PLUGINS -ErrorAction SilentlyContinue
       } else {
-        $env:OPENCLAW_DISABLE_BUNDLED_PLUGINS = $previousDisableBundledPlugins
+        $env:OPNEX_DISABLE_BUNDLED_PLUGINS = $previousDisableBundledPlugins
       }
     }
     [pscustomobject]@{
       ExitCode = $LASTEXITCODE
       Output = ($output | Out-String).Trim()
     }
-  } -ArgumentList $OpenClawPath, $UpdateTarget
+  } -ArgumentList $OPNEXPath, $UpdateTarget
 
   $completed = Wait-Job $updateJob -Timeout $TimeoutSeconds
   if ($null -ne $completed) {
@@ -764,33 +764,33 @@ function Invoke-OpenClawUpdateWithTimeout {
     }
     Remove-Job $updateJob -Force -ErrorAction SilentlyContinue
     if ($result.ExitCode -ne 0) {
-      throw "openclaw update failed with exit code $($result.ExitCode)"
+      throw "opnex update failed with exit code $($result.ExitCode)"
     }
     return
   }
 
   Stop-Job $updateJob -ErrorAction SilentlyContinue
   Remove-Job $updateJob -Force -ErrorAction SilentlyContinue
-  Write-ProgressLog 'update.openclaw-update.timeout'
-  'openclaw update timed out after package install window; killing stale update/completion processes and verifying installed version' | Tee-Object -FilePath $LogPath -Append | Out-Null
-  Stop-OpenClawUpdateProcesses
+  Write-ProgressLog 'update.opnex-update.timeout'
+  'opnex update timed out after package install window; killing stale update/completion processes and verifying installed version' | Tee-Object -FilePath $LogPath -Append | Out-Null
+  Stop-OPNEXUpdateProcesses
 }
 
-function Invoke-OpenClawAgentWithTimeout {
+function Invoke-OPNEXAgentWithTimeout {
   param(
-    [Parameter(Mandatory = $true)][string]$OpenClawPath,
+    [Parameter(Mandatory = $true)][string]$OPNEXPath,
     [Parameter(Mandatory = $true)][string]$SessionId,
     [int]$TimeoutSeconds = 600
   )
 
   $message = 'Reply with exact ASCII text OK only.'
-  $stdout = Join-Path $env:TEMP ("openclaw-parallels-agent-{0}.out.log" -f ([guid]::NewGuid().ToString('N')))
-  $stderr = Join-Path $env:TEMP ("openclaw-parallels-agent-{0}.err.log" -f ([guid]::NewGuid().ToString('N')))
+  $stdout = Join-Path $env:TEMP ("opnex-parallels-agent-{0}.out.log" -f ([guid]::NewGuid().ToString('N')))
+  $stderr = Join-Path $env:TEMP ("opnex-parallels-agent-{0}.err.log" -f ([guid]::NewGuid().ToString('N')))
   $agentJob = Start-Job -ScriptBlock {
     param([string]$Path, [string]$AgentSessionId, [string]$AgentMessage, [string]$StdoutPath, [string]$StderrPath)
     & $Path agent --local --agent main --session-id $AgentSessionId --message $AgentMessage --json > $StdoutPath 2> $StderrPath
     exit $LASTEXITCODE
-  } -ArgumentList $OpenClawPath, $SessionId, $message, $stdout, $stderr
+  } -ArgumentList $OPNEXPath, $SessionId, $message, $stdout, $stderr
   $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
   $combined = ''
   while ((Get-Date) -lt $deadline) {
@@ -820,9 +820,9 @@ function Invoke-OpenClawAgentWithTimeout {
       $jobState = $agentJob.State
       Remove-Job $agentJob -Force -ErrorAction SilentlyContinue
       if ($jobState -ne 'Completed') {
-        throw "openclaw agent failed with job state $jobState"
+        throw "opnex agent failed with job state $jobState"
       }
-      throw 'openclaw agent finished without OK response'
+      throw 'opnex agent finished without OK response'
     }
   }
 
@@ -832,25 +832,25 @@ function Invoke-OpenClawAgentWithTimeout {
   if ($combined.Trim().Length -gt 0) {
     $combined.Trim() | Tee-Object -FilePath $LogPath -Append | Out-Null
   }
-  throw "openclaw agent timed out after ${TimeoutSeconds}s"
+  throw "opnex agent timed out after ${TimeoutSeconds}s"
 }
 
 function Start-GatewayRunFallback {
   param(
-    [Parameter(Mandatory = $true)][string]$OpenClawPath
+    [Parameter(Mandatory = $true)][string]$OPNEXPath
   )
 
   Write-ProgressLog 'update.gateway-run-fallback'
-  Stop-OpenClawGatewayProcesses
-  $entry = Join-Path $env:APPDATA 'npm\node_modules\openclaw\dist\index.js'
+  Stop-OPNEXGatewayProcesses
+  $entry = Join-Path $env:APPDATA 'npm\node_modules\opnex\dist\index.js'
   if (-not (Test-Path $entry)) {
-    throw "openclaw dist entry missing: $entry"
+    throw "opnex dist entry missing: $entry"
   }
   $node = (Get-Command node.exe -ErrorAction Stop).Source
-  $stdout = Join-Path $env:TEMP 'openclaw-parallels-npm-update-gateway.log'
-  $stderr = Join-Path $env:TEMP 'openclaw-parallels-npm-update-gateway.err.log'
+  $stdout = Join-Path $env:TEMP 'opnex-parallels-npm-update-gateway.log'
+  $stderr = Join-Path $env:TEMP 'opnex-parallels-npm-update-gateway.err.log'
   Start-Process -FilePath $node -ArgumentList @($entry, 'gateway', 'run', '--bind', 'loopback', '--port', '18789', '--force') -WindowStyle Hidden -RedirectStandardOutput $stdout -RedirectStandardError $stderr | Out-Null
-  if (-not (Wait-GatewayRpcReady -OpenClawPath $OpenClawPath -Attempts 20 -SleepSeconds 3)) {
+  if (-not (Wait-GatewayRpcReady -OPNEXPath $OPNEXPath -Attempts 20 -SleepSeconds 3)) {
     if (Test-Path $stdout) {
       Get-Content $stdout -Tail 80 | Tee-Object -FilePath $LogPath -Append | Out-Null
     }
@@ -862,16 +862,16 @@ function Start-GatewayRunFallback {
 }
 
 function Complete-WorkspaceSetup {
-  $workspace = $env:OPENCLAW_WORKSPACE_DIR
+  $workspace = $env:OPNEX_WORKSPACE_DIR
   if (-not $workspace) {
-    $workspace = Join-Path $env:USERPROFILE '.openclaw\workspace'
+    $workspace = Join-Path $env:USERPROFILE '.opnex\workspace'
   }
-  $stateDir = Join-Path $workspace '.openclaw'
+  $stateDir = Join-Path $workspace '.opnex'
   New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
   @'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels npm update smoke test assistant.
 '@ | Set-Content -Path (Join-Path $workspace 'IDENTITY.md') -Encoding UTF8
   @'
@@ -885,7 +885,7 @@ function Complete-WorkspaceSetup {
 
 function Restart-GatewayWithRecovery {
   param(
-    [Parameter(Mandatory = $true)][string]$OpenClawPath
+    [Parameter(Mandatory = $true)][string]$OPNEXPath
   )
 
   $restartFailed = $false
@@ -896,7 +896,7 @@ function Restart-GatewayWithRecovery {
       ExitCode = $LASTEXITCODE
       Output = ($output | Out-String).Trim()
     }
-  } -ArgumentList $OpenClawPath
+  } -ArgumentList $OPNEXPath
 
   $restartCompleted = Wait-Job $restartJob -Timeout 20
   if ($null -ne $restartCompleted) {
@@ -907,31 +907,31 @@ function Restart-GatewayWithRecovery {
     if ($restartResult.ExitCode -ne 0) {
       $restartFailed = $true
       Write-ProgressLog 'update.restart-gateway.soft-fail'
-      "openclaw gateway restart failed with exit code $($restartResult.ExitCode)" | Tee-Object -FilePath $LogPath -Append | Out-Null
+      "opnex gateway restart failed with exit code $($restartResult.ExitCode)" | Tee-Object -FilePath $LogPath -Append | Out-Null
     }
   } else {
     $restartFailed = $true
     Stop-Job $restartJob -ErrorAction SilentlyContinue
     Write-ProgressLog 'update.restart-gateway.timeout'
-    'openclaw gateway restart timed out after 20s; continuing to RPC readiness checks' | Tee-Object -FilePath $LogPath -Append | Out-Null
+    'opnex gateway restart timed out after 20s; continuing to RPC readiness checks' | Tee-Object -FilePath $LogPath -Append | Out-Null
   }
   Remove-Job $restartJob -Force -ErrorAction SilentlyContinue
 
   Write-ProgressLog 'update.gateway-status'
-  if (Wait-GatewayRpcReady -OpenClawPath $OpenClawPath) {
+  if (Wait-GatewayRpcReady -OPNEXPath $OPNEXPath) {
     return
   }
   Write-ProgressLog 'update.gateway-start-recover'
-  Stop-OpenClawGatewayProcesses
-  Invoke-Logged 'openclaw gateway start' { & $OpenClawPath gateway start }
+  Stop-OPNEXGatewayProcesses
+  Invoke-Logged 'opnex gateway start' { & $OPNEXPath gateway start }
   Write-ProgressLog 'update.gateway-status-recover'
-  if (-not (Wait-GatewayRpcReady -OpenClawPath $OpenClawPath)) {
-    Start-GatewayRunFallback -OpenClawPath $OpenClawPath
+  if (-not (Wait-GatewayRpcReady -OPNEXPath $OPNEXPath)) {
+    Start-GatewayRunFallback -OPNEXPath $OPNEXPath
   }
 }
 
 try {
-  $env:PATH = "$env:LOCALAPPDATA\OpenClaw\deps\portable-git\cmd;$env:LOCALAPPDATA\OpenClaw\deps\portable-git\mingw64\bin;$env:LOCALAPPDATA\OpenClaw\deps\portable-git\usr\bin;$env:PATH"
+  $env:PATH = "$env:LOCALAPPDATA\OPNEX\deps\portable-git\cmd;$env:LOCALAPPDATA\OPNEX\deps\portable-git\mingw64\bin;$env:LOCALAPPDATA\OPNEX\deps\portable-git\usr\bin;$env:PATH"
   Remove-Item $LogPath, $DonePath -Force -ErrorAction SilentlyContinue
   Write-ProgressLog 'update.start'
   if ($ProviderKeyFile) {
@@ -942,32 +942,32 @@ try {
     throw "$ProviderKeyEnv is required"
   }
   Set-Item -Path ('Env:' + $ProviderKeyEnv) -Value $ProviderKey
-  $openclaw = Join-Path $env:APPDATA 'npm\openclaw.cmd'
+  $opnex = Join-Path $env:APPDATA 'npm\opnex.cmd'
   Remove-FuturePluginEntries
-  Stop-OpenClawGatewayProcesses
-  Write-ProgressLog 'update.openclaw-update'
-  Invoke-OpenClawUpdateWithTimeout -OpenClawPath $openclaw -UpdateTarget $UpdateTarget
+  Stop-OPNEXGatewayProcesses
+  Write-ProgressLog 'update.opnex-update'
+  Invoke-OPNEXUpdateWithTimeout -OPNEXPath $opnex -UpdateTarget $UpdateTarget
   Write-ProgressLog 'update.verify-version'
-  $version = Invoke-CaptureLogged 'openclaw --version' { & $openclaw --version }
+  $version = Invoke-CaptureLogged 'opnex --version' { & $opnex --version }
   if ($ExpectedNeedle -and $version -notmatch [regex]::Escape($ExpectedNeedle)) {
     throw "version mismatch: expected substring $ExpectedNeedle"
   }
   Write-ProgressLog $version
   Write-ProgressLog 'update.status'
-  Invoke-Logged 'openclaw update status' { & $openclaw update status --json }
+  Invoke-Logged 'opnex update status' { & $opnex update status --json }
   Write-ProgressLog 'update.set-model'
-  Invoke-Logged 'openclaw models set' { & $openclaw models set $ModelId }
+  Invoke-Logged 'opnex models set' { & $opnex models set $ModelId }
   # Windows can keep the old hashed dist modules alive across in-place global npm upgrades.
   # Restart the gateway/service before verifying status or the next agent turn.
   # Current login-item restarts can report failure before the background service
   # is fully observable again, so verify readiness separately and fall back to
   # an explicit start only if the RPC endpoint never returns.
   Write-ProgressLog 'update.restart-gateway'
-  Restart-GatewayWithRecovery -OpenClawPath $openclaw
-  Stop-OpenClawGatewayProcesses
+  Restart-GatewayWithRecovery -OPNEXPath $opnex
+  Stop-OPNEXGatewayProcesses
   Complete-WorkspaceSetup
   Write-ProgressLog 'update.agent-turn'
-  $exitCode = Invoke-OpenClawAgentWithTimeout -OpenClawPath $openclaw -SessionId $SessionId
+  $exitCode = Invoke-OPNEXAgentWithTimeout -OPNEXPath $opnex -SessionId $SessionId
   Write-ProgressLog 'update.done'
   Set-Content -Path $DonePath -Value ([string]$exitCode)
   exit $exitCode
@@ -990,7 +990,7 @@ start_server() {
   (
     cd "$MAIN_TGZ_DIR"
     exec "$PYTHON_BIN" -m http.server "$HOST_PORT" --bind 0.0.0.0
-  ) >/tmp/openclaw-parallels-npm-update-http.log 2>&1 &
+  ) >/tmp/opnex-parallels-npm-update-http.log 2>&1 &
   SERVER_PID=$!
   sleep 1
   kill -0 "$SERVER_PID" >/dev/null 2>&1 || die "failed to start host HTTP server"
@@ -1042,17 +1042,17 @@ PY
 
 verify_macos_update_after_transport_loss() {
   local expected_needle="$1"
-  local script_path="/tmp/openclaw-npm-update-macos-recover.sh"
+  local script_path="/tmp/opnex-npm-update-macos-recover.sh"
   cat <<EOF | prlctl exec "$MACOS_VM" /usr/bin/tee "$script_path" >/dev/null
 set -euo pipefail
 export PATH=/opt/homebrew/bin:/opt/homebrew/opt/node/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin
-export OPENCLAW_PLUGIN_STAGE_DIR="\$HOME/.openclaw/plugin-runtime-deps-parallels"
-busy="\$(/bin/ps -axo command | /usr/bin/egrep 'openclaw update|npm install|pnpm install|pnpm run build' | /usr/bin/egrep -v 'egrep|openclaw-npm-update-macos-recover' || true)"
+export OPNEX_PLUGIN_STAGE_DIR="\$HOME/.opnex/plugin-runtime-deps-parallels"
+busy="\$(/bin/ps -axo command | /usr/bin/egrep 'opnex update|npm install|pnpm install|pnpm run build' | /usr/bin/egrep -v 'egrep|opnex-npm-update-macos-recover' || true)"
 gateway_listener_ready() {
   /usr/sbin/lsof -tiTCP:18789 -sTCP:LISTEN >/dev/null 2>&1
 }
 gateway_log_ready() {
-  latest="\$(/bin/ls -t /tmp/openclaw/openclaw-*.log 2>/dev/null | /usr/bin/head -n 1 || true)"
+  latest="\$(/bin/ls -t /tmp/opnex/opnex-*.log 2>/dev/null | /usr/bin/head -n 1 || true)"
   [ -n "\$latest" ] || return 1
   /usr/bin/tail -n 160 "\$latest" | /usr/bin/grep -q 'ready ('
 }
@@ -1060,10 +1060,10 @@ gateway_smoke_ready() {
   gateway_listener_ready && gateway_log_ready
 }
 if [ -n "\$busy" ]; then
-  printf 'update still has active npm/pnpm/openclaw processes\n%s\n' "\$busy" >&2
+  printf 'update still has active npm/pnpm/opnex processes\n%s\n' "\$busy" >&2
   exit 1
 fi
-version="\$(/opt/homebrew/bin/openclaw --version)"
+version="\$(/opt/homebrew/bin/opnex --version)"
 printf '%s\n' "\$version"
 if [ -n "$expected_needle" ]; then
   case "\$version" in
@@ -1074,7 +1074,7 @@ if [ -n "$expected_needle" ]; then
       ;;
   esac
 fi
-gateway_smoke_ready || /opt/homebrew/bin/openclaw gateway restart || true
+gateway_smoke_ready || /opt/homebrew/bin/opnex gateway restart || true
 gateway_ready=0
 for _ in 1 2 3 4 5 6; do
   if gateway_smoke_ready; then
@@ -1084,7 +1084,7 @@ for _ in 1 2 3 4 5 6; do
   sleep 2
 done
 if [ "\$gateway_ready" != "1" ]; then
-  /opt/homebrew/bin/openclaw gateway start || true
+  /opt/homebrew/bin/opnex gateway start || true
   for _ in 1 2 3 4 5 6; do
     if gateway_smoke_ready; then
       gateway_ready=1
@@ -1097,24 +1097,24 @@ if [ "\$gateway_ready" != "1" ]; then
   echo "gateway did not become ready after transport recovery" >&2
   exit 1
 fi
-workspace="\${OPENCLAW_WORKSPACE_DIR:-\$HOME/.openclaw/workspace}"
-mkdir -p "\$workspace/.openclaw"
+workspace="\${OPNEX_WORKSPACE_DIR:-\$HOME/.opnex/workspace}"
+mkdir -p "\$workspace/.opnex"
 cat > "\$workspace/IDENTITY.md" <<'IDENTITY_EOF'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels npm update smoke test assistant.
 IDENTITY_EOF
-cat > "\$workspace/.openclaw/workspace-state.json" <<'STATE_EOF'
+cat > "\$workspace/.opnex/workspace-state.json" <<'STATE_EOF'
 {
   "version": 1,
   "setupCompletedAt": "2026-01-01T00:00:00.000Z"
 }
 STATE_EOF
 rm -f "\$workspace/BOOTSTRAP.md"
-  /opt/homebrew/bin/openclaw models set "$MODEL_ID"
-  /opt/homebrew/bin/openclaw config set agents.defaults.skipBootstrap true --strict-json
-/opt/homebrew/bin/openclaw agent --agent main --session-id "parallels-npm-update-macos-transport-recovery-$expected_needle" --message "Reply with exact ASCII text OK only." --json
+  /opt/homebrew/bin/opnex models set "$MODEL_ID"
+  /opt/homebrew/bin/opnex config set agents.defaults.skipBootstrap true --strict-json
+/opt/homebrew/bin/opnex agent --agent main --session-id "parallels-npm-update-macos-transport-recovery-$expected_needle" --message "Reply with exact ASCII text OK only." --json
 EOF
   macos_desktop_user_exec /bin/bash "$script_path"
 }
@@ -1133,19 +1133,19 @@ PY
   set +e
   guest_powershell_poll 720 "$(cat <<EOF
 \$ErrorActionPreference = 'Stop'
-\$openclaw = Join-Path \$env:APPDATA 'npm\\openclaw.cmd'
-if (-not (Test-Path \$openclaw)) {
-  throw "openclaw shim missing: \$openclaw"
+\$opnex = Join-Path \$env:APPDATA 'npm\\opnex.cmd'
+if (-not (Test-Path \$opnex)) {
+  throw "opnex shim missing: \$opnex"
 }
 \$busy = Get-CimInstance Win32_Process |
   Where-Object {
     \$_.CommandLine -and
-    (\$_.CommandLine -match 'openclaw update|npm install|pnpm install|pnpm run build')
+    (\$_.CommandLine -match 'opnex update|npm install|pnpm install|pnpm run build')
   }
 if (\$busy) {
-  throw 'update still has active npm/pnpm/openclaw processes'
+  throw 'update still has active npm/pnpm/opnex processes'
 }
-\$version = & \$openclaw --version
+\$version = & \$opnex --version
 Write-Output \$version
 if ('$expected_needle' -and \$version -notmatch [regex]::Escape('$expected_needle')) {
   throw "version mismatch after transport loss: expected substring $expected_needle"
@@ -1166,7 +1166,7 @@ function Stop-GatewayListeners {
   \$previousNativeErrorPreference = \$PSNativeCommandUseErrorActionPreference
   try {
     \$PSNativeCommandUseErrorActionPreference = \$false
-    schtasks /End /TN 'OpenClaw Gateway' 2>\$null | Out-Null
+    schtasks /End /TN 'OPNEX Gateway' 2>\$null | Out-Null
   } catch {
   } finally {
     \$PSNativeCommandUseErrorActionPreference = \$previousNativeErrorPreference
@@ -1174,8 +1174,8 @@ function Stop-GatewayListeners {
   Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
     Where-Object {
       \$_.CommandLine -and (
-        \$_.CommandLine -match 'openclaw.*gateway --port 18789' -or
-        \$_.CommandLine -match 'openclaw.*gateway run' -or
+        \$_.CommandLine -match 'opnex.*gateway --port 18789' -or
+        \$_.CommandLine -match 'opnex.*gateway run' -or
         \$_.CommandLine -match 'dist\\\\index\\.js gateway --port 18789'
       )
     } |
@@ -1195,7 +1195,7 @@ function Stop-GatewayListeners {
 }
 \$gatewayReady = \$false
 for (\$i = 0; \$i -lt 6; \$i++) {
-  if (Test-GatewayWritable \$openclaw) {
+  if (Test-GatewayWritable \$opnex) {
     \$gatewayReady = \$true
     break
   }
@@ -1203,9 +1203,9 @@ for (\$i = 0; \$i -lt 6; \$i++) {
 }
 if (-not \$gatewayReady) {
   Stop-GatewayListeners
-  & \$openclaw gateway restart
+  & \$opnex gateway restart
   for (\$i = 0; \$i -lt 6; \$i++) {
-    if (Test-GatewayWritable \$openclaw) {
+    if (Test-GatewayWritable \$opnex) {
       \$gatewayReady = \$true
       break
     }
@@ -1214,9 +1214,9 @@ if (-not \$gatewayReady) {
 }
 if (-not \$gatewayReady) {
   Stop-GatewayListeners
-  & \$openclaw gateway start
+  & \$opnex gateway start
   for (\$i = 0; \$i -lt 6; \$i++) {
-    if (Test-GatewayWritable \$openclaw) {
+    if (Test-GatewayWritable \$opnex) {
       \$gatewayReady = \$true
       break
     }
@@ -1225,13 +1225,13 @@ if (-not \$gatewayReady) {
 }
 if (-not \$gatewayReady) {
   Stop-GatewayListeners
-  \$entry = Join-Path \$env:APPDATA 'npm\\node_modules\\openclaw\\dist\\index.js'
+  \$entry = Join-Path \$env:APPDATA 'npm\\node_modules\\opnex\\dist\\index.js'
   \$node = (Get-Command node.exe -ErrorAction Stop).Source
-  \$stdout = Join-Path \$env:TEMP 'openclaw-parallels-npm-update-recover-gateway.log'
-  \$stderr = Join-Path \$env:TEMP 'openclaw-parallels-npm-update-recover-gateway.err.log'
+  \$stdout = Join-Path \$env:TEMP 'opnex-parallels-npm-update-recover-gateway.log'
+  \$stderr = Join-Path \$env:TEMP 'opnex-parallels-npm-update-recover-gateway.err.log'
   Start-Process -FilePath \$node -ArgumentList @(\$entry, 'gateway', 'run', '--bind', 'loopback', '--port', '18789', '--force') -WindowStyle Hidden -RedirectStandardOutput \$stdout -RedirectStandardError \$stderr | Out-Null
   for (\$i = 0; \$i -lt 20; \$i++) {
-    if (Test-GatewayWritable \$openclaw) {
+    if (Test-GatewayWritable \$opnex) {
       \$gatewayReady = \$true
       break
     }
@@ -1244,18 +1244,18 @@ if (-not \$gatewayReady) {
 \$providerBytes = [Convert]::FromBase64String('$provider_key_b64')
 \$providerValue = [Text.Encoding]::UTF8.GetString(\$providerBytes)
 Set-Item -Path ('Env:' + '$API_KEY_ENV') -Value \$providerValue
-  & \$openclaw models set '$MODEL_ID'
-  & \$openclaw config set agents.defaults.skipBootstrap true --strict-json
-\$workspace = \$env:OPENCLAW_WORKSPACE_DIR
+  & \$opnex models set '$MODEL_ID'
+  & \$opnex config set agents.defaults.skipBootstrap true --strict-json
+\$workspace = \$env:OPNEX_WORKSPACE_DIR
 if (-not \$workspace) {
-  \$workspace = Join-Path \$env:USERPROFILE '.openclaw\\workspace'
+  \$workspace = Join-Path \$env:USERPROFILE '.opnex\\workspace'
 }
-\$stateDir = Join-Path \$workspace '.openclaw'
+\$stateDir = Join-Path \$workspace '.opnex'
 New-Item -ItemType Directory -Path \$stateDir -Force | Out-Null
 @'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels npm update smoke test assistant.
 '@ | Set-Content -Path (Join-Path \$workspace 'IDENTITY.md') -Encoding UTF8
 @'
@@ -1266,13 +1266,13 @@ New-Item -ItemType Directory -Path \$stateDir -Force | Out-Null
 '@ | Set-Content -Path (Join-Path \$stateDir 'workspace-state.json') -Encoding UTF8
 Remove-Item (Join-Path \$workspace 'BOOTSTRAP.md') -Force -ErrorAction SilentlyContinue
 Stop-GatewayListeners
-\$agentStdout = Join-Path \$env:TEMP ("openclaw-parallels-agent-{0}.out.log" -f ([guid]::NewGuid().ToString('N')))
-\$agentStderr = Join-Path \$env:TEMP ("openclaw-parallels-agent-{0}.err.log" -f ([guid]::NewGuid().ToString('N')))
+\$agentStdout = Join-Path \$env:TEMP ("opnex-parallels-agent-{0}.out.log" -f ([guid]::NewGuid().ToString('N')))
+\$agentStderr = Join-Path \$env:TEMP ("opnex-parallels-agent-{0}.err.log" -f ([guid]::NewGuid().ToString('N')))
 \$agentJob = Start-Job -ScriptBlock {
   param([string]\$Path, [string]\$StdoutPath, [string]\$StderrPath)
   & \$Path agent --local --agent main --session-id 'parallels-npm-update-windows-transport-recovery-$expected_needle' --message 'Reply with exact ASCII text OK only.' --json > \$StdoutPath 2> \$StderrPath
   exit \$LASTEXITCODE
-} -ArgumentList \$openclaw, \$agentStdout, \$agentStderr
+} -ArgumentList \$opnex, \$agentStdout, \$agentStderr
 \$agentDeadline = (Get-Date).AddSeconds(600)
 \$agentCombined = ''
 while ((Get-Date) -lt \$agentDeadline) {
@@ -1304,9 +1304,9 @@ while ((Get-Date) -lt \$agentDeadline) {
     Remove-Job \$agentJob -Force -ErrorAction SilentlyContinue
     \$agentJob = \$null
     if (\$agentJobState -ne 'Completed') {
-      throw "openclaw agent failed with job state \$agentJobState"
+      throw "opnex agent failed with job state \$agentJobState"
     }
-    throw 'openclaw agent finished without OK response'
+    throw 'opnex agent finished without OK response'
     break
   }
 }
@@ -1316,7 +1316,7 @@ if (\$null -ne \$agentJob) {
   if (\$agentCombined.Trim().Length -gt 0) {
     \$agentCombined.Trim() | Write-Output
   }
-  throw 'openclaw agent timed out after 600s'
+  throw 'opnex agent timed out after 600s'
 }
 EOF
   )"
@@ -1384,8 +1384,8 @@ import re
 import sys
 
 text = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8", errors="replace")
-matches = re.findall(r"OpenClaw [^\r\n]+", text)
-matches = [match for match in matches if re.search(r"OpenClaw \d", match)]
+matches = re.findall(r"OPNEX [^\r\n]+", text)
+matches = [match for match in matches if re.search(r"OPNEX \d", match)]
 print(matches[-1] if matches else "")
 PY
 }
@@ -1490,10 +1490,10 @@ run_windows_script_via_log() {
   local runner_name log_name done_name done_status launcher_state guest_log
   local start_seconds poll_deadline startup_checked poll_rc state_rc log_rc
   local log_state_path provider_key_b64
-  runner_name="openclaw-update-$RANDOM-$RANDOM.ps1"
-  log_name="openclaw-update-$RANDOM-$RANDOM.log"
-  done_name="openclaw-update-$RANDOM-$RANDOM.done"
-  log_state_path="$(mktemp "${TMPDIR:-/tmp}/openclaw-update-log-state.XXXXXX")"
+  runner_name="opnex-update-$RANDOM-$RANDOM.ps1"
+  log_name="opnex-update-$RANDOM-$RANDOM.log"
+  done_name="opnex-update-$RANDOM-$RANDOM.done"
+  log_state_path="$(mktemp "${TMPDIR:-/tmp}/opnex-update-log-state.XXXXXX")"
   : >"$log_state_path"
   provider_key_b64="$(
     PROVIDER_KEY="$provider_key" "$PYTHON_BIN" - <<'PY'
@@ -1621,11 +1621,11 @@ PY
 run_macos_update() {
   local update_target="$1"
   local expected_needle="$2"
-  cat <<EOF | prlctl exec "$MACOS_VM" /usr/bin/tee /tmp/openclaw-main-update.sh >/dev/null
+  cat <<EOF | prlctl exec "$MACOS_VM" /usr/bin/tee /tmp/opnex-main-update.sh >/dev/null
 set -euo pipefail
 export PATH=/opt/homebrew/bin:/opt/homebrew/opt/node/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 if [ -z "\${HOME:-}" ]; then export HOME="/Users/\$(id -un)"; fi
-export OPENCLAW_PLUGIN_STAGE_DIR="\$HOME/.openclaw/plugin-runtime-deps-parallels"
+export OPNEX_PLUGIN_STAGE_DIR="\$HOME/.opnex/plugin-runtime-deps-parallels"
 if [ -z "\${$API_KEY_ENV:-}" ]; then
   echo "$API_KEY_ENV is required in the macOS update environment" >&2
   exit 1
@@ -1635,7 +1635,7 @@ gateway_listener_ready() {
   /usr/sbin/lsof -tiTCP:18789 -sTCP:LISTEN >/dev/null 2>&1
 }
 gateway_log_ready() {
-  latest="\$(/bin/ls -t /tmp/openclaw/openclaw-*.log 2>/dev/null | /usr/bin/head -n 1 || true)"
+  latest="\$(/bin/ls -t /tmp/opnex/opnex-*.log 2>/dev/null | /usr/bin/head -n 1 || true)"
   [ -n "\$latest" ] || return 1
   /usr/bin/tail -n 160 "\$latest" | /usr/bin/grep -q 'ready ('
 }
@@ -1648,7 +1648,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const configPath = path.join(os.homedir(), ".openclaw", "openclaw.json");
+const configPath = path.join(os.homedir(), ".opnex", "opnex.json");
 if (!fs.existsSync(configPath)) process.exit(0);
 let config;
 try {
@@ -1669,11 +1669,11 @@ if (Array.isArray(plugins.allow)) {
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n");
 JS
 }
-stop_openclaw_gateway_processes() {
-  OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/openclaw gateway stop >/dev/null 2>&1 || true
-  /usr/bin/pkill -9 -f openclaw-gateway || true
-  /usr/bin/pkill -9 -f 'openclaw gateway run' || true
-  /usr/bin/pkill -9 -f 'openclaw.mjs gateway' || true
+stop_opnex_gateway_processes() {
+  OPNEX_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/opnex gateway stop >/dev/null 2>&1 || true
+  /usr/bin/pkill -9 -f opnex-gateway || true
+  /usr/bin/pkill -9 -f 'opnex gateway run' || true
+  /usr/bin/pkill -9 -f 'opnex.mjs gateway' || true
   for pid in \$(/usr/sbin/lsof -tiTCP:18789 -sTCP:LISTEN 2>/dev/null || true); do
     /bin/kill -9 "\$pid" 2>/dev/null || true
   done
@@ -1681,16 +1681,16 @@ stop_openclaw_gateway_processes() {
 # Stop the pre-update gateway before replacing the package. Otherwise the old
 # host can observe new plugin metadata mid-update and abort config validation.
 scrub_future_plugin_entries
-stop_openclaw_gateway_processes
+stop_opnex_gateway_processes
 # The baseline updater process may run its post-install doctor through the old
 # host while new bundled plugin metadata is already on disk. Keep this
 # same-guest update hop focused on core/package migration; post-update smoke
 # below starts the fresh gateway with bundled plugins enabled.
-OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/openclaw update --tag "$update_target" --yes --json
+OPNEX_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/opnex update --tag "$update_target" --yes --json
 # Same-guest npm upgrades can leave the old gateway process holding the old
 # bundled plugin host version. Stop it before post-update config commands.
-stop_openclaw_gateway_processes
-version="\$(/opt/homebrew/bin/openclaw --version)"
+stop_opnex_gateway_processes
+version="\$(/opt/homebrew/bin/opnex --version)"
 printf '%s\n' "\$version"
 if [ -n "$expected_needle" ]; then
   case "\$version" in
@@ -1701,14 +1701,14 @@ if [ -n "$expected_needle" ]; then
       ;;
   esac
 fi
-/opt/homebrew/bin/openclaw update status --json
-  /opt/homebrew/bin/openclaw models set "$MODEL_ID"
-  /opt/homebrew/bin/openclaw config set agents.defaults.skipBootstrap true --strict-json
+/opt/homebrew/bin/opnex update status --json
+  /opt/homebrew/bin/opnex models set "$MODEL_ID"
+  /opt/homebrew/bin/opnex config set agents.defaults.skipBootstrap true --strict-json
 # Same-guest npm upgrades can leave launchd holding the old gateway process or
 # module graph briefly; wait for a fresh RPC-ready restart before the agent turn.
 # Fresh npm installs may not have a launchd service yet, so fall back to the
 # same manual gateway launch used by the fresh macOS lane.
-/opt/homebrew/bin/openclaw gateway restart || true
+/opt/homebrew/bin/opnex gateway restart || true
 gateway_ready=0
 for _ in 1 2 3 4 5 6 7 8; do
   if gateway_smoke_ready; then
@@ -1718,8 +1718,8 @@ for _ in 1 2 3 4 5 6 7 8; do
   sleep 2
 done
 if [ "\$gateway_ready" != "1" ]; then
-  stop_openclaw_gateway_processes
-  /opt/homebrew/bin/openclaw gateway run --bind loopback --port 18789 --force >/tmp/openclaw-parallels-npm-update-macos-gateway.log 2>&1 </dev/null &
+  stop_opnex_gateway_processes
+  /opt/homebrew/bin/opnex gateway run --bind loopback --port 18789 --force >/tmp/opnex-parallels-npm-update-macos-gateway.log 2>&1 </dev/null &
   for _ in 1 2 3 4 5 6 7 8; do
     if gateway_smoke_ready; then
       gateway_ready=1
@@ -1729,29 +1729,29 @@ if [ "\$gateway_ready" != "1" ]; then
   done
 fi
 if [ "\$gateway_ready" != "1" ]; then
-  tail -n 120 /tmp/openclaw-parallels-npm-update-macos-gateway.log 2>/dev/null || true
+  tail -n 120 /tmp/opnex-parallels-npm-update-macos-gateway.log 2>/dev/null || true
 fi
 if [ "\$gateway_ready" != "1" ]; then
-  /opt/homebrew/bin/openclaw gateway status --deep --require-rpc
+  /opt/homebrew/bin/opnex gateway status --deep --require-rpc
 fi
-workspace="\${OPENCLAW_WORKSPACE_DIR:-\$HOME/.openclaw/workspace}"
-mkdir -p "\$workspace/.openclaw"
+workspace="\${OPNEX_WORKSPACE_DIR:-\$HOME/.opnex/workspace}"
+mkdir -p "\$workspace/.opnex"
 cat > "\$workspace/IDENTITY.md" <<'IDENTITY_EOF'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels npm update smoke test assistant.
 IDENTITY_EOF
-cat > "\$workspace/.openclaw/workspace-state.json" <<'STATE_EOF'
+cat > "\$workspace/.opnex/workspace-state.json" <<'STATE_EOF'
 {
   "version": 1,
   "setupCompletedAt": "2026-01-01T00:00:00.000Z"
 }
 STATE_EOF
 rm -f "\$workspace/BOOTSTRAP.md"
-/opt/homebrew/bin/openclaw agent --agent main --session-id parallels-npm-update-macos-$expected_needle --message "Reply with exact ASCII text OK only." --json
+/opt/homebrew/bin/opnex agent --agent main --session-id parallels-npm-update-macos-$expected_needle --message "Reply with exact ASCII text OK only." --json
 EOF
-  macos_desktop_user_exec /bin/bash /tmp/openclaw-main-update.sh
+  macos_desktop_user_exec /bin/bash /tmp/opnex-main-update.sh
 }
 
 run_windows_update() {
@@ -1771,7 +1771,7 @@ run_windows_update() {
 run_linux_update() {
   local update_target="$1"
   local expected_needle="$2"
-  cat <<EOF | prlctl exec "$LINUX_VM" /usr/bin/tee /tmp/openclaw-main-update.sh >/dev/null
+  cat <<EOF | prlctl exec "$LINUX_VM" /usr/bin/tee /tmp/opnex-main-update.sh >/dev/null
 set -euo pipefail
 export HOME=/root
 cd "\$HOME"
@@ -1781,7 +1781,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const configPath = path.join(os.homedir(), ".openclaw", "openclaw.json");
+const configPath = path.join(os.homedir(), ".opnex", "opnex.json");
 if (!fs.existsSync(configPath)) process.exit(0);
 let config;
 try {
@@ -1802,11 +1802,11 @@ if (Array.isArray(plugins.allow)) {
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n");
 JS
 }
-stop_openclaw_gateway_processes() {
-  OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 openclaw gateway stop >/dev/null 2>&1 || true
-  pkill -9 -f openclaw-gateway || true
-  pkill -9 -f 'openclaw gateway run' || true
-  pkill -9 -f 'openclaw.mjs gateway' || true
+stop_opnex_gateway_processes() {
+  OPNEX_DISABLE_BUNDLED_PLUGINS=1 opnex gateway stop >/dev/null 2>&1 || true
+  pkill -9 -f opnex-gateway || true
+  pkill -9 -f 'opnex gateway run' || true
+  pkill -9 -f 'opnex.mjs gateway' || true
   if command -v fuser >/dev/null 2>&1; then
     fuser -k 18789/tcp >/dev/null 2>&1 || true
   fi
@@ -1819,12 +1819,12 @@ stop_openclaw_gateway_processes() {
 # Stop the pre-update manual gateway before replacing the package. Otherwise
 # the old host can observe new plugin metadata mid-update and abort validation.
 scrub_future_plugin_entries
-stop_openclaw_gateway_processes
-OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 openclaw update --tag "$update_target" --yes --json
+stop_opnex_gateway_processes
+OPNEX_DISABLE_BUNDLED_PLUGINS=1 opnex update --tag "$update_target" --yes --json
 # The fresh Linux lane starts a manual gateway; stop the old process before
 # post-update config validation sees mixed old-host/new-plugin metadata.
-stop_openclaw_gateway_processes
-version="\$(openclaw --version)"
+stop_opnex_gateway_processes
+version="\$(opnex --version)"
 printf '%s\n' "\$version"
 if [ -n "$expected_needle" ]; then
   case "\$version" in
@@ -1835,27 +1835,27 @@ if [ -n "$expected_needle" ]; then
       ;;
   esac
 fi
-openclaw update status --json
-openclaw models set "$MODEL_ID"
-openclaw config set agents.defaults.skipBootstrap true --strict-json
-workspace="\${OPENCLAW_WORKSPACE_DIR:-\$HOME/.openclaw/workspace}"
-mkdir -p "\$workspace/.openclaw"
+opnex update status --json
+opnex models set "$MODEL_ID"
+opnex config set agents.defaults.skipBootstrap true --strict-json
+workspace="\${OPNEX_WORKSPACE_DIR:-\$HOME/.opnex/workspace}"
+mkdir -p "\$workspace/.opnex"
 cat > "\$workspace/IDENTITY.md" <<'IDENTITY_EOF'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels npm update smoke test assistant.
 IDENTITY_EOF
-cat > "\$workspace/.openclaw/workspace-state.json" <<'STATE_EOF'
+cat > "\$workspace/.opnex/workspace-state.json" <<'STATE_EOF'
 {
   "version": 1,
   "setupCompletedAt": "2026-01-01T00:00:00.000Z"
 }
 STATE_EOF
 rm -f "\$workspace/BOOTSTRAP.md"
-openclaw agent --local --agent main --session-id parallels-npm-update-linux-$expected_needle --message "Reply with exact ASCII text OK only." --json
+opnex agent --local --agent main --session-id parallels-npm-update-linux-$expected_needle --message "Reply with exact ASCII text OK only." --json
 EOF
-  prlctl exec "$LINUX_VM" /usr/bin/env "$API_KEY_ENV=$API_KEY_VALUE" /bin/bash /tmp/openclaw-main-update.sh
+  prlctl exec "$LINUX_VM" /usr/bin/env "$API_KEY_ENV=$API_KEY_VALUE" /bin/bash /tmp/opnex-main-update.sh
 }
 
 write_summary_json() {
@@ -1902,7 +1902,7 @@ PY
 
 LATEST_VERSION="$(resolve_latest_version)"
 if [[ -z "$PACKAGE_SPEC" ]]; then
-  PACKAGE_SPEC="openclaw@$LATEST_VERSION"
+  PACKAGE_SPEC="opnex@$LATEST_VERSION"
 fi
 preflight_registry_update_target
 resolve_current_head
@@ -1944,7 +1944,7 @@ if platform_enabled windows; then
 fi
 
 if platform_enabled linux; then
-  OPENCLAW_PARALLELS_LINUX_DISABLE_BONJOUR=1 bash "$ROOT_DIR/scripts/e2e/parallels-linux-smoke.sh" \
+  OPNEX_PARALLELS_LINUX_DISABLE_BONJOUR=1 bash "$ROOT_DIR/scripts/e2e/parallels-linux-smoke.sh" \
     --mode fresh \
     --provider "$PROVIDER" \
     --model "$MODEL_ID" \
@@ -1997,7 +1997,7 @@ if platform_enabled windows; then
   windows_update_script_url="http://$HOST_IP:$HOST_PORT/$(basename "$WINDOWS_UPDATE_SCRIPT_PATH")"
 fi
 
-say "Run same-guest openclaw update to $UPDATE_TARGET_EFFECTIVE"
+say "Run same-guest opnex update to $UPDATE_TARGET_EFFECTIVE"
 update_monitor_args=()
 if platform_enabled macos; then
   ensure_vm_running_for_update "$MACOS_VM"

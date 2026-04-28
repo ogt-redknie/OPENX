@@ -1,10 +1,10 @@
 import {
   definePluginEntry,
-  type OpenClawConfig,
+  type OPNEXConfig,
   type ProviderCatalogContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "opnex/plugin-sdk/provider-auth-api-key";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import {
   applyStepFunPlanConfig,
   applyStepFunPlanConfigCn,
@@ -131,7 +131,7 @@ function createStepFunApiKeyMethod(params: {
   choiceId: string;
   choiceLabel: string;
   choiceHint: string;
-  applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyConfig: (cfg: OPNEXConfig) => OPNEXConfig;
 }) {
   return createProviderApiKeyAuthMethod({
     providerId: params.providerId,

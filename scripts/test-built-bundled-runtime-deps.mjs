@@ -14,7 +14,7 @@ import { parsePackageRootArg } from "./lib/package-root-args.mjs";
 
 const { packageRoot } = parsePackageRootArg(
   process.argv.slice(2),
-  "OPENCLAW_BUNDLED_RUNTIME_DEPS_ROOT",
+  "OPNEX_BUNDLED_RUNTIME_DEPS_ROOT",
 );
 const rootPackageJsonPath = path.join(packageRoot, "package.json");
 const builtPluginsDir = path.join(packageRoot, "dist", "extensions");
@@ -118,12 +118,12 @@ function findBuiltBrowserEntryPath(distDir) {
 }
 
 function createBuiltBrowserImportSmokeFixture(packageRoot) {
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-built-browser-smoke-"));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "opnex-built-browser-smoke-"));
   const tempDistDir = path.join(tempRoot, "dist");
   const tempNodeModulesDir = path.join(tempRoot, "node_modules");
   const stageNodeModulesDir = path.join(
     tempRoot,
-    ".openclaw",
+    ".opnex",
     "plugin-runtime-deps",
     "browser",
     "node_modules",

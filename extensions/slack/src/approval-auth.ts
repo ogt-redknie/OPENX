@@ -1,13 +1,13 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "openclaw/plugin-sdk/approval-auth-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/approval-auth-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { resolveSlackAccount } from "./accounts.js";
 import { normalizeSlackApproverId } from "./exec-approvals.js";
 
 export function getSlackApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveSlackAccount(params).config;
@@ -21,7 +21,7 @@ export function getSlackApprovalApprovers(params: {
 }
 
 export function isSlackApprovalAuthorizedSender(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   senderId?: string | null;
 }): boolean {

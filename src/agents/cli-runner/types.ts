@@ -5,7 +5,7 @@ import type { ThinkLevel } from "../../auto-reply/thinking.js";
 import type { CliSessionBinding } from "../../config/sessions.js";
 import type { SessionSystemPromptReport } from "../../config/sessions/types.js";
 import type { CliBackendConfig } from "../../config/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import type { PromptImageOrderEntry } from "../../media/prompt-image-order.js";
 import type { ResolvedCliBackend } from "../cli-backends.js";
 import type { EmbeddedRunTrigger } from "../pi-embedded-runner/run/params.js";
@@ -19,7 +19,7 @@ export type RunCliAgentParams = {
   trigger?: EmbeddedRunTrigger;
   sessionFile: string;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   prompt: string;
   transcriptPrompt?: string;
   provider: string;
@@ -90,7 +90,7 @@ export type PreparedCliRunContext = {
   systemPrompt: string;
   systemPromptReport: SessionSystemPromptReport;
   bootstrapPromptWarningLines: string[];
-  openClawHistoryPrompt?: string;
+  opnexHistoryPrompt?: string;
   heartbeatPrompt?: string;
   authEpoch?: string;
   authEpochVersion: number;

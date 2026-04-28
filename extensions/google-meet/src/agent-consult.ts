@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { PluginRuntime, RuntimeLogger } from "opnex/plugin-sdk/plugin-runtime";
 import {
   buildRealtimeVoiceAgentConsultWorkingResponse,
   consultRealtimeVoiceAgent,
@@ -9,8 +9,8 @@ import {
   resolveRealtimeVoiceAgentConsultToolsAllow,
   type RealtimeVoiceBridgeSession,
   type RealtimeVoiceTool,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/realtime-voice";
+import { normalizeAgentId } from "opnex/plugin-sdk/routing";
 import type { GoogleMeetConfig, GoogleMeetToolPolicy } from "./config.js";
 
 export const GOOGLE_MEET_AGENT_CONSULT_TOOL_NAME = REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME;
@@ -40,9 +40,9 @@ export function submitGoogleMeetConsultWorkingResponse(
   });
 }
 
-export async function consultOpenClawAgentForGoogleMeet(params: {
+export async function consultOPNEXAgentForGoogleMeet(params: {
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: OPNEXConfig;
   runtime: PluginRuntime;
   logger: RuntimeLogger;
   meetingSessionId: string;

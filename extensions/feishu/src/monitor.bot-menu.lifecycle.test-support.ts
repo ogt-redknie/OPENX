@@ -1,4 +1,4 @@
-import { createRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "opnex/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "./lifecycle.test-support.js";
 import {
@@ -34,7 +34,7 @@ const {
 
 let _handlers: Record<string, (data: unknown) => Promise<void>> = {};
 let lastRuntime = createRuntimeEnv();
-const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalStateDir = process.env.OPNEX_STATE_DIR;
 const lifecycleConfig = createFeishuLifecycleConfig({
   accountId: "acct-menu",
   appId: "cli_test",
@@ -91,7 +91,7 @@ describe("Feishu bot-menu lifecycle", () => {
     resetFeishuLifecycleTestMocks();
     _handlers = {};
     lastRuntime = createRuntimeEnv();
-    setFeishuLifecycleStateDir("openclaw-feishu-bot-menu");
+    setFeishuLifecycleStateDir("opnex-feishu-bot-menu");
 
     createFeishuReplyDispatcherMock.mockReturnValue(createFeishuLifecycleReplyDispatcher());
 

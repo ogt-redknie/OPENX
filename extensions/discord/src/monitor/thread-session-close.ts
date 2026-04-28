@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveStorePath, updateSessionStore } from "openclaw/plugin-sdk/session-store-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveStorePath, updateSessionStore } from "opnex/plugin-sdk/session-store-runtime";
+import { normalizeOptionalLowercaseString } from "opnex/plugin-sdk/text-runtime";
 
 /**
  * Marks every session entry in the store whose key contains {@link threadId}
@@ -12,7 +12,7 @@ import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runti
  * any on-disk transcript history.
  */
 export async function closeDiscordThreadSessions(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   threadId: string;
 }): Promise<number> {

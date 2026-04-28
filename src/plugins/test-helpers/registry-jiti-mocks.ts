@@ -2,7 +2,7 @@ import { vi } from "vitest";
 
 const registryJitiMocks = vi.hoisted(() => ({
   createJiti: vi.fn(),
-  discoverOpenClawPlugins: vi.fn(),
+  discoverOPNEXPlugins: vi.fn(),
   loadPluginManifestRegistry: vi.fn(),
   loadPluginRegistrySnapshot: vi.fn(),
 }));
@@ -13,9 +13,9 @@ vi.mock("jiti", () => ({
 }));
 
 vi.mock("../discovery.js", () => ({
-  discoverOpenClawPlugins: (
-    ...args: Parameters<typeof registryJitiMocks.discoverOpenClawPlugins>
-  ) => registryJitiMocks.discoverOpenClawPlugins(...args),
+  discoverOPNEXPlugins: (
+    ...args: Parameters<typeof registryJitiMocks.discoverOPNEXPlugins>
+  ) => registryJitiMocks.discoverOPNEXPlugins(...args),
 }));
 
 vi.mock("../manifest-registry.js", () => ({
@@ -44,10 +44,10 @@ vi.mock("../plugin-registry.js", async (importOriginal) => {
 });
 export function resetRegistryJitiMocks(): void {
   registryJitiMocks.createJiti.mockReset();
-  registryJitiMocks.discoverOpenClawPlugins.mockReset();
+  registryJitiMocks.discoverOPNEXPlugins.mockReset();
   registryJitiMocks.loadPluginManifestRegistry.mockReset();
   registryJitiMocks.loadPluginRegistrySnapshot.mockReset();
-  registryJitiMocks.discoverOpenClawPlugins.mockReturnValue({
+  registryJitiMocks.discoverOPNEXPlugins.mockReturnValue({
     candidates: [],
     diagnostics: [],
   });

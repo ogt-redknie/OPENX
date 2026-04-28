@@ -1,26 +1,26 @@
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
+import { createChannelPairingController } from "opnex/plugin-sdk/channel-pairing";
 import {
   readStoreAllowFromForDmPolicy,
   resolveEffectiveAllowFromLists,
-} from "openclaw/plugin-sdk/channel-policy";
-import { resolveControlCommandGate } from "openclaw/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
+} from "opnex/plugin-sdk/channel-policy";
+import { resolveControlCommandGate } from "opnex/plugin-sdk/command-auth";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { isDangerousNameMatchingEnabled } from "opnex/plugin-sdk/dangerous-name-runtime";
 import {
   deliverFormattedTextWithAttachments,
   type OutboundReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+} from "opnex/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime";
 import {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "opnex/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { ResolvedIrcAccount } from "./accounts.js";
 import { normalizeIrcAllowlist, resolveIrcAllowlistMatch } from "./normalize.js";
 import {
@@ -167,7 +167,7 @@ export async function handleIrcInbound(params: {
   });
 
   const allowTextCommands = core.channel.commands.shouldHandleTextCommands({
-    cfg: config as OpenClawConfig,
+    cfg: config as OPNEXConfig,
     surface: CHANNEL_ID,
   });
   const useAccessGroups = config.commands?.useAccessGroups !== false;
@@ -176,7 +176,7 @@ export async function handleIrcInbound(params: {
     message,
     allowNameMatching,
   }).allowed;
-  const hasControlCommand = core.channel.text.hasControlCommand(rawBody, config as OpenClawConfig);
+  const hasControlCommand = core.channel.text.hasControlCommand(rawBody, config as OPNEXConfig);
   const commandGate = resolveControlCommandGate({
     useAccessGroups,
     authorizers: [
@@ -241,7 +241,7 @@ export async function handleIrcInbound(params: {
   }
 
   if (message.isGroup && commandGate.shouldBlock) {
-    const { logInboundDrop } = await import("openclaw/plugin-sdk/channel-inbound");
+    const { logInboundDrop } = await import("opnex/plugin-sdk/channel-inbound");
     logInboundDrop({
       log: (line) => runtime.log?.(line),
       channel: CHANNEL_ID,
@@ -251,7 +251,7 @@ export async function handleIrcInbound(params: {
     return;
   }
 
-  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as OpenClawConfig);
+  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as OPNEXConfig);
   const mentionNick = connectedNick?.trim() || account.nick;
   const explicitMentionRegex = mentionNick
     ? new RegExp(`\\b${escapeIrcRegexLiteral(mentionNick)}\\b[:,]?`, "i")
@@ -282,7 +282,7 @@ export async function handleIrcInbound(params: {
 
   const peerId = message.isGroup ? message.target : message.senderNick;
   const route = core.channel.routing.resolveAgentRoute({
-    cfg: config as OpenClawConfig,
+    cfg: config as OPNEXConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     peer: {
@@ -295,7 +295,7 @@ export async function handleIrcInbound(params: {
   const storePath = core.channel.session.resolveStorePath(config.session?.store, {
     agentId: route.agentId,
   });
-  const envelopeOptions = core.channel.reply.resolveEnvelopeFormatOptions(config as OpenClawConfig);
+  const envelopeOptions = core.channel.reply.resolveEnvelopeFormatOptions(config as OPNEXConfig);
   const previousTimestamp = core.channel.session.readSessionUpdatedAt({
     storePath,
     sessionKey: route.sessionKey,
@@ -336,9 +336,9 @@ export async function handleIrcInbound(params: {
   });
 
   const { dispatchInboundReplyWithBase } =
-    await import("openclaw/plugin-sdk/inbound-reply-dispatch");
+    await import("opnex/plugin-sdk/inbound-reply-dispatch");
   await dispatchInboundReplyWithBase({
-    cfg: config as OpenClawConfig,
+    cfg: config as OPNEXConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     route,

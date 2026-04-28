@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
-export function makeQqbotSecretRefConfig(): OpenClawConfig {
+export function makeQqbotSecretRefConfig(): OPNEXConfig {
   return {
     channels: {
       qqbot: {
@@ -12,10 +12,10 @@ export function makeQqbotSecretRefConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
-export function makeQqbotDefaultAccountConfig(): OpenClawConfig {
+export function makeQqbotDefaultAccountConfig(): OPNEXConfig {
   return {
     channels: {
       qqbot: {
@@ -25,5 +25,5 @@ export function makeQqbotDefaultAccountConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }

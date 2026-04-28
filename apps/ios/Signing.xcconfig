@@ -4,17 +4,17 @@
 
 #include "Config/Version.xcconfig"
 
-OPENCLAW_CODE_SIGN_STYLE = Manual
-OPENCLAW_DEVELOPMENT_TEAM = Y5PE65HELJ
+OPNEX_CODE_SIGN_STYLE = Manual
+OPNEX_DEVELOPMENT_TEAM = Y5PE65HELJ
 
-OPENCLAW_APP_BUNDLE_ID = ai.openclaw.client
-OPENCLAW_SHARE_BUNDLE_ID = ai.openclaw.client.share
-OPENCLAW_WATCH_APP_BUNDLE_ID = ai.openclaw.client.watchkitapp
-OPENCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.openclaw.client.watchkitapp.extension
-OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.openclaw.client.activitywidget
+OPNEX_APP_BUNDLE_ID = ai.opnex.client
+OPNEX_SHARE_BUNDLE_ID = ai.opnex.client.share
+OPNEX_WATCH_APP_BUNDLE_ID = ai.opnex.client.watchkitapp
+OPNEX_WATCH_EXTENSION_BUNDLE_ID = ai.opnex.client.watchkitapp.extension
+OPNEX_ACTIVITY_WIDGET_BUNDLE_ID = ai.opnex.client.activitywidget
 
-OPENCLAW_APP_PROFILE = ai.openclaw.client Development
-OPENCLAW_SHARE_PROFILE = ai.openclaw.client.share Development
+OPNEX_APP_PROFILE = ai.opnex.client Development
+OPNEX_SHARE_PROFILE = ai.opnex.client.share Development
 
 // Keep local includes after defaults: xcconfig is evaluated top-to-bottom,
 // so later assignments in local files override the defaults above.

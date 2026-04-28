@@ -1,5 +1,5 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import { DEFAULT_ACCOUNT_ID } from "opnex/plugin-sdk/account-id";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
 type BlueBubblesConfigPatch = {
   serverUrl?: string;
@@ -34,12 +34,12 @@ function normalizePatch(
 }
 
 export function applyBlueBubblesConnectionConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   patch: BlueBubblesConfigPatch;
   onlyDefinedFields?: boolean;
   accountEnabled?: AccountEnabledMode;
-}): OpenClawConfig {
+}): OPNEXConfig {
   const patch = normalizePatch(params.patch, params.onlyDefinedFields === true);
   if (params.accountId === DEFAULT_ACCOUNT_ID) {
     return {

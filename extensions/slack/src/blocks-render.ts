@@ -2,12 +2,12 @@ import type { Block, KnownBlock } from "@slack/web-api";
 import {
   presentationToInteractiveReply,
   reduceInteractiveReply,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "opnex/plugin-sdk/interactive-runtime";
 import type {
   InteractiveReply,
   MessagePresentation,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/interactive-runtime";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { SLACK_REPLY_BUTTON_ACTION_ID, SLACK_REPLY_SELECT_ACTION_ID } from "./reply-action-ids.js";
 import { truncateSlackText } from "./truncate.js";
 
@@ -83,7 +83,7 @@ export function buildSlackInteractiveBlocks(interactive?: InteractiveReply): Sla
       }
       state.blocks.push({
         type: "actions",
-        block_id: `openclaw_reply_buttons_${++state.buttonIndex}`,
+        block_id: `opnex_reply_buttons_${++state.buttonIndex}`,
         elements,
       });
       return state;
@@ -93,7 +93,7 @@ export function buildSlackInteractiveBlocks(interactive?: InteractiveReply): Sla
     }
     state.blocks.push({
       type: "actions",
-      block_id: `openclaw_reply_select_${++state.selectIndex}`,
+      block_id: `opnex_reply_select_${++state.selectIndex}`,
       elements: [
         {
           type: "static_select",

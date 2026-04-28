@@ -4,9 +4,9 @@ import {
   createSandboxBrowserConfig,
   createSandboxPruneConfig,
   createSandboxSshConfig,
-} from "openclaw/plugin-sdk/test-fixtures";
+} from "opnex/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import type { SandboxConfig } from "./types.js";
 
 const sshMocks = vi.hoisted(() => ({
@@ -31,7 +31,7 @@ vi.mock("./ssh.js", async () => {
 
 const { createSshSandboxBackend, sshSandboxBackendManager } = await import("./ssh-backend.js");
 
-function createConfig(): OpenClawConfig {
+function createConfig(): OPNEXConfig {
   return {
     agents: {
       defaults: {
@@ -43,7 +43,7 @@ function createConfig(): OpenClawConfig {
           ssh: {
             target: "peter@example.com:2222",
             command: "ssh",
-            workspaceRoot: "/remote/openclaw",
+            workspaceRoot: "/remote/opnex",
             strictHostKeyChecking: true,
             updateHostKeys: true,
           },
@@ -56,8 +56,8 @@ function createConfig(): OpenClawConfig {
 function createSession() {
   return {
     command: "ssh",
-    configPath: path.join(os.tmpdir(), "openclaw-test-ssh-config"),
-    host: "openclaw-sandbox",
+    configPath: path.join(os.tmpdir(), "opnex-test-ssh-config"),
+    host: "opnex-sandbox",
   };
 }
 
@@ -67,7 +67,7 @@ function createBackendSandboxConfig(params?: { binds?: string[]; target?: string
     backend: "ssh",
     scope: "session",
     workspaceAccess: "rw" as const,
-    workspaceRoot: "~/.openclaw/sandboxes",
+    workspaceRoot: "~/.opnex/sandboxes",
     docker: {
       image: "img",
       containerPrefix: "prefix-",
@@ -81,7 +81,7 @@ function createBackendSandboxConfig(params?: { binds?: string[]; target?: string
     },
     ssh: {
       ...createSandboxSshConfig(
-        "/remote/openclaw",
+        "/remote/opnex",
         params?.target ? { target: params.target } : {},
       ),
     },
@@ -153,9 +153,9 @@ describe("ssh sandbox backend", () => {
   it("describes runtimes via the configured ssh target", async () => {
     const result = await sshSandboxBackendManager.describeRuntime({
       entry: {
-        containerName: "openclaw-ssh-worker-abcd1234",
+        containerName: "opnex-ssh-worker-abcd1234",
         backendId: "ssh",
-        runtimeLabel: "openclaw-ssh-worker-abcd1234",
+        runtimeLabel: "opnex-ssh-worker-abcd1234",
         sessionKey: "agent:worker",
         createdAtMs: 1,
         lastUsedAtMs: 1,
@@ -173,12 +173,12 @@ describe("ssh sandbox backend", () => {
     expect(sshMocks.createSshSandboxSessionFromSettings).toHaveBeenCalledWith(
       expect.objectContaining({
         target: "peter@example.com:2222",
-        workspaceRoot: "/remote/openclaw",
+        workspaceRoot: "/remote/opnex",
       }),
     );
     expect(sshMocks.runSshSandboxCommand).toHaveBeenCalledWith(
       expect.objectContaining({
-        remoteCommand: expect.stringContaining("/remote/openclaw/openclaw-ssh-agent-worker"),
+        remoteCommand: expect.stringContaining("/remote/opnex/opnex-ssh-agent-worker"),
       }),
     );
   });
@@ -186,9 +186,9 @@ describe("ssh sandbox backend", () => {
   it("removes runtimes by deleting the remote scope root", async () => {
     await sshSandboxBackendManager.removeRuntime({
       entry: {
-        containerName: "openclaw-ssh-worker-abcd1234",
+        containerName: "opnex-ssh-worker-abcd1234",
         backendId: "ssh",
-        runtimeLabel: "openclaw-ssh-worker-abcd1234",
+        runtimeLabel: "opnex-ssh-worker-abcd1234",
         sessionKey: "agent:worker",
         createdAtMs: 1,
         lastUsedAtMs: 1,
@@ -234,10 +234,10 @@ describe("ssh sandbox backend", () => {
         backend: "ssh",
         scope: "session",
         workspaceAccess: "rw",
-        workspaceRoot: "~/.openclaw/sandboxes",
+        workspaceRoot: "~/.opnex/sandboxes",
         docker: {
-          image: "openclaw-sandbox:bookworm-slim",
-          containerPrefix: "openclaw-sbx-",
+          image: "opnex-sandbox:bookworm-slim",
+          containerPrefix: "opnex-sbx-",
           workdir: "/workspace",
           readOnlyRoot: true,
           tmpfs: ["/tmp"],
@@ -248,14 +248,14 @@ describe("ssh sandbox backend", () => {
         ssh: {
           target: "peter@example.com:2222",
           command: "ssh",
-          workspaceRoot: "/remote/openclaw",
+          workspaceRoot: "/remote/opnex",
           strictHostKeyChecking: true,
           updateHostKeys: true,
         },
         browser: {
           enabled: false,
-          image: "openclaw-browser",
-          containerPrefix: "openclaw-browser-",
+          image: "opnex-browser",
+          containerPrefix: "opnex-browser-",
           network: "bridge",
           cdpPort: 9222,
           vncPort: 5900,
@@ -280,7 +280,7 @@ describe("ssh sandbox backend", () => {
     expect(execSpec.argv).toEqual(
       expect.arrayContaining(["ssh", "-F", createSession().configPath, "-T", createSession().host]),
     );
-    expect(execSpec.argv.at(-1)).toContain("/remote/openclaw/openclaw-ssh-agent-worker");
+    expect(execSpec.argv.at(-1)).toContain("/remote/opnex/opnex-ssh-agent-worker");
     expect(sshMocks.uploadDirectoryToSshTarget).toHaveBeenCalledTimes(2);
     expect(sshMocks.uploadDirectoryToSshTarget).toHaveBeenNthCalledWith(
       1,

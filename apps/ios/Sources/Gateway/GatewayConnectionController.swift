@@ -8,7 +8,7 @@ import EventKit
 import Foundation
 import Network
 import Observation
-import OpenClawKit
+import OPNEXKit
 import os
 import Photos
 import ReplayKit
@@ -774,7 +774,7 @@ final class GatewayConnectionController {
         if manualClientId?.isEmpty == false {
             return manualClientId!
         }
-        return "openclaw-ios"
+        return "opnex-ios"
     }
 
     private func resolveManualPort(host: String, port: Int, useTLS: Bool) -> Int? {
@@ -804,32 +804,32 @@ final class GatewayConnectionController {
     }
 
     private func currentCaps() -> [String] {
-        var caps = [OpenClawCapability.canvas.rawValue, OpenClawCapability.screen.rawValue]
+        var caps = [OPNEXCapability.canvas.rawValue, OPNEXCapability.screen.rawValue]
 
         // Default-on: if the key doesn't exist yet, treat it as enabled.
         let cameraEnabled =
             UserDefaults.standard.object(forKey: "camera.enabled") == nil
                 ? true
                 : UserDefaults.standard.bool(forKey: "camera.enabled")
-        if cameraEnabled { caps.append(OpenClawCapability.camera.rawValue) }
+        if cameraEnabled { caps.append(OPNEXCapability.camera.rawValue) }
 
         let voiceWakeEnabled = UserDefaults.standard.bool(forKey: VoiceWakePreferences.enabledKey)
-        if voiceWakeEnabled { caps.append(OpenClawCapability.voiceWake.rawValue) }
+        if voiceWakeEnabled { caps.append(OPNEXCapability.voiceWake.rawValue) }
 
         let locationModeRaw = UserDefaults.standard.string(forKey: "location.enabledMode") ?? "off"
-        let locationMode = OpenClawLocationMode(rawValue: locationModeRaw) ?? .off
-        if locationMode != .off { caps.append(OpenClawCapability.location.rawValue) }
+        let locationMode = OPNEXLocationMode(rawValue: locationModeRaw) ?? .off
+        if locationMode != .off { caps.append(OPNEXCapability.location.rawValue) }
 
-        caps.append(OpenClawCapability.device.rawValue)
+        caps.append(OPNEXCapability.device.rawValue)
         if WatchMessagingService.isSupportedOnDevice() {
-            caps.append(OpenClawCapability.watch.rawValue)
+            caps.append(OPNEXCapability.watch.rawValue)
         }
-        caps.append(OpenClawCapability.photos.rawValue)
-        caps.append(OpenClawCapability.contacts.rawValue)
-        caps.append(OpenClawCapability.calendar.rawValue)
-        caps.append(OpenClawCapability.reminders.rawValue)
+        caps.append(OPNEXCapability.photos.rawValue)
+        caps.append(OPNEXCapability.contacts.rawValue)
+        caps.append(OPNEXCapability.calendar.rawValue)
+        caps.append(OPNEXCapability.reminders.rawValue)
         if Self.motionAvailable() {
-            caps.append(OpenClawCapability.motion.rawValue)
+            caps.append(OPNEXCapability.motion.rawValue)
         }
 
         return caps
@@ -837,58 +837,58 @@ final class GatewayConnectionController {
 
     private func currentCommands() -> [String] {
         var commands: [String] = [
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
-            OpenClawCanvasA2UICommand.reset.rawValue,
-            OpenClawScreenCommand.record.rawValue,
-            OpenClawSystemCommand.notify.rawValue,
-            OpenClawChatCommand.push.rawValue,
-            OpenClawTalkCommand.pttStart.rawValue,
-            OpenClawTalkCommand.pttStop.rawValue,
-            OpenClawTalkCommand.pttCancel.rawValue,
-            OpenClawTalkCommand.pttOnce.rawValue,
+            OPNEXCanvasCommand.present.rawValue,
+            OPNEXCanvasCommand.hide.rawValue,
+            OPNEXCanvasCommand.navigate.rawValue,
+            OPNEXCanvasCommand.evalJS.rawValue,
+            OPNEXCanvasCommand.snapshot.rawValue,
+            OPNEXCanvasA2UICommand.push.rawValue,
+            OPNEXCanvasA2UICommand.pushJSONL.rawValue,
+            OPNEXCanvasA2UICommand.reset.rawValue,
+            OPNEXScreenCommand.record.rawValue,
+            OPNEXSystemCommand.notify.rawValue,
+            OPNEXChatCommand.push.rawValue,
+            OPNEXTalkCommand.pttStart.rawValue,
+            OPNEXTalkCommand.pttStop.rawValue,
+            OPNEXTalkCommand.pttCancel.rawValue,
+            OPNEXTalkCommand.pttOnce.rawValue,
         ]
 
         let caps = Set(self.currentCaps())
-        if caps.contains(OpenClawCapability.camera.rawValue) {
-            commands.append(OpenClawCameraCommand.list.rawValue)
-            commands.append(OpenClawCameraCommand.snap.rawValue)
-            commands.append(OpenClawCameraCommand.clip.rawValue)
+        if caps.contains(OPNEXCapability.camera.rawValue) {
+            commands.append(OPNEXCameraCommand.list.rawValue)
+            commands.append(OPNEXCameraCommand.snap.rawValue)
+            commands.append(OPNEXCameraCommand.clip.rawValue)
         }
-        if caps.contains(OpenClawCapability.location.rawValue) {
-            commands.append(OpenClawLocationCommand.get.rawValue)
+        if caps.contains(OPNEXCapability.location.rawValue) {
+            commands.append(OPNEXLocationCommand.get.rawValue)
         }
-        if caps.contains(OpenClawCapability.device.rawValue) {
-            commands.append(OpenClawDeviceCommand.status.rawValue)
-            commands.append(OpenClawDeviceCommand.info.rawValue)
+        if caps.contains(OPNEXCapability.device.rawValue) {
+            commands.append(OPNEXDeviceCommand.status.rawValue)
+            commands.append(OPNEXDeviceCommand.info.rawValue)
         }
-        if caps.contains(OpenClawCapability.watch.rawValue) {
-            commands.append(OpenClawWatchCommand.status.rawValue)
-            commands.append(OpenClawWatchCommand.notify.rawValue)
+        if caps.contains(OPNEXCapability.watch.rawValue) {
+            commands.append(OPNEXWatchCommand.status.rawValue)
+            commands.append(OPNEXWatchCommand.notify.rawValue)
         }
-        if caps.contains(OpenClawCapability.photos.rawValue) {
-            commands.append(OpenClawPhotosCommand.latest.rawValue)
+        if caps.contains(OPNEXCapability.photos.rawValue) {
+            commands.append(OPNEXPhotosCommand.latest.rawValue)
         }
-        if caps.contains(OpenClawCapability.contacts.rawValue) {
-            commands.append(OpenClawContactsCommand.search.rawValue)
-            commands.append(OpenClawContactsCommand.add.rawValue)
+        if caps.contains(OPNEXCapability.contacts.rawValue) {
+            commands.append(OPNEXContactsCommand.search.rawValue)
+            commands.append(OPNEXContactsCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.calendar.rawValue) {
-            commands.append(OpenClawCalendarCommand.events.rawValue)
-            commands.append(OpenClawCalendarCommand.add.rawValue)
+        if caps.contains(OPNEXCapability.calendar.rawValue) {
+            commands.append(OPNEXCalendarCommand.events.rawValue)
+            commands.append(OPNEXCalendarCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.reminders.rawValue) {
-            commands.append(OpenClawRemindersCommand.list.rawValue)
-            commands.append(OpenClawRemindersCommand.add.rawValue)
+        if caps.contains(OPNEXCapability.reminders.rawValue) {
+            commands.append(OPNEXRemindersCommand.list.rawValue)
+            commands.append(OPNEXRemindersCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.motion.rawValue) {
-            commands.append(OpenClawMotionCommand.activity.rawValue)
-            commands.append(OpenClawMotionCommand.pedometer.rawValue)
+        if caps.contains(OPNEXCapability.motion.rawValue) {
+            commands.append(OPNEXMotionCommand.activity.rawValue)
+            commands.append(OPNEXMotionCommand.pedometer.rawValue)
         }
 
         return commands

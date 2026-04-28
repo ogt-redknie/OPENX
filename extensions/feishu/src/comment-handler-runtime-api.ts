@@ -1,3 +1,3 @@
-export type { OpenClawConfig as ClawdbotConfig } from "openclaw/plugin-sdk/config-types";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
+export type { OPNEXConfig as ClawdbotConfig } from "opnex/plugin-sdk/config-types";
+export type { RuntimeEnv } from "opnex/plugin-sdk/runtime";
+export { createChannelPairingController } from "opnex/plugin-sdk/channel-pairing";

@@ -3,9 +3,9 @@ import {
   type ModelAliasIndex,
   resolveDefaultModelForAgent,
 } from "../../agents/model-selection.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 
-export function resolveDefaultModel(params: { cfg: OpenClawConfig; agentId?: string }): {
+export function resolveDefaultModel(params: { cfg: OPNEXConfig; agentId?: string }): {
   defaultProvider: string;
   defaultModel: string;
   aliasIndex: ModelAliasIndex;

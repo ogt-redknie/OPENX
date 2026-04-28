@@ -205,7 +205,7 @@ describe("buildExportSessionReply", () => {
     expect(html).not.toContain("{{SESSION_DATA}}");
     expect(html).not.toContain("{{MARKED_JS}}");
     expect(html).not.toContain("{{HIGHLIGHT_JS}}");
-    expect(html).not.toContain("data-openclaw-export-placeholder");
+    expect(html).not.toContain("data-opnex-export-placeholder");
     expect(html).toContain(
       Buffer.from(
         JSON.stringify({
@@ -225,11 +225,11 @@ describe("buildExportSessionReply", () => {
     hoisted.exportHtmlTemplateContents.set(
       "template.html",
       [
-        '<style data-openclaw-export-placeholder="CSS"></style>',
-        '<script id="session-data" type="application/json" data-openclaw-export-placeholder="SESSION_DATA"></script>',
-        '<script data-openclaw-export-placeholder="MARKED_JS"></script>',
-        '<script data-openclaw-export-placeholder="HIGHLIGHT_JS"></script>',
-        '<script data-openclaw-export-placeholder="JS"></script>',
+        '<style data-opnex-export-placeholder="CSS"></style>',
+        '<script id="session-data" type="application/json" data-opnex-export-placeholder="SESSION_DATA"></script>',
+        '<script data-opnex-export-placeholder="MARKED_JS"></script>',
+        '<script data-opnex-export-placeholder="HIGHLIGHT_JS"></script>',
+        '<script data-opnex-export-placeholder="JS"></script>',
       ].join(""),
     );
     hoisted.exportHtmlTemplateContents.set("template.css", "/* {{THEME_VARS}} */$&$1");

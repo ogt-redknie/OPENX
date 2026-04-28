@@ -8,16 +8,16 @@ import {
 
 describe("gh-read helpers", () => {
   it("finds repo from gh args", () => {
-    expect(parseRepoArg(["pr", "view", "42", "-R", "openclaw/openclaw"])).toBe("openclaw/openclaw");
-    expect(parseRepoArg(["run", "list", "--repo=openclaw/docs"])).toBe("openclaw/docs");
+    expect(parseRepoArg(["pr", "view", "42", "-R", "opnex/opnex"])).toBe("opnex/opnex");
+    expect(parseRepoArg(["run", "list", "--repo=opnex/docs"])).toBe("opnex/docs");
     expect(parseRepoArg(["pr", "view", "42"])).toBeNull();
   });
 
   it("normalizes repo strings from common git formats", () => {
-    expect(normalizeRepo("openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("github.com/openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("https://github.com/openclaw/openclaw.git")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("git@github.com:openclaw/openclaw.git")).toBe("openclaw/openclaw");
+    expect(normalizeRepo("opnex/opnex")).toBe("opnex/opnex");
+    expect(normalizeRepo("github.com/opnex/opnex")).toBe("opnex/opnex");
+    expect(normalizeRepo("https://github.com/opnex/opnex.git")).toBe("opnex/opnex");
+    expect(normalizeRepo("git@github.com:opnex/opnex.git")).toBe("opnex/opnex");
     expect(normalizeRepo("invalid")).toBeNull();
   });
 

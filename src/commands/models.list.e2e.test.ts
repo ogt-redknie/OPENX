@@ -10,8 +10,8 @@ const readConfigFileSnapshotForWrite = vi.fn().mockResolvedValue({
   writeOptions: {},
 });
 const setRuntimeConfigSnapshot = vi.fn();
-const ensureOpenClawModelsJson = vi.fn().mockResolvedValue(undefined);
-const resolveOpenClawAgentDir = vi.fn().mockReturnValue("/tmp/openclaw-agent");
+const ensureOPNEXModelsJson = vi.fn().mockResolvedValue(undefined);
+const resolveOPNEXAgentDir = vi.fn().mockReturnValue("/tmp/opnex-agent");
 const ensureAuthProfileStore = vi.fn().mockReturnValue({ version: 1, profiles: {} });
 const listProfilesForProvider = vi.fn().mockReturnValue([]);
 const resolveEnvApiKey = vi.fn().mockReturnValue(undefined);
@@ -86,8 +86,8 @@ vi.mock("./models/list.runtime.js", () => {
 
   return {
     ensureAuthProfileStore,
-    ensureOpenClawModelsJson,
-    resolveOpenClawAgentDir,
+    ensureOPNEXModelsJson,
+    resolveOPNEXAgentDir,
     listProfilesForProvider,
     resolveEnvApiKey,
     resolveAwsSdkEnvVarName,
@@ -112,7 +112,7 @@ vi.mock("./models/list.runtime.js", () => {
 });
 
 vi.mock("../agents/agent-paths.js", () => ({
-  resolveOpenClawAgentDir,
+  resolveOPNEXAgentDir,
 }));
 
 vi.mock("../agents/auth-profiles/profile-list.js", () => ({
@@ -251,7 +251,7 @@ beforeEach(() => {
   getRuntimeConfig.mockReset();
   getRuntimeConfig.mockReturnValue({});
   listProfilesForProvider.mockReturnValue([]);
-  ensureOpenClawModelsJson.mockClear();
+  ensureOPNEXModelsJson.mockClear();
   loadModelCatalog.mockClear();
   loadModelCatalog.mockResolvedValue([]);
   loadProviderCatalogModelsForList.mockReset();
@@ -567,7 +567,7 @@ describe("models list/status", () => {
 
     await loadModelRegistry(resolvedConfig as never);
 
-    expect(ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(ensureOPNEXModelsJson).not.toHaveBeenCalled();
   });
 
   it("filters stale spark rows from models list and registry views", async () => {
@@ -647,7 +647,7 @@ describe("models list/status", () => {
 
     await modelsListCommand({ all: true, json: true }, runtime);
 
-    expect(ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(ensureOPNEXModelsJson).not.toHaveBeenCalled();
     const payload = parseJsonLog(runtime);
     expect(payload.models).toEqual([
       expect.objectContaining({

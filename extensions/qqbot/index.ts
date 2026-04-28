@@ -1,11 +1,11 @@
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-  type OpenClawPluginApi,
-} from "openclaw/plugin-sdk/channel-entry-contract";
+  type OPNEXPluginApi,
+} from "opnex/plugin-sdk/channel-entry-contract";
 
-function registerQQBotFull(api: OpenClawPluginApi): void {
-  const register = loadBundledEntryExportSync<(api: OpenClawPluginApi) => void>(import.meta.url, {
+function registerQQBotFull(api: OPNEXPluginApi): void {
+  const register = loadBundledEntryExportSync<(api: OPNEXPluginApi) => void>(import.meta.url, {
     specifier: "./api.js",
     exportName: "registerQQBotFull",
   });

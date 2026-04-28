@@ -4,8 +4,8 @@ import {
   mergeAllowFromEntries,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/setup";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/setup";
 import { resolveDefaultZaloAccountId, resolveZaloAccount } from "./accounts.js";
 
 type ZaloAccountSetupConfig = {
@@ -28,10 +28,10 @@ export async function noteZaloTokenHelp(
 }
 
 export async function promptZaloAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   prompter: Parameters<NonNullable<ChannelSetupDmPolicy["promptAllowFrom"]>>[0]["prompter"];
   accountId?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<OPNEXConfig> {
   const { cfg, prompter } = params;
   const accountId = params.accountId ?? resolveDefaultZaloAccountId(cfg);
   const resolved = resolveZaloAccount({ cfg, accountId });
@@ -66,7 +66,7 @@ export async function promptZaloAllowFrom(params: {
           allowFrom: unique,
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
   }
 
   const currentAccount = cfg.channels?.zalo?.accounts?.[accountId] as
@@ -90,5 +90,5 @@ export async function promptZaloAllowFrom(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }

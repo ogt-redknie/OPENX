@@ -1,28 +1,28 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { formatAllowFromLowercase } from "openclaw/plugin-sdk/allow-from";
-import { createTopLevelChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
+import { describeAccountSnapshot } from "opnex/plugin-sdk/account-helpers";
+import { formatAllowFromLowercase } from "opnex/plugin-sdk/allow-from";
+import { createTopLevelChannelConfigAdapter } from "opnex/plugin-sdk/channel-config-helpers";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+} from "opnex/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "opnex/plugin-sdk/channel-core";
+import { createPairingPrefixStripper } from "opnex/plugin-sdk/channel-pairing";
 import {
   createAllowlistProviderGroupPolicyWarningCollector,
   projectConfigWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "opnex/plugin-sdk/channel-policy";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
   listDirectoryEntriesFromSources,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { normalizeMessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import { createRuntimeOutboundDelegates } from "openclaw/plugin-sdk/outbound-runtime";
-import { createComputedAccountStatusAdapter } from "openclaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/directory-runtime";
+import { normalizeMessagePresentation } from "opnex/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeNamedExport } from "opnex/plugin-sdk/lazy-runtime";
+import { createRuntimeOutboundDelegates } from "opnex/plugin-sdk/outbound-runtime";
+import { createComputedAccountStatusAdapter } from "opnex/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { Type } from "typebox";
-import type { ChannelMessageActionName, ChannelPlugin, OpenClawConfig } from "../runtime-api.js";
+import type { ChannelMessageActionName, ChannelPlugin, OPNEXConfig } from "../runtime-api.js";
 import {
   buildProbeChannelStatusSummary,
   chunkTextForOutbound,
@@ -78,7 +78,7 @@ const TEAMS_GRAPH_PERMISSION_HINTS: Record<string, string> = {
 };
 
 const collectMSTeamsSecurityWarnings = createAllowlistProviderGroupPolicyWarningCollector<{
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 }>({
   providerConfigPresent: (cfg) => cfg.channels?.msteams !== undefined,
   resolveGroupPolicy: ({ cfg }) => cfg.channels?.msteams?.groupPolicy,
@@ -95,7 +95,7 @@ const loadMSTeamsChannelRuntime = createLazyRuntimeNamedExport(
   "msTeamsChannelRuntime",
 );
 
-const resolveMSTeamsChannelConfig = (cfg: OpenClawConfig) => ({
+const resolveMSTeamsChannelConfig = (cfg: OPNEXConfig) => ({
   allowFrom: cfg.channels?.msteams?.allowFrom,
   defaultTo: cfg.channels?.msteams?.defaultTo,
 });
@@ -1088,7 +1088,7 @@ export const msteamsPlugin: ChannelPlugin<ResolvedMSTeamsAccount, ProbeMSTeamsRe
       },
     },
     security: {
-      collectWarnings: projectConfigWarningCollector<{ cfg: OpenClawConfig }>(
+      collectWarnings: projectConfigWarningCollector<{ cfg: OPNEXConfig }>(
         collectMSTeamsSecurityWarnings,
       ),
     },

@@ -54,8 +54,8 @@ describe("proxy stream wrappers", () => {
     expect(calls).toEqual([
       {
         headers: {
-          "HTTP-Referer": "https://openclaw.ai",
-          "X-OpenRouter-Title": "OpenClaw",
+          "HTTP-Referer": "https://opnex.ai",
+          "X-OpenRouter-Title": "OPNEX",
           "X-OpenRouter-Categories": "cli-agent",
           "X-Custom": "1",
         },

@@ -1,6 +1,6 @@
-import { buildPluginConfigSchema } from "openclaw/plugin-sdk/core";
-import { z } from "openclaw/plugin-sdk/zod";
-import type { OpenClawPluginConfigSchema } from "../runtime-api.js";
+import { buildPluginConfigSchema } from "opnex/plugin-sdk/core";
+import { z } from "opnex/plugin-sdk/zod";
+import type { OPNEXPluginConfigSchema } from "../runtime-api.js";
 
 export const ACPX_PERMISSION_MODES = ["approve-all", "approve-reads", "deny-all"] as const;
 export type AcpxPermissionMode = (typeof ACPX_PERMISSION_MODES)[number];
@@ -30,7 +30,7 @@ export type AcpxPluginConfig = {
   permissionMode?: AcpxPermissionMode;
   nonInteractivePermissions?: AcpxNonInteractivePermissionPolicy;
   pluginToolsMcpBridge?: boolean;
-  openClawToolsMcpBridge?: boolean;
+  opnexToolsMcpBridge?: boolean;
   strictWindowsCmdWrapper?: boolean;
   timeoutSeconds?: number;
   queueOwnerTtlSeconds?: number;
@@ -45,7 +45,7 @@ export type ResolvedAcpxPluginConfig = {
   permissionMode: AcpxPermissionMode;
   nonInteractivePermissions: AcpxNonInteractivePermissionPolicy;
   pluginToolsMcpBridge: boolean;
-  openClawToolsMcpBridge: boolean;
+  opnexToolsMcpBridge: boolean;
   strictWindowsCmdWrapper: boolean;
   timeoutSeconds?: number;
   queueOwnerTtlSeconds: number;
@@ -93,8 +93,8 @@ export const AcpxPluginConfigSchema = z.strictObject({
     })
     .optional(),
   pluginToolsMcpBridge: z.boolean({ error: "pluginToolsMcpBridge must be a boolean" }).optional(),
-  openClawToolsMcpBridge: z
-    .boolean({ error: "openClawToolsMcpBridge must be a boolean" })
+  opnexToolsMcpBridge: z
+    .boolean({ error: "opnexToolsMcpBridge must be a boolean" })
     .optional(),
   strictWindowsCmdWrapper: z
     .boolean({ error: "strictWindowsCmdWrapper must be a boolean" })
@@ -118,6 +118,6 @@ export const AcpxPluginConfigSchema = z.strictObject({
     .optional(),
 });
 
-export function createAcpxPluginConfigSchema(): OpenClawPluginConfigSchema {
+export function createAcpxPluginConfigSchema(): OPNEXPluginConfigSchema {
   return buildPluginConfigSchema(AcpxPluginConfigSchema);
 }

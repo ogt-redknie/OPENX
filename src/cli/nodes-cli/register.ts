@@ -20,15 +20,15 @@ export function registerNodesCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw nodes status", "List known nodes with live status."],
-          ["openclaw nodes pairing pending", "Show pending node pairing requests."],
-          ["openclaw nodes remove --node <id|name|ip>", "Remove a stale paired node entry."],
+          ["opnex nodes status", "List known nodes with live status."],
+          ["opnex nodes pairing pending", "Show pending node pairing requests."],
+          ["opnex nodes remove --node <id|name|ip>", "Remove a stale paired node entry."],
           [
-            'openclaw nodes invoke --node <id> --command system.which --params \'{"name":"uname"}\'',
+            'opnex nodes invoke --node <id> --command system.which --params \'{"name":"uname"}\'',
             "Invoke a node command directly.",
           ],
-          ["openclaw nodes camera snap --node <id>", "Capture a photo from a node camera."],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/nodes", "docs.openclaw.ai/cli/nodes")}\n`,
+          ["opnex nodes camera snap --node <id>", "Capture a photo from a node camera."],
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/nodes", "docs.opnex.ai/cli/nodes")}\n`,
     );
 
   registerNodesStatusCommands(nodes);

@@ -1,8 +1,8 @@
-import { resolveOpenClawAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { isLiveTestEnabled } from "openclaw/plugin-sdk/test-env";
+import { resolveOPNEXAgentDir } from "opnex/plugin-sdk/agent-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { createTestPluginApi } from "opnex/plugin-sdk/plugin-test-api";
+import { getRuntimeConfig } from "opnex/plugin-sdk/runtime-config-snapshot";
+import { isLiveTestEnabled } from "opnex/plugin-sdk/test-env";
 import { beforeAll, describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { getComfyConfig, isComfyCapabilityConfigured } from "./workflow-runtime.js";
@@ -32,7 +32,7 @@ function withPluginsEnabled<T>(cfg: T): T {
 }
 
 describeLive("comfy live", () => {
-  let cfg = {} as OpenClawConfig;
+  let cfg = {} as OPNEXConfig;
   let agentDir = "";
   const imageProviders: Array<{ id: string; generateImage: Function; isConfigured?: Function }> =
     [];
@@ -42,7 +42,7 @@ describeLive("comfy live", () => {
 
   beforeAll(async () => {
     cfg = withPluginsEnabled(getRuntimeConfig());
-    agentDir = resolveOpenClawAgentDir();
+    agentDir = resolveOPNEXAgentDir();
     plugin.register(
       createTestPluginApi({
         config: cfg as never,
@@ -67,7 +67,7 @@ describeLive("comfy live", () => {
       const result = await provider!.generateImage({
         provider: "comfy",
         model: "workflow",
-        prompt: "A tiny orange lobster icon on a clean background.",
+        prompt: "A tiny orange opnex icon on a clean background.",
         cfg: cfg as never,
         agentDir,
       });
@@ -86,7 +86,7 @@ describeLive("comfy live", () => {
       const result = await provider!.generateVideo({
         provider: "comfy",
         model: "workflow",
-        prompt: "A tiny paper lobster gently waving, cinematic motion.",
+        prompt: "A tiny paper opnex gently waving, cinematic motion.",
         cfg: cfg as never,
         agentDir,
       });

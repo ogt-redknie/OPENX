@@ -6,7 +6,7 @@ import type {
   ReplyDispatcher,
 } from "../auto-reply/reply/reply-dispatcher.types.js";
 import type { FinalizedMsgContext } from "../auto-reply/templating.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { TtsAutoMode } from "../config/types.tts.js";
 import type { DiagnosticTraceContext } from "../infra/diagnostic-trace-context.js";
 import {
@@ -368,7 +368,7 @@ export type PluginHookReplyDispatchEvent = {
 };
 
 export type PluginHookReplyDispatchContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   dispatcher: ReplyDispatcher;
   abortSignal?: AbortSignal;
   onReplyStart?: () => Promise<void> | void;
@@ -584,7 +584,7 @@ export type PluginHookSubagentEndedEvent = {
 
 export type PluginHookGatewayContext = {
   port?: number;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   getCron?: () => PluginHookGatewayCronService | undefined;
 };

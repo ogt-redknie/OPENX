@@ -1,4 +1,4 @@
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "opnex/plugin-sdk/reply-payload";
 import { isParentOwnedBackgroundAcpSession } from "../../acp/session-interaction-mode.js";
 import {
   resolveAgentConfig,
@@ -14,7 +14,7 @@ import { shouldSuppressLocalExecApprovalPrompt } from "../../channels/plugins/ex
 import { applyMergePatch } from "../../config/merge-patch.js";
 import { parseSessionThreadInfoFast } from "../../config/sessions/thread-info.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { logVerbose } from "../../globals.js";
 import { fireAndForgetHook } from "../../hooks/fire-and-forget.js";
 import {
@@ -196,7 +196,7 @@ const resolveRoutedPolicyConversationType = (
 
 const resolveSessionStoreLookup = (
   ctx: FinalizedMsgContext,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
 ): {
   sessionKey?: string;
   storePath?: string;
@@ -229,7 +229,7 @@ const resolveSessionStoreLookup = (
 
 const resolveBoundAcpDispatchSessionKey = (params: {
   ctx: FinalizedMsgContext;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 }): string | undefined => {
   const bindingContext = resolveConversationBindingContextFromMessage({
     cfg: params.cfg,
@@ -1055,7 +1055,7 @@ export async function dispatchReplyFromConfig(
     const replyResolver =
       params.replyResolver ?? (await loadGetReplyFromConfigRuntime()).getReplyFromConfig;
     const replyConfig = withFullRuntimeReplyConfig(
-      params.configOverride ? (applyMergePatch(cfg, params.configOverride) as OpenClawConfig) : cfg,
+      params.configOverride ? (applyMergePatch(cfg, params.configOverride) as OPNEXConfig) : cfg,
     );
     const replyResult = await replyResolver(
       ctx,

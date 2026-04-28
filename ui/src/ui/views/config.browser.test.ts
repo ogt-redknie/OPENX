@@ -58,7 +58,7 @@ describe("config view", () => {
     borderRadius: 50,
     setBorderRadius: vi.fn(),
     gatewayUrl: "",
-    assistantName: "OpenClaw",
+    assistantName: "OPNEX",
   });
 
   function findActionButtons(container: HTMLElement): {
@@ -600,7 +600,7 @@ describe("config view", () => {
     const container = document.createElement("div");
     const props: ConfigProps = {
       ...baseProps(),
-      configPath: "/tmp/openclaw-a.json5",
+      configPath: "/tmp/opnex-a.json5",
       formMode: "raw",
       raw: '{\n  token: "TOKEN_A_AFTER"\n}\n',
       originalRaw: '{\n  token: "TOKEN_A_BEFORE"\n}\n',
@@ -633,7 +633,7 @@ describe("config view", () => {
     revealButton!.click();
     expect(normalizedText(container)).toContain("TOKEN_A_AFTER");
 
-    props.configPath = "/tmp/openclaw-b.json5";
+    props.configPath = "/tmp/opnex-b.json5";
     props.raw = '{\n  token: "TOKEN_B_AFTER"\n}\n';
     props.originalRaw = '{\n  token: "TOKEN_B_BEFORE"\n}\n';
     props.formValue = {
@@ -762,7 +762,7 @@ describe("config view", () => {
     const secretRefValue = {
       channels: {
         discord: {
-          token: { source: "env", provider: "default", id: "__OPENCLAW_REDACTED__" },
+          token: { source: "env", provider: "default", id: "__OPNEX_REDACTED__" },
         },
       },
     };

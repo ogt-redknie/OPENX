@@ -57,11 +57,11 @@ providerHttpMocks.pollProviderOperationJsonMock.mockImplementation(
   },
 );
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("opnex/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: providerHttpMocks.resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("opnex/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: providerHttpMocks.assertOkOrThrowHttpErrorMock,
   assertOkOrThrowProviderError: providerHttpMocks.assertOkOrThrowProviderErrorMock,
   createProviderOperationDeadline: ({

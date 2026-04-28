@@ -1,5 +1,5 @@
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   ensureAuthProfileStore,
   loadAuthProfileStoreWithoutExternalProfiles,
@@ -12,7 +12,7 @@ import { normalizeProviderId } from "./model-selection.js";
 
 export function resolveModelAuthLabel(params: {
   provider?: string;
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   sessionEntry?: Partial<Pick<SessionEntry, "authProfileOverride">>;
   agentDir?: string;
   includeExternalProfiles?: boolean;

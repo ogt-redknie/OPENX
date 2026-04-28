@@ -1,5 +1,5 @@
 import { Container } from "@buape/carbon";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { normalizeDiscordAccentColor, resolveDiscordAccentColor } from "./ui-colors.js";
 
 export { normalizeDiscordAccentColor, resolveDiscordAccentColor } from "./ui-colors.js";
@@ -8,7 +8,7 @@ type DiscordContainerComponents = ConstructorParameters<typeof Container>[0];
 
 export class DiscordUiContainer extends Container {
   constructor(params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     accountId?: string | null;
     components?: DiscordContainerComponents;
     accentColor?: string;

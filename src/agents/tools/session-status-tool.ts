@@ -12,7 +12,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { resolveSessionModelIdentityRef } from "../../gateway/session-utils.js";
 import {
   buildAgentMainSessionKey,
@@ -188,7 +188,7 @@ function formatSessionTaskLine(params: {
 }
 
 async function resolveModelOverride(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   raw: string;
   sessionEntry?: SessionEntry;
   agentId: string;
@@ -253,7 +253,7 @@ async function resolveModelOverride(params: {
 
 export function createSessionStatusTool(opts?: {
   agentSessionKey?: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   sandboxed?: boolean;
 }): AnyAgentTool {
   return {

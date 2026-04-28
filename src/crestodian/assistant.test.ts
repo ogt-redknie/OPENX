@@ -13,7 +13,7 @@ import type { CrestodianOverview } from "./overview.js";
 function overview(overrides: Partial<CrestodianOverview["tools"]> = {}): CrestodianOverview {
   return {
     config: {
-      path: "/tmp/openclaw.json",
+      path: "/tmp/opnex.json",
       exists: false,
       valid: false,
       issues: [],
@@ -33,8 +33,8 @@ function overview(overrides: Partial<CrestodianOverview["tools"]> = {}): Crestod
       reachable: false,
     },
     references: {
-      docsUrl: "https://docs.openclaw.ai",
-      sourceUrl: "https://github.com/openclaw/openclaw",
+      docsUrl: "https://docs.opnex.ai",
+      sourceUrl: "https://github.com/opnex/opnex",
     },
   };
 }
@@ -65,7 +65,7 @@ describe("Crestodian assistant", () => {
           apiKeys: { openai: true, anthropic: false },
         }),
         config: {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/opnex.json",
           exists: true,
           valid: true,
           issues: [],
@@ -83,10 +83,10 @@ describe("Crestodian assistant", () => {
         defaultAgentId: "main",
         defaultModel: "openai/gpt-5.5",
         references: {
-          docsPath: "/tmp/openclaw/docs",
-          docsUrl: "https://docs.openclaw.ai",
-          sourcePath: "/tmp/openclaw",
-          sourceUrl: "https://github.com/openclaw/openclaw",
+          docsPath: "/tmp/opnex/docs",
+          docsUrl: "https://docs.opnex.ai",
+          sourcePath: "/tmp/opnex",
+          sourceUrl: "https://github.com/opnex/opnex",
         },
       },
     });
@@ -95,8 +95,8 @@ describe("Crestodian assistant", () => {
     expect(prompt).toContain("Default model: openai/gpt-5.5");
     expect(prompt).toContain("id=main, name=Main, workspace=/tmp/main");
     expect(prompt).toContain("OpenAI API key: found");
-    expect(prompt).toContain("OpenClaw docs: /tmp/openclaw/docs");
-    expect(prompt).toContain("OpenClaw source: /tmp/openclaw");
+    expect(prompt).toContain("OPNEX docs: /tmp/opnex/docs");
+    expect(prompt).toContain("OPNEX source: /tmp/opnex");
   });
 
   it("uses Claude CLI first for configless planning", async () => {

@@ -1,9 +1,9 @@
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-resolution";
+import { normalizeAccountId } from "opnex/plugin-sdk/account-resolution";
 import {
   createResolvedDirectoryEntriesLister,
   type DirectoryConfigParams,
-} from "openclaw/plugin-sdk/directory-config-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/directory-config-runtime";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { mergeSlackAccountConfig, resolveDefaultSlackAccountId } from "./accounts.js";
 import { parseSlackTarget } from "./targets.js";
 

@@ -4,7 +4,7 @@ import {
   resolveAgentContextLimits,
   resolveAgentWorkspaceDir,
   resolveMemorySearchConfig,
-  type OpenClawConfig,
+  type OPNEXConfig,
 } from "./config-utils.js";
 import { isFileMissingError, statRegularFile } from "./fs-utils.js";
 import { isMemoryPath, normalizeExtraMemoryPaths } from "./internal.js";
@@ -87,7 +87,7 @@ export async function readMemoryFile(params: {
 }
 
 export async function readAgentMemoryFile(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   relPath: string;
   from?: number;

@@ -18,25 +18,25 @@ export function resetPairingSecurityMocks(config: Record<string, unknown>) {
   upsertPairingRequestMock.mockReset().mockResolvedValue({ code: "PAIRCODE", created: true });
 }
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("opnex/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("opnex/plugin-sdk/runtime-config-snapshot")
+  >("opnex/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: (...args: unknown[]) => loadConfigMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", () => {
+vi.mock("opnex/plugin-sdk/conversation-runtime", () => {
   return {
     upsertChannelPairingRequest: (...args: unknown[]) => upsertPairingRequestMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/security-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/security-runtime")>(
-    "openclaw/plugin-sdk/security-runtime",
+vi.mock("opnex/plugin-sdk/security-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/security-runtime")>(
+    "opnex/plugin-sdk/security-runtime",
   );
   return {
     ...actual,

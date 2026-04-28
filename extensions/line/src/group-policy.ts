@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "openclaw/plugin-sdk/channel-policy";
-import { resolveExactLineGroupConfigKey, type OpenClawConfig } from "./channel-api.js";
+import { resolveChannelGroupRequireMention } from "opnex/plugin-sdk/channel-policy";
+import { resolveExactLineGroupConfigKey, type OPNEXConfig } from "./channel-api.js";
 
 type LineGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

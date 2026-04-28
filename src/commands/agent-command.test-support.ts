@@ -1,10 +1,10 @@
 import path from "node:path";
-import { withTempHome as withTempHomeBase } from "openclaw/plugin-sdk/test-env";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { withTempHome as withTempHomeBase } from "opnex/plugin-sdk/test-env";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
-type AgentDefaultConfig = NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>;
+type AgentDefaultConfig = NonNullable<NonNullable<OPNEXConfig["agents"]>["defaults"]>;
 type LoadConfigMock = {
-  mockReturnValue(value: OpenClawConfig): unknown;
+  mockReturnValue(value: OPNEXConfig): unknown;
 };
 
 export async function withAgentCommandTempHome<T>(
@@ -19,18 +19,18 @@ export function mockAgentCommandConfig(
   home: string,
   storePath: string,
   agentOverrides?: Partial<AgentDefaultConfig>,
-): OpenClawConfig {
+): OPNEXConfig {
   const cfg = {
     agents: {
       defaults: {
         model: { primary: "anthropic/claude-opus-4-6" },
         models: { "anthropic/claude-opus-4-6": {} },
-        workspace: path.join(home, "openclaw"),
+        workspace: path.join(home, "opnex"),
         ...agentOverrides,
       },
     },
     session: { store: storePath, mainKey: "main" },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
   configSpy.mockReturnValue(cfg);
   return cfg;
 }

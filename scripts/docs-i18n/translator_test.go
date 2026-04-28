@@ -126,7 +126,7 @@ func TestCodexTranslatorStripsInputWrapperEcho(t *testing.T) {
 		systemPrompt: "Translate from English to German.",
 		thinking:     "high",
 		runPrompt: func(context.Context, codexPromptRequest) (string, error) {
-			return "<openclaw_docs_i18n_input>\nÜbersetzt\n</openclaw_docs_i18n_input>", nil
+			return "<opnex_docs_i18n_input>\nÜbersetzt\n</opnex_docs_i18n_input>", nil
 		},
 	}
 
@@ -145,9 +145,9 @@ func TestBuildCodexTranslationPromptIncludesGuardrailsAndInput(t *testing.T) {
 	for _, want := range []string{
 		"System prompt.",
 		"Return only the translated text",
-		"<openclaw_docs_i18n_input>",
+		"<opnex_docs_i18n_input>",
 		"Hello\nworld",
-		"</openclaw_docs_i18n_input>",
+		"</opnex_docs_i18n_input>",
 	} {
 		if !strings.Contains(prompt, want) {
 			t.Fatalf("expected %q in prompt:\n%s", want, prompt)

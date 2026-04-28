@@ -87,10 +87,10 @@ export function runTestboxSyncSanity({
     cwd: root,
     statusRaw,
     deletionThreshold: parsePositiveInteger(
-      env.OPENCLAW_TESTBOX_DELETION_THRESHOLD,
+      env.OPNEX_TESTBOX_DELETION_THRESHOLD,
       DEFAULT_DELETION_THRESHOLD,
     ),
-    allowMassDeletions: parseBooleanEnv(env.OPENCLAW_TESTBOX_ALLOW_MASS_DELETIONS),
+    allowMassDeletions: parseBooleanEnv(env.OPNEX_TESTBOX_ALLOW_MASS_DELETIONS),
   });
 
   if (!result.ok) {

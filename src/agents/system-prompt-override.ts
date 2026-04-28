@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 
 function trimNonEmpty(value: unknown): string | undefined {
@@ -10,7 +10,7 @@ function trimNonEmpty(value: unknown): string | undefined {
 }
 
 export function resolveSystemPromptOverride(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   agentId?: string;
 }): string | undefined {
   const config = params.config;

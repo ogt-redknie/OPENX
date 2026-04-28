@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import type {
   CompiledConfiguredBinding,
   ConfiguredBindingRecordResolution,
@@ -16,7 +16,7 @@ export type ConfiguredBindingConsumer = {
   id: string;
   supports: (binding: ConfiguredBindingRuleConfig) => boolean;
   buildTargetFactory: (params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     binding: ConfiguredBindingRuleConfig;
     channel: string;
     agentId: string;

@@ -1,7 +1,7 @@
-export { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+export { definePluginEntry } from "opnex/plugin-sdk/plugin-entry";
 export type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  OPNEXPluginApi,
+  OPNEXPluginCommandDefinition,
   PluginCommandContext,
-  OpenClawPluginService,
-} from "openclaw/plugin-sdk/plugin-entry";
+  OPNEXPluginService,
+} from "opnex/plugin-sdk/plugin-entry";

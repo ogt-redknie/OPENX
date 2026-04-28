@@ -1,9 +1,9 @@
 /**
  * Network proxy module — public API surface.
  *
- * This module routes OpenClaw process HTTP and WebSocket traffic through an
+ * This module routes OPNEX process HTTP and WebSocket traffic through an
  * operator-managed filtering forward proxy. The proxy must enforce
- * destination filtering at connect time; OpenClaw only owns process-wide
+ * destination filtering at connect time; OPNEX only owns process-wide
  * routing into that proxy.
  *
  * Integration:

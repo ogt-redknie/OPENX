@@ -8,7 +8,7 @@ import type {
   ExecApprovalForwardingConfig,
   ExecApprovalForwardTarget,
 } from "../config/types.approvals.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
   buildApprovalPendingReplyPayload,
@@ -45,7 +45,7 @@ export type { ExecApprovalRequest, ExecApprovalResolved };
 type DeliverOutboundPayloads = typeof import("./outbound/deliver.js").deliverOutboundPayloads;
 type MaybePromise<T> = T | Promise<T>;
 type ResolveSessionTargetFn = (params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   request: ExecApprovalRequest;
 }) => MaybePromise<ExecApprovalForwardTarget | null>;
 
@@ -68,7 +68,7 @@ type PendingApproval<TRouteRequest extends ApprovalRouteRequest> = {
 };
 
 type ApprovalRenderContext<TRouteRequest extends ApprovalRouteRequest> = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   target: ForwardTarget;
   routeRequest: TRouteRequest;
 };
@@ -94,7 +94,7 @@ type ApprovalStrategy<
   TRouteRequest extends ApprovalRouteRequest = ApprovalRouteRequest,
 > = {
   kind: ApprovalKind;
-  config: (cfg: OpenClawConfig) => ExecApprovalForwardingConfig | undefined;
+  config: (cfg: OPNEXConfig) => ExecApprovalForwardingConfig | undefined;
   getRequestId: (request: TRequest) => string;
   getResolvedId: (resolved: TResolved) => string;
   getExpiresAtMs: (request: TRequest) => number;
@@ -127,7 +127,7 @@ export type ExecApprovalForwarder = {
 };
 
 export type ExecApprovalForwarderDeps = {
-  getConfig?: () => OpenClawConfig;
+  getConfig?: () => OPNEXConfig;
   deliver?: DeliverOutboundPayloads;
   nowMs?: () => number;
   resolveSessionTarget?: ResolveSessionTargetFn;
@@ -198,7 +198,7 @@ function buildSyntheticApprovalRequest(routeRequest: ApprovalRouteRequest): Exec
 function shouldSkipForwardingFallback(params: {
   approvalKind: "exec" | "plugin";
   target: ExecApprovalForwardTarget;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   routeRequest: ApprovalRouteRequest;
 }): boolean {
   const channel = normalizeMessageChannel(params.target.channel) ?? params.target.channel;
@@ -312,7 +312,7 @@ function extractApprovalRouteRequest(
 }
 
 function defaultResolveSessionTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   request: ExecApprovalRequest;
 }): Promise<ExecApprovalForwardTarget | null> {
   return loadExecApprovalForwarderRuntime().then(({ resolveExecApprovalSessionTarget }) => {
@@ -341,7 +341,7 @@ function defaultResolveSessionTarget(params: {
 }
 
 async function deliverToTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   targets: ForwardTarget[];
   buildPayload: (target: ForwardTarget) => ReplyPayload;
   deliver: DeliverOutboundPayloads;
@@ -392,7 +392,7 @@ function buildApprovalRenderPayload<TParams>(params: {
 }
 
 function buildExecPendingPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   request: ExecApprovalRequest;
   target: ForwardTarget;
   nowMs: number;
@@ -414,7 +414,7 @@ function buildExecPendingPayload(params: {
 }
 
 function buildExecResolvedPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   resolved: ExecApprovalResolved;
   target: ForwardTarget;
 }): ReplyPayload {
@@ -432,7 +432,7 @@ function buildExecResolvedPayload(params: {
 }
 
 function buildPluginPendingPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   request: PluginApprovalRequest;
   target: ForwardTarget;
   nowMs: number;
@@ -451,7 +451,7 @@ function buildPluginPendingPayload(params: {
 }
 
 function buildPluginResolvedPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   resolved: PluginApprovalResolved;
   target: ForwardTarget;
 }): ReplyPayload {
@@ -467,7 +467,7 @@ function buildPluginResolvedPayload(params: {
 }
 
 async function resolveForwardTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   config?: ExecApprovalForwardingConfig;
   routeRequest: ApprovalRouteRequest;
   resolveSessionTarget: ResolveSessionTargetFn;
@@ -511,7 +511,7 @@ function createApprovalHandlers<
   TRouteRequest extends ApprovalRouteRequest = ApprovalRouteRequest,
 >(params: {
   strategy: ApprovalStrategy<TRequest, TResolved, TRouteRequest>;
-  getConfig: () => OpenClawConfig;
+  getConfig: () => OPNEXConfig;
   deliver: DeliverOutboundPayloads;
   nowMs: () => number;
   resolveSessionTarget: ResolveSessionTargetFn;
@@ -684,7 +684,7 @@ function createApprovalStrategy<
   TResolved extends { id: string; request?: ApprovalRouteRequestFields | null },
 >(params: {
   kind: ApprovalKind;
-  config: (cfg: OpenClawConfig) => ExecApprovalForwardingConfig | undefined;
+  config: (cfg: OPNEXConfig) => ExecApprovalForwardingConfig | undefined;
   buildExpiredText: (request: TRequest) => string;
   buildPendingPayload: (
     params: ApprovalPendingRenderContext<TRequest, ApprovalRouteRequest>,

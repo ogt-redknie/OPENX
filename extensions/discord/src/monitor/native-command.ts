@@ -10,18 +10,18 @@ import {
   type TopLevelComponents,
 } from "@buape/carbon";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
-import { createChannelReplyPipeline } from "openclaw/plugin-sdk/channel-reply-pipeline";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-streaming";
+import { resolveHumanDelayConfig } from "opnex/plugin-sdk/agent-runtime";
+import { createChannelReplyPipeline } from "opnex/plugin-sdk/channel-reply-pipeline";
+import { resolveChannelStreamingBlockEnabled } from "opnex/plugin-sdk/channel-streaming";
 import {
   resolveCommandAuthorizedFromAuthorizers,
   resolveNativeCommandSessionTargets,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { resolveDirectStatusReplyForSession } from "openclaw/plugin-sdk/command-status-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { buildPairingReply } from "openclaw/plugin-sdk/conversation-runtime";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+} from "opnex/plugin-sdk/command-auth-native";
+import { resolveDirectStatusReplyForSession } from "opnex/plugin-sdk/command-status-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { buildPairingReply } from "opnex/plugin-sdk/conversation-runtime";
+import { isDangerousNameMatchingEnabled } from "opnex/plugin-sdk/dangerous-name-runtime";
+import { getAgentScopedMediaLocalRoots } from "opnex/plugin-sdk/media-runtime";
 import {
   buildCommandTextFromArgs,
   findCommandByNativeName,
@@ -33,24 +33,24 @@ import {
   type CommandArgDefinition,
   type CommandArgValues,
   type NativeCommandSpec,
-} from "openclaw/plugin-sdk/native-command-registry";
-import * as pluginRuntime from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveChunkMode, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
+} from "opnex/plugin-sdk/native-command-registry";
+import * as pluginRuntime from "opnex/plugin-sdk/plugin-runtime";
+import { resolveChunkMode, resolveTextChunkLimit } from "opnex/plugin-sdk/reply-chunking";
 import {
   dispatchReplyWithDispatcher,
   type ReplyPayload,
-} from "openclaw/plugin-sdk/reply-dispatch-runtime";
+} from "opnex/plugin-sdk/reply-dispatch-runtime";
 import {
   resolveSendableOutboundReplyParts,
   resolveTextChunksWithFallback,
-} from "openclaw/plugin-sdk/reply-payload";
-import { createSubsystemLogger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+} from "opnex/plugin-sdk/reply-payload";
+import { createSubsystemLogger, logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { resolveOpenProviderRuntimeGroupPolicy } from "opnex/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "opnex/plugin-sdk/text-runtime";
+import { loadWebMedia } from "opnex/plugin-sdk/web-media";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import { chunkDiscordTextWithMode } from "../chunk.js";
 import {
@@ -84,7 +84,7 @@ import { resolveDiscordNativeInteractionChannelContext } from "./native-interact
 import { resolveDiscordSenderIdentity } from "./sender-identity.js";
 import type { ThreadBindingManager } from "./thread-bindings.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<OPNEXConfig["channels"]>["discord"];
 type DiscordCommandArgs = {
   raw?: string;
   values?: CommandArgValues;
@@ -156,7 +156,7 @@ function resolveDiscordCommandLogLabel(command: ChatCommandDefinition): string {
 }
 
 function resolveDiscordNativeCommandAllowlistAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   sender: { id: string; name?: string; tag?: string };
   chatType: "direct" | "group" | "thread" | "channel";
@@ -200,7 +200,7 @@ function resolveDiscordNativeCommandAllowlistAccess(params: {
 }
 
 function resolveDiscordGuildNativeCommandAuthorized(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   discordConfig: DiscordConfig;
   useAccessGroups: boolean;
   commandsAllowFromAccess: ReturnType<typeof resolveDiscordNativeCommandAllowlistAccess>;
@@ -262,7 +262,7 @@ function resolveDiscordGuildNativeCommandAuthorized(params: {
 
 function buildDiscordCommandOptions(params: {
   command: ChatCommandDefinition;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   authorizeChoiceContext?: (interaction: AutocompleteInteraction) => Promise<boolean>;
   resolveChoiceContext?: (
     interaction: AutocompleteInteraction,
@@ -398,7 +398,7 @@ function resolveDiscordNativeGroupDmAccess(params: {
 
 async function resolveDiscordNativeAutocompleteAuthorized(params: {
   interaction: AutocompleteInteraction;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   discordConfig: DiscordConfig;
   accountId: string;
 }): Promise<boolean> {
@@ -634,7 +634,7 @@ function createNativeCommandDefinition(command: NativeCommandSpec): ChatCommandD
 
 export function createDiscordNativeCommand(params: {
   command: NativeCommandSpec;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;
@@ -742,7 +742,7 @@ async function dispatchDiscordCommandInteraction(params: {
   prompt: string;
   command: ChatCommandDefinition;
   commandArgs?: DiscordCommandArgs;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;

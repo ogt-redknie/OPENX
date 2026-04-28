@@ -1,8 +1,8 @@
 import {
   registerProviderPlugin,
   registerSingleProviderPlugin,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { expectPassthroughReplayPolicy } from "openclaw/plugin-sdk/provider-test-contracts";
+} from "opnex/plugin-sdk/plugin-test-runtime";
+import { expectPassthroughReplayPolicy } from "opnex/plugin-sdk/provider-test-contracts";
 import { describe, expect, it, vi } from "vitest";
 import openrouterPlugin from "./index.js";
 import {

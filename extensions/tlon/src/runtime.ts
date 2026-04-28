@@ -1,5 +1,5 @@
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { createPluginRuntimeStore } from "openclaw/plugin-sdk/runtime-store";
+import type { PluginRuntime } from "opnex/plugin-sdk/plugin-runtime";
+import { createPluginRuntimeStore } from "opnex/plugin-sdk/runtime-store";
 
 const { setRuntime: setTlonRuntime, getRuntime: getTlonRuntime } =
   createPluginRuntimeStore<PluginRuntime>({

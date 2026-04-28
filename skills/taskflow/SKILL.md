@@ -1,7 +1,7 @@
 ---
 name: taskflow
 description: Coordinate multi-step detached tasks as one durable TaskFlow job with owner context, state, waits, and child tasks.
-metadata: { "openclaw": { "emoji": "🪝" } }
+metadata: { "opnex": { "emoji": "🪝" } }
 ---
 
 # TaskFlow
@@ -25,7 +25,7 @@ Use TaskFlow when a job needs to outlive one prompt or one detached run, but you
 - finish, fail, cancel, waiting, and blocked state
 - revision tracking for conflict-safe mutations
 
-It does **not** own branching or business logic. Put that in Lobster, acpx, or the calling code.
+It does **not** own branching or business logic. Put that in OPNEX, acpx, or the calling code.
 
 ## Current runtime shape
 
@@ -144,6 +144,6 @@ Use the flow runtime for state and task linkage. Keep decisions in the authoring
 
 ## Examples
 
-- See `skills/taskflow/examples/inbox-triage.lobster`
-- See `skills/taskflow/examples/pr-intake.lobster`
+- See `skills/taskflow/examples/inbox-triage.opnex`
+- See `skills/taskflow/examples/pr-intake.opnex`
 - See `skills/taskflow-inbox-triage/SKILL.md` for a concrete routing pattern

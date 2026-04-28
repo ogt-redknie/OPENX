@@ -9,20 +9,20 @@ Status: text + DM attachments are supported; channel/group file sending requires
 
 ## Bundled plugin
 
-Microsoft Teams ships as a bundled plugin in current OpenClaw releases, so no
+Microsoft Teams ships as a bundled plugin in current OPNEX releases, so no
 separate install is required in the normal packaged build.
 
 If you are on an older build or a custom install that excludes bundled Teams,
 install it manually:
 
 ```bash
-openclaw plugins install @openclaw/msteams
+opnex plugins install @opnex/msteams
 ```
 
 Local checkout (when running from a git repo):
 
 ```bash
-openclaw plugins install ./path/to/local/msteams-plugin
+opnex plugins install ./path/to/local/msteams-plugin
 ```
 
 Details: [Plugins](/tools/plugin)
@@ -49,11 +49,11 @@ Install and authenticate the devtunnel CLI if you haven't already ([getting star
 
 ```bash
 # One-time setup (persistent URL across sessions):
-devtunnel create my-openclaw-bot --allow-anonymous
-devtunnel port create my-openclaw-bot -p 3978 --protocol auto
+devtunnel create my-opnex-bot --allow-anonymous
+devtunnel port create my-opnex-bot -p 3978 --protocol auto
 
 # Each dev session:
-devtunnel host my-openclaw-bot
+devtunnel host my-opnex-bot
 # Your endpoint: https://<tunnel-id>.devtunnels.ms/api/messages
 ```
 
@@ -67,7 +67,7 @@ Alternatives: `ngrok http 3978` or `tailscale funnel 3978` (but these may change
 
 ```bash
 teams app create \
-  --name "OpenClaw" \
+  --name "OPNEX" \
   --endpoint "https://<your-tunnel-url>/api/messages"
 ```
 
@@ -80,7 +80,7 @@ This single command:
 
 The output will show `CLIENT_ID`, `CLIENT_SECRET`, `TENANT_ID`, and a **Teams App ID** — note these for the next steps. It also offers to install the app in Teams directly.
 
-**4. Configure OpenClaw** using the credentials from the output:
+**4. Configure OPNEX** using the credentials from the output:
 
 ```json5
 {
@@ -122,7 +122,7 @@ Group chats are blocked by default (`channels.msteams.groupPolicy: "allowlist"`)
 
 ## Goals
 
-- Talk to OpenClaw via Teams DMs, group chats, or channels.
+- Talk to OPNEX via Teams DMs, group chats, or channels.
 - Keep routing deterministic: replies always go back to the channel they arrived on.
 - Default to safe channel behavior (mentions required unless configured otherwise).
 
@@ -144,7 +144,7 @@ Disable with:
 
 - Default: `channels.msteams.dmPolicy = "pairing"`. Unknown senders are ignored until approved.
 - `channels.msteams.allowFrom` should use stable AAD object IDs.
-- Do not rely on UPN/display-name matching for allowlists — they can change. OpenClaw disables direct name matching by default; opt in explicitly with `channels.msteams.dangerouslyAllowNameMatching: true`.
+- Do not rely on UPN/display-name matching for allowlists — they can change. OPNEX disables direct name matching by default; opt in explicitly with `channels.msteams.dangerouslyAllowNameMatching: true`.
 - The wizard can resolve names to IDs via Microsoft Graph when credentials allow.
 
 **Group access**
@@ -173,7 +173,7 @@ Example:
 - Keys should use stable team IDs and channel conversation IDs.
 - When `groupPolicy="allowlist"` and a teams allowlist is present, only listed teams/channels are accepted (mention‑gated).
 - The configure wizard accepts `Team/Channel` entries and stores them for you.
-- On startup, OpenClaw resolves team/channel and user allowlist names to IDs (when Graph permissions allow)
+- On startup, OPNEX resolves team/channel and user allowlist names to IDs (when Graph permissions allow)
   and logs the mapping; unresolved team/channel names are kept as typed but ignored for routing by default unless `channels.msteams.dangerouslyAllowNameMatching: true` is enabled.
 
 Example:
@@ -206,7 +206,7 @@ If you can't use the Teams CLI, you can set up the bot manually through the Azur
 2. Create an **Azure Bot** (App ID + secret + tenant ID).
 3. Build a **Teams app package** that references the bot and includes the RSC permissions below.
 4. Upload/install the Teams app into a team (or personal scope for DMs).
-5. Configure `msteams` in `~/.openclaw/openclaw.json` (or env vars) and start the gateway.
+5. Configure `msteams` in `~/.opnex/opnex.json` (or env vars) and start the gateway.
 6. The gateway listens for Bot Framework webhook traffic on `/api/messages` by default.
 
 ### Step 1: Create Azure Bot
@@ -216,7 +216,7 @@ If you can't use the Teams CLI, you can set up the bot manually through the Azur
 
    | Field              | Value                                                    |
    | ------------------ | -------------------------------------------------------- |
-   | **Bot handle**     | Your bot name, e.g., `openclaw-msteams` (must be unique) |
+   | **Bot handle**     | Your bot name, e.g., `opnex-msteams` (must be unique) |
    | **Subscription**   | Select your Azure subscription                           |
    | **Resource group** | Create new or use existing                               |
    | **Pricing tier**   | **Free** for dev/testing                                 |
@@ -259,7 +259,7 @@ Creation of new multi-tenant bots was deprecated after 2025-07-31. Use **Single 
 - Create icons: `outline.png` (32x32) and `color.png` (192x192).
 - Zip all three files together: `manifest.json`, `outline.png`, `color.png`.
 
-### Step 6: Configure OpenClaw
+### Step 6: Configure OPNEX
 
 ```json5
 {
@@ -287,7 +287,7 @@ The Teams channel starts automatically when the plugin is available and `msteams
 
 > Added in 2026.3.24
 
-For production deployments, OpenClaw supports **federated authentication** as a more secure alternative to client secrets. Two methods are available:
+For production deployments, OPNEX supports **federated authentication** as a more secure alternative to client secrets. Two methods are available:
 
 ### Option A: Certificate-based authentication
 
@@ -328,7 +328,7 @@ Use Azure Managed Identity for passwordless authentication. This is ideal for de
 
 1. The bot pod/VM has a managed identity (system-assigned or user-assigned).
 2. A **federated identity credential** links the managed identity to the Entra ID app registration.
-3. At runtime, OpenClaw uses `@azure/identity` to acquire tokens from the Azure IMDS endpoint (`169.254.169.254`).
+3. At runtime, OPNEX uses `@azure/identity` to acquire tokens from the Azure IMDS endpoint (`169.254.169.254`).
 4. The token is passed to the Teams SDK for bot authentication.
 
 **Prerequisites:**
@@ -423,7 +423,7 @@ For AKS deployments using workload identity:
 | **Certificate**      | `authType: "federated"` + `certificatePath`    | No shared secret over network      | Certificate management overhead       |
 | **Managed Identity** | `authType: "federated"` + `useManagedIdentity` | Passwordless, no secrets to manage | Azure infrastructure required         |
 
-**Default behavior:** When `authType` is not set, OpenClaw defaults to client secret authentication. Existing configurations continue to work without changes.
+**Default behavior:** When `authType` is not set, OPNEX defaults to client secret authentication. Existing configurations continue to work without changes.
 
 ## Local development (tunneling)
 
@@ -431,11 +431,11 @@ Teams can't reach `localhost`. Use a persistent dev tunnel so your URL stays the
 
 ```bash
 # One-time setup:
-devtunnel create my-openclaw-bot --allow-anonymous
-devtunnel port create my-openclaw-bot -p 3978 --protocol auto
+devtunnel create my-opnex-bot --allow-anonymous
+devtunnel port create my-opnex-bot -p 3978 --protocol auto
 
 # Each dev session:
-devtunnel host my-openclaw-bot
+devtunnel host my-opnex-bot
 ```
 
 Alternatives: `ngrok http 3978` or `tailscale funnel 3978` (URLs may change each session).
@@ -477,7 +477,7 @@ All config keys can be set via environment variables instead:
 
 ## Member info action
 
-OpenClaw exposes a Graph-backed `member-info` action for Microsoft Teams so agents and automations can resolve channel member details (display name, email, role) directly from Microsoft Graph.
+OPNEX exposes a Graph-backed `member-info` action for Microsoft Teams so agents and automations can resolve channel member details (display name, email, role) directly from Microsoft Graph.
 
 Requirements:
 
@@ -529,14 +529,14 @@ Minimal, valid example with the required fields. Replace IDs and URLs.
   manifestVersion: "1.23",
   version: "1.0.0",
   id: "00000000-0000-0000-0000-000000000000",
-  name: { short: "OpenClaw" },
+  name: { short: "OPNEX" },
   developer: {
     name: "Your Org",
     websiteUrl: "https://example.com",
     privacyUrl: "https://example.com/privacy",
     termsOfUseUrl: "https://example.com/terms",
   },
-  description: { short: "OpenClaw in Teams", full: "OpenClaw in Teams" },
+  description: { short: "OPNEX in Teams", full: "OPNEX in Teams" },
   icons: { outline: "outline.png", color: "color.png" },
   accentColor: "#5B6DEF",
   bots: [
@@ -661,7 +661,7 @@ Teams delivers messages via HTTP webhook. If processing takes too long (e.g., sl
 - Teams retrying the message (causing duplicates)
 - Dropped replies
 
-OpenClaw handles this by returning quickly and sending replies proactively, but very slow responses may still cause issues.
+OPNEX handles this by returning quickly and sending replies proactively, but very slow responses may still cause issues.
 
 ### Formatting
 
@@ -758,7 +758,7 @@ Teams recently introduced two channel UI styles over the same underlying data mo
 - For explicit file-first sends, use `action=upload-file` with `media` / `filePath` / `path`; optional `message` becomes the accompanying text/comment, and `filename` overrides the uploaded name.
 
 Without Graph permissions, channel messages with images will be received as text-only (the image content is not accessible to the bot).
-By default, OpenClaw only downloads media from Microsoft/Teams hostnames. Override with `channels.msteams.mediaAllowHosts` (use `["*"]` to allow any host).
+By default, OPNEX only downloads media from Microsoft/Teams hostnames. Override with `channels.msteams.mediaAllowHosts` (use `["*"]` to allow any host).
 Authorization headers are only attached for hosts in `channels.msteams.mediaAuthAllowHosts` (defaults to Graph + Bot Framework hosts). Keep this list strict (avoid multi-tenant suffixes).
 
 ## Sending files in group chats
@@ -797,7 +797,7 @@ Bots don't have a personal OneDrive drive (the `/me/drive` Graph API endpoint do
    # Response includes: "id": "contoso.sharepoint.com,guid1,guid2"
    ```
 
-4. **Configure OpenClaw:**
+4. **Configure OPNEX:**
 
    ```json5
    {
@@ -830,20 +830,20 @@ Per-user sharing is more secure as only the chat participants can access the fil
 
 ### Files stored location
 
-Uploaded files are stored in a `/OpenClawShared/` folder in the configured SharePoint site's default document library.
+Uploaded files are stored in a `/OPNEXShared/` folder in the configured SharePoint site's default document library.
 
 ## Polls (Adaptive Cards)
 
-OpenClaw sends Teams polls as Adaptive Cards (there is no native Teams poll API).
+OPNEX sends Teams polls as Adaptive Cards (there is no native Teams poll API).
 
-- CLI: `openclaw message poll --channel msteams --target conversation:<id> ...`
-- Votes are recorded by the gateway in `~/.openclaw/msteams-polls.json`.
+- CLI: `opnex message poll --channel msteams --target conversation:<id> ...`
+- Votes are recorded by the gateway in `~/.opnex/msteams-polls.json`.
 - The gateway must stay online to record votes.
 - Polls do not auto-post result summaries yet (inspect the store file if needed).
 
 ## Presentation cards
 
-Send semantic presentation payloads to Teams users or conversations using the `message` tool or CLI. OpenClaw renders them as Teams Adaptive Cards from the generic presentation contract.
+Send semantic presentation payloads to Teams users or conversations using the `message` tool or CLI. OPNEX renders them as Teams Adaptive Cards from the generic presentation contract.
 
 The `presentation` parameter accepts semantic blocks. When `presentation` is provided, the message text is optional.
 
@@ -864,7 +864,7 @@ The `presentation` parameter accepts semantic blocks. When `presentation` is pro
 **CLI:**
 
 ```bash
-openclaw message send --channel msteams \
+opnex message send --channel msteams \
   --target "conversation:19:abc...@thread.tacv2" \
   --presentation '{"title":"Hello","blocks":[{"type":"text","text":"Hello!"}]}'
 ```
@@ -886,16 +886,16 @@ MSTeams targets use prefixes to distinguish between users and conversations:
 
 ```bash
 # Send to a user by ID
-openclaw message send --channel msteams --target "user:40a1a0ed-..." --message "Hello"
+opnex message send --channel msteams --target "user:40a1a0ed-..." --message "Hello"
 
 # Send to a user by display name (triggers Graph API lookup)
-openclaw message send --channel msteams --target "user:John Smith" --message "Hello"
+opnex message send --channel msteams --target "user:John Smith" --message "Hello"
 
 # Send to a group chat or channel
-openclaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" --message "Hello"
+opnex message send --channel msteams --target "conversation:19:abc...@thread.tacv2" --message "Hello"
 
 # Send a presentation card to a conversation
-openclaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" \
+opnex message send --channel msteams --target "conversation:19:abc...@thread.tacv2" \
   --presentation '{"title":"Hello","blocks":[{"type":"text","text":"Hello"}]}'
 ```
 

@@ -2,7 +2,7 @@ import type {
   ContextVisibilityMode,
   DmPolicy,
   GroupPolicy,
-  OpenClawConfig,
+  OPNEXConfig,
   SecretInput,
 } from "./runtime-api.js";
 export type { ContextVisibilityMode, DmPolicy, GroupPolicy };
@@ -236,6 +236,6 @@ export type CoreConfig = {
     ackReaction?: string;
     ackReactionScope?: "group-mentions" | "group-all" | "direct" | "all" | "none" | "off";
   };
-  secrets?: OpenClawConfig["secrets"];
+  secrets?: OPNEXConfig["secrets"];
   [key: string]: unknown;
 };

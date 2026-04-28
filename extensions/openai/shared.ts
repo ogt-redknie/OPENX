@@ -1,12 +1,12 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { findCatalogTemplate } from "openclaw/plugin-sdk/provider-catalog-shared";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { findCatalogTemplate } from "opnex/plugin-sdk/provider-catalog-shared";
 import {
   cloneFirstTemplateModel,
   matchesExactOrPrefix,
   type ProviderPlugin,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { OPENAI_RESPONSES_STREAM_HOOKS } from "openclaw/plugin-sdk/provider-stream-family";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/provider-model-shared";
+import { OPENAI_RESPONSES_STREAM_HOOKS } from "opnex/plugin-sdk/provider-stream-family";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { createOpenAINativeWebSearchWrapper } from "./native-web-search.js";
 import { buildOpenAIReplayPolicy } from "./replay-policy.js";
 import {
@@ -38,7 +38,7 @@ export function toOpenAIDataUrl(buffer: Buffer, mimeType: string): string {
   return `data:${mimeType};base64,${buffer.toString("base64")}`;
 }
 
-export function resolveConfiguredOpenAIBaseUrl(cfg: OpenClawConfig | undefined): string {
+export function resolveConfiguredOpenAIBaseUrl(cfg: OPNEXConfig | undefined): string {
   return normalizeOptionalString(cfg?.models?.providers?.openai?.baseUrl) ?? OPENAI_API_BASE_URL;
 }
 

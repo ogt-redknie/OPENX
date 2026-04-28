@@ -12,7 +12,7 @@ export {
   runPassiveAccountLifecycle,
   type ChannelMessageActionAdapter,
   type ChannelStatusIssue,
-  type OpenClawConfig,
+  type OPNEXConfig,
 } from "../runtime-api.js";
 export {
   listGoogleChatAccountIds,

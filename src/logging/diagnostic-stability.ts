@@ -143,10 +143,10 @@ function createState(capacity = DEFAULT_DIAGNOSTIC_STABILITY_CAPACITY): Diagnost
 
 function getDiagnosticStabilityState(): DiagnosticStabilityState {
   const globalStore = globalThis as typeof globalThis & {
-    __openclawDiagnosticStabilityState?: DiagnosticStabilityState;
+    __opnexDiagnosticStabilityState?: DiagnosticStabilityState;
   };
-  globalStore.__openclawDiagnosticStabilityState ??= createState();
-  return globalStore.__openclawDiagnosticStabilityState;
+  globalStore.__opnexDiagnosticStabilityState ??= createState();
+  return globalStore.__opnexDiagnosticStabilityState;
 }
 
 function copyMemory(memory: DiagnosticMemoryUsage): DiagnosticMemoryUsage {
@@ -636,7 +636,7 @@ export function resetDiagnosticStabilityRecorderForTest(): void {
   state.unsubscribe?.();
   const next = createState(state.capacity);
   const globalStore = globalThis as typeof globalThis & {
-    __openclawDiagnosticStabilityState?: DiagnosticStabilityState;
+    __opnexDiagnosticStabilityState?: DiagnosticStabilityState;
   };
-  globalStore.__openclawDiagnosticStabilityState = next;
+  globalStore.__opnexDiagnosticStabilityState = next;
 }

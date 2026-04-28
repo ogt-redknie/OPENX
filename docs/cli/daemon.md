@@ -1,26 +1,26 @@
 ---
-summary: "CLI reference for `openclaw daemon` (legacy alias for gateway service management)"
+summary: "CLI reference for `opnex daemon` (legacy alias for gateway service management)"
 read_when:
-  - You still use `openclaw daemon ...` in scripts
+  - You still use `opnex daemon ...` in scripts
   - You need service lifecycle commands (install/start/stop/restart/status)
 title: "Daemon"
 ---
 
-# `openclaw daemon`
+# `opnex daemon`
 
 Legacy alias for Gateway service management commands.
 
-`openclaw daemon ...` maps to the same service control surface as `openclaw gateway ...` service commands.
+`opnex daemon ...` maps to the same service control surface as `opnex gateway ...` service commands.
 
 ## Usage
 
 ```bash
-openclaw daemon status
-openclaw daemon install
-openclaw daemon start
-openclaw daemon stop
-openclaw daemon restart
-openclaw daemon uninstall
+opnex daemon status
+opnex daemon install
+opnex daemon start
+opnex daemon stop
+opnex daemon restart
+opnex daemon uninstall
 ```
 
 ## Subcommands
@@ -55,7 +55,7 @@ Notes:
 
 ## Prefer
 
-Use [`openclaw gateway`](/cli/gateway) for current docs and examples.
+Use [`opnex gateway`](/cli/gateway) for current docs and examples.
 
 ## Related
 

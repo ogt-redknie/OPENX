@@ -2,30 +2,30 @@ import {
   buildLegacyDmAccountAllowlistAdapter,
   createAccountScopedAllowlistNameResolver,
   createNestedAllowlistOverrideResolver,
-} from "openclaw/plugin-sdk/allowlist-config-edit";
+} from "opnex/plugin-sdk/allowlist-config-edit";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+} from "opnex/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "opnex/plugin-sdk/channel-core";
+import { createPairingPrefixStripper } from "opnex/plugin-sdk/channel-pairing";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/directory-runtime";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "opnex/plugin-sdk/lazy-runtime";
+import { sleepWithAbort } from "opnex/plugin-sdk/runtime-env";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { resolveTargetsWithOptionalToken } from "openclaw/plugin-sdk/target-resolver-runtime";
+} from "opnex/plugin-sdk/status-helpers";
+import { resolveTargetsWithOptionalToken } from "opnex/plugin-sdk/target-resolver-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import {
   listDiscordAccountIds,
   resolveDiscordAccount,
@@ -40,7 +40,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type OPNEXConfig,
 } from "./channel-api.js";
 import { resolveDiscordCurrentConversationIdentity } from "./conversation-identity.js";
 import { shouldSuppressLocalDiscordExecApprovalPrompt } from "./exec-approvals.js";
@@ -165,7 +165,7 @@ const discordMessageActions = {
   },
 };
 
-function resolveDiscordStartupDelayMs(cfg: OpenClawConfig, accountId: string): number {
+function resolveDiscordStartupDelayMs(cfg: OPNEXConfig, accountId: string): number {
   const startupAccountIds = listDiscordAccountIds(cfg).filter((candidateId) => {
     const candidate = resolveDiscordAccount({ cfg, accountId: candidateId });
     return (
@@ -389,7 +389,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
       agentPrompt: {
         messageToolHints: () => [
           "- Discord components: set `components` when sending messages to include buttons, selects, or v2 containers.",
-          "- Forms: add `components.modal` (title, fields). OpenClaw adds a trigger button and routes submissions as new messages.",
+          "- Forms: add `components.modal` (title, fields). OPNEX adds a trigger button and routes submissions as new messages.",
         ],
       },
       messaging: {
@@ -598,7 +598,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
               ],
             };
           }
-          const statusCfg: OpenClawConfig = {
+          const statusCfg: OPNEXConfig = {
             channels: {
               discord: {
                 accounts: {

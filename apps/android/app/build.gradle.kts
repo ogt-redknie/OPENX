@@ -2,10 +2,10 @@ import com.android.build.api.variant.impl.VariantOutputImpl
 
 val dnsjavaInetAddressResolverService = "META-INF/services/java.net.spi.InetAddressResolverProvider"
 
-val androidStoreFile = providers.gradleProperty("OPENCLAW_ANDROID_STORE_FILE").orNull?.takeIf { it.isNotBlank() }
-val androidStorePassword = providers.gradleProperty("OPENCLAW_ANDROID_STORE_PASSWORD").orNull?.takeIf { it.isNotBlank() }
-val androidKeyAlias = providers.gradleProperty("OPENCLAW_ANDROID_KEY_ALIAS").orNull?.takeIf { it.isNotBlank() }
-val androidKeyPassword = providers.gradleProperty("OPENCLAW_ANDROID_KEY_PASSWORD").orNull?.takeIf { it.isNotBlank() }
+val androidStoreFile = providers.gradleProperty("OPNEX_ANDROID_STORE_FILE").orNull?.takeIf { it.isNotBlank() }
+val androidStorePassword = providers.gradleProperty("OPNEX_ANDROID_STORE_PASSWORD").orNull?.takeIf { it.isNotBlank() }
+val androidKeyAlias = providers.gradleProperty("OPNEX_ANDROID_KEY_ALIAS").orNull?.takeIf { it.isNotBlank() }
+val androidKeyPassword = providers.gradleProperty("OPNEX_ANDROID_KEY_PASSWORD").orNull?.takeIf { it.isNotBlank() }
 val resolvedAndroidStoreFile =
   androidStoreFile?.let { storeFilePath ->
     if (storeFilePath.startsWith("~/")) {
@@ -26,9 +26,9 @@ val wantsAndroidReleaseBuild =
 
 if (wantsAndroidReleaseBuild && !hasAndroidReleaseSigning) {
   error(
-    "Missing Android release signing properties. Set OPENCLAW_ANDROID_STORE_FILE, " +
-      "OPENCLAW_ANDROID_STORE_PASSWORD, OPENCLAW_ANDROID_KEY_ALIAS, and " +
-      "OPENCLAW_ANDROID_KEY_PASSWORD in ~/.gradle/gradle.properties.",
+    "Missing Android release signing properties. Set OPNEX_ANDROID_STORE_FILE, " +
+      "OPNEX_ANDROID_STORE_PASSWORD, OPNEX_ANDROID_KEY_ALIAS, and " +
+      "OPNEX_ANDROID_KEY_PASSWORD in ~/.gradle/gradle.properties.",
   )
 }
 
@@ -40,7 +40,7 @@ plugins {
 }
 
 android {
-  namespace = "ai.openclaw.app"
+  namespace = "ai.opnex.app"
   compileSdk = 36
 
   // Release signing is local-only; keep the keystore path and passwords out of the repo.
@@ -57,12 +57,12 @@ android {
 
   sourceSets {
     getByName("main") {
-      assets.directories.add("../../shared/OpenClawKit/Sources/OpenClawKit/Resources")
+      assets.directories.add("../../shared/OPNEXKit/Sources/OPNEXKit/Resources")
     }
   }
 
   defaultConfig {
-    applicationId = "ai.openclaw.app"
+    applicationId = "ai.opnex.app"
     minSdk = 31
     targetSdk = 36
     versionCode = 2026042700
@@ -148,9 +148,9 @@ androidComponents {
         val flavorName = variant.flavorName?.takeIf { it.isNotBlank() }
         val outputFileName =
           if (flavorName == null) {
-            "openclaw-$versionName-$buildType.apk"
+            "opnex-$versionName-$buildType.apk"
           } else {
-            "openclaw-$versionName-$flavorName-$buildType.apk"
+            "opnex-$versionName-$flavorName-$buildType.apk"
           }
         output.outputFileName = outputFileName
       }

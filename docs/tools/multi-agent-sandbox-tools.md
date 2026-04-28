@@ -21,7 +21,7 @@ Each agent in a multi-agent setup can override the global sandbox and tool polic
 </CardGroup>
 
 <Warning>
-Auth is per-agent: each agent reads from its own `agentDir` auth store at `~/.openclaw/agents/<agentId>/agent/auth-profiles.json`. Credentials are **not** shared between agents. Never reuse `agentDir` across agents. If you want to share creds, copy `auth-profiles.json` into the other agent's `agentDir`.
+Auth is per-agent: each agent reads from its own `agentDir` auth store at `~/.opnex/agents/<agentId>/agent/auth-profiles.json`. Credentials are **not** shared between agents. Never reuse `agentDir` across agents. If you want to share creds, copy `auth-profiles.json` into the other agent's `agentDir`.
 </Warning>
 
 ---
@@ -38,13 +38,13 @@ Auth is per-agent: each agent reads from its own `agentDir` auth store at `~/.op
             "id": "main",
             "default": true,
             "name": "Personal Assistant",
-            "workspace": "~/.openclaw/workspace",
+            "workspace": "~/.opnex/workspace",
             "sandbox": { "mode": "off" }
           },
           {
             "id": "family",
             "name": "Family Bot",
-            "workspace": "~/.openclaw/workspace-family",
+            "workspace": "~/.opnex/workspace-family",
             "sandbox": {
               "mode": "all",
               "scope": "agent"
@@ -85,12 +85,12 @@ Auth is per-agent: each agent reads from its own `agentDir` auth store at `~/.op
         "list": [
           {
             "id": "personal",
-            "workspace": "~/.openclaw/workspace-personal",
+            "workspace": "~/.opnex/workspace-personal",
             "sandbox": { "mode": "off" }
           },
           {
             "id": "work",
-            "workspace": "~/.openclaw/workspace-work",
+            "workspace": "~/.opnex/workspace-work",
             "sandbox": {
               "mode": "all",
               "scope": "shared",
@@ -140,14 +140,14 @@ Auth is per-agent: each agent reads from its own `agentDir` auth store at `~/.op
         "list": [
           {
             "id": "main",
-            "workspace": "~/.openclaw/workspace",
+            "workspace": "~/.opnex/workspace",
             "sandbox": {
               "mode": "off"
             }
           },
           {
             "id": "public",
-            "workspace": "~/.openclaw/workspace-public",
+            "workspace": "~/.opnex/workspace-public",
             "sandbox": {
               "mode": "all",
               "scope": "agent"
@@ -228,7 +228,7 @@ The filtering order is:
 
   </Accordion>
   <Accordion title="Empty allowlist behavior">
-    If any explicit allowlist in that chain leaves the run with no callable tools, OpenClaw stops before submitting the prompt to the model. This is intentional: an agent configured with a missing tool such as `agents.list[].tools.allow: ["query_db"]` should fail loudly until the plugin that registers `query_db` is enabled, not continue as a text-only agent.
+    If any explicit allowlist in that chain leaves the run with no callable tools, OPNEX stops before submitting the prompt to the model. This is intentional: an agent configured with a missing tool such as `agents.list[].tools.allow: ["query_db"]` should fail loudly until the plugin that registers `query_db` is enabled, not continue as a text-only agent.
   </Accordion>
 </AccordionGroup>
 
@@ -246,7 +246,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
     {
       "agents": {
         "defaults": {
-          "workspace": "~/.openclaw/workspace",
+          "workspace": "~/.opnex/workspace",
           "sandbox": {
             "mode": "non-main"
           }
@@ -271,7 +271,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
           {
             "id": "main",
             "default": true,
-            "workspace": "~/.openclaw/workspace",
+            "workspace": "~/.opnex/workspace",
             "sandbox": { "mode": "off" }
           }
         ]
@@ -282,7 +282,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
 </Tabs>
 
 <Note>
-Legacy `agent.*` configs are migrated by `openclaw doctor`; prefer `agents.defaults` + `agents.list` going forward.
+Legacy `agent.*` configs are migrated by `opnex doctor`; prefer `agents.defaults` + `agents.list` going forward.
 </Note>
 
 ---
@@ -343,12 +343,12 @@ After configuring multi-agent sandbox and tools:
 <Steps>
   <Step title="Check agent resolution">
     ```bash
-    openclaw agents list --bindings
+    opnex agents list --bindings
     ```
   </Step>
   <Step title="Verify sandbox containers">
     ```bash
-    docker ps --filter "name=openclaw-sbx-"
+    docker ps --filter "name=opnex-sbx-"
     ```
   </Step>
   <Step title="Test tool restrictions">
@@ -358,7 +358,7 @@ After configuring multi-agent sandbox and tools:
   </Step>
   <Step title="Monitor logs">
     ```bash
-    tail -f "${OPENCLAW_STATE_DIR:-$HOME/.openclaw}/logs/gateway.log" | grep -E "routing|sandbox|tools"
+    tail -f "${OPNEX_STATE_DIR:-$HOME/.opnex}/logs/gateway.log" | grep -E "routing|sandbox|tools"
     ```
   </Step>
 </Steps>

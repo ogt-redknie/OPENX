@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import type { CronJob } from "../../cron/types.js";
 
 const getRuntimeConfig = vi.hoisted(() =>
-  vi.fn<() => OpenClawConfig>(() => ({}) as OpenClawConfig),
+  vi.fn<() => OPNEXConfig>(() => ({}) as OPNEXConfig),
 );
 
 vi.mock("../../config/config.js", async () => {
@@ -79,7 +79,7 @@ function createCronJob(overrides: Partial<CronJob> = {}): CronJob {
 
 describe("cron method validation", () => {
   beforeEach(() => {
-    getRuntimeConfig.mockReset().mockReturnValue({} as OpenClawConfig);
+    getRuntimeConfig.mockReset().mockReturnValue({} as OPNEXConfig);
   });
 
   it("accepts threadId on announce delivery add params", async () => {
@@ -94,7 +94,7 @@ describe("cron method validation", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
 
     const { context, respond } = await invokeCronAdd({
       name: "topic announce add",
@@ -136,7 +136,7 @@ describe("cron method validation", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
 
     const { context, respond } = await invokeCronUpdate(
       {
@@ -189,7 +189,7 @@ describe("cron method validation", () => {
           slack: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
 
     const { context, respond } = await invokeCronAdd({
       name: "ambiguous announce add",
@@ -231,7 +231,7 @@ describe("cron method validation", () => {
           slack: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
 
     const { context, respond } = await invokeCronUpdate(
       {
@@ -269,7 +269,7 @@ describe("cron method validation", () => {
           slack: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
 
     const { context, respond } = await invokeCronAdd({
       name: "invalid delivery provider",

@@ -1,13 +1,13 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { ChannelGroupPolicy } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { ChannelGroupPolicy } from "opnex/plugin-sdk/config-types";
 import type {
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-types";
-import { evaluateMatchedGroupAccessForPolicy } from "openclaw/plugin-sdk/group-access";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+} from "opnex/plugin-sdk/config-types";
+import { evaluateMatchedGroupAccessForPolicy } from "opnex/plugin-sdk/group-access";
+import { resolveOpenProviderRuntimeGroupPolicy } from "opnex/plugin-sdk/runtime-group-policy";
 import { isSenderAllowed, type NormalizedAllowFrom } from "./bot-access.js";
 import { firstDefined } from "./bot-access.js";
 
@@ -120,7 +120,7 @@ export const resolveTelegramRuntimeGroupPolicy = (params: {
 export const evaluateTelegramGroupPolicyAccess = (params: {
   isGroup: boolean;
   chatId: string | number;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   telegramCfg: TelegramAccountConfig;
   topicConfig?: TelegramTopicConfig;
   groupConfig?: TelegramGroupConfig;

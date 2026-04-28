@@ -1,7 +1,7 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@opnex/discord",
   "version": "2026.4.25",
-  "description": "OpenClaw Discord channel plugin",
+  "description": "OPNEX Discord channel plugin",
   "type": "module",
   "dependencies": {
     "@buape/carbon": "0.16.0",
@@ -14,18 +14,18 @@
     "ws": "^8.20.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.25"
+    "opnex": ">=2026.4.25"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -50,7 +50,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/discord",
+      "npmSpec": "@opnex/discord",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -58,7 +58,7 @@
       "pluginApi": ">=2026.4.25"
     },
     "build": {
-      "openclawVersion": "2026.4.25"
+      "opnexVersion": "2026.4.25"
     },
     "bundle": {
       "stageRuntimeDependencies": true

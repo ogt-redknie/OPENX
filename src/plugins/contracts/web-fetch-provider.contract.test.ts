@@ -1,4 +1,4 @@
-import { describeWebFetchProviderContracts } from "openclaw/plugin-sdk/provider-test-contracts";
+import { describeWebFetchProviderContracts } from "opnex/plugin-sdk/provider-test-contracts";
 import { pluginRegistrationContractRegistry } from "./registry.js";
 
 const webFetchProviderContractTests = pluginRegistrationContractRegistry.filter(

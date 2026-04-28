@@ -1,18 +1,18 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { createScopedDmSecurityResolver } from "openclaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createAccountStatusSink } from "openclaw/plugin-sdk/channel-lifecycle";
+import { DEFAULT_ACCOUNT_ID } from "opnex/plugin-sdk/account-id";
+import { createScopedDmSecurityResolver } from "opnex/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin } from "opnex/plugin-sdk/channel-core";
+import { createAccountStatusSink } from "opnex/plugin-sdk/channel-lifecycle";
 import {
   createOpenGroupPolicyRestrictSendersWarningCollector,
   projectAccountWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
-import { buildProbeChannelStatusSummary } from "openclaw/plugin-sdk/channel-status";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+} from "opnex/plugin-sdk/channel-policy";
+import { buildProbeChannelStatusSummary } from "opnex/plugin-sdk/channel-status";
+import { createLazyRuntimeNamedExport } from "opnex/plugin-sdk/lazy-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   type ResolvedBlueBubblesAccount,
   resolveBlueBubblesEffectiveAllowPrivateNetwork,

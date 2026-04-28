@@ -119,7 +119,7 @@ import type { NostrProfileFormState } from "./views/channels.nostr-profile-form.
 
 declare global {
   interface Window {
-    __OPENCLAW_CONTROL_UI_BASE_PATH__?: string;
+    __OPNEX_CONTROL_UI_BASE_PATH__?: string;
   }
 }
 
@@ -139,8 +139,8 @@ function resolveOnboardingMode(): boolean {
   return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
 }
 
-@customElement("openclaw-app")
-export class OpenClawApp extends LitElement {
+@customElement("opnex-app")
+export class OPNEXApp extends LitElement {
   private i18nController = new I18nController(this);
   clientInstanceId = generateUUID();
   connectGeneration = 0;
@@ -865,7 +865,7 @@ export class OpenClawApp extends LitElement {
         }
       },
       onTranscript: (entry) => {
-        this.realtimeTalkTranscript = `${entry.role === "user" ? "You" : "OpenClaw"}: ${entry.text}`;
+        this.realtimeTalkTranscript = `${entry.role === "user" ? "You" : "OPNEX"}: ${entry.text}`;
       },
     });
     this.realtimeTalkSession = session;

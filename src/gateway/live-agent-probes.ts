@@ -73,46 +73,46 @@ export function buildLiveCronProbeMessage(params: {
   const claudeLike = isClaudeLikeLiveAgent(params.agent);
   if (params.attempt === 0) {
     return (
-      "Use the OpenClaw MCP tool `openclaw-tools/cron` (server `openclaw-tools`, tool `cron`). " +
-      "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+      "Use the OPNEX MCP tool `opnex-tools/cron` (server `opnex-tools`, tool `cron`). " +
+      "If the harness shows Claude-style MCP names, use `mcp__opnex-tools__cron` or `mcp__opnex_tools__cron`. " +
       `Call it with JSON arguments ${params.argsJson}. ` +
       "Preserve the JSON exactly, including job.sessionTarget and job.sessionKey; do not omit, rename, or flatten those fields. " +
-      "Do the actual tool call; I will verify externally with the OpenClaw cron CLI. " +
+      "Do the actual tool call; I will verify externally with the OPNEX cron CLI. " +
       `After the cron job is created, reply exactly: ${params.exactReply}`
     );
   }
   if (claudeLike) {
     return (
-      "Retry the OpenClaw MCP tool `openclaw-tools/cron` now. " +
-      "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+      "Retry the OPNEX MCP tool `opnex-tools/cron` now. " +
+      "If the harness shows Claude-style MCP names, use `mcp__opnex-tools__cron` or `mcp__opnex_tools__cron`. " +
       `Use these exact JSON arguments: ${params.argsJson}. ` +
       "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
       `If the cron job is created, reply exactly: ${params.exactReply}. ` +
       "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
       "reply briefly saying that and ask me to retry. No markdown. " +
-      "I will verify externally with the OpenClaw cron CLI."
+      "I will verify externally with the OPNEX cron CLI."
     );
   }
   return (
-    "Your previous OpenClaw cron MCP tool call was cancelled before the job was created. " +
-    "Retry the OpenClaw MCP tool `openclaw-tools/cron` now. " +
-    "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+    "Your previous OPNEX cron MCP tool call was cancelled before the job was created. " +
+    "Retry the OPNEX MCP tool `opnex-tools/cron` now. " +
+    "If the harness shows Claude-style MCP names, use `mcp__opnex-tools__cron` or `mcp__opnex_tools__cron`. " +
     `Use these exact JSON arguments: ${params.argsJson}. ` +
     "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
     `If the cron job is created, reply exactly: ${params.exactReply}. ` +
     "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
     "reply briefly saying that and ask me to retry. No markdown. " +
-    "I will verify externally with the OpenClaw cron CLI."
+    "I will verify externally with the OPNEX cron CLI."
   );
 }
 
-export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
+export async function runOPNEXCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
   const childEnv = { ...env };
   delete childEnv.VITEST;
   delete childEnv.VITEST_MODE;
   delete childEnv.VITEST_POOL_ID;
   delete childEnv.VITEST_WORKER_ID;
-  const { stdout, stderr } = await execFileAsync(process.execPath, ["openclaw.mjs", ...args], {
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["opnex.mjs", ...args], {
     cwd: process.cwd(),
     env: childEnv,
     timeout: 30_000,
@@ -122,7 +122,7 @@ export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessE
   if (!trimmed) {
     throw new Error(
       [
-        `openclaw ${args.join(" ")} produced no JSON stdout`,
+        `opnex ${args.join(" ")} produced no JSON stdout`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
       ]
         .filter(Boolean)
@@ -134,7 +134,7 @@ export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessE
   } catch (error) {
     throw new Error(
       [
-        `openclaw ${args.join(" ")} returned invalid JSON`,
+        `opnex ${args.join(" ")} returned invalid JSON`,
         `stdout: ${trimmed}`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
         error instanceof Error ? `cause: ${error.message}` : undefined,
@@ -153,7 +153,7 @@ export async function assertCronJobVisibleViaCli(params: {
   expectedName: string;
   expectedMessage: string;
 }): Promise<CronListJob | undefined> {
-  const cronList = await runOpenClawCliJson<CronListCliResult>(
+  const cronList = await runOPNEXCliJson<CronListCliResult>(
     [
       "cron",
       "list",

@@ -2,7 +2,7 @@ import {
   resolveAckReaction,
   shouldAckReaction as shouldAckReactionGate,
   type AckReactionScope,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "opnex/plugin-sdk/channel-feedback";
 import {
   buildMentionRegexes,
   formatInboundEnvelope,
@@ -11,25 +11,25 @@ import {
   matchesMentionWithExplicit,
   resolveEnvelopeFormatOptions,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelSourceReplyDeliveryMode } from "openclaw/plugin-sdk/channel-reply-pipeline";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import { resolveControlCommandGate } from "openclaw/plugin-sdk/command-gating";
-import { shouldHandleTextCommands } from "openclaw/plugin-sdk/command-surface";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { finalizeInboundContext } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+} from "opnex/plugin-sdk/channel-inbound";
+import { resolveChannelSourceReplyDeliveryMode } from "opnex/plugin-sdk/channel-reply-pipeline";
+import { hasControlCommand } from "opnex/plugin-sdk/command-detection";
+import { resolveControlCommandGate } from "opnex/plugin-sdk/command-gating";
+import { shouldHandleTextCommands } from "opnex/plugin-sdk/command-surface";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import { finalizeInboundContext } from "opnex/plugin-sdk/reply-dispatch-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
-} from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
+} from "opnex/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "opnex/plugin-sdk/reply-runtime";
+import { logVerbose, shouldLogVerbose } from "opnex/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "opnex/plugin-sdk/security-runtime";
+import { enqueueSystemEvent } from "opnex/plugin-sdk/system-event-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import { reactSlackMessage } from "../../actions.js";
 import { formatSlackFileReference } from "../../file-reference.js";

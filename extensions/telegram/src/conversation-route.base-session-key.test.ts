@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveThreadSessionKeys } from "opnex/plugin-sdk/routing";
 import { describe, expect, it } from "vitest";
 import { resolveTelegramConversationBaseSessionKey } from "./conversation-route.js";
 
 describe("resolveTelegramConversationBaseSessionKey", () => {
-  const cfg: OpenClawConfig = {};
+  const cfg: OPNEXConfig = {};
 
   it("keeps default-account DMs on the route session key", () => {
     expect(

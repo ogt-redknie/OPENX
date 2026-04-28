@@ -1,5 +1,5 @@
 import { normalizeProviderId } from "../agents/provider-id.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { normalizePluginIdScope, serializePluginIdScope } from "./plugin-scope.js";
 import { resolveProviderConfigApiOwnerHint } from "./provider-config-owner.js";
@@ -70,7 +70,7 @@ function projectPluginEntryForProviderHookCache(
 }
 
 function projectPluginsConfigForProviderHookCache(
-  plugins: OpenClawConfig["plugins"],
+  plugins: OPNEXConfig["plugins"],
   fullConfigPluginIds: ReadonlySet<string>,
 ): unknown {
   if (!isRecord(plugins)) {
@@ -94,7 +94,7 @@ function projectPluginsConfigForProviderHookCache(
 
 function resolveProviderOwnerConfigPluginIds(params: {
   providerRefs?: readonly string[];
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): string[] {
@@ -131,7 +131,7 @@ function resolveProviderOwnerConfigPluginIds(params: {
 }
 
 export function resolveProviderHookConfigCacheShape(
-  config: OpenClawConfig | undefined,
+  config: OPNEXConfig | undefined,
   fullConfigPluginIds: readonly string[] | undefined,
 ): unknown {
   if (!config) {
@@ -144,7 +144,7 @@ export function resolveProviderHookConfigCacheShape(
 }
 
 function buildHookProviderCacheKey(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   onlyPluginIds?: string[];
   providerRefs?: string[];
@@ -182,7 +182,7 @@ export const __testing = {
 } as const;
 
 export function resolveProviderPluginsForHooks(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   onlyPluginIds?: string[];
@@ -256,7 +256,7 @@ export function resolveProviderPluginsForHooks(params: {
 
 export function resolveProviderRuntimePlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   applyAutoEnable?: boolean;
@@ -289,7 +289,7 @@ export function resolveProviderRuntimePlugin(params: {
 
 export function resolveProviderHookPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderPlugin | undefined {
@@ -305,7 +305,7 @@ export function resolveProviderHookPlugin(params: {
 
 export function prepareProviderExtraParams(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderPrepareExtraParamsContext;
@@ -315,7 +315,7 @@ export function prepareProviderExtraParams(params: {
 
 export function resolveProviderExtraParamsForTransport(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderExtraParamsForTransportContext;
@@ -325,7 +325,7 @@ export function resolveProviderExtraParamsForTransport(params: {
 
 export function resolveProviderAuthProfileId(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveAuthProfileIdContext;
@@ -336,7 +336,7 @@ export function resolveProviderAuthProfileId(params: {
 
 export function resolveProviderFollowupFallbackRoute(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderFollowupFallbackRouteContext;
@@ -346,7 +346,7 @@ export function resolveProviderFollowupFallbackRoute(params: {
 
 export function wrapProviderStreamFn(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderWrapStreamFnContext;

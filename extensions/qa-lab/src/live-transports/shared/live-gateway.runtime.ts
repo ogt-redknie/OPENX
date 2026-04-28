@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   startQaGatewayChild,
   type QaCliBackendAuthMode,
@@ -41,7 +41,7 @@ export async function startQaLiveLaneGateway(params: {
     requiredPluginIds: readonly string[];
     createGatewayConfig: (params: {
       baseUrl: string;
-    }) => Pick<OpenClawConfig, "channels" | "messages">;
+    }) => Pick<OPNEXConfig, "channels" | "messages">;
   };
   transportBaseUrl: string;
   controlUiAllowedOrigins?: string[];
@@ -52,7 +52,7 @@ export async function startQaLiveLaneGateway(params: {
   thinkingDefault?: QaThinkingLevel;
   claudeCliAuthMode?: QaCliBackendAuthMode;
   controlUiEnabled?: boolean;
-  mutateConfig?: (cfg: OpenClawConfig) => OpenClawConfig;
+  mutateConfig?: (cfg: OPNEXConfig) => OPNEXConfig;
 }) {
   const mock = await startQaProviderServer(params.providerMode);
   try {

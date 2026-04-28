@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/deepseek-provider",
+  "name": "@opnex/deepseek-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw DeepSeek provider plugin",
+  "description": "OPNEX DeepSeek provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

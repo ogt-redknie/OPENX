@@ -2,11 +2,11 @@
  * Security module: token validation, rate limiting, input sanitization, user allowlist.
  */
 
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
+import { safeEqualSecret } from "opnex/plugin-sdk/security-runtime";
 import {
   createFixedWindowRateLimiter,
   type FixedWindowRateLimiter,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "opnex/plugin-sdk/webhook-ingress";
 
 export type DmAuthorizationResult =
   | { allowed: true }

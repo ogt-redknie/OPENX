@@ -11,13 +11,13 @@ export {
 } from "./public-surface-loader.js";
 
 type ProviderRuntimeCatalogModule = Pick<
-  typeof import("openclaw/plugin-sdk/provider-catalog-runtime"),
+  typeof import("opnex/plugin-sdk/provider-catalog-runtime"),
   "augmentModelCatalogWithProviderPlugins" | "resetProviderRuntimeHookCacheForTest"
 >;
 
 export async function importProviderRuntimeCatalogModule(): Promise<ProviderRuntimeCatalogModule> {
   const { augmentModelCatalogWithProviderPlugins, resetProviderRuntimeHookCacheForTest } =
-    await import("openclaw/plugin-sdk/provider-catalog-runtime");
+    await import("opnex/plugin-sdk/provider-catalog-runtime");
   return {
     augmentModelCatalogWithProviderPlugins,
     resetProviderRuntimeHookCacheForTest,

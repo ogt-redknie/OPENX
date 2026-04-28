@@ -17,7 +17,7 @@ import { resolveSelectedAndActiveModel } from "../auto-reply/model-runtime.js";
 import type { ThinkLevel } from "../auto-reply/thinking.js";
 import { toAgentModelListLike } from "../config/model-input.js";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   formatUsageWindowSummary,
   loadProviderUsageSummary,
@@ -101,7 +101,7 @@ function formatSessionTaskLine(sessionKey: string): string | undefined {
 }
 
 function resolveStatusHarnessId(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   provider: string;
   model: string;
   agentId: string;

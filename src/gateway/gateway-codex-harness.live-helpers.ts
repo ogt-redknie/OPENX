@@ -69,7 +69,7 @@ export const EXPECTED_CODEX_MODELS_COMMAND_TEXT = [
   "Active model: `codex/",
   "Current active model is `openai/",
   "Current active model is `codex/",
-  "Current OpenClaw session status reports the active model as:",
+  "Current OPNEX session status reports the active model as:",
 ] as const;
 
 export const EXPECTED_CODEX_STATUS_COMMAND_TEXT = [
@@ -78,8 +78,8 @@ export const EXPECTED_CODEX_STATUS_COMMAND_TEXT = [
   "Model: codex/",
   "Session: `agent:dev:live-codex-harness`",
   "Session: agent:dev:live-codex-harness",
-  "OpenClaw `",
-  "OpenClaw status:",
+  "OPNEX `",
+  "OPNEX status:",
   "Status: running on",
   "model `codex/",
   "session `agent:dev:live-codex-harness`",
@@ -89,9 +89,9 @@ export const EXPECTED_CODEX_STATUS_COMMAND_TEXT = [
 
 export function isExpectedCodexStatusCommandText(text: string): boolean {
   const normalized = text.toLowerCase();
-  const mentionsOpenClawStatus =
-    normalized.includes("openclaw is running on") ||
-    normalized.includes("openclaw status:") ||
+  const mentionsOPNEXStatus =
+    normalized.includes("opnex is running on") ||
+    normalized.includes("opnex status:") ||
     normalized.includes("status: running on");
   const mentionsHarnessSession =
     normalized.includes("session: `agent:dev:live-codex-harness`") ||
@@ -115,7 +115,7 @@ export function isExpectedCodexStatusCommandText(text: string): boolean {
     mentionsModel;
 
   return (
-    isCurrentSessionStatus || (mentionsOpenClawStatus && mentionsHarnessSession && mentionsModel)
+    isCurrentSessionStatus || (mentionsOPNEXStatus && mentionsHarnessSession && mentionsModel)
   );
 }
 
@@ -171,7 +171,7 @@ export function isExpectedCodexModelsCommandText(text: string): boolean {
     normalized.includes("registered models") ||
     normalized.includes("only listed model") ||
     normalized.includes("single codex model") ||
-    normalized.includes("live openclaw config shows") ||
+    normalized.includes("live opnex config shows") ||
     normalized.includes("current gateway config");
   const isSessionConfigFallback =
     (text.includes("`openai/") || text.includes("`codex/")) &&

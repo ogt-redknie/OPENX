@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { OPNEXConfig } from "../runtime-api.js";
 import { type GraphResponse, fetchGraphJson, resolveGraphToken } from "./graph.js";
 
 // ---------------------------------------------------------------------------
@@ -15,7 +15,7 @@ export type GraphTeamsChannel = {
 };
 
 export type ListChannelsMSTeamsParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   teamId: string;
 };
 
@@ -30,7 +30,7 @@ export type ListChannelsMSTeamsResult = {
 };
 
 export type GetChannelInfoMSTeamsParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   teamId: string;
   channelId: string;
 };

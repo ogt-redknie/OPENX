@@ -1,4 +1,4 @@
-import { definePluginEntry } from "openclaw/plugin-sdk/core";
+import { definePluginEntry } from "opnex/plugin-sdk/core";
 
 export default definePluginEntry({
   id: "memory-core",

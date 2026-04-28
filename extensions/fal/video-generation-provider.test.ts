@@ -1,6 +1,6 @@
-import * as providerAuth from "openclaw/plugin-sdk/provider-auth-runtime";
-import * as providerHttp from "openclaw/plugin-sdk/provider-http";
-import { expectExplicitVideoGenerationCapabilities } from "openclaw/plugin-sdk/provider-test-contracts";
+import * as providerAuth from "opnex/plugin-sdk/provider-auth-runtime";
+import * as providerHttp from "opnex/plugin-sdk/provider-http";
+import { expectExplicitVideoGenerationCapabilities } from "opnex/plugin-sdk/provider-test-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   _setFalVideoFetchGuardForTesting,
@@ -196,7 +196,7 @@ describe("fal video generation provider", () => {
     const result = await provider.generateVideo({
       provider: "fal",
       model: "fal-ai/heygen/v2/video-agent",
-      prompt: "A founder explains OpenClaw in a concise studio video",
+      prompt: "A founder explains OPNEX in a concise studio video",
       durationSeconds: 8,
       aspectRatio: "16:9",
       resolution: "720P",
@@ -211,7 +211,7 @@ describe("fal video generation provider", () => {
       }),
     );
     expect(getSubmitBody()).toEqual({
-      prompt: "A founder explains OpenClaw in a concise studio video",
+      prompt: "A founder explains OPNEX in a concise studio video",
     });
     expect(result.metadata).toEqual({
       requestId: "heygen-req-123",
@@ -235,7 +235,7 @@ describe("fal video generation provider", () => {
     const result = await provider.generateVideo({
       provider: "fal",
       model: "bytedance/seedance-2.0/fast/text-to-video",
-      prompt: "A chrome lobster drives a tiny kart across a neon pier",
+      prompt: "A chrome opnex drives a tiny kart across a neon pier",
       durationSeconds: 7,
       aspectRatio: "16:9",
       resolution: "720P",
@@ -250,7 +250,7 @@ describe("fal video generation provider", () => {
       }),
     );
     expect(getSubmitBody()).toEqual({
-      prompt: "A chrome lobster drives a tiny kart across a neon pier",
+      prompt: "A chrome opnex drives a tiny kart across a neon pier",
       aspect_ratio: "16:9",
       resolution: "720p",
       duration: "7",

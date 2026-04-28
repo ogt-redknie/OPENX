@@ -1,5 +1,5 @@
 import type { Bot } from "grammy";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const { loadWebMedia } = vi.hoisted(() => ({
   loadWebMedia: vi.fn(),
@@ -24,20 +24,20 @@ type DeliverWithParams = Omit<
   Partial<Pick<DeliverRepliesParams, "replyToMode" | "textLimit" | "mediaLoader">>;
 type RuntimeStub = Pick<RuntimeEnv, "error" | "log" | "exit">;
 
-vi.mock("openclaw/plugin-sdk/web-media", () => ({
+vi.mock("opnex/plugin-sdk/web-media", () => ({
   loadWebMedia: (...args: unknown[]) => loadWebMedia(...args),
 }));
 
-vi.mock("openclaw/plugin-sdk/hook-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/hook-runtime")>();
+vi.mock("opnex/plugin-sdk/hook-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("opnex/plugin-sdk/hook-runtime")>();
   return {
     ...actual,
     triggerInternalHook,
   };
 });
 
-vi.mock("openclaw/plugin-sdk/plugin-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/plugin-runtime")>();
+vi.mock("opnex/plugin-sdk/plugin-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("opnex/plugin-sdk/plugin-runtime")>();
   return {
     ...actual,
     getGlobalHookRunner: () => messageHookRunner,

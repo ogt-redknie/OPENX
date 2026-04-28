@@ -4,13 +4,13 @@ import path from "node:path";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "opnex/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "opnex/plugin-sdk/plugin-test-runtime";
 import {
   castAgentMessage,
   makeAgentAssistantMessage,
   makeAgentUserMessage,
-} from "openclaw/plugin-sdk/test-fixtures";
+} from "opnex/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 import { mirrorCodexAppServerTranscript } from "./transcript-mirror.js";
 
@@ -24,7 +24,7 @@ afterEach(async () => {
 });
 
 async function createTempSessionFile() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-transcript-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-codex-transcript-"));
   tempDirs.push(dir);
   return path.join(dir, "session.jsonl");
 }

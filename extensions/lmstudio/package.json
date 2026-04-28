@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/lmstudio-provider",
+  "name": "@opnex/lmstudio-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw LM Studio provider plugin",
+  "description": "OPNEX LM Studio provider plugin",
   "type": "module",
   "dependencies": {
     "@mariozechner/pi-ai": "0.70.5"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

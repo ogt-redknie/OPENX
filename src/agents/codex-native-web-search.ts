@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   hasAvailableCodexAuth,
   isCodexNativeSearchEligibleModel,
@@ -26,7 +26,7 @@ export {
 } from "./codex-native-web-search.shared.js";
 
 export function isCodexNativeWebSearchRelevant(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   agentId?: string;
   agentDir?: string;
 }): boolean {

@@ -24,12 +24,12 @@ const {
   mockRuntimeResolveMarkdownTableMode: vi.fn(() => "preserve"),
 }));
 
-vi.mock("openclaw/plugin-sdk/markdown-table-runtime", () => ({
+vi.mock("opnex/plugin-sdk/markdown-table-runtime", () => ({
   resolveMarkdownTableMode: mockResolveMarkdownTableMode,
 }));
 
-vi.mock("openclaw/plugin-sdk/text-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/text-runtime")>();
+vi.mock("opnex/plugin-sdk/text-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("opnex/plugin-sdk/text-runtime")>();
   return {
     ...actual,
     convertMarkdownTables: mockConvertMarkdownTables,
@@ -495,7 +495,7 @@ describe("resolveFeishuCardTemplate", () => {
   });
 
   it("drops unsupported free-form identity themes", () => {
-    expect(resolveFeishuCardTemplate("space lobster")).toBeUndefined();
+    expect(resolveFeishuCardTemplate("space opnex")).toBeUndefined();
   });
 });
 
@@ -518,7 +518,7 @@ describe("buildStructuredCard", () => {
     const card = buildStructuredCard("hello", {
       header: {
         title: "Agent",
-        template: "space lobster",
+        template: "space opnex",
       },
     });
 

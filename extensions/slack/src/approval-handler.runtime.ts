@@ -5,13 +5,13 @@ import type {
   ExecApprovalExpiredView,
   ExecApprovalPendingView,
   ExecApprovalResolvedView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
-import { buildApprovalInteractiveReplyFromActionDescriptors } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalRequest } from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { logError, normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "opnex/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "opnex/plugin-sdk/approval-native-runtime";
+import { buildApprovalInteractiveReplyFromActionDescriptors } from "opnex/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalRequest } from "opnex/plugin-sdk/approval-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { logError, normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   isSlackExecApprovalClientEnabled,
   shouldHandleSlackExecApprovalRequest,
@@ -31,7 +31,7 @@ type SlackPendingDelivery = {
 };
 
 type SlackExecApprovalConfig = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>["execApprovals"]
+  NonNullable<NonNullable<OPNEXConfig["channels"]>["slack"]>["execApprovals"]
 >;
 
 export type SlackApprovalHandlerContext = {

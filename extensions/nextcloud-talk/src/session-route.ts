@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { buildOutboundBaseSessionKey } from "openclaw/plugin-sdk/routing";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { buildOutboundBaseSessionKey } from "opnex/plugin-sdk/routing";
 import { stripNextcloudTalkTargetPrefix } from "./normalize.js";
 
 type NextcloudTalkOutboundSessionRouteParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

@@ -24,14 +24,14 @@ export const SECRETS_RUNTIME_INTEGRATION_TIMEOUT_MS = 300_000;
 
 export function beginSecretsRuntimeIsolationForTest(): SecretsRuntimeEnvSnapshot {
   const envSnapshot = captureEnv([
-    "OPENCLAW_BUNDLED_PLUGINS_DIR",
-    "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-    "OPENCLAW_DISABLE_PLUGIN_DISCOVERY_CACHE",
-    "OPENCLAW_VERSION",
+    "OPNEX_BUNDLED_PLUGINS_DIR",
+    "OPNEX_DISABLE_BUNDLED_PLUGINS",
+    "OPNEX_DISABLE_PLUGIN_DISCOVERY_CACHE",
+    "OPNEX_VERSION",
   ]);
-  delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-  process.env.OPENCLAW_DISABLE_PLUGIN_DISCOVERY_CACHE = "1";
-  delete process.env.OPENCLAW_VERSION;
+  delete process.env.OPNEX_BUNDLED_PLUGINS_DIR;
+  process.env.OPNEX_DISABLE_PLUGIN_DISCOVERY_CACHE = "1";
+  delete process.env.OPNEX_VERSION;
   return envSnapshot;
 }
 

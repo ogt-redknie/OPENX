@@ -1,11 +1,11 @@
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-types";
+import type { MarkdownTableMode } from "opnex/plugin-sdk/config-types";
 import {
   markdownToIR,
   normalizeLowercaseStringOrEmpty,
   type MarkdownIR,
   type MarkdownStyle,
   renderMarkdownIRChunksWithinLimit,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 
 type SignalTextStyle = "BOLD" | "ITALIC" | "STRIKETHROUGH" | "MONOSPACE" | "SPOILER";
 

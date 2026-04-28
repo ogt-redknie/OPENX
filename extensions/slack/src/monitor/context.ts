@@ -1,23 +1,23 @@
 import type { App } from "@slack/bolt";
-import { formatAllowlistMatchMeta } from "openclaw/plugin-sdk/allow-from";
+import { formatAllowlistMatchMeta } from "opnex/plugin-sdk/allow-from";
 import type {
-  OpenClawConfig,
+  OPNEXConfig,
   SlackReactionNotificationMode,
-} from "openclaw/plugin-sdk/config-types";
-import type { SessionScope } from "openclaw/plugin-sdk/config-types";
-import type { DmPolicy, GroupPolicy } from "openclaw/plugin-sdk/config-types";
-import { createDedupeCache } from "openclaw/plugin-sdk/dedupe-runtime";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/config-types";
+import type { SessionScope } from "opnex/plugin-sdk/config-types";
+import type { DmPolicy, GroupPolicy } from "opnex/plugin-sdk/config-types";
+import { createDedupeCache } from "opnex/plugin-sdk/dedupe-runtime";
+import { resolveDefaultAgentId } from "opnex/plugin-sdk/agent-runtime";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import type { HistoryEntry } from "opnex/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "opnex/plugin-sdk/routing";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { getChildLogger } from "opnex/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { SlackMessageEvent } from "../types.js";
 import { normalizeAllowList, normalizeAllowListLower, normalizeSlackSlug } from "./allow-list.js";
 import type { SlackChannelConfigEntries } from "./channel-config.js";
@@ -33,7 +33,7 @@ export {
 } from "./channel-type.js";
 
 export type SlackMonitorContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   botToken: string;
   app: App;
@@ -66,7 +66,7 @@ export type SlackMonitorContext = {
   threadHistoryScope: "thread" | "channel";
   threadInheritParent: boolean;
   threadRequireExplicitMention: boolean;
-  slashCommand: Required<import("openclaw/plugin-sdk/config-types").SlackSlashCommandConfig>;
+  slashCommand: Required<import("opnex/plugin-sdk/config-types").SlackSlashCommandConfig>;
   textLimit: number;
   ackReactionScope: string;
   typingReaction: string;
@@ -102,7 +102,7 @@ export type SlackMonitorContext = {
 };
 
 export function createSlackMonitorContext(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   botToken: string;
   app: App;

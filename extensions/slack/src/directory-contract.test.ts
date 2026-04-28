@@ -1,6 +1,6 @@
-import type { BaseProbeResult } from "openclaw/plugin-sdk/channel-contract";
-import { expectDirectoryIds } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { BaseProbeResult } from "opnex/plugin-sdk/channel-contract";
+import { expectDirectoryIds } from "opnex/plugin-sdk/channel-test-helpers";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   listSlackDirectoryGroupsFromConfig,
@@ -24,7 +24,7 @@ describe("Slack directory contract", () => {
           channels: { C111: { users: ["U777"] } },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as OPNEXConfig;
 
     await expectDirectoryIds(
       listSlackDirectoryPeersFromConfig,
@@ -50,7 +50,7 @@ describe("Slack directory contract", () => {
           channels: { C111: {} },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as OPNEXConfig;
 
     await expectDirectoryIds(listSlackDirectoryPeersFromConfig, cfg, ["user:u123"]);
     await expectDirectoryIds(listSlackDirectoryGroupsFromConfig, cfg, ["channel:c111"]);
@@ -66,7 +66,7 @@ describe("Slack directory contract", () => {
           dms: { U300: {} },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as OPNEXConfig;
 
     const peers = await listSlackDirectoryPeersFromConfig({
       cfg,

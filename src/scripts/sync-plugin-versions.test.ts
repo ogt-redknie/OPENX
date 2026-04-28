@@ -16,23 +16,23 @@ describe("syncPluginVersions", () => {
     cleanupTempDirs(tempDirs);
   });
 
-  it("preserves workspace openclaw devDependencies and plugin host floors", () => {
-    const rootDir = makeTempDir(tempDirs, "openclaw-sync-plugin-versions-");
+  it("preserves workspace opnex devDependencies and plugin host floors", () => {
+    const rootDir = makeTempDir(tempDirs, "opnex-sync-plugin-versions-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "openclaw",
+      name: "opnex",
       version: "2026.4.1",
     });
     writeJson(path.join(rootDir, "extensions/bluebubbles/package.json"), {
-      name: "@openclaw/bluebubbles",
+      name: "@opnex/bluebubbles",
       version: "2026.3.30",
       devDependencies: {
-        openclaw: "workspace:*",
+        opnex: "workspace:*",
       },
       peerDependencies: {
-        openclaw: ">=2026.3.30",
+        opnex: ">=2026.3.30",
       },
-      openclaw: {
+      opnex: {
         install: {
           minHostVersion: ">=2026.3.30",
         },
@@ -40,7 +40,7 @@ describe("syncPluginVersions", () => {
           pluginApi: ">=2026.3.30",
         },
         build: {
-          openclawVersion: "2026.3.30",
+          opnexVersion: "2026.3.30",
         },
       },
     });
@@ -52,7 +52,7 @@ describe("syncPluginVersions", () => {
       version?: string;
       devDependencies?: Record<string, string>;
       peerDependencies?: Record<string, string>;
-      openclaw?: {
+      opnex?: {
         install?: {
           minHostVersion?: string;
         };
@@ -60,17 +60,17 @@ describe("syncPluginVersions", () => {
           pluginApi?: string;
         };
         build?: {
-          openclawVersion?: string;
+          opnexVersion?: string;
         };
       };
     };
 
-    expect(summary.updated).toContain("@openclaw/bluebubbles");
+    expect(summary.updated).toContain("@opnex/bluebubbles");
     expect(updatedPackage.version).toBe("2026.4.1");
-    expect(updatedPackage.devDependencies?.openclaw).toBe("workspace:*");
-    expect(updatedPackage.peerDependencies?.openclaw).toBe(">=2026.4.1");
-    expect(updatedPackage.openclaw?.install?.minHostVersion).toBe(">=2026.3.30");
-    expect(updatedPackage.openclaw?.compat?.pluginApi).toBe(">=2026.4.1");
-    expect(updatedPackage.openclaw?.build?.openclawVersion).toBe("2026.4.1");
+    expect(updatedPackage.devDependencies?.opnex).toBe("workspace:*");
+    expect(updatedPackage.peerDependencies?.opnex).toBe(">=2026.4.1");
+    expect(updatedPackage.opnex?.install?.minHostVersion).toBe(">=2026.3.30");
+    expect(updatedPackage.opnex?.compat?.pluginApi).toBe(">=2026.4.1");
+    expect(updatedPackage.opnex?.build?.opnexVersion).toBe("2026.4.1");
   });
 });

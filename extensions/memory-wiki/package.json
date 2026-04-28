@@ -1,26 +1,26 @@
 {
-  "name": "@openclaw/memory-wiki",
+  "name": "@opnex/memory-wiki",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw persistent wiki plugin",
+  "description": "OPNEX persistent wiki plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.33",
     "yaml": "^2.8.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.25"
+    "opnex": ">=2026.4.25"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,5 +1,5 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createMockCommandInteraction as createInteraction } from "./native-command.test-helpers.js";
 import { createNoopThreadBindingManager } from "./thread-bindings.js";
@@ -10,9 +10,9 @@ const runtimeModuleMocks = vi.hoisted(() => ({
   resolveDirectStatusReplyForSession: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-dispatch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/reply-dispatch-runtime")>(
-    "openclaw/plugin-sdk/reply-dispatch-runtime",
+vi.mock("opnex/plugin-sdk/reply-dispatch-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/reply-dispatch-runtime")>(
+    "opnex/plugin-sdk/reply-dispatch-runtime",
   );
   return {
     ...actual,
@@ -21,19 +21,19 @@ vi.mock("openclaw/plugin-sdk/reply-dispatch-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/command-status-runtime", () => ({
+vi.mock("opnex/plugin-sdk/command-status-runtime", () => ({
   resolveDirectStatusReplyForSession: (...args: unknown[]) =>
     runtimeModuleMocks.resolveDirectStatusReplyForSession(...args),
 }));
 
-vi.mock("openclaw/plugin-sdk/web-media", () => ({
+vi.mock("opnex/plugin-sdk/web-media", () => ({
   loadWebMedia: (...args: unknown[]) => runtimeModuleMocks.loadWebMedia(...args),
 }));
 
 let createDiscordNativeCommand: typeof import("./native-command.js").createDiscordNativeCommand;
 let discordNativeCommandTesting: typeof import("./native-command.js").__testing;
 
-function createConfig(params?: { requireMention?: boolean }): OpenClawConfig {
+function createConfig(params?: { requireMention?: boolean }): OPNEXConfig {
   return {
     commands: {
       useAccessGroups: false,
@@ -54,10 +54,10 @@ function createConfig(params?: { requireMention?: boolean }): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
-async function createStatusCommand(cfg: OpenClawConfig) {
+async function createStatusCommand(cfg: OPNEXConfig) {
   return createDiscordNativeCommand({
     command: {
       name: "status",
@@ -101,7 +101,7 @@ function setDefaultRouteState() {
 }
 
 function firstStatusCall(): {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   sessionKey: string;
   channel: string;
   isGroup: boolean;
@@ -112,7 +112,7 @@ function firstStatusCall(): {
     throw new Error("expected resolveDirectStatusReplyForSession to be called");
   }
   return call as {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     sessionKey: string;
     channel: string;
     isGroup: boolean;
@@ -144,7 +144,7 @@ describe("discord native /status", () => {
       fileName: "status.png",
     });
     discordNativeCommandTesting.setDispatchReplyWithDispatcher(
-      runtimeModuleMocks.dispatchReplyWithDispatcher as typeof import("openclaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithDispatcher,
+      runtimeModuleMocks.dispatchReplyWithDispatcher as typeof import("opnex/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithDispatcher,
     );
     setDefaultRouteState();
   });

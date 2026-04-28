@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
-  loadOpenClawProviderIndex,
+  loadOPNEXProviderIndex,
   normalizeModelCatalogProviderId,
   planProviderIndexModelCatalogRows,
 } from "../../model-catalog/index.js";
@@ -9,12 +9,12 @@ import { normalizePluginsConfig, resolveEffectiveEnableState } from "../../plugi
 
 export function loadProviderIndexCatalogRowsForList(params: {
   providerFilter?: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 }): readonly NormalizedModelCatalogRow[] {
   const providerFilter = params.providerFilter
     ? normalizeModelCatalogProviderId(params.providerFilter)
     : undefined;
-  const index = loadOpenClawProviderIndex();
+  const index = loadOPNEXProviderIndex();
   return planProviderIndexModelCatalogRows({
     index,
     ...(providerFilter ? { providerFilter } : {}),

@@ -1,8 +1,8 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/channel-plugin-common";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/channel-plugin-common";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalStringifiedId,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import {
   autoBindSpawnedDiscordSubagent,
@@ -76,7 +76,7 @@ function normalizeThreadBindingTargetKind(raw?: string): ThreadBindingTargetKind
   return undefined;
 }
 
-function resolveThreadBindingFlags(api: OpenClawPluginApi, accountId?: string) {
+function resolveThreadBindingFlags(api: OPNEXPluginApi, accountId?: string) {
   const account = resolveDiscordAccount({
     cfg: api.config,
     accountId,
@@ -98,7 +98,7 @@ function resolveThreadBindingFlags(api: OpenClawPluginApi, accountId?: string) {
 }
 
 export async function handleDiscordSubagentSpawning(
-  api: OpenClawPluginApi,
+  api: OPNEXPluginApi,
   event: DiscordSubagentSpawningEvent,
 ): Promise<DiscordSubagentSpawningResult> {
   if (!event.threadRequested) {

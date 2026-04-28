@@ -1,8 +1,8 @@
 export {
   implicitMentionKindWhen,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-mention-gating";
-export { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-export { recordPendingHistoryEntryIfEnabled } from "openclaw/plugin-sdk/reply-history";
-export { parseActivationCommand } from "openclaw/plugin-sdk/group-activation";
+} from "opnex/plugin-sdk/channel-mention-gating";
+export { hasControlCommand } from "opnex/plugin-sdk/command-detection";
+export { recordPendingHistoryEntryIfEnabled } from "opnex/plugin-sdk/reply-history";
+export { parseActivationCommand } from "opnex/plugin-sdk/group-activation";
 export { normalizeE164 } from "../../text-runtime.js";

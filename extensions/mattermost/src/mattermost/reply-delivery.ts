@@ -1,11 +1,11 @@
-import type { OpenClawConfig, PluginRuntime } from "openclaw/plugin-sdk/core";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+import type { OPNEXConfig, PluginRuntime } from "opnex/plugin-sdk/core";
+import { getAgentScopedMediaLocalRoots } from "opnex/plugin-sdk/media-runtime";
 import {
   deliverTextOrMediaReply,
   isReasoningReplyPayload,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "opnex/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
 
 type MarkdownTableMode = Parameters<PluginRuntime["channel"]["text"]["convertMarkdownTables"]>[1];
 
@@ -13,7 +13,7 @@ type SendMattermostMessage = (
   to: string,
   text: string,
   opts: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     accountId?: string;
     mediaUrl?: string;
     mediaLocalRoots?: readonly string[];
@@ -23,7 +23,7 @@ type SendMattermostMessage = (
 
 export async function deliverMattermostReplyPayload(params: {
   core: PluginRuntime;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   payload: ReplyPayload;
   to: string;
   accountId: string;

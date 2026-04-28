@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-const BUNDLED_RUNTIME_MIRROR_METADATA_FILE = ".openclaw-runtime-mirror.json";
+const BUNDLED_RUNTIME_MIRROR_METADATA_FILE = ".opnex-runtime-mirror.json";
 const BUNDLED_RUNTIME_MIRROR_METADATA_VERSION = 1;
 
 type BundledRuntimeMirrorMetadata = {
@@ -135,7 +135,7 @@ function copyBundledRuntimeMirrorFileAtomic(sourcePath: string, targetPath: stri
 function createBundledRuntimeMirrorTempPath(targetPath: string): string {
   return path.join(
     path.dirname(targetPath),
-    `.openclaw-mirror-${process.pid}-${process.hrtime.bigint()}-${path.basename(targetPath)}.tmp`,
+    `.opnex-mirror-${process.pid}-${process.hrtime.bigint()}-${path.basename(targetPath)}.tmp`,
   );
 }
 

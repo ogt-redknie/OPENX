@@ -1,17 +1,17 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   resolveRuntimeConversationBindingRoute,
   type RuntimeConversationBindingRouteResult,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { resolveAgentRoute } from "opnex/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "opnex/plugin-sdk/routing";
 import { resolveSlackReplyToMode } from "../../account-reply-mode.js";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import { resolveSlackThreadContext } from "../../threading.js";
 import type { SlackMessageEvent } from "../../types.js";
 
 export type SlackRoutingContextDeps = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   teamId: string;
   threadInheritParent: boolean;
   threadHistoryScope: "thread" | "channel";

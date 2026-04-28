@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, info, success } from "openclaw/plugin-sdk/runtime-env";
-import { defaultRuntime, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { logInfo } from "openclaw/plugin-sdk/text-runtime";
+import { getRuntimeConfig } from "opnex/plugin-sdk/runtime-config-snapshot";
+import { danger, info, success } from "opnex/plugin-sdk/runtime-env";
+import { defaultRuntime, type RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
+import { logInfo } from "opnex/plugin-sdk/text-runtime";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import {
   closeWaSocket,

@@ -38,22 +38,22 @@ export {
   ssrfPolicyFromAllowPrivateNetwork,
   type LookupFn,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "opnex/plugin-sdk/ssrf-runtime";
 export {
   setMatrixThreadBindingIdleTimeoutBySessionKey,
   setMatrixThreadBindingMaxAgeBySessionKey,
 } from "./src/matrix/thread-bindings-shared.js";
 export { setMatrixRuntime } from "./src/runtime.js";
-export { writeJsonFileAtomically } from "openclaw/plugin-sdk/json-store";
+export { writeJsonFileAtomically } from "opnex/plugin-sdk/json-store";
 export type {
   ChannelDirectoryEntry,
   ChannelMessageActionContext,
-} from "openclaw/plugin-sdk/channel-contract";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-export { formatZonedTimestamp } from "openclaw/plugin-sdk/time-runtime";
-export type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-export type { WizardPrompter } from "openclaw/plugin-sdk/setup";
+} from "opnex/plugin-sdk/channel-contract";
+export type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+export { formatZonedTimestamp } from "opnex/plugin-sdk/time-runtime";
+export type { PluginRuntime, RuntimeLogger } from "opnex/plugin-sdk/plugin-runtime";
+export type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
+export type { WizardPrompter } from "opnex/plugin-sdk/setup";
 
 export function chunkTextForOutbound(text: string, limit: number): string[] {
   const chunks: string[] = [];

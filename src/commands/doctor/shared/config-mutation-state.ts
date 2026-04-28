@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../../config/types.opnex.js";
 
 export type DoctorConfigMutationState = {
-  cfg: OpenClawConfig;
-  candidate: OpenClawConfig;
+  cfg: OPNEXConfig;
+  candidate: OPNEXConfig;
   pendingChanges: boolean;
   fixHints: string[];
 };
 
 export type DoctorConfigMutationResult = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   changes: string[];
 };
 

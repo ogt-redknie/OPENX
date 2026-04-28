@@ -2,7 +2,7 @@ import { createAllowlistProviderRestrictSendersWarningCollector } from "../chann
 import type { ChannelSecurityAdapter } from "../channels/plugins/types.adapters.js";
 import { collectProviderDangerousNameMatchingScopes } from "../config/dangerous-name-matching.js";
 import type { GroupPolicy } from "../config/types.base.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { sanitizeForLog } from "../terminal/ansi.js";
 import { createScopedDmSecurityResolver } from "./channel-config-helpers.js";
 /** Shared policy warnings and DM/group policy helpers for channel plugins. */
@@ -116,7 +116,7 @@ export function createDangerousNameMatchingMutableAllowlistWarningCollector(para
     dangerousFlagPath: string;
   }) => ChannelMutableAllowlistCandidate[];
 }) {
-  return ({ cfg }: { cfg: OpenClawConfig }): string[] => {
+  return ({ cfg }: { cfg: OPNEXConfig }): string[] => {
     const hits: ChannelMutableAllowlistHit[] = [];
     for (const scope of collectProviderDangerousNameMatchingScopes(cfg, params.channel)) {
       if (scope.dangerousNameMatchingEnabled) {
@@ -156,7 +156,7 @@ export function createRestrictSendersChannelSecurity<
   groupPolicyPath: string;
   groupAllowFromPath: string;
   mentionGated?: boolean;
-  providerConfigPresent?: (cfg: OpenClawConfig) => boolean;
+  providerConfigPresent?: (cfg: OPNEXConfig) => boolean;
   resolveFallbackAccountId?: (account: ResolvedAccount) => string | null | undefined;
   defaultDmPolicy?: string;
   allowFromPathSuffix?: string;

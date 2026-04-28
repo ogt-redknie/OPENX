@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/diffs",
+  "name": "@opnex/diffs",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw diff viewer plugin",
+  "description": "OPNEX diff viewer plugin",
   "type": "module",
   "scripts": {
     "build:viewer": "bun build src/viewer-client.ts --target browser --format esm --minify --outfile assets/viewer-runtime.js"
@@ -14,9 +14,9 @@
     "typebox": "1.1.33"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "bundle": {
       "stageRuntimeDependencies": true
     },

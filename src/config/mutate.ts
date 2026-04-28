@@ -27,7 +27,7 @@ import {
   type ConfigWriteAfterWrite,
   type ConfigWriteFollowUp,
 } from "./runtime-snapshot.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, OPNEXConfig } from "./types.js";
 import { validateConfigObjectWithPlugins } from "./validation.js";
 
 export type ConfigMutationBase = "runtime" | "source";
@@ -46,14 +46,14 @@ export type ConfigReplaceResult = {
   path: string;
   previousHash: string | null;
   snapshot: ConfigFileSnapshot;
-  nextConfig: OpenClawConfig;
+  nextConfig: OPNEXConfig;
   afterWrite: ConfigWriteAfterWrite;
   followUp: ConfigWriteFollowUp;
 };
 
 type ConfigMutationIO = {
   readConfigFileSnapshotForWrite: typeof readConfigFileSnapshotForWrite;
-  writeConfigFile: (cfg: OpenClawConfig, options?: ConfigWriteOptions) => Promise<unknown>;
+  writeConfigFile: (cfg: OPNEXConfig, options?: ConfigWriteOptions) => Promise<unknown>;
 };
 
 function assertBaseHashMatches(snapshot: ConfigFileSnapshot, expectedHash?: string): string | null {
@@ -131,7 +131,7 @@ async function writeJsonFileAtomic(filePath: string, value: unknown): Promise<vo
 
 async function tryWriteSingleTopLevelIncludeMutation(params: {
   snapshot: ConfigFileSnapshot;
-  nextConfig: OpenClawConfig;
+  nextConfig: OPNEXConfig;
   afterWrite?: ConfigWriteOptions["afterWrite"];
   writeOptions?: ConfigWriteOptions;
   io?: ConfigMutationIO;
@@ -222,7 +222,7 @@ async function tryWriteSingleTopLevelIncludeMutation(params: {
 }
 
 export async function replaceConfigFile(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: OPNEXConfig;
   baseHash?: string;
   snapshot?: ConfigFileSnapshot;
   afterWrite?: ConfigWriteOptions["afterWrite"];
@@ -270,7 +270,7 @@ export async function mutateConfigFile<T = void>(params: {
   writeOptions?: ConfigWriteOptions;
   io?: ConfigMutationIO;
   mutate: (
-    draft: OpenClawConfig,
+    draft: OPNEXConfig,
     context: { snapshot: ConfigFileSnapshot; previousHash: string | null },
   ) => Promise<T | void> | T | void;
 }): Promise<ConfigReplaceResult & { result: T | undefined }> {
@@ -279,7 +279,7 @@ export async function mutateConfigFile<T = void>(params: {
   )();
   const previousHash = assertBaseHashMatches(snapshot, params.baseHash);
   const baseConfig = params.base === "runtime" ? snapshot.runtimeConfig : snapshot.sourceConfig;
-  const draft = structuredClone(baseConfig) as OpenClawConfig;
+  const draft = structuredClone(baseConfig) as OPNEXConfig;
   const result = (await params.mutate(draft, { snapshot, previousHash })) as T | undefined;
   const afterWrite = resolveConfigWriteAfterWrite(
     params.afterWrite ?? params.writeOptions?.afterWrite,

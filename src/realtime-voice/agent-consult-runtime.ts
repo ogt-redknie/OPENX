@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { RunEmbeddedPiAgentParams } from "../agents/pi-embedded-runner/run/params.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { RuntimeLogger, PluginRuntimeCore } from "../plugins/runtime/types-core.js";
 import {
   buildRealtimeVoiceAgentConsultPrompt,
@@ -24,7 +24,7 @@ function resolveRealtimeVoiceAgentSandboxSessionKey(agentId: string, sessionKey:
 }
 
 export async function consultRealtimeVoiceAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentRuntime: RealtimeVoiceAgentConsultRuntime;
   logger: Pick<RuntimeLogger, "warn">;
   sessionKey: string;

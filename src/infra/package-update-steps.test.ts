@@ -13,7 +13,7 @@ async function writePackageRoot(packageRoot: string, version: string): Promise<v
   await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
   await fs.writeFile(
     path.join(packageRoot, "package.json"),
-    JSON.stringify({ name: "openclaw", version }),
+    JSON.stringify({ name: "opnex", version }),
     "utf8",
   );
   await fs.writeFile(path.join(packageRoot, "dist", "index.js"), "export {};\n", "utf8");
@@ -25,7 +25,7 @@ function createNpmTarget(globalRoot: string): ResolvedGlobalInstallTarget {
     manager: "npm",
     command: "npm",
     globalRoot,
-    packageRoot: path.join(globalRoot, "openclaw"),
+    packageRoot: path.join(globalRoot, "opnex"),
   };
 }
 
@@ -40,10 +40,10 @@ function createRootRunner(globalRoot: string): CommandRunner {
 
 describe("runGlobalPackageUpdateSteps", () => {
   it("installs npm updates into a clean staged prefix before swapping the global package", async () => {
-    await withTempDir({ prefix: "openclaw-package-update-staged-" }, async (base) => {
+    await withTempDir({ prefix: "opnex-package-update-staged-" }, async (base) => {
       const prefix = path.join(base, "prefix");
       const globalRoot = path.join(prefix, "lib", "node_modules");
-      const packageRoot = path.join(globalRoot, "openclaw");
+      const packageRoot = path.join(globalRoot, "opnex");
       await writePackageRoot(packageRoot, "1.0.0");
       await fs.mkdir(path.join(packageRoot, "dist", "extensions", "qa-channel"), {
         recursive: true,
@@ -68,13 +68,13 @@ describe("runGlobalPackageUpdateSteps", () => {
           }
           expect(path.dirname(stagePrefix)).toBe(globalRoot);
           await writePackageRoot(
-            path.join(stagePrefix, "lib", "node_modules", "openclaw"),
+            path.join(stagePrefix, "lib", "node_modules", "opnex"),
             "2.0.0",
           );
           await fs.mkdir(path.join(stagePrefix, "bin"), { recursive: true });
           await fs.symlink(
-            "../lib/node_modules/openclaw/dist/index.js",
-            path.join(stagePrefix, "bin", "openclaw"),
+            "../lib/node_modules/opnex/dist/index.js",
+            path.join(stagePrefix, "bin", "opnex"),
           );
           return {
             name,
@@ -88,8 +88,8 @@ describe("runGlobalPackageUpdateSteps", () => {
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createNpmTarget(globalRoot),
-        installSpec: "openclaw@2.0.0",
-        packageName: "openclaw",
+        installSpec: "opnex@2.0.0",
+        packageName: "opnex",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
         runStep,
@@ -109,24 +109,24 @@ describe("runGlobalPackageUpdateSteps", () => {
       await expect(
         fs.access(path.join(packageRoot, "dist", "extensions", "qa-channel", "runtime-api.js")),
       ).rejects.toMatchObject({ code: "ENOENT" });
-      await expect(fs.readlink(path.join(prefix, "bin", "openclaw"))).resolves.toBe(
-        "../lib/node_modules/openclaw/dist/index.js",
+      await expect(fs.readlink(path.join(prefix, "bin", "opnex"))).resolves.toBe(
+        "../lib/node_modules/opnex/dist/index.js",
       );
     });
   });
 
   it("does not run post-verify work when staged npm verification fails", async () => {
-    await withTempDir({ prefix: "openclaw-package-update-verify-" }, async (base) => {
+    await withTempDir({ prefix: "opnex-package-update-verify-" }, async (base) => {
       const prefix = path.join(base, "prefix");
       const globalRoot = path.join(prefix, "lib", "node_modules");
-      const packageRoot = path.join(globalRoot, "openclaw");
+      const packageRoot = path.join(globalRoot, "opnex");
       await writePackageRoot(packageRoot, "1.0.0");
       const postVerifyStep = vi.fn();
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createNpmTarget(globalRoot),
-        installSpec: "openclaw@2.0.0",
-        packageName: "openclaw",
+        installSpec: "opnex@2.0.0",
+        packageName: "opnex",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
         runStep: async ({ name, argv, cwd }) => {
@@ -136,7 +136,7 @@ describe("runGlobalPackageUpdateSteps", () => {
             throw new Error("missing staged prefix");
           }
           await writePackageRoot(
-            path.join(stagePrefix, "lib", "node_modules", "openclaw"),
+            path.join(stagePrefix, "lib", "node_modules", "opnex"),
             "1.5.0",
           );
           return {
@@ -171,19 +171,19 @@ describe("runGlobalPackageUpdateSteps", () => {
   it.runIf(process.platform !== "win32")(
     "restores the existing bin shim when staged shim replacement fails",
     async () => {
-      await withTempDir({ prefix: "openclaw-package-update-shim-rollback-" }, async (base) => {
+      await withTempDir({ prefix: "opnex-package-update-shim-rollback-" }, async (base) => {
         const prefix = path.join(base, "prefix");
         const globalRoot = path.join(prefix, "lib", "node_modules");
-        const packageRoot = path.join(globalRoot, "openclaw");
-        const targetShim = path.join(prefix, "bin", "openclaw");
+        const packageRoot = path.join(globalRoot, "opnex");
+        const targetShim = path.join(prefix, "bin", "opnex");
         await writePackageRoot(packageRoot, "1.0.0");
         await fs.mkdir(path.dirname(targetShim), { recursive: true });
         await fs.writeFile(targetShim, "old shim\n", "utf8");
 
         const result = await runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
-          packageName: "openclaw",
+          installSpec: "opnex@2.0.0",
+          packageName: "opnex",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
           runStep: async ({ name, argv, cwd }) => {
@@ -193,10 +193,10 @@ describe("runGlobalPackageUpdateSteps", () => {
               throw new Error("missing staged prefix");
             }
             await writePackageRoot(
-              path.join(stagePrefix, "lib", "node_modules", "openclaw"),
+              path.join(stagePrefix, "lib", "node_modules", "opnex"),
               "2.0.0",
             );
-            const stagedShim = path.join(stagePrefix, "bin", "openclaw");
+            const stagedShim = path.join(stagePrefix, "bin", "opnex");
             await fs.mkdir(path.dirname(stagedShim), { recursive: true });
             await fs.writeFile(stagedShim, "new shim\n", "utf8");
             await fs.chmod(stagedShim, 0);
@@ -223,18 +223,18 @@ describe("runGlobalPackageUpdateSteps", () => {
   );
 
   it("cleans the staged npm prefix when the install command throws", async () => {
-    await withTempDir({ prefix: "openclaw-package-update-cleanup-" }, async (base) => {
+    await withTempDir({ prefix: "opnex-package-update-cleanup-" }, async (base) => {
       const prefix = path.join(base, "prefix");
       const globalRoot = path.join(prefix, "lib", "node_modules");
-      const packageRoot = path.join(globalRoot, "openclaw");
+      const packageRoot = path.join(globalRoot, "opnex");
       await writePackageRoot(packageRoot, "1.0.0");
 
       let stagePrefix: string | undefined;
       await expect(
         runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
-          packageName: "openclaw",
+          installSpec: "opnex@2.0.0",
+          packageName: "opnex",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
           runStep: async ({ argv }) => {

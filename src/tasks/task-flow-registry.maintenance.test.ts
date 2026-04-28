@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withOPNEXTestState } from "../test-utils/opnex-test-state.js";
 import { createRunningTaskRun } from "./task-executor.js";
 import {
   createManagedTaskFlow,
@@ -17,15 +17,15 @@ import {
   resetTaskRegistryForTests,
 } from "./task-registry.js";
 
-const ORIGINAL_STATE_DIR = process.env.OPENCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.OPNEX_STATE_DIR;
 
 async function withTaskFlowMaintenanceStateDir(
   run: (root: string) => Promise<void>,
 ): Promise<void> {
-  await withOpenClawTestState(
+  await withOPNEXTestState(
     {
       layout: "state-only",
-      prefix: "openclaw-task-flow-maintenance-",
+      prefix: "opnex-task-flow-maintenance-",
     },
     async (state) => {
       resetTaskRegistryDeliveryRuntimeForTests();
@@ -45,9 +45,9 @@ async function withTaskFlowMaintenanceStateDir(
 describe("task-flow-registry maintenance", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.OPNEX_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.OPNEX_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetTaskRegistryDeliveryRuntimeForTests();
     resetTaskRegistryForTests();

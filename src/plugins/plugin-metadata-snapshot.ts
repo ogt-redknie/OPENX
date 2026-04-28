@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveInstalledPluginIndexPolicyHash } from "./installed-plugin-index-policy.js";
 import type { InstalledPluginIndex } from "./installed-plugin-index.js";
 import {
@@ -36,7 +36,7 @@ function indexesMatch(
 
 export function isPluginMetadataSnapshotCompatible(params: {
   snapshot: Pick<PluginMetadataSnapshot, "index" | "policyHash" | "workspaceDir">;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   workspaceDir?: string;
   index?: InstalledPluginIndex;
 }): boolean {

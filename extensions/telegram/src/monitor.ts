@@ -1,13 +1,13 @@
 import type { RunOptions } from "@grammyjs/runner";
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveAgentMaxConcurrent } from "openclaw/plugin-sdk/model-session-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { waitForAbortSignal } from "openclaw/plugin-sdk/runtime-env";
-import { registerUnhandledRejectionHandler } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "opnex/plugin-sdk/approval-handler-adapter-runtime";
+import { registerChannelRuntimeContext } from "opnex/plugin-sdk/channel-runtime-context";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveAgentMaxConcurrent } from "opnex/plugin-sdk/model-session-runtime";
+import { getRuntimeConfig } from "opnex/plugin-sdk/runtime-config-snapshot";
+import { waitForAbortSignal } from "opnex/plugin-sdk/runtime-env";
+import { registerUnhandledRejectionHandler } from "opnex/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "opnex/plugin-sdk/ssrf-runtime";
 import { resolveTelegramAccount } from "./accounts.js";
 import { resolveTelegramAllowedUpdates } from "./allowed-updates.js";
 import { isTelegramExecApprovalHandlerConfigured } from "./exec-approvals.js";
@@ -22,7 +22,7 @@ import { makeProxyFetch } from "./proxy.js";
 
 export type { MonitorTelegramOpts } from "./monitor.types.js";
 
-export function createTelegramRunnerOptions(cfg: OpenClawConfig): RunOptions<unknown> {
+export function createTelegramRunnerOptions(cfg: OPNEXConfig): RunOptions<unknown> {
   return {
     sink: {
       concurrency: resolveAgentMaxConcurrent(cfg),

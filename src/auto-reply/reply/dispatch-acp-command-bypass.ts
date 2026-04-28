@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
   isCommandEnabled,
   maybeResolveTextAlias,
@@ -37,7 +37,7 @@ function isLocalCommandCandidate(text: string): boolean {
 
 export function shouldBypassAcpDispatchForCommand(
   ctx: FinalizedMsgContext,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
 ): boolean {
   const candidate = resolveCommandCandidateText(ctx);
   if (!candidate) {

@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { safeEqualSecret } from "../security/secret-equal.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -13,8 +13,8 @@ const MAX_MCP_BODY_BYTES = 1_048_576;
 
 function shouldLogMcpLoopbackHttp(): boolean {
   return (
-    isTruthyEnvValue(process.env.OPENCLAW_CLI_BACKEND_LOG_OUTPUT) ||
-    isTruthyEnvValue(process.env.OPENCLAW_LIVE_CLI_BACKEND_DEBUG)
+    isTruthyEnvValue(process.env.OPNEX_CLI_BACKEND_LOG_OUTPUT) ||
+    isTruthyEnvValue(process.env.OPNEX_LIVE_CLI_BACKEND_DEBUG)
   );
 }
 
@@ -32,7 +32,7 @@ export type McpRequestContext = {
   senderIsOwner: boolean;
 };
 
-function resolveScopedSessionKey(cfg: OpenClawConfig, rawSessionKey: string | undefined): string {
+function resolveScopedSessionKey(cfg: OPNEXConfig, rawSessionKey: string | undefined): string {
   const trimmed = normalizeOptionalString(rawSessionKey);
   return !trimmed || trimmed === "main" ? resolveMainSessionKey(cfg) : trimmed;
 }
@@ -165,14 +165,14 @@ export async function readMcpHttpBody(req: IncomingMessage): Promise<string> {
 
 export function resolveMcpRequestContext(
   req: IncomingMessage,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   auth: { senderIsOwner: boolean },
 ): McpRequestContext {
   return {
     sessionKey: resolveScopedSessionKey(cfg, getHeader(req, "x-session-key")),
     messageProvider:
-      normalizeMessageChannel(getHeader(req, "x-openclaw-message-channel")) ?? undefined,
-    accountId: normalizeOptionalString(getHeader(req, "x-openclaw-account-id")),
+      normalizeMessageChannel(getHeader(req, "x-opnex-message-channel")) ?? undefined,
+    accountId: normalizeOptionalString(getHeader(req, "x-opnex-account-id")),
     senderIsOwner: auth.senderIsOwner,
   };
 }

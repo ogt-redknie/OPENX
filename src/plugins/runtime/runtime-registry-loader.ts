@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { withActivatedPluginIds } from "../activation-context.js";
 import {
   resolveChannelPluginIds,
   resolveConfiguredChannelPluginIds,
   resolveDiscoverableScopedChannelPluginIds,
 } from "../channel-plugin-ids.js";
-import { loadOpenClawPlugins, resolveRuntimePluginRegistry } from "../loader.js";
+import { loadOPNEXPlugins, resolveRuntimePluginRegistry } from "../loader.js";
 import {
   hasExplicitPluginIdScope,
   hasNonEmptyPluginIdScope,
@@ -75,19 +75,19 @@ function shouldForwardChannelScope(params: {
 }
 
 function resolveOrLoadRuntimePluginRegistry(
-  loadOptions: Parameters<typeof loadOpenClawPlugins>[0],
+  loadOptions: Parameters<typeof loadOPNEXPlugins>[0],
 ): void {
   // Prefer the runtime resolver so broad ensures can reuse compatible active
   // registries, including gateway-bindable startup registries.
   if (!resolveRuntimePluginRegistry(loadOptions)) {
-    loadOpenClawPlugins(loadOptions);
+    loadOPNEXPlugins(loadOptions);
   }
 }
 
 export function ensurePluginRegistryLoaded(options?: {
   scope?: PluginRegistryScope;
-  config?: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config?: OPNEXConfig;
+  activationSourceConfig?: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
   onlyPluginIds?: string[];

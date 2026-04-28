@@ -54,11 +54,11 @@ describe("resolveGatewayService", () => {
     expect(() => resolveGatewayService()).toThrow("Gateway service install not supported on aix");
   });
 
-  it("guards mutating service adapters when config was written by a newer OpenClaw", async () => {
-    const tempHome = await makeTempWorkspace("openclaw-service-future-config-");
-    const stateDir = path.join(tempHome, ".openclaw");
-    const configPath = path.join(stateDir, "openclaw.json");
-    const envSnapshot = captureEnv(["HOME", "OPENCLAW_STATE_DIR", "OPENCLAW_CONFIG_PATH"]);
+  it("guards mutating service adapters when config was written by a newer OPNEX", async () => {
+    const tempHome = await makeTempWorkspace("opnex-service-future-config-");
+    const stateDir = path.join(tempHome, ".opnex");
+    const configPath = path.join(stateDir, "opnex.json");
+    const envSnapshot = captureEnv(["HOME", "OPNEX_STATE_DIR", "OPNEX_CONFIG_PATH"]);
     try {
       await fs.mkdir(stateDir, { recursive: true });
       await fs.writeFile(
@@ -74,8 +74,8 @@ describe("resolveGatewayService", () => {
         ),
       );
       process.env.HOME = tempHome;
-      process.env.OPENCLAW_STATE_DIR = stateDir;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.OPNEX_STATE_DIR = stateDir;
+      process.env.OPNEX_CONFIG_PATH = configPath;
       clearConfigCache();
       clearRuntimeConfigSnapshot();
 
@@ -107,20 +107,20 @@ describe("readGatewayServiceState", () => {
     const service = createService({
       isLoaded: vi.fn(async () => true),
       readCommand: vi.fn(async () => ({
-        programArguments: ["openclaw", "gateway", "run"],
-        environment: { OPENCLAW_GATEWAY_PORT: "18789" },
+        programArguments: ["opnex", "gateway", "run"],
+        environment: { OPNEX_GATEWAY_PORT: "18789" },
       })),
       readRuntime: vi.fn(async () => ({ status: "running" })),
     });
 
     const state = await readGatewayServiceState(service, {
-      env: { OPENCLAW_GATEWAY_PORT: "1" },
+      env: { OPNEX_GATEWAY_PORT: "1" },
     });
 
     expect(state.installed).toBe(true);
     expect(state.loaded).toBe(true);
     expect(state.running).toBe(true);
-    expect(state.env.OPENCLAW_GATEWAY_PORT).toBe("18789");
+    expect(state.env.OPNEX_GATEWAY_PORT).toBe("18789");
   });
 });
 
@@ -139,8 +139,8 @@ describe("startGatewayService", () => {
 
   it("restarts stopped installed services and returns post-start state", async () => {
     const readCommand = vi.fn(async () => ({
-      programArguments: ["openclaw", "gateway", "run"],
-      environment: { OPENCLAW_GATEWAY_PORT: "18789" },
+      programArguments: ["opnex", "gateway", "run"],
+      environment: { OPNEX_GATEWAY_PORT: "18789" },
     }));
     const isLoaded = vi
       .fn<GatewayService["isLoaded"]>()
@@ -172,7 +172,7 @@ describe("startGatewayService", () => {
     const readCommand = vi
       .fn<GatewayService["readCommand"]>()
       .mockResolvedValueOnce({
-        programArguments: ["openclaw", "gateway", "run"],
+        programArguments: ["opnex", "gateway", "run"],
       })
       .mockResolvedValueOnce(null);
     const service = createService({

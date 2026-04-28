@@ -4,12 +4,12 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>ai.openclaw.ios.bgrefresh</string>
+		<string>ai.opnex.ios.bgrefresh</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>OpenClaw</string>
+	<string>OPNEX</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconName</key>
@@ -23,22 +23,22 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(OPENCLAW_MARKETING_VERSION)</string>
-	<key>OpenClawCanonicalVersion</key>
-	<string>$(OPENCLAW_IOS_VERSION)</string>
+	<string>$(OPNEX_MARKETING_VERSION)</string>
+	<key>OPNEXCanonicalVersion</key>
+	<string>$(OPNEX_IOS_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>ai.openclaw.ios</string>
+			<string>ai.opnex.ios</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>openclaw</string>
+				<string>opnex</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(OPENCLAW_BUILD_VERSION)</string>
+	<string>$(OPNEX_BUILD_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
@@ -48,34 +48,34 @@
 	</dict>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_openclaw-gw._tcp</string>
+		<string>_opnex-gw._tcp</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>OpenClaw can capture photos or short video clips when requested via the gateway.</string>
+	<string>OPNEX can capture photos or short video clips when requested via the gateway.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>OpenClaw discovers and connects to your OpenClaw gateway on the local network.</string>
+	<string>OPNEX discovers and connects to your OPNEX gateway on the local network.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>OpenClaw can share your location in the background when you enable Always.</string>
+	<string>OPNEX can share your location in the background when you enable Always.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>OpenClaw uses your location when you allow location sharing.</string>
+	<string>OPNEX uses your location when you allow location sharing.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>OpenClaw needs microphone access for voice wake.</string>
+	<string>OPNEX needs microphone access for voice wake.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>OpenClaw may use motion data to support device-aware interactions and automations.</string>
+	<string>OPNEX may use motion data to support device-aware interactions and automations.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>OpenClaw needs photo library access when you choose existing photos to share with your assistant.</string>
+	<string>OPNEX needs photo library access when you choose existing photos to share with your assistant.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>OpenClaw uses on-device speech recognition for voice wake.</string>
+	<string>OPNEX uses on-device speech recognition for voice wake.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
-	<key>OpenClawPushAPNsEnvironment</key>
-	<string>$(OPENCLAW_PUSH_APNS_ENVIRONMENT)</string>
-	<key>OpenClawPushDistribution</key>
-	<string>$(OPENCLAW_PUSH_DISTRIBUTION)</string>
-	<key>OpenClawPushRelayBaseURL</key>
-	<string>$(OPENCLAW_PUSH_RELAY_BASE_URL)</string>
-	<key>OpenClawPushTransport</key>
-	<string>$(OPENCLAW_PUSH_TRANSPORT)</string>
+	<key>OPNEXPushAPNsEnvironment</key>
+	<string>$(OPNEX_PUSH_APNS_ENVIRONMENT)</string>
+	<key>OPNEXPushDistribution</key>
+	<string>$(OPNEX_PUSH_DISTRIBUTION)</string>
+	<key>OPNEXPushRelayBaseURL</key>
+	<string>$(OPNEX_PUSH_RELAY_BASE_URL)</string>
+	<key>OPNEXPushTransport</key>
+	<string>$(OPNEX_PUSH_TRANSPORT)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

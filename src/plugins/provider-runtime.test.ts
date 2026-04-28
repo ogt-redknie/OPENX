@@ -1,6 +1,6 @@
 import type { AgentMessage } from "@mariozechner/pi-agent-core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ModelProviderConfig, OpenClawConfig } from "../config/types.js";
+import type { ModelProviderConfig, OPNEXConfig } from "../config/types.js";
 import type { ProviderRuntimeModel } from "./provider-runtime-model.types.js";
 import {
   expectAugmentedCodexCatalog,
@@ -375,7 +375,7 @@ describe("provider-runtime", () => {
   it("normalizes plugin scopes in provider hook cache keys", () => {
     const base = {
       workspaceDir: "/tmp/workspace",
-      env: { OPENCLAW_HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { OPNEX_HOME: "/tmp/opnex-home" } as NodeJS.ProcessEnv,
       providerRefs: ["demo"],
     };
 
@@ -395,7 +395,7 @@ describe("provider-runtime", () => {
   it("separates provider hook cache keys by load policy", () => {
     const base = {
       workspaceDir: "/tmp/workspace",
-      env: { OPENCLAW_HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { OPNEX_HOME: "/tmp/opnex-home" } as NodeJS.ProcessEnv,
       providerRefs: ["demo"],
     };
 
@@ -413,7 +413,7 @@ describe("provider-runtime", () => {
   it("ignores unrelated plugin config values in provider hook cache keys", () => {
     const base = {
       workspaceDir: "/tmp/workspace",
-      env: { OPENCLAW_HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { OPNEX_HOME: "/tmp/opnex-home" } as NodeJS.ProcessEnv,
       onlyPluginIds: ["demo"],
     };
     const firstConfig = {
@@ -423,7 +423,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -431,7 +431,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { qmd: { searchMode: "fast" } } },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       providerRuntimeTesting.buildHookProviderCacheKey({
@@ -451,7 +451,7 @@ describe("provider-runtime", () => {
   it("keeps scoped provider plugin config in provider hook cache keys", () => {
     const base = {
       workspaceDir: "/tmp/workspace",
-      env: { OPENCLAW_HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { OPNEX_HOME: "/tmp/opnex-home" } as NodeJS.ProcessEnv,
       onlyPluginIds: ["demo"],
       fullConfigPluginIds: ["demo"],
     };
@@ -465,7 +465,7 @@ describe("provider-runtime", () => {
               demo: { enabled: true, config: { endpoint: "https://one.example" } },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
       }),
     ).not.toBe(
       providerRuntimeTesting.buildHookProviderCacheKey({
@@ -476,7 +476,7 @@ describe("provider-runtime", () => {
               demo: { enabled: true, config: { endpoint: "https://two.example" } },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
       }),
     );
   });
@@ -495,14 +495,14 @@ describe("provider-runtime", () => {
           demo: { enabled: true, config: { endpoint: "https://one.example" } },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const secondConfig = {
       plugins: {
         entries: {
           demo: { enabled: true, config: { endpoint: "https://two.example" } },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -529,7 +529,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -537,7 +537,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { qmd: { searchMode: "fast" } } },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -701,15 +701,15 @@ describe("provider-runtime", () => {
           demo: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const firstConfig = {
       ...baseConfig,
       agents: { defaults: { model: "openai/gpt-5.4" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const secondConfig = {
       ...baseConfig,
       agents: { defaults: { model: "anthropic/claude-sonnet-4-5" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(
       await augmentModelCatalogWithProviderPlugins({
@@ -746,7 +746,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -754,7 +754,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { qmd: { searchMode: "fast" } } },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     for (const config of [firstConfig, secondConfig]) {
       expect(

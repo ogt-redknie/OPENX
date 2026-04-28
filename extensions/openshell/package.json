@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/openshell-sandbox",
+  "name": "@opnex/openshell-sandbox",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw OpenShell sandbox backend",
+  "description": "OPNEX OpenShell sandbox backend",
   "type": "module",
   "dependencies": {
     "openshell": "0.1.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

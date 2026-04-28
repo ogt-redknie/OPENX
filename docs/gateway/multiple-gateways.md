@@ -1,5 +1,5 @@
 ---
-summary: "Run multiple OpenClaw Gateways on one host (isolation, ports, and profiles)"
+summary: "Run multiple OPNEX Gateways on one host (isolation, ports, and profiles)"
 read_when:
   - Running more than one Gateway on the same machine
   - You need isolated config/state/ports per Gateway
@@ -28,13 +28,13 @@ else:
 
 ```bash
 # Rescue bot (separate Telegram bot, separate profile, port 19789)
-openclaw --profile rescue onboard
-openclaw --profile rescue gateway install --port 19789
+opnex --profile rescue onboard
+opnex --profile rescue gateway install --port 19789
 ```
 
 If your main bot is already running, that is usually all you need.
 
-During `openclaw --profile rescue onboard`:
+During `opnex --profile rescue onboard`:
 
 - use the separate Telegram bot token
 - keep the `rescue` profile
@@ -63,14 +63,14 @@ For most setups, use a completely separate Telegram bot for the rescue profile:
 
 ## What `--profile rescue onboard` Changes
 
-`openclaw --profile rescue onboard` uses the normal onboarding flow, but it
+`opnex --profile rescue onboard` uses the normal onboarding flow, but it
 writes everything into a separate profile.
 
 In practice, that means the rescue bot gets its own:
 
 - config file
 - state directory
-- workspace (by default `~/.openclaw/workspace-rescue`)
+- workspace (by default `~/.opnex/workspace-rescue`)
 - managed service name
 
 The prompts are otherwise the same as normal onboarding.
@@ -85,29 +85,29 @@ own base port:
 
 ```bash
 # main (default profile)
-openclaw setup
-openclaw gateway --port 18789
+opnex setup
+opnex gateway --port 18789
 
 # extra gateway
-openclaw --profile ops setup
-openclaw --profile ops gateway --port 19789
+opnex --profile ops setup
+opnex --profile ops gateway --port 19789
 ```
 
 If you want both Gateways to use named profiles, that also works:
 
 ```bash
-openclaw --profile main setup
-openclaw --profile main gateway --port 18789
+opnex --profile main setup
+opnex --profile main gateway --port 18789
 
-openclaw --profile ops setup
-openclaw --profile ops gateway --port 19789
+opnex --profile ops setup
+opnex --profile ops gateway --port 19789
 ```
 
 Services follow the same pattern:
 
 ```bash
-openclaw gateway install
-openclaw --profile ops gateway install --port 19789
+opnex gateway install
+opnex --profile ops gateway install --port 19789
 ```
 
 Use the rescue-bot quickstart when you want a fallback operator lane. Use the
@@ -118,8 +118,8 @@ different channels, tenants, workspaces, or operational roles.
 
 Keep these unique per Gateway instance:
 
-- `OPENCLAW_CONFIG_PATH` — per-instance config file
-- `OPENCLAW_STATE_DIR` — per-instance sessions, creds, caches
+- `OPNEX_CONFIG_PATH` — per-instance config file
+- `OPNEX_STATE_DIR` — per-instance sessions, creds, caches
 - `agents.defaults.workspace` — per-instance workspace root
 - `gateway.port` (or `--port`) — unique per instance
 - derived browser/canvas/CDP ports
@@ -128,7 +128,7 @@ If these are shared, you will hit config races and port conflicts.
 
 ## Port mapping (derived)
 
-Base port = `gateway.port` (or `OPENCLAW_GATEWAY_PORT` / `--port`).
+Base port = `gateway.port` (or `OPNEX_GATEWAY_PORT` / `--port`).
 
 - browser control service port = base + 2 (loopback only)
 - canvas host is served on the Gateway HTTP server (same port as `gateway.port`)
@@ -146,24 +146,24 @@ If you override any of these in config or env, you must keep them unique per ins
 ## Manual env example
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/main.json \
-OPENCLAW_STATE_DIR=~/.openclaw \
-openclaw gateway --port 18789
+OPNEX_CONFIG_PATH=~/.opnex/main.json \
+OPNEX_STATE_DIR=~/.opnex \
+opnex gateway --port 18789
 
-OPENCLAW_CONFIG_PATH=~/.openclaw/rescue.json \
-OPENCLAW_STATE_DIR=~/.openclaw-rescue \
-openclaw gateway --port 19789
+OPNEX_CONFIG_PATH=~/.opnex/rescue.json \
+OPNEX_STATE_DIR=~/.opnex-rescue \
+opnex gateway --port 19789
 ```
 
 ## Quick checks
 
 ```bash
-openclaw gateway status --deep
-openclaw --profile rescue gateway status --deep
-openclaw --profile rescue gateway probe
-openclaw status
-openclaw --profile rescue status
-openclaw --profile rescue browser status
+opnex gateway status --deep
+opnex --profile rescue gateway status --deep
+opnex --profile rescue gateway probe
+opnex status
+opnex --profile rescue status
+opnex --profile rescue browser status
 ```
 
 Interpretation:

@@ -14,7 +14,7 @@ AUTH_CHOICE=""
 AUTH_KEY_FLAG=""
 MODEL_ID=""
 MODEL_ID_EXPLICIT=0
-INSTALL_URL="https://openclaw.ai/install.sh"
+INSTALL_URL="https://opnex.ai/install.sh"
 HOST_PORT="18427"
 HOST_PORT_EXPLICIT=0
 HOST_IP=""
@@ -31,15 +31,15 @@ PACKED_MAIN_COMMIT_SHORT=""
 MAIN_TGZ_DIR="$(mktemp -d)"
 MAIN_TGZ_PATH=""
 SERVER_PID=""
-RUN_DIR="$(mktemp -d /tmp/openclaw-parallels-linux.XXXXXX)"
-BUILD_LOCK_DIR="${TMPDIR:-/tmp}/openclaw-parallels-build.lock"
+RUN_DIR="$(mktemp -d /tmp/opnex-parallels-linux.XXXXXX)"
+BUILD_LOCK_DIR="${TMPDIR:-/tmp}/opnex-parallels-build.lock"
 
 TIMEOUT_SNAPSHOT_S=180
 TIMEOUT_BOOTSTRAP_S=600
 TIMEOUT_INSTALL_S=420
 TIMEOUT_VERIFY_S=90
 TIMEOUT_ONBOARD_S=180
-TIMEOUT_AGENT_S="${OPENCLAW_PARALLELS_LINUX_AGENT_TIMEOUT_S:-300}"
+TIMEOUT_AGENT_S="${OPNEX_PARALLELS_LINUX_AGENT_TIMEOUT_S:-300}"
 TIMEOUT_GATEWAY_S=240
 PHASE_STALE_WARN_S=60
 DISABLE_BONJOUR_FOR_GATEWAY=0
@@ -110,14 +110,14 @@ Options:
   --api-key-env <var>        Host env var name for provider API key.
                              Default: OPENAI_API_KEY for openai, ANTHROPIC_API_KEY for anthropic
   --openai-api-key-env <var> Alias for --api-key-env (backward compatible)
-  --install-url <url>        Installer URL for latest release. Default: https://openclaw.ai/install.sh
+  --install-url <url>        Installer URL for latest release. Default: https://opnex.ai/install.sh
   --host-port <port>         Host HTTP port for current-main tgz. Default: 18427
   --host-ip <ip>             Override Parallels host IP.
   --latest-version <ver>     Override npm latest version lookup.
   --install-version <ver>    Pin site-installer version/dist-tag for the baseline lane.
   --target-package-spec <npm-spec>
                              Install this npm package tarball instead of packing current main.
-                             Example: openclaw@2026.3.13-beta.1
+                             Example: opnex@2026.3.13-beta.1
   --keep-server              Leave temp host HTTP server running.
   --json                     Print machine-readable JSON summary.
   -h, --help                 Show help.
@@ -209,19 +209,19 @@ case "$PROVIDER" in
   openai)
     AUTH_CHOICE="openai-api-key"
     AUTH_KEY_FLAG="openai-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_OPENAI_MODEL:-openai/gpt-5.5}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_OPENAI_MODEL:-openai/gpt-5.5}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="OPENAI_API_KEY"
     ;;
   anthropic)
     AUTH_CHOICE="apiKey"
     AUTH_KEY_FLAG="anthropic-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_ANTHROPIC_MODEL:-anthropic/claude-sonnet-4-6}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_ANTHROPIC_MODEL:-anthropic/claude-sonnet-4-6}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="ANTHROPIC_API_KEY"
     ;;
   minimax)
     AUTH_CHOICE="minimax-global-api"
     AUTH_KEY_FLAG="minimax-api-key"
-    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPENCLAW_PARALLELS_MINIMAX_MODEL:-minimax/MiniMax-M2.7}"
+    [[ "$MODEL_ID_EXPLICIT" -eq 1 ]] || MODEL_ID="${OPNEX_PARALLELS_MINIMAX_MODEL:-minimax/MiniMax-M2.7}"
     [[ -n "$API_KEY_ENV" ]] || API_KEY_ENV="MINIMAX_API_KEY"
     ;;
   *)
@@ -231,7 +231,7 @@ esac
 
 API_KEY_VALUE="${!API_KEY_ENV:-}"
 [[ -n "$API_KEY_VALUE" ]] || die "$API_KEY_ENV is required"
-case "${OPENCLAW_PARALLELS_LINUX_DISABLE_BONJOUR:-}" in
+case "${OPNEX_PARALLELS_LINUX_DISABLE_BONJOUR:-}" in
   1|true|TRUE|yes|YES|on|ON)
     DISABLE_BONJOUR_FOR_GATEWAY=1
     ;;
@@ -487,7 +487,7 @@ resolve_latest_version() {
     printf '%s\n' "$LATEST_VERSION"
     return
   fi
-  npm view openclaw version --userconfig "$(mktemp)"
+  npm view opnex version --userconfig "$(mktemp)"
 }
 
 current_build_commit() {
@@ -509,7 +509,7 @@ release_build_lock() {
 ensure_current_build() {
   local head build_commit rc lock_owned
   lock_owned=0
-  if [[ "${OPENCLAW_PARALLELS_BUILD_LOCK_HELD:-0}" != "1" ]]; then
+  if [[ "${OPNEX_PARALLELS_BUILD_LOCK_HELD:-0}" != "1" ]]; then
     acquire_build_lock
     lock_owned=1
   fi
@@ -567,7 +567,7 @@ pack_main_tgz() {
   acquire_build_lock
   set +e
   {
-    OPENCLAW_PARALLELS_BUILD_LOCK_HELD=1 ensure_current_build &&
+    OPNEX_PARALLELS_BUILD_LOCK_HELD=1 ensure_current_build &&
       write_package_dist_inventory &&
       short_head="$(git rev-parse --short HEAD)" &&
       pkg="$(
@@ -579,7 +579,7 @@ pack_main_tgz() {
   set -e
   release_build_lock
   [[ $rc -eq 0 ]] || return "$rc"
-  MAIN_TGZ_PATH="$MAIN_TGZ_DIR/openclaw-main-$short_head.tgz"
+  MAIN_TGZ_PATH="$MAIN_TGZ_DIR/opnex-main-$short_head.tgz"
   cp "$MAIN_TGZ_DIR/$pkg" "$MAIN_TGZ_PATH"
   packed_commit="$(extract_package_build_commit_from_tgz "$MAIN_TGZ_PATH")"
   [[ -n "$packed_commit" ]] || die "failed to read packed build commit from $MAIN_TGZ_PATH"
@@ -608,7 +608,7 @@ start_server() {
     (
       cd "$MAIN_TGZ_DIR"
       exec python3 -m http.server "$HOST_PORT" --bind 0.0.0.0
-    ) >/tmp/openclaw-parallels-linux-http.log 2>&1 &
+    ) >/tmp/opnex-parallels-linux-http.log 2>&1 &
     SERVER_PID=$!
     sleep 1
     probe_url="http://127.0.0.1:$HOST_PORT/$artifact"
@@ -627,13 +627,13 @@ start_server() {
 }
 
 install_latest_release() {
-  guest_exec curl -fsSL "$INSTALL_URL" -o /tmp/openclaw-install.sh
+  guest_exec curl -fsSL "$INSTALL_URL" -o /tmp/opnex-install.sh
   if [[ -n "$INSTALL_VERSION" ]]; then
-    guest_exec /usr/bin/env OPENCLAW_NO_ONBOARD=1 bash /tmp/openclaw-install.sh --version "$INSTALL_VERSION" --no-onboard
+    guest_exec /usr/bin/env OPNEX_NO_ONBOARD=1 bash /tmp/opnex-install.sh --version "$INSTALL_VERSION" --no-onboard
   else
-    guest_exec /usr/bin/env OPENCLAW_NO_ONBOARD=1 bash /tmp/openclaw-install.sh --no-onboard
+    guest_exec /usr/bin/env OPNEX_NO_ONBOARD=1 bash /tmp/opnex-install.sh --no-onboard
   fi
-  guest_exec openclaw --version
+  guest_exec opnex --version
 }
 
 install_main_tgz() {
@@ -642,13 +642,13 @@ install_main_tgz() {
   local tgz_url="http://$host_ip:$HOST_PORT/$(basename "$MAIN_TGZ_PATH")"
   guest_exec curl -fsSL "$tgz_url" -o "/tmp/$temp_name"
   guest_exec npm install -g "/tmp/$temp_name" --no-fund --no-audit
-  guest_exec openclaw --version
+  guest_exec opnex --version
 }
 
 verify_version_contains() {
   local needle="$1"
   local version
-  version="$(guest_exec openclaw --version)"
+  version="$(guest_exec opnex --version)"
   printf '%s\n' "$version"
   case "$version" in
     *"$needle"*) ;;
@@ -660,7 +660,7 @@ verify_version_contains() {
 }
 
 run_ref_onboard() {
-  guest_exec /usr/bin/env "$API_KEY_ENV=$API_KEY_VALUE" openclaw onboard \
+  guest_exec /usr/bin/env "$API_KEY_ENV=$API_KEY_VALUE" opnex onboard \
     --non-interactive \
     --mode local \
     --auth-choice "$AUTH_CHOICE" \
@@ -676,19 +676,19 @@ run_ref_onboard() {
 inject_bad_plugin_fixture() {
   guest_bash_script <<'EOF'
 set -euo pipefail
-plugin_dir=/root/.openclaw/test-bad-plugin
+plugin_dir=/root/.opnex/test-bad-plugin
 mkdir -p "$plugin_dir"
 cat >"$plugin_dir/package.json" <<'JSON'
 {
-  "name": "@openclaw/test-bad-plugin",
+  "name": "@opnex/test-bad-plugin",
   "version": "1.0.0",
-  "openclaw": {
+  "opnex": {
     "extensions": ["./index.cjs"],
     "setupEntry": "./setup-entry.cjs"
   }
 }
 JSON
-cat >"$plugin_dir/openclaw.plugin.json" <<'JSON'
+cat >"$plugin_dir/opnex.plugin.json" <<'JSON'
 {
   "id": "test-bad-plugin",
   "configSchema": {
@@ -714,7 +714,7 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
-config_path = Path("/root/.openclaw/openclaw.json")
+config_path = Path("/root/.opnex/opnex.json")
 config = {}
 if config_path.exists():
     config = json.loads(config_path.read_text())
@@ -722,7 +722,7 @@ if config_path.exists():
 plugins = config.setdefault("plugins", {})
 load = plugins.setdefault("load", {})
 paths = load.setdefault("paths", [])
-plugin_dir = "/root/.openclaw/test-bad-plugin"
+plugin_dir = "/root/.opnex/test-bad-plugin"
 if plugin_dir not in paths:
     paths.append(plugin_dir)
 
@@ -737,7 +737,7 @@ EOF
 
 verify_bad_plugin_diagnostic() {
   guest_bash_script <<'EOF'
-grep -F "failed to load setup entry" /tmp/openclaw-parallels-linux-gateway.log
+grep -F "failed to load setup entry" /tmp/opnex-parallels-linux-gateway.log
 EOF
 }
 
@@ -746,12 +746,12 @@ start_gateway_background() {
   api_key_value_q="$(shell_quote "$API_KEY_VALUE")"
   bonjour_env=""
   if [[ "$DISABLE_BONJOUR_FOR_GATEWAY" -eq 1 ]]; then
-    bonjour_env=" OPENCLAW_DISABLE_BONJOUR=1"
+    bonjour_env=" OPNEX_DISABLE_BONJOUR=1"
   fi
   cmd="$(cat <<EOF
-pkill -f "openclaw gateway run" >/dev/null 2>&1 || true
-rm -f /tmp/openclaw-parallels-linux-gateway.log
-setsid sh -lc 'exec env OPENCLAW_HOME=/root OPENCLAW_STATE_DIR=/root/.openclaw OPENCLAW_CONFIG_PATH=/root/.openclaw/openclaw.json${bonjour_env} ${API_KEY_ENV}=${api_key_value_q} openclaw gateway run --bind loopback --port 18789 --force >/tmp/openclaw-parallels-linux-gateway.log 2>&1' >/dev/null 2>&1 < /dev/null &
+pkill -f "opnex gateway run" >/dev/null 2>&1 || true
+rm -f /tmp/opnex-parallels-linux-gateway.log
+setsid sh -lc 'exec env OPNEX_HOME=/root OPNEX_STATE_DIR=/root/.opnex OPNEX_CONFIG_PATH=/root/.opnex/opnex.json${bonjour_env} ${API_KEY_ENV}=${api_key_value_q} opnex gateway run --bind loopback --port 18789 --force >/tmp/opnex-parallels-linux-gateway.log 2>&1' >/dev/null 2>&1 < /dev/null &
 EOF
 )"
   guest_exec bash -lc "$cmd"
@@ -772,17 +772,17 @@ EOF
 }
 
 show_gateway_status_compat() {
-  if guest_exec openclaw gateway status --help | grep -Fq -- "--require-rpc"; then
-    guest_exec openclaw gateway status --deep --require-rpc
+  if guest_exec opnex gateway status --help | grep -Fq -- "--require-rpc"; then
+    guest_exec opnex gateway status --deep --require-rpc
     return
   fi
-  guest_exec openclaw gateway status --deep
+  guest_exec opnex gateway status --deep
 }
 
 verify_gateway_status() {
   local attempt
   for attempt in 1 2 3 4 5 6 7 8; do
-    if guest_exec openclaw gateway status --deep --require-rpc --timeout 15000; then
+    if guest_exec opnex gateway status --deep --require-rpc --timeout 15000; then
       return 0
     fi
     if (( attempt < 8 )); then
@@ -795,15 +795,15 @@ verify_gateway_status() {
 
 prepare_agent_workspace() {
   guest_exec /bin/sh -lc 'set -eu
-workspace="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}"
-mkdir -p "$workspace/.openclaw"
+workspace="${OPNEX_WORKSPACE_DIR:-$HOME/.opnex/workspace}"
+mkdir -p "$workspace/.opnex"
 cat > "$workspace/IDENTITY.md" <<'"'"'IDENTITY_EOF'"'"'
 # Identity
 
-- Name: OpenClaw
+- Name: OPNEX
 - Purpose: Parallels Linux smoke test assistant.
 IDENTITY_EOF
-cat > "$workspace/.openclaw/workspace-state.json" <<'"'"'STATE_EOF'"'"'
+cat > "$workspace/.opnex/workspace-state.json" <<'"'"'STATE_EOF'"'"'
 {
   "version": 1,
   "setupCompletedAt": "2026-01-01T00:00:00.000Z"
@@ -813,11 +813,11 @@ rm -f "$workspace/BOOTSTRAP.md"'
 }
 
 verify_local_turn() {
-  guest_exec openclaw models set "$MODEL_ID"
-  guest_exec openclaw config set agents.defaults.skipBootstrap true --strict-json
+  guest_exec opnex models set "$MODEL_ID"
+  guest_exec opnex config set agents.defaults.skipBootstrap true --strict-json
   prepare_agent_workspace
   guest_exec /bin/sh -lc "$(cat <<EOF
-exec /usr/bin/env $(shell_quote "$API_KEY_ENV=$API_KEY_VALUE") openclaw agent \
+exec /usr/bin/env $(shell_quote "$API_KEY_ENV=$API_KEY_VALUE") opnex agent \
   --local \
   --agent main \
   --session-id parallels-linux-smoke \
@@ -839,7 +839,7 @@ import re
 import sys
 
 text = pathlib.Path(sys.argv[1]).read_text(errors="replace")
-matches = re.findall(r"OpenClaw [^\r\n]+ \([0-9a-f]{7,}\)", text)
+matches = re.findall(r"OPNEX [^\r\n]+ \([0-9a-f]{7,}\)", text)
 print(matches[-1] if matches else "")
 PY
 }
@@ -950,7 +950,7 @@ run_fresh_main_lane() {
   phase_run "fresh.restore-snapshot" "$TIMEOUT_SNAPSHOT_S" restore_snapshot "$snapshot_id"
   phase_run "fresh.bootstrap-guest" "$TIMEOUT_BOOTSTRAP_S" bootstrap_guest
   phase_run "fresh.install-latest-bootstrap" "$TIMEOUT_INSTALL_S" install_latest_release
-  phase_run "fresh.install-main" "$TIMEOUT_INSTALL_S" install_main_tgz "$host_ip" "openclaw-main-fresh.tgz"
+  phase_run "fresh.install-main" "$TIMEOUT_INSTALL_S" install_main_tgz "$host_ip" "opnex-main-fresh.tgz"
   FRESH_MAIN_VERSION="$(extract_last_version "$(phase_log_path fresh.install-main)")"
   phase_run "fresh.verify-main-version" "$TIMEOUT_VERIFY_S" verify_target_version
   phase_run "fresh.onboard-ref" "$TIMEOUT_ONBOARD_S" run_ref_onboard
@@ -971,7 +971,7 @@ run_upgrade_lane() {
   phase_run "upgrade.install-latest" "$TIMEOUT_INSTALL_S" install_latest_release
   LATEST_INSTALLED_VERSION="$(extract_last_version "$(phase_log_path upgrade.install-latest)")"
   phase_run "upgrade.verify-latest-version" "$TIMEOUT_VERIFY_S" verify_version_contains "$LATEST_VERSION"
-  phase_run "upgrade.install-main" "$TIMEOUT_INSTALL_S" install_main_tgz "$host_ip" "openclaw-main-upgrade.tgz"
+  phase_run "upgrade.install-main" "$TIMEOUT_INSTALL_S" install_main_tgz "$host_ip" "opnex-main-upgrade.tgz"
   UPGRADE_MAIN_VERSION="$(extract_last_version "$(phase_log_path upgrade.install-main)")"
   phase_run "upgrade.verify-main-version" "$TIMEOUT_VERIFY_S" verify_target_version
   phase_run "upgrade.inject-bad-plugin" "$TIMEOUT_VERIFY_S" inject_bad_plugin_fixture

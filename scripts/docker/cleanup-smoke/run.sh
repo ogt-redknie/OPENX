@@ -3,42 +3,42 @@ set -euo pipefail
 
 cd /repo
 
-export OPENCLAW_STATE_DIR="/tmp/openclaw-test"
-export OPENCLAW_CONFIG_PATH="${OPENCLAW_STATE_DIR}/openclaw.json"
+export OPNEX_STATE_DIR="/tmp/opnex-test"
+export OPNEX_CONFIG_PATH="${OPNEX_STATE_DIR}/opnex.json"
 
 echo "==> Build"
-if ! pnpm build >/tmp/openclaw-cleanup-build.log 2>&1; then
-  cat /tmp/openclaw-cleanup-build.log
+if ! pnpm build >/tmp/opnex-cleanup-build.log 2>&1; then
+  cat /tmp/opnex-cleanup-build.log
   exit 1
 fi
 
 echo "==> Seed state"
-mkdir -p "${OPENCLAW_STATE_DIR}/credentials"
-mkdir -p "${OPENCLAW_STATE_DIR}/agents/main/sessions"
-echo '{}' >"${OPENCLAW_CONFIG_PATH}"
-echo 'creds' >"${OPENCLAW_STATE_DIR}/credentials/marker.txt"
-echo 'session' >"${OPENCLAW_STATE_DIR}/agents/main/sessions/sessions.json"
+mkdir -p "${OPNEX_STATE_DIR}/credentials"
+mkdir -p "${OPNEX_STATE_DIR}/agents/main/sessions"
+echo '{}' >"${OPNEX_CONFIG_PATH}"
+echo 'creds' >"${OPNEX_STATE_DIR}/credentials/marker.txt"
+echo 'session' >"${OPNEX_STATE_DIR}/agents/main/sessions/sessions.json"
 
 echo "==> Reset (config+creds+sessions)"
-if ! pnpm openclaw reset --scope config+creds+sessions --yes --non-interactive >/tmp/openclaw-cleanup-reset.log 2>&1; then
-  cat /tmp/openclaw-cleanup-reset.log
+if ! pnpm opnex reset --scope config+creds+sessions --yes --non-interactive >/tmp/opnex-cleanup-reset.log 2>&1; then
+  cat /tmp/opnex-cleanup-reset.log
   exit 1
 fi
 
-test ! -f "${OPENCLAW_CONFIG_PATH}"
-test ! -d "${OPENCLAW_STATE_DIR}/credentials"
-test ! -d "${OPENCLAW_STATE_DIR}/agents/main/sessions"
+test ! -f "${OPNEX_CONFIG_PATH}"
+test ! -d "${OPNEX_STATE_DIR}/credentials"
+test ! -d "${OPNEX_STATE_DIR}/agents/main/sessions"
 
 echo "==> Recreate minimal config"
-mkdir -p "${OPENCLAW_STATE_DIR}/credentials"
-echo '{}' >"${OPENCLAW_CONFIG_PATH}"
+mkdir -p "${OPNEX_STATE_DIR}/credentials"
+echo '{}' >"${OPNEX_CONFIG_PATH}"
 
 echo "==> Uninstall (state only)"
-if ! pnpm openclaw uninstall --state --yes --non-interactive >/tmp/openclaw-cleanup-uninstall.log 2>&1; then
-  cat /tmp/openclaw-cleanup-uninstall.log
+if ! pnpm opnex uninstall --state --yes --non-interactive >/tmp/opnex-cleanup-uninstall.log 2>&1; then
+  cat /tmp/opnex-cleanup-uninstall.log
   exit 1
 fi
 
-test ! -d "${OPENCLAW_STATE_DIR}"
+test ! -d "${OPNEX_STATE_DIR}"
 
 echo "OK"

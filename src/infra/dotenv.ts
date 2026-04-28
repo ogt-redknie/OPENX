@@ -29,44 +29,44 @@ const BLOCKED_WORKSPACE_DOTENV_KEYS = new Set([
   "NO_PROXY",
   "OPENAI_API_KEY",
   "OPENAI_API_KEYS",
-  "OPENCLAW_AGENT_DIR",
-  "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS",
-  "OPENCLAW_ALLOW_PROJECT_LOCAL_BIN",
-  "OPENCLAW_BROWSER_EXECUTABLE_PATH",
-  "OPENCLAW_BROWSER_CONTROL_MODULE",
-  "OPENCLAW_BUNDLED_HOOKS_DIR",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_BUNDLED_SKILLS_DIR",
-  "OPENCLAW_CACHE_TRACE",
-  "OPENCLAW_CACHE_TRACE_FILE",
-  "OPENCLAW_CACHE_TRACE_MESSAGES",
-  "OPENCLAW_CACHE_TRACE_PROMPT",
-  "OPENCLAW_CACHE_TRACE_SYSTEM",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_GATEWAY_PORT",
-  "OPENCLAW_GATEWAY_SECRET",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_URL",
-  "OPENCLAW_HOME",
-  "OPENCLAW_LIVE_ANTHROPIC_KEY",
-  "OPENCLAW_LIVE_ANTHROPIC_KEYS",
-  "OPENCLAW_LIVE_GEMINI_KEY",
-  "OPENCLAW_LIVE_OPENAI_KEY",
-  "OPENCLAW_MPM_CATALOG_PATHS",
-  "OPENCLAW_NODE_EXEC_FALLBACK",
-  "OPENCLAW_NODE_EXEC_HOST",
-  "OPENCLAW_OAUTH_DIR",
-  "OPENCLAW_PINNED_PYTHON",
-  "OPENCLAW_PINNED_WRITE_PYTHON",
-  "OPENCLAW_PLUGIN_CATALOG_PATHS",
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_RAW_STREAM",
-  "OPENCLAW_RAW_STREAM_PATH",
-  "OPENCLAW_SHOW_SECRETS",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_TEST_TAILSCALE_BINARY",
+  "OPNEX_AGENT_DIR",
+  "OPNEX_ALLOW_INSECURE_PRIVATE_WS",
+  "OPNEX_ALLOW_PROJECT_LOCAL_BIN",
+  "OPNEX_BROWSER_EXECUTABLE_PATH",
+  "OPNEX_BROWSER_CONTROL_MODULE",
+  "OPNEX_BUNDLED_HOOKS_DIR",
+  "OPNEX_BUNDLED_PLUGINS_DIR",
+  "OPNEX_BUNDLED_SKILLS_DIR",
+  "OPNEX_CACHE_TRACE",
+  "OPNEX_CACHE_TRACE_FILE",
+  "OPNEX_CACHE_TRACE_MESSAGES",
+  "OPNEX_CACHE_TRACE_PROMPT",
+  "OPNEX_CACHE_TRACE_SYSTEM",
+  "OPNEX_CONFIG_PATH",
+  "OPNEX_GATEWAY_PASSWORD",
+  "OPNEX_GATEWAY_PORT",
+  "OPNEX_GATEWAY_SECRET",
+  "OPNEX_GATEWAY_TOKEN",
+  "OPNEX_GATEWAY_URL",
+  "OPNEX_HOME",
+  "OPNEX_LIVE_ANTHROPIC_KEY",
+  "OPNEX_LIVE_ANTHROPIC_KEYS",
+  "OPNEX_LIVE_GEMINI_KEY",
+  "OPNEX_LIVE_OPENAI_KEY",
+  "OPNEX_MPM_CATALOG_PATHS",
+  "OPNEX_NODE_EXEC_FALLBACK",
+  "OPNEX_NODE_EXEC_HOST",
+  "OPNEX_OAUTH_DIR",
+  "OPNEX_PINNED_PYTHON",
+  "OPNEX_PINNED_WRITE_PYTHON",
+  "OPNEX_PLUGIN_CATALOG_PATHS",
+  "OPNEX_PROFILE",
+  "OPNEX_RAW_STREAM",
+  "OPNEX_RAW_STREAM_PATH",
+  "OPNEX_SHOW_SECRETS",
+  "OPNEX_SKIP_BROWSER_CONTROL_SERVER",
+  "OPNEX_STATE_DIR",
+  "OPNEX_TEST_TAILSCALE_BINARY",
   "PI_CODING_AGENT_DIR",
   "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
   "SYNOLOGY_CHAT_INCOMING_URL",
@@ -82,13 +82,13 @@ const BLOCKED_WORKSPACE_DOTENV_PREFIXES = [
   "ANTHROPIC_API_KEY_",
   "CLAWHUB_",
   "OPENAI_API_KEY_",
-  // Workspace .env is untrusted; reserve the full OpenClaw runtime namespace
-  // for shell/global config so new OPENCLAW_* controls are fail-closed by default.
-  "OPENCLAW_",
-  "OPENCLAW_CLAWHUB_",
-  "OPENCLAW_DISABLE_",
-  "OPENCLAW_SKIP_",
-  "OPENCLAW_UPDATE_",
+  // Workspace .env is untrusted; reserve the full OPNEX runtime namespace
+  // for shell/global config so new OPNEX_* controls are fail-closed by default.
+  "OPNEX_",
+  "OPNEX_CLAWHUB_",
+  "OPNEX_DISABLE_",
+  "OPNEX_SKIP_",
+  "OPNEX_UPDATE_",
 ];
 
 function shouldBlockWorkspaceRuntimeDotEnvKey(key: string): boolean {
@@ -96,7 +96,7 @@ function shouldBlockWorkspaceRuntimeDotEnvKey(key: string): boolean {
 }
 
 function shouldBlockRuntimeDotEnvKey(key: string): boolean {
-  // The global ~/.openclaw/.env (or OPENCLAW_STATE_DIR/.env) is a trusted
+  // The global ~/.opnex/.env (or OPNEX_STATE_DIR/.env) is a trusted
   // operator-controlled runtime surface. Workspace .env is untrusted and gets
   // the strict blocklist, but the trusted global fallback is allowed to set
   // runtime vars like proxy/base-url/auth values.
@@ -247,11 +247,11 @@ export function loadGlobalRuntimeDotEnvFiles(opts?: { quiet?: boolean; stateEnvP
   const stateEnvPath = opts?.stateEnvPath ?? path.join(resolveConfigDir(process.env), ".env");
   const defaultStateEnvPath = path.join(
     resolveRequiredHomeDir(process.env, os.homedir),
-    ".openclaw",
+    ".opnex",
     ".env",
   );
   const hasExplicitNonDefaultStateDir =
-    process.env.OPENCLAW_STATE_DIR?.trim() !== undefined &&
+    process.env.OPNEX_STATE_DIR?.trim() !== undefined &&
     path.resolve(stateEnvPath) !== path.resolve(defaultStateEnvPath);
   const parsedFiles = [
     readDotEnvFile({
@@ -266,7 +266,7 @@ export function loadGlobalRuntimeDotEnvFiles(opts?: { quiet?: boolean; stateEnvP
         filePath: path.join(
           resolveRequiredHomeDir(process.env, os.homedir),
           ".config",
-          "openclaw",
+          "opnex",
           "gateway.env",
         ),
         shouldBlockKey: shouldBlockRuntimeDotEnvKey,
@@ -283,7 +283,7 @@ export function loadDotEnv(opts?: { quiet?: boolean }) {
   const cwdEnvPath = path.join(process.cwd(), ".env");
   loadWorkspaceDotEnvFile(cwdEnvPath, { quiet });
 
-  // Then load global fallback: ~/.openclaw/.env (or OPENCLAW_STATE_DIR/.env),
+  // Then load global fallback: ~/.opnex/.env (or OPNEX_STATE_DIR/.env),
   // without overriding any env vars already present.
   loadGlobalRuntimeDotEnvFiles({ quiet });
 }

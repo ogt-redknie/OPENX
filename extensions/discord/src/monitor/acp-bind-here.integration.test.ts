@@ -3,24 +3,24 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const loadConfigMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("opnex/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("opnex/plugin-sdk/runtime-config-snapshot")
+  >("opnex/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => loadConfigMock(),
   };
 });
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   getSessionBindingService,
   registerSessionBindingAdapter,
   type SessionBindingBindInput,
   type SessionBindingRecord,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { __testing as sessionBindingTesting } from "openclaw/plugin-sdk/conversation-runtime";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { __testing as sessionBindingTesting } from "opnex/plugin-sdk/conversation-runtime";
 import { preflightDiscordMessage } from "./message-handler.preflight.js";
 import {
   createDiscordMessage,
@@ -49,7 +49,7 @@ const baseCfg = {
       },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies OPNEXConfig;
 
 function createDmClient(channelId: string): DiscordClient {
   return {

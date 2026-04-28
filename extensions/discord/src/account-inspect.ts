@@ -1,15 +1,15 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "opnex/plugin-sdk/account-id";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   mergeDiscordAccountConfig,
   resolveDefaultDiscordAccountId,
   resolveDiscordAccountConfig,
 } from "./accounts.js";
-import type { DiscordAccountConfig, OpenClawConfig } from "./runtime-api.js";
+import type { DiscordAccountConfig, OPNEXConfig } from "./runtime-api.js";
 
 export type DiscordCredentialStatus = "available" | "configured_unavailable" | "missing";
 
@@ -48,7 +48,7 @@ function inspectDiscordTokenValue(value: unknown): {
 }
 
 export function inspectDiscordAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   envToken?: string | null;
 }): InspectedDiscordAccount {

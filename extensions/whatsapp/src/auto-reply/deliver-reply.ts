@@ -1,11 +1,11 @@
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-types";
-import { chunkMarkdownTextWithMode, type ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-chunking";
+import type { MarkdownTableMode } from "opnex/plugin-sdk/config-types";
+import { chunkMarkdownTextWithMode, type ChunkMode } from "opnex/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-chunking";
 import {
   isReasoningReplyPayload,
   sendMediaWithLeadingCaption,
-} from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/reply-payload";
+import { logVerbose, shouldLogVerbose } from "opnex/plugin-sdk/runtime-env";
 import { loadWebMedia } from "../media.js";
 import {
   normalizeWhatsAppOutboundPayload,

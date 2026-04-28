@@ -1,8 +1,8 @@
 import {
   getProviderHttpMocks,
   installProviderHttpMockCleanup,
-} from "openclaw/plugin-sdk/provider-http-test-mocks";
-import { expectExplicitVideoGenerationCapabilities } from "openclaw/plugin-sdk/provider-test-contracts";
+} from "opnex/plugin-sdk/provider-http-test-mocks";
+import { expectExplicitVideoGenerationCapabilities } from "opnex/plugin-sdk/provider-test-contracts";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 const { postJsonRequestMock, fetchWithTimeoutMock } = getProviderHttpMocks();
@@ -47,7 +47,7 @@ describe("runway video generation provider", () => {
     const result = await provider.generateVideo({
       provider: "runway",
       model: "gen4.5",
-      prompt: "a tiny lobster DJ under neon lights",
+      prompt: "a tiny opnex DJ under neon lights",
       cfg: {},
       durationSeconds: 4,
       aspectRatio: "16:9",
@@ -58,7 +58,7 @@ describe("runway video generation provider", () => {
         url: "https://api.dev.runwayml.com/v1/text_to_video",
         body: {
           model: "gen4.5",
-          promptText: "a tiny lobster DJ under neon lights",
+          promptText: "a tiny opnex DJ under neon lights",
           ratio: "1280:720",
           duration: 4,
         },

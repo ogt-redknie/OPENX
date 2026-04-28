@@ -4,16 +4,16 @@ import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   projectConfigOntoRuntimeSourceSnapshot,
-  type OpenClawConfig,
+  type OPNEXConfig,
 } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import { resolveInstalledManifestRegistryIndexFingerprint } from "../plugins/manifest-registry-installed.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
-import { resolveOpenClawAgentDir } from "./agent-paths.js";
+import { resolveOPNEXAgentDir } from "./agent-paths.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "./agent-scope.js";
 import { MODELS_JSON_STATE } from "./models-config-state.js";
-import { planOpenClawModelsJson } from "./models-config.plan.js";
+import { planOPNEXModelsJson } from "./models-config.plan.js";
 
 export { resetModelsJsonReadyCacheForTest } from "./models-config-state.js";
 
@@ -42,8 +42,8 @@ function stableStringify(value: unknown): string {
 }
 
 async function buildModelsJsonFingerprint(params: {
-  config: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+  config: OPNEXConfig;
+  sourceConfigForSecrets: OPNEXConfig;
   agentDir: string;
   workspaceDir?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index">;
@@ -108,9 +108,9 @@ export async function writeModelsFileAtomicForModelsJson(
   await fs.rename(tempPath, targetPath);
 }
 
-function resolveModelsConfigInput(config?: OpenClawConfig): {
-  config: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+function resolveModelsConfigInput(config?: OPNEXConfig): {
+  config: OPNEXConfig;
+  sourceConfigForSecrets: OPNEXConfig;
 } {
   const runtimeSource = getRuntimeConfigSourceSnapshot();
   if (!config) {
@@ -154,8 +154,8 @@ async function withModelsJsonWriteLock<T>(targetPath: string, run: () => Promise
   }
 }
 
-export async function ensureOpenClawModelsJson(
-  config?: OpenClawConfig,
+export async function ensureOPNEXModelsJson(
+  config?: OPNEXConfig,
   agentDirOverride?: string,
   options: {
     pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">;
@@ -177,7 +177,7 @@ export async function ensureOpenClawModelsJson(
       config: cfg,
       ...(workspaceDir ? { workspaceDir } : {}),
     });
-  const agentDir = agentDirOverride?.trim() ? agentDirOverride.trim() : resolveOpenClawAgentDir();
+  const agentDir = agentDirOverride?.trim() ? agentDirOverride.trim() : resolveOPNEXAgentDir();
   const targetPath = path.join(agentDir, "models.json");
   const fingerprint = await buildModelsJsonFingerprint({
     config: cfg,
@@ -205,7 +205,7 @@ export async function ensureOpenClawModelsJson(
     // are available to provider discovery without mutating process.env.
     const env = createConfigRuntimeEnv(cfg);
     const existingModelsFile = await readExistingModelsFile(targetPath);
-    const plan = await planOpenClawModelsJson({
+    const plan = await planOPNEXModelsJson({
       cfg,
       sourceConfigForSecrets: resolved.sourceConfigForSecrets,
       agentDir,

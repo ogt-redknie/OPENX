@@ -44,8 +44,8 @@ export type {
   AnyAgentTool,
   CliBackendPlugin,
   MediaUnderstandingProviderPlugin,
-  OpenClawPluginApi,
-  OpenClawPluginConfigSchema,
+  OPNEXPluginApi,
+  OPNEXPluginConfigSchema,
   PluginLogger,
   ProviderAuthContext,
   ProviderAuthResult,
@@ -77,11 +77,11 @@ export type {
   TaskRunDetail,
   TaskRunView,
 } from "../plugins/runtime/task-domain-types.js";
-export type { OpenClawConfig } from "../config/config.js";
-/** @deprecated Use OpenClawConfig instead */
-export type { OpenClawConfig as ClawdbotConfig } from "../config/config.js";
-/** @deprecated Use OpenClawConfig instead */
-export type { OpenClawConfig as OpenClawSchemaType } from "../config/config.js";
+export type { OPNEXConfig } from "../config/config.js";
+/** @deprecated Use OPNEXConfig instead */
+export type { OPNEXConfig as ClawdbotConfig } from "../config/config.js";
+/** @deprecated Use OPNEXConfig instead */
+export type { OPNEXConfig as OPNEXSchemaType } from "../config/config.js";
 export type {
   MemoryPluginCapability,
   MemoryPluginPublicArtifact,

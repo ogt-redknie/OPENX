@@ -15,7 +15,7 @@ describe("loadExtraBootstrapFiles", () => {
   };
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-extra-bootstrap-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-extra-bootstrap-"));
   });
 
   afterAll(async () => {

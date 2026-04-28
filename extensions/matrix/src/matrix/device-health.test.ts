@@ -1,29 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { isOpenClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
+import { isOPNEXManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
 
 describe("matrix device health", () => {
-  it("detects OpenClaw-managed device names", () => {
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Gateway")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Debug")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("Element iPhone")).toBe(false);
-    expect(isOpenClawManagedMatrixDevice(null)).toBe(false);
+  it("detects OPNEX-managed device names", () => {
+    expect(isOPNEXManagedMatrixDevice("OPNEX Gateway")).toBe(true);
+    expect(isOPNEXManagedMatrixDevice("OPNEX Debug")).toBe(true);
+    expect(isOPNEXManagedMatrixDevice("Element iPhone")).toBe(false);
+    expect(isOPNEXManagedMatrixDevice(null)).toBe(false);
   });
 
-  it("summarizes stale OpenClaw-managed devices separately from the current device", () => {
+  it("summarizes stale OPNEX-managed devices separately from the current device", () => {
     const summary = summarizeMatrixDeviceHealth([
       {
         deviceId: "du314Zpw3A",
-        displayName: "OpenClaw Gateway",
+        displayName: "OPNEX Gateway",
         current: true,
       },
       {
         deviceId: "BritdXC6iL",
-        displayName: "OpenClaw Gateway",
+        displayName: "OPNEX Gateway",
         current: false,
       },
       {
         deviceId: "G6NJU9cTgs",
-        displayName: "OpenClaw Debug",
+        displayName: "OPNEX Debug",
         current: false,
       },
       {
@@ -34,10 +34,10 @@ describe("matrix device health", () => {
     ]);
 
     expect(summary.currentDeviceId).toBe("du314Zpw3A");
-    expect(summary.currentOpenClawDevices).toEqual([
+    expect(summary.currentOPNEXDevices).toEqual([
       expect.objectContaining({ deviceId: "du314Zpw3A" }),
     ]);
-    expect(summary.staleOpenClawDevices).toEqual([
+    expect(summary.staleOPNEXDevices).toEqual([
       expect.objectContaining({ deviceId: "BritdXC6iL" }),
       expect.objectContaining({ deviceId: "G6NJU9cTgs" }),
     ]);

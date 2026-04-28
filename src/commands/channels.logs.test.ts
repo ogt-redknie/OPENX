@@ -42,8 +42,8 @@ describe("channelsLogsCommand", () => {
   let logPath: string;
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-channels-logs-"));
-    logPath = path.join(tempDir, "openclaw.log");
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-channels-logs-"));
+    logPath = path.join(tempDir, "opnex.log");
     setLoggerOverride({ file: logPath });
     runtime.log.mockClear();
     runtime.error.mockClear();

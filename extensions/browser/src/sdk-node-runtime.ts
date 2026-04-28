@@ -11,20 +11,20 @@ export {
   resolveGatewayAuth,
   resolveNodeCommandAllowlist,
   safeParseJson,
-} from "openclaw/plugin-sdk/gateway-runtime";
+} from "opnex/plugin-sdk/gateway-runtime";
 export type {
   GatewayRequestHandlers,
   GatewayRpcOpts,
   NodeSession,
-} from "openclaw/plugin-sdk/gateway-runtime";
-export { runExec } from "openclaw/plugin-sdk/process-runtime";
-export { runCommandWithRuntime } from "openclaw/plugin-sdk/cli-runtime";
-export type { OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
+} from "opnex/plugin-sdk/gateway-runtime";
+export { runExec } from "opnex/plugin-sdk/process-runtime";
+export { runCommandWithRuntime } from "opnex/plugin-sdk/cli-runtime";
+export type { OPNEXPluginService } from "opnex/plugin-sdk/plugin-entry";
 export {
   startLazyPluginServiceModule,
   type LazyPluginServiceHandle,
-} from "openclaw/plugin-sdk/plugin-runtime";
-export { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/plugin-runtime";
+export { defaultRuntime } from "opnex/plugin-sdk/runtime-env";
 
 export async function withTimeout<T>(
   work: (signal: AbortSignal | undefined) => Promise<T>,

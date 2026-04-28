@@ -1,14 +1,14 @@
 import {
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { OutboundIdentity } from "openclaw/plugin-sdk/outbound-runtime";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/outbound-send-deps";
+} from "opnex/plugin-sdk/channel-send-result";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { OutboundIdentity } from "opnex/plugin-sdk/outbound-runtime";
+import { resolveOutboundSendDep } from "opnex/plugin-sdk/outbound-send-deps";
 import {
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { chunkDiscordTextWithMode } from "./chunk.js";
 import { withDiscordDeliveryRetry } from "./delivery-retry.js";
 import { isLikelyDiscordVideoMedia } from "./media-detection.js";
@@ -48,7 +48,7 @@ function resolveDiscordWebhookIdentity(params: {
 }
 
 async function maybeSendDiscordWebhookText(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   text: string;
   threadId?: string | number | null;
   accountId?: string | null;

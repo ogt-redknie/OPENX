@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { WebInboundMessage } from "../../inbound/types.js";
 import { maybeSendAckReaction } from "./ack-reaction.js";
@@ -30,8 +30,8 @@ function createMessage(overrides: Partial<WebInboundMessage> = {}): WebInboundMe
 
 function createConfig(
   reactionLevel: "off" | "ack" | "minimal" | "extensive",
-  extras?: Partial<NonNullable<OpenClawConfig["channels"]>["whatsapp"]>,
-): OpenClawConfig {
+  extras?: Partial<NonNullable<OPNEXConfig["channels"]>["whatsapp"]>,
+): OPNEXConfig {
   return {
     channels: {
       whatsapp: {
@@ -44,7 +44,7 @@ function createConfig(
         ...extras,
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 type AckReactionParams = Parameters<typeof maybeSendAckReaction>[0];

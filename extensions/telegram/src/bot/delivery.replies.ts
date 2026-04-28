@@ -1,29 +1,29 @@
 import { type Bot, GrammyError, InputFile } from "grammy";
-import type { ReplyToMode } from "openclaw/plugin-sdk/config-types";
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-types";
-import { fireAndForgetHook } from "openclaw/plugin-sdk/hook-runtime";
-import { createInternalHookEvent, triggerInternalHook } from "openclaw/plugin-sdk/hook-runtime";
+import type { ReplyToMode } from "opnex/plugin-sdk/config-types";
+import type { MarkdownTableMode } from "opnex/plugin-sdk/config-types";
+import { fireAndForgetHook } from "opnex/plugin-sdk/hook-runtime";
+import { createInternalHookEvent, triggerInternalHook } from "opnex/plugin-sdk/hook-runtime";
 import {
   buildCanonicalSentMessageHookContext,
   toInternalMessageSentContext,
   toPluginMessageContext,
   toPluginMessageSentEvent,
-} from "openclaw/plugin-sdk/hook-runtime";
-import type { ReplyPayloadDelivery } from "openclaw/plugin-sdk/interactive-runtime";
-import { buildOutboundMediaLoadOptions } from "openclaw/plugin-sdk/media-runtime";
-import { isGifMedia, kindFromMime } from "openclaw/plugin-sdk/media-runtime";
+} from "opnex/plugin-sdk/hook-runtime";
+import type { ReplyPayloadDelivery } from "opnex/plugin-sdk/interactive-runtime";
+import { buildOutboundMediaLoadOptions } from "opnex/plugin-sdk/media-runtime";
+import { isGifMedia, kindFromMime } from "opnex/plugin-sdk/media-runtime";
 import {
   createOutboundPayloadPlan,
   projectOutboundPayloadPlanForDelivery,
-} from "openclaw/plugin-sdk/outbound-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { chunkMarkdownTextWithMode, type ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "opnex/plugin-sdk/outbound-runtime";
+import { getGlobalHookRunner } from "opnex/plugin-sdk/plugin-runtime";
+import { chunkMarkdownTextWithMode, type ChunkMode } from "opnex/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
+import { danger, logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "opnex/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "opnex/plugin-sdk/ssrf-runtime";
+import { loadWebMedia } from "opnex/plugin-sdk/web-media";
 import type { TelegramInlineButtons } from "../button-types.js";
 import { splitTelegramCaption } from "../caption.js";
 import {
@@ -661,7 +661,7 @@ export function emitTelegramMessageSentHooks(params: EmitMessageSentHookParams):
 
 export async function deliverReplies(params: {
   replies: ReplyPayload[];
-  cfg?: import("openclaw/plugin-sdk/config-types").OpenClawConfig;
+  cfg?: import("opnex/plugin-sdk/config-types").OPNEXConfig;
   chatId: string;
   accountId?: string;
   sessionKeyForInternalHooks?: string;

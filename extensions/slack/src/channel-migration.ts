@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { SlackChannelConfig } from "openclaw/plugin-sdk/config-types";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { SlackChannelConfig } from "opnex/plugin-sdk/config-types";
+import { normalizeAccountId } from "opnex/plugin-sdk/routing";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 
 type SlackChannels = Record<string, SlackChannelConfig>;
 
@@ -14,7 +14,7 @@ export type SlackChannelMigrationResult = {
 };
 
 function resolveAccountChannels(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   accountId?: string | null,
 ): { channels?: SlackChannels } {
   if (!accountId) {
@@ -58,7 +58,7 @@ export function migrateSlackChannelsInPlace(
 }
 
 export function migrateSlackChannelConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   oldChannelId: string;
   newChannelId: string;

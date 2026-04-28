@@ -2,7 +2,7 @@ import {
   logAckFailure,
   removeAckReactionHandleAfterReply,
   type AckReactionHandle,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "opnex/plugin-sdk/channel-feedback";
 import {
   createInternalHookEvent,
   deriveInboundMessageHookContext,
@@ -11,9 +11,9 @@ import {
   toPluginMessageContext,
   toPluginMessageReceivedEvent,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
+} from "opnex/plugin-sdk/hook-runtime";
+import { getGlobalHookRunner } from "opnex/plugin-sdk/plugin-runtime";
+import { resolveBatchedReplyThreadingPolicy } from "opnex/plugin-sdk/reply-reference";
 import { getPrimaryIdentityId, getSelfIdentity, getSenderIdentity } from "../../identity.js";
 import {
   resolveWhatsAppCommandAuthorized,

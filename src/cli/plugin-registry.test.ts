@@ -28,7 +28,7 @@ function withActivatedPluginIdsForTest<T extends Record<string, unknown>>(
 }
 
 const mocks = vi.hoisted(() => ({
-  loadOpenClawPlugins: vi.fn<typeof import("../plugins/loader.js").loadOpenClawPlugins>(),
+  loadOPNEXPlugins: vi.fn<typeof import("../plugins/loader.js").loadOPNEXPlugins>(),
   resolveRuntimePluginRegistry:
     vi.fn<typeof import("../plugins/loader.js").resolveRuntimePluginRegistry>(),
   getActivePluginRegistry: vi.fn<typeof import("../plugins/runtime.js").getActivePluginRegistry>(),
@@ -48,8 +48,8 @@ let ensurePluginRegistryLoaded: typeof import("./plugin-registry.js").ensurePlug
 let resetPluginRegistryLoadedForTests: typeof import("./plugin-registry.js").__testing.resetPluginRegistryLoadedForTests;
 
 vi.mock("../plugins/loader.js", () => ({
-  loadOpenClawPlugins: (...args: Parameters<typeof mocks.loadOpenClawPlugins>) =>
-    mocks.loadOpenClawPlugins(...args),
+  loadOPNEXPlugins: (...args: Parameters<typeof mocks.loadOPNEXPlugins>) =>
+    mocks.loadOPNEXPlugins(...args),
   resolveRuntimePluginRegistry: (...args: Parameters<typeof mocks.resolveRuntimePluginRegistry>) =>
     mocks.resolveRuntimePluginRegistry(...args),
 }));
@@ -122,7 +122,7 @@ describe("ensurePluginRegistryLoaded", () => {
   });
 
   beforeEach(() => {
-    mocks.loadOpenClawPlugins.mockReset();
+    mocks.loadOPNEXPlugins.mockReset();
     mocks.resolveRuntimePluginRegistry.mockReset();
     mocks.getActivePluginRegistry.mockReset();
     mocks.resolveConfiguredChannelPluginIds.mockReset();
@@ -184,7 +184,7 @@ describe("ensurePluginRegistryLoaded", () => {
         workspaceDir: "/tmp/workspace",
       }),
     );
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: autoEnabledConfig,
         activationSourceConfig: autoEnabledConfig,
@@ -219,15 +219,15 @@ describe("ensurePluginRegistryLoaded", () => {
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
     ensurePluginRegistryLoaded({ scope: "channels" });
 
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledTimes(2);
-    expect(mocks.loadOpenClawPlugins).toHaveBeenNthCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledTimes(2);
+    expect(mocks.loadOPNEXPlugins).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({
         onlyPluginIds: ["demo-channel-a"],
         throwOnLoadError: true,
       }),
     );
-    expect(mocks.loadOpenClawPlugins).toHaveBeenNthCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         onlyPluginIds: ["demo-channel-a", "demo-channel-b"],
@@ -259,8 +259,8 @@ describe("ensurePluginRegistryLoaded", () => {
 
     ensurePluginRegistryLoaded({ scope: "all" });
 
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledTimes(1);
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledTimes(1);
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config,
         throwOnLoadError: true,
@@ -294,8 +294,8 @@ describe("ensurePluginRegistryLoaded", () => {
 
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
 
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledTimes(1);
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledTimes(1);
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: activatedConfig,
         activationSourceConfig: activatedConfig,
@@ -335,8 +335,8 @@ describe("ensurePluginRegistryLoaded", () => {
     } as never);
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
 
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledTimes(1);
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledTimes(1);
+    expect(mocks.loadOPNEXPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: activatedConfig,
         activationSourceConfig: activatedConfig,

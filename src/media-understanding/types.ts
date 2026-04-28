@@ -1,5 +1,5 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
 export type MediaUnderstandingKind =
   | "audio.transcription"
@@ -139,7 +139,7 @@ export type ImageDescriptionRequest = {
   preferredProfile?: string;
   authStore?: AuthProfileStore;
   agentDir: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   model: string;
   provider: string;
 };
@@ -161,7 +161,7 @@ export type ImagesDescriptionRequest = {
   preferredProfile?: string;
   authStore?: AuthProfileStore;
   agentDir: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 };
 
 export type ImageDescriptionResult = {

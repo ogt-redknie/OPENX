@@ -1,6 +1,6 @@
-import { installedPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "opnex/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import {
   applyPluginUninstallDirectoryRemoval,
   buildPluginDiagnosticsReport,
@@ -19,7 +19,7 @@ import {
   writePersistedInstalledPluginIndexInstallRecords,
 } from "./plugins-cli-test-helpers.js";
 
-const CLI_STATE_ROOT = "/tmp/openclaw-state";
+const CLI_STATE_ROOT = "/tmp/opnex-state";
 const ALPHA_INSTALL_PATH = installedPluginRoot(CLI_STATE_ROOT, "alpha");
 
 describe("plugins cli uninstall", () => {
@@ -46,14 +46,14 @@ describe("plugins cli uninstall", () => {
           contextEngine: "alpha",
         },
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
     planPluginUninstall.mockReturnValue({
       ok: true,
-      config: {} as OpenClawConfig,
+      config: {} as OPNEXConfig,
       actions: {
         entry: true,
         install: true,
@@ -92,13 +92,13 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -163,13 +163,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -222,13 +222,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -277,7 +277,7 @@ describe("plugins cli uninstall", () => {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig);
+    } as OPNEXConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],

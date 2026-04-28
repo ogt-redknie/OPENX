@@ -8,7 +8,7 @@ import {
   createReplyOperation,
   replyRunRegistry,
 } from "../auto-reply/reply/reply-run-registry.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import { runPreparedCliAgent } from "./cli-runner.js";
 import {
@@ -35,8 +35,8 @@ vi.mock("../tts/tts.js", () => ({
 const mockGetGlobalHookRunner = vi.mocked(getGlobalHookRunner);
 
 function createSessionFile(params?: { history?: Array<{ role: "user"; content: string }> }) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-hooks-"));
-  vi.stubEnv("OPENCLAW_STATE_DIR", dir);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "opnex-cli-hooks-"));
+  vi.stubEnv("OPNEX_STATE_DIR", dir);
   const sessionFile = path.join(dir, "agents", "main", "sessions", "s1.jsonl");
   fs.mkdirSync(path.dirname(sessionFile), { recursive: true });
   fs.writeFileSync(
@@ -74,7 +74,7 @@ function buildPreparedContext(params?: {
   sessionKey?: string;
   cliSessionId?: string;
   runId?: string;
-  openClawHistoryPrompt?: string;
+  opnexHistoryPrompt?: string;
 }): PreparedCliRunContext {
   const backend = {
     command: "codex",
@@ -116,8 +116,8 @@ function buildPreparedContext(params?: {
     systemPrompt: "You are a helpful assistant.",
     systemPromptReport: {} as PreparedCliRunContext["systemPromptReport"],
     bootstrapPromptWarningLines: [],
-    ...(params?.openClawHistoryPrompt
-      ? { openClawHistoryPrompt: params.openClawHistoryPrompt }
+    ...(params?.opnexHistoryPrompt
+      ? { opnexHistoryPrompt: params.opnexHistoryPrompt }
       : {}),
     authEpochVersion: 2,
   };
@@ -328,7 +328,7 @@ describe("runCliAgent reliability", () => {
     });
   });
 
-  it("seeds fresh CLI sessions from the OpenClaw transcript", async () => {
+  it("seeds fresh CLI sessions from the OPNEX transcript", async () => {
     supervisorSpawnMock.mockResolvedValueOnce(
       createManagedRun({
         reason: "exit",
@@ -344,8 +344,8 @@ describe("runCliAgent reliability", () => {
 
     const result = await runPreparedCliAgent(
       buildPreparedContext({
-        openClawHistoryPrompt:
-          "Continue this conversation using the OpenClaw transcript below.\n\nUser: earlier ask\n\nAssistant: earlier answer\n\n<next_user_message>\nhi\n</next_user_message>",
+        opnexHistoryPrompt:
+          "Continue this conversation using the OPNEX transcript below.\n\nUser: earlier ask\n\nAssistant: earlier answer\n\n<next_user_message>\nhi\n</next_user_message>",
       }),
     );
 
@@ -370,7 +370,7 @@ describe("runCliAgent reliability", () => {
     const result = await runPreparedCliAgent(
       buildPreparedContext({
         cliSessionId: "cli-session",
-        openClawHistoryPrompt: "User: earlier ask",
+        opnexHistoryPrompt: "User: earlier ask",
       }),
     );
 
@@ -770,7 +770,7 @@ describe("runCliAgent reliability", () => {
       })}\n`,
       "utf-8",
     );
-    const config: OpenClawConfig = {
+    const config: OPNEXConfig = {
       agents: {
         defaults: {
           workspace: dir,
@@ -807,9 +807,9 @@ describe("runCliAgent reliability", () => {
       });
 
       expect(context.params.prompt).toBe("hook context\n\ncurrent ask");
-      expect(context.openClawHistoryPrompt).toContain("Compaction summary: compacted earlier ask");
-      expect(context.openClawHistoryPrompt).toContain("hook context");
-      expect(context.openClawHistoryPrompt).toContain("current ask");
+      expect(context.opnexHistoryPrompt).toContain("Compaction summary: compacted earlier ask");
+      expect(context.opnexHistoryPrompt).toContain("hook context");
+      expect(context.opnexHistoryPrompt).toContain("current ask");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }

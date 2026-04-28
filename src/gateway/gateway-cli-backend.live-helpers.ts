@@ -68,11 +68,11 @@ export function parseImageMode(raw?: string): "list" | "repeat" | undefined {
   if (trimmed === "list" || trimmed === "repeat") {
     return trimmed;
   }
-  throw new Error("OPENCLAW_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
+  throw new Error("OPNEX_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
 }
 
 export function shouldRunCliImageProbe(providerId: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
+  const raw = process.env.OPNEX_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -80,7 +80,7 @@ export function shouldRunCliImageProbe(providerId: string): boolean {
 }
 
 export function shouldRunCliMcpProbe(providerId: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
+  const raw = process.env.OPNEX_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -94,18 +94,18 @@ export function resolveCliBackendLiveArgs(params: {
 }): { args: string[]; resumeArgs?: string[] } {
   const args =
     parseJsonStringArray(
-      "OPENCLAW_LIVE_CLI_BACKEND_ARGS",
-      process.env.OPENCLAW_LIVE_CLI_BACKEND_ARGS,
+      "OPNEX_LIVE_CLI_BACKEND_ARGS",
+      process.env.OPNEX_LIVE_CLI_BACKEND_ARGS,
     ) ?? params.defaultArgs;
   if (!args || args.length === 0) {
     throw new Error(
-      `OPENCLAW_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
+      `OPNEX_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
     );
   }
   const resumeArgs =
     parseJsonStringArray(
-      "OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS",
-      process.env.OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS,
+      "OPNEX_LIVE_CLI_BACKEND_RESUME_ARGS",
+      process.env.OPNEX_LIVE_CLI_BACKEND_RESUME_ARGS,
     ) ?? params.defaultResumeArgs;
   return { args, resumeArgs };
 }
@@ -126,7 +126,7 @@ export function resolveCliModelSwitchProbeTarget(
 }
 
 export function shouldRunCliModelSwitchProbe(providerId: string, modelRef: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
+  const raw = process.env.OPNEX_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -351,30 +351,30 @@ function isRetryableGatewayConnectError(error: Error): boolean {
 
 export function snapshotCliBackendLiveEnv(): CliBackendLiveEnvSnapshot {
   return {
-    configPath: process.env.OPENCLAW_CONFIG_PATH,
-    stateDir: process.env.OPENCLAW_STATE_DIR,
-    token: process.env.OPENCLAW_GATEWAY_TOKEN,
-    skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
-    skipProviders: process.env.OPENCLAW_SKIP_PROVIDERS,
-    skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
-    skipCron: process.env.OPENCLAW_SKIP_CRON,
-    skipCanvas: process.env.OPENCLAW_SKIP_CANVAS_HOST,
-    skipBrowserControl: process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER,
-    bundledPluginsDir: process.env.OPENCLAW_BUNDLED_PLUGINS_DIR,
-    minimalGateway: process.env.OPENCLAW_TEST_MINIMAL_GATEWAY,
+    configPath: process.env.OPNEX_CONFIG_PATH,
+    stateDir: process.env.OPNEX_STATE_DIR,
+    token: process.env.OPNEX_GATEWAY_TOKEN,
+    skipChannels: process.env.OPNEX_SKIP_CHANNELS,
+    skipProviders: process.env.OPNEX_SKIP_PROVIDERS,
+    skipGmail: process.env.OPNEX_SKIP_GMAIL_WATCHER,
+    skipCron: process.env.OPNEX_SKIP_CRON,
+    skipCanvas: process.env.OPNEX_SKIP_CANVAS_HOST,
+    skipBrowserControl: process.env.OPNEX_SKIP_BROWSER_CONTROL_SERVER,
+    bundledPluginsDir: process.env.OPNEX_BUNDLED_PLUGINS_DIR,
+    minimalGateway: process.env.OPNEX_TEST_MINIMAL_GATEWAY,
     anthropicApiKey: process.env.ANTHROPIC_API_KEY,
     anthropicApiKeyOld: process.env.ANTHROPIC_API_KEY_OLD,
   };
 }
 
 export function applyCliBackendLiveEnv(preservedEnv: ReadonlySet<string>): void {
-  process.env.OPENCLAW_SKIP_CHANNELS = "1";
-  process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-  process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.OPENCLAW_SKIP_CRON = "1";
-  process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+  process.env.OPNEX_SKIP_CHANNELS = "1";
+  process.env.OPNEX_SKIP_PROVIDERS = "1";
+  process.env.OPNEX_SKIP_GMAIL_WATCHER = "1";
+  process.env.OPNEX_SKIP_CRON = "1";
+  process.env.OPNEX_SKIP_CANVAS_HOST = "1";
+  process.env.OPNEX_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.OPNEX_TEST_MINIMAL_GATEWAY = "1";
   if (!preservedEnv.has("ANTHROPIC_API_KEY")) {
     delete process.env.ANTHROPIC_API_KEY;
   }
@@ -384,17 +384,17 @@ export function applyCliBackendLiveEnv(preservedEnv: ReadonlySet<string>): void 
 }
 
 export function restoreCliBackendLiveEnv(snapshot: CliBackendLiveEnvSnapshot): void {
-  restoreEnvVar("OPENCLAW_CONFIG_PATH", snapshot.configPath);
-  restoreEnvVar("OPENCLAW_STATE_DIR", snapshot.stateDir);
-  restoreEnvVar("OPENCLAW_GATEWAY_TOKEN", snapshot.token);
-  restoreEnvVar("OPENCLAW_SKIP_CHANNELS", snapshot.skipChannels);
-  restoreEnvVar("OPENCLAW_SKIP_PROVIDERS", snapshot.skipProviders);
-  restoreEnvVar("OPENCLAW_SKIP_GMAIL_WATCHER", snapshot.skipGmail);
-  restoreEnvVar("OPENCLAW_SKIP_CRON", snapshot.skipCron);
-  restoreEnvVar("OPENCLAW_SKIP_CANVAS_HOST", snapshot.skipCanvas);
-  restoreEnvVar("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", snapshot.skipBrowserControl);
-  restoreEnvVar("OPENCLAW_BUNDLED_PLUGINS_DIR", snapshot.bundledPluginsDir);
-  restoreEnvVar("OPENCLAW_TEST_MINIMAL_GATEWAY", snapshot.minimalGateway);
+  restoreEnvVar("OPNEX_CONFIG_PATH", snapshot.configPath);
+  restoreEnvVar("OPNEX_STATE_DIR", snapshot.stateDir);
+  restoreEnvVar("OPNEX_GATEWAY_TOKEN", snapshot.token);
+  restoreEnvVar("OPNEX_SKIP_CHANNELS", snapshot.skipChannels);
+  restoreEnvVar("OPNEX_SKIP_PROVIDERS", snapshot.skipProviders);
+  restoreEnvVar("OPNEX_SKIP_GMAIL_WATCHER", snapshot.skipGmail);
+  restoreEnvVar("OPNEX_SKIP_CRON", snapshot.skipCron);
+  restoreEnvVar("OPNEX_SKIP_CANVAS_HOST", snapshot.skipCanvas);
+  restoreEnvVar("OPNEX_SKIP_BROWSER_CONTROL_SERVER", snapshot.skipBrowserControl);
+  restoreEnvVar("OPNEX_BUNDLED_PLUGINS_DIR", snapshot.bundledPluginsDir);
+  restoreEnvVar("OPNEX_TEST_MINIMAL_GATEWAY", snapshot.minimalGateway);
   restoreEnvVar("ANTHROPIC_API_KEY", snapshot.anthropicApiKey);
   restoreEnvVar("ANTHROPIC_API_KEY_OLD", snapshot.anthropicApiKeyOld);
 }

@@ -1,7 +1,7 @@
 import { EventEmitter } from "node:events";
 import { RateLimitError } from "@buape/carbon";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { ChannelRuntimeSurface } from "opnex/plugin-sdk/channel-contract";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   baseConfig,
@@ -38,7 +38,7 @@ const {
 
 let monitorDiscordProvider: typeof import("./provider.js").monitorDiscordProvider;
 let providerTesting: typeof import("./provider.js").__testing;
-let runtimeEnvModule: typeof import("openclaw/plugin-sdk/runtime-env");
+let runtimeEnvModule: typeof import("opnex/plugin-sdk/runtime-env");
 
 function createAcpRuntimeError(code: string, message: string): Error & { code: string } {
   return Object.assign(new Error(message), { code });
@@ -86,7 +86,7 @@ function createCompatRateLimitError(
   return new RateLimitErrorCtor(response, body, compatRequest);
 }
 
-function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): OpenClawConfig {
+function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): OPNEXConfig {
   return {
     channels: {
       discord: {
@@ -98,7 +98,7 @@ function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {})
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 vi.mock("../voice/manager.runtime.js", () => {
@@ -110,7 +110,7 @@ vi.mock("../voice/manager.runtime.js", () => {
 });
 describe("monitorDiscordProvider", () => {
   type ReconcileHealthProbeParams = {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     accountId: string;
     sessionKey: string;
     binding: unknown;
@@ -118,7 +118,7 @@ describe("monitorDiscordProvider", () => {
   };
 
   type ReconcileStartupParams = {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     healthProbe?: (
       params: ReconcileHealthProbeParams,
     ) => Promise<{ status: string; reason?: string }>;
@@ -158,9 +158,9 @@ describe("monitorDiscordProvider", () => {
   };
 
   beforeAll(async () => {
-    vi.doMock("openclaw/plugin-sdk/plugin-runtime", async () => {
-      const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/plugin-runtime")>(
-        "openclaw/plugin-sdk/plugin-runtime",
+    vi.doMock("opnex/plugin-sdk/plugin-runtime", async () => {
+      const actual = await vi.importActual<typeof import("opnex/plugin-sdk/plugin-runtime")>(
+        "opnex/plugin-sdk/plugin-runtime",
       );
       return {
         ...actual,
@@ -177,7 +177,7 @@ describe("monitorDiscordProvider", () => {
     vi.doMock("../token.js", () => ({
       normalizeDiscordToken: (value?: string) => value,
     }));
-    runtimeEnvModule = await import("openclaw/plugin-sdk/runtime-env");
+    runtimeEnvModule = await import("opnex/plugin-sdk/runtime-env");
     vi.spyOn(runtimeEnvModule, "logVerbose").mockImplementation(() => undefined);
     ({ monitorDiscordProvider, __testing: providerTesting } = await import("./provider.js"));
   });
@@ -602,7 +602,7 @@ describe("monitorDiscordProvider", () => {
     expect(drained[0]?.message).toContain("4014");
   });
 
-  it("passes OpenClaw EventQueue defaults to Carbon Client", async () => {
+  it("passes OPNEX EventQueue defaults to Carbon Client", async () => {
     await monitorDiscordProvider({
       config: baseConfig(),
       runtime: baseRuntime(),

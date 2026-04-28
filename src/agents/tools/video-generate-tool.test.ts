@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import { MAX_VIDEO_BYTES } from "../../media/constants.js";
 import * as mediaStore from "../../media/store.js";
 import * as webMedia from "../../media/web-media.js";
@@ -24,8 +24,8 @@ const taskExecutorMocks = vi.hoisted(() => ({
 vi.mock("../../tasks/runtime-internal.js", () => taskRuntimeInternalMocks);
 vi.mock("../../tasks/detached-task-runtime.js", () => taskExecutorMocks);
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): OPNEXConfig {
+  return value as OPNEXConfig;
 }
 
 function mockVideoPluginProvider(capabilities: Record<string, unknown> = {}) {
@@ -159,7 +159,7 @@ describe("createVideoGenerateTool", () => {
       requesterSessionKey: "agent:main:discord:direct:123",
       ownerKey: "agent:main:discord:direct:123",
       scopeKind: "session",
-      task: "friendly lobster surfing",
+      task: "friendly opnex surfing",
       status: "running",
       deliveryStatus: "not_applicable",
       notifyPolicy: "silent",
@@ -175,14 +175,14 @@ describe("createVideoGenerateTool", () => {
         {
           buffer: Buffer.from("video-bytes"),
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
       metadata: { taskId: "task-1" },
     });
     const saveSpy = vi.spyOn(mediaStore, "saveMediaBuffer").mockResolvedValueOnce({
-      path: "/tmp/generated-lobster.mp4",
-      id: "generated-lobster.mp4",
+      path: "/tmp/generated-opnex.mp4",
+      id: "generated-opnex.mp4",
       size: 11,
       contentType: "video/mp4",
     });
@@ -202,7 +202,7 @@ describe("createVideoGenerateTool", () => {
       throw new Error("expected video_generate tool");
     }
 
-    const result = await tool.execute("call-1", { prompt: "friendly lobster surfing" });
+    const result = await tool.execute("call-1", { prompt: "friendly opnex surfing" });
     const text = (result.content?.[0] as { text: string } | undefined)?.text ?? "";
 
     expect(saveSpy).toHaveBeenCalledWith(
@@ -210,18 +210,18 @@ describe("createVideoGenerateTool", () => {
       "video/mp4",
       "tool-video-generation",
       8 * 1024 * 1024,
-      "lobster.mp4",
+      "opnex.mp4",
     );
     expect(text).toContain("Generated 1 video with qwen/wan2.6-t2v.");
-    expect(text).toContain("MEDIA:/tmp/generated-lobster.mp4");
+    expect(text).toContain("MEDIA:/tmp/generated-opnex.mp4");
     expect(result.details).toMatchObject({
       provider: "qwen",
       model: "wan2.6-t2v",
       count: 1,
       media: {
-        mediaUrls: ["/tmp/generated-lobster.mp4"],
+        mediaUrls: ["/tmp/generated-opnex.mp4"],
       },
-      paths: ["/tmp/generated-lobster.mp4"],
+      paths: ["/tmp/generated-opnex.mp4"],
       metadata: { taskId: "task-1" },
     });
     expect(taskExecutorMocks.createRunningTaskRun).not.toHaveBeenCalled();
@@ -238,13 +238,13 @@ describe("createVideoGenerateTool", () => {
         {
           buffer: Buffer.from("video-bytes"),
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
     });
     const saveSpy = vi.spyOn(mediaStore, "saveMediaBuffer").mockResolvedValueOnce({
-      path: "/tmp/generated-lobster.mp4",
-      id: "generated-lobster.mp4",
+      path: "/tmp/generated-opnex.mp4",
+      id: "generated-opnex.mp4",
       size: 11,
       contentType: "video/mp4",
     });
@@ -262,14 +262,14 @@ describe("createVideoGenerateTool", () => {
       throw new Error("expected video_generate tool");
     }
 
-    await tool.execute("call-default-cap", { prompt: "friendly lobster surfing" });
+    await tool.execute("call-default-cap", { prompt: "friendly opnex surfing" });
 
     expect(saveSpy).toHaveBeenCalledWith(
       Buffer.from("video-bytes"),
       "video/mp4",
       "tool-video-generation",
       MAX_VIDEO_BYTES,
-      "lobster.mp4",
+      "opnex.mp4",
     );
   });
 
@@ -281,9 +281,9 @@ describe("createVideoGenerateTool", () => {
       ignoredOverrides: [],
       videos: [
         {
-          url: "https://example.com/generated-lobster.mp4",
+          url: "https://example.com/generated-opnex.mp4",
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
       metadata: { taskId: "task-1" },
@@ -303,20 +303,20 @@ describe("createVideoGenerateTool", () => {
       throw new Error("expected video_generate tool");
     }
 
-    const result = await tool.execute("call-url", { prompt: "friendly lobster surfing" });
+    const result = await tool.execute("call-url", { prompt: "friendly opnex surfing" });
     const text = (result.content?.[0] as { text: string } | undefined)?.text ?? "";
 
     expect(saveSpy).not.toHaveBeenCalled();
     expect(text).toContain("Generated 1 video with vydra/veo3.");
-    expect(text).toContain("MEDIA:https://example.com/generated-lobster.mp4");
+    expect(text).toContain("MEDIA:https://example.com/generated-opnex.mp4");
     expect(result.details).toMatchObject({
       provider: "vydra",
       model: "veo3",
       count: 1,
       media: {
-        mediaUrls: ["https://example.com/generated-lobster.mp4"],
+        mediaUrls: ["https://example.com/generated-opnex.mp4"],
       },
-      paths: ["https://example.com/generated-lobster.mp4"],
+      paths: ["https://example.com/generated-opnex.mp4"],
       metadata: { taskId: "task-1" },
     });
   });
@@ -330,9 +330,9 @@ describe("createVideoGenerateTool", () => {
       videos: [
         {
           buffer: Buffer.from("large-video-bytes"),
-          url: "https://fal.run/files/generated-lobster.mp4",
+          url: "https://fal.run/files/generated-opnex.mp4",
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
     });
@@ -354,20 +354,20 @@ describe("createVideoGenerateTool", () => {
     }
 
     const result = await tool.execute("call-url-fallback", {
-      prompt: "friendly lobster surfing",
+      prompt: "friendly opnex surfing",
     });
     const text = (result.content?.[0] as { text: string } | undefined)?.text ?? "";
 
     expect(text).toContain("Generated 1 video with fal/fal-ai/minimax/video-01-live.");
-    expect(text).toContain("MEDIA:https://fal.run/files/generated-lobster.mp4");
+    expect(text).toContain("MEDIA:https://fal.run/files/generated-opnex.mp4");
     expect(result.details).toMatchObject({
       provider: "fal",
       model: "fal-ai/minimax/video-01-live",
       count: 1,
       media: {
-        mediaUrls: ["https://fal.run/files/generated-lobster.mp4"],
+        mediaUrls: ["https://fal.run/files/generated-opnex.mp4"],
       },
-      paths: ["https://fal.run/files/generated-lobster.mp4"],
+      paths: ["https://fal.run/files/generated-opnex.mp4"],
     });
   });
 
@@ -378,7 +378,7 @@ describe("createVideoGenerateTool", () => {
       requesterSessionKey: "agent:main:discord:direct:123",
       ownerKey: "agent:main:discord:direct:123",
       scopeKind: "session",
-      task: "friendly lobster surfing",
+      task: "friendly opnex surfing",
       status: "running",
       deliveryStatus: "not_applicable",
       notifyPolicy: "silent",
@@ -395,9 +395,9 @@ describe("createVideoGenerateTool", () => {
       ignoredOverrides: [],
       videos: [
         {
-          url: "https://example.com/generated-lobster.mp4",
+          url: "https://example.com/generated-opnex.mp4",
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
       metadata: { taskId: "task-1" },
@@ -425,7 +425,7 @@ describe("createVideoGenerateTool", () => {
       throw new Error("expected video_generate tool");
     }
 
-    const result = await tool.execute("call-1", { prompt: "friendly lobster surfing" });
+    const result = await tool.execute("call-1", { prompt: "friendly opnex surfing" });
     const text = (result.content?.[0] as { text: string } | undefined)?.text ?? "";
 
     expect(text).toContain("Background task started for video generation (task-123).");
@@ -457,8 +457,8 @@ describe("createVideoGenerateTool", () => {
           taskId: "task-123",
         }),
         status: "ok",
-        mediaUrls: ["https://example.com/generated-lobster.mp4"],
-        result: expect.stringContaining("MEDIA:https://example.com/generated-lobster.mp4"),
+        mediaUrls: ["https://example.com/generated-opnex.mp4"],
+        result: expect.stringContaining("MEDIA:https://example.com/generated-opnex.mp4"),
       }),
     );
   });
@@ -480,7 +480,7 @@ describe("createVideoGenerateTool", () => {
       throw new Error("expected video_generate tool");
     }
 
-    await expect(tool.execute("call-2", { prompt: "broken lobster" })).rejects.toThrow(
+    await expect(tool.execute("call-2", { prompt: "broken opnex" })).rejects.toThrow(
       "queue boom",
     );
     expect(taskExecutorMocks.failTaskRunByRunId).not.toHaveBeenCalled();
@@ -496,7 +496,7 @@ describe("createVideoGenerateTool", () => {
         {
           buffer: Buffer.from("video-bytes"),
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
       normalization: {
@@ -513,8 +513,8 @@ describe("createVideoGenerateTool", () => {
       },
     });
     vi.spyOn(mediaStore, "saveMediaBuffer").mockResolvedValueOnce({
-      path: "/tmp/generated-lobster.mp4",
-      id: "generated-lobster.mp4",
+      path: "/tmp/generated-opnex.mp4",
+      id: "generated-opnex.mp4",
       size: 11,
       contentType: "video/mp4",
     });
@@ -533,7 +533,7 @@ describe("createVideoGenerateTool", () => {
     }
 
     const result = await tool.execute("call-1", {
-      prompt: "friendly lobster surfing",
+      prompt: "friendly opnex surfing",
       durationSeconds: 5,
     });
     const text = (result.content?.[0] as { text: string } | undefined)?.text ?? "";
@@ -563,7 +563,7 @@ describe("createVideoGenerateTool", () => {
         {
           buffer: Buffer.from("video-bytes"),
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
       normalization: {
@@ -578,8 +578,8 @@ describe("createVideoGenerateTool", () => {
       },
     });
     vi.spyOn(mediaStore, "saveMediaBuffer").mockResolvedValueOnce({
-      path: "/tmp/generated-lobster.mp4",
-      id: "generated-lobster.mp4",
+      path: "/tmp/generated-opnex.mp4",
+      id: "generated-opnex.mp4",
       size: 11,
       contentType: "video/mp4",
     });
@@ -598,7 +598,7 @@ describe("createVideoGenerateTool", () => {
     }
 
     const result = await tool.execute("call-1", {
-      prompt: "friendly lobster surfing",
+      prompt: "friendly opnex surfing",
       size: "1280x720",
     });
 
@@ -702,7 +702,7 @@ describe("createVideoGenerateTool", () => {
 
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster timelapse",
+        prompt: "opnex timelapse",
         image: "data:image/png;base64,cG5n",
       }),
     ).rejects.toThrow("video-plugin does not support image-to-video reference inputs.");
@@ -738,13 +738,13 @@ describe("createVideoGenerateTool", () => {
         {
           buffer: Buffer.from("video-bytes"),
           mimeType: "video/mp4",
-          fileName: "lobster.mp4",
+          fileName: "opnex.mp4",
         },
       ],
     });
     vi.spyOn(mediaStore, "saveMediaBuffer").mockResolvedValueOnce({
-      path: "/tmp/generated-lobster.mp4",
-      id: "generated-lobster.mp4",
+      path: "/tmp/generated-opnex.mp4",
+      id: "generated-opnex.mp4",
       size: 11,
       contentType: "video/mp4",
     });
@@ -763,7 +763,7 @@ describe("createVideoGenerateTool", () => {
     }
 
     const result = await tool.execute("call-openai-generate", {
-      prompt: "A lobster on a neon bridge",
+      prompt: "A opnex on a neon bridge",
       size: "1280x720",
       resolution: "720P",
       audio: false,
@@ -801,7 +801,7 @@ describe("createVideoGenerateTool", () => {
     // Record with numeric-string keys and silently forwarded.
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster",
+        prompt: "opnex",
         providerOptions: ["seed", 42] as unknown as Record<string, unknown>,
       }),
     ).rejects.toThrow(
@@ -810,7 +810,7 @@ describe("createVideoGenerateTool", () => {
     // String providerOptions should also be rejected.
     await expect(
       tool.execute("call-2", {
-        prompt: "lobster",
+        prompt: "opnex",
         providerOptions: "seed=42" as unknown as Record<string, unknown>,
       }),
     ).rejects.toThrow(
@@ -827,7 +827,7 @@ describe("createVideoGenerateTool", () => {
     const tool = createVideoPluginTool();
 
     await tool.execute("call-1", {
-      prompt: "lobster",
+      prompt: "opnex",
       providerOptions: { seed: 42, draft: true },
     });
 
@@ -847,7 +847,7 @@ describe("createVideoGenerateTool", () => {
 
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster",
+        prompt: "opnex",
         image: "data:image/png;base64,cG5n",
         // Only one image is provided, so passing two roles is an off-by-one bug.
         imageRoles: ["first_frame", "last_frame"],
@@ -863,7 +863,7 @@ describe("createVideoGenerateTool", () => {
 
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster",
+        prompt: "opnex",
         imageRoles: "first_frame" as unknown as string[],
       }),
     ).rejects.toThrow(
@@ -880,7 +880,7 @@ describe("createVideoGenerateTool", () => {
     const tool = createVideoPluginTool();
 
     await tool.execute("call-1", {
-      prompt: "lobster",
+      prompt: "opnex",
       images: ["data:image/png;base64,Zmlyc3Q=", "data:image/png;base64,bGFzdA=="],
       imageRoles: ["first_frame", "last_frame"],
     });
@@ -919,7 +919,7 @@ describe("createVideoGenerateTool", () => {
     }
 
     await tool.execute("call-1", {
-      prompt: "lobster",
+      prompt: "opnex",
       image: "/tmp/reference.png",
     });
 
@@ -940,7 +940,7 @@ describe("createVideoGenerateTool", () => {
 
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster",
+        prompt: "opnex",
         audioRef: "data:audio/mpeg;base64,bXAz",
       }),
     ).rejects.toThrow("audio data: URLs are not supported for video_generate.");
@@ -953,7 +953,7 @@ describe("createVideoGenerateTool", () => {
     const tool = createVideoPluginTool();
 
     await tool.execute("call-1", {
-      prompt: "lobster",
+      prompt: "opnex",
       aspectRatio: "adaptive",
     });
 
@@ -966,7 +966,7 @@ describe("createVideoGenerateTool", () => {
 
     await expect(
       tool.execute("call-1", {
-        prompt: "lobster",
+        prompt: "opnex",
         aspectRatio: "17:9",
       }),
     ).rejects.toThrow(

@@ -1,7 +1,7 @@
 {
-  "name": "@openclaw/voice-call",
+  "name": "@opnex/voice-call",
   "version": "2026.4.25",
-  "description": "OpenClaw voice-call plugin",
+  "description": "OPNEX voice-call plugin",
   "type": "module",
   "dependencies": {
     "commander": "^14.0.3",
@@ -9,18 +9,18 @@
     "ws": "^8.20.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.25"
+    "opnex": ">=2026.4.25"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -31,7 +31,7 @@
       "pluginApi": ">=2026.4.25"
     },
     "build": {
-      "openclawVersion": "2026.4.25"
+      "opnexVersion": "2026.4.25"
     },
     "release": {
       "publishToClawHub": true,

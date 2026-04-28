@@ -140,9 +140,9 @@ describe("runEmbeddedAttempt context engine sessionKey forwarding", () => {
         prompt: [
           "visible ask",
           "",
-          "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<BEGIN_OPNEX_INTERNAL_CONTEXT>>>",
           "secret runtime context",
-          "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<END_OPNEX_INTERNAL_CONTEXT>>>",
         ].join("\n"),
         transcriptPrompt: "visible ask",
       },
@@ -162,15 +162,15 @@ describe("runEmbeddedAttempt context engine sessionKey forwarding", () => {
       expect.arrayContaining([
         expect.objectContaining({
           role: "custom",
-          customType: "openclaw.runtime-context",
+          customType: "opnex.runtime-context",
           display: false,
           content:
-            "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret runtime context\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "<<<BEGIN_OPNEX_INTERNAL_CONTEXT>>>\nsecret runtime context\n<<<END_OPNEX_INTERNAL_CONTEXT>>>",
         }),
       ]),
     );
     expect(JSON.stringify(seen.messages)).not.toContain(
-      "OpenClaw runtime context for the immediately preceding user message.",
+      "OPNEX runtime context for the immediately preceding user message.",
     );
     expect(JSON.stringify(seen.messages)).not.toContain("not user-authored");
     const trajectoryEvents = (
@@ -194,7 +194,7 @@ describe("runEmbeddedAttempt context engine sessionKey forwarding", () => {
       modelCompleted?.data?.finalPromptText,
       traceArtifacts?.data?.finalPromptText,
     ]) {
-      expect(String(value)).not.toContain("OPENCLAW_INTERNAL_CONTEXT");
+      expect(String(value)).not.toContain("OPNEX_INTERNAL_CONTEXT");
       expect(String(value)).not.toContain("secret runtime context");
     }
   });

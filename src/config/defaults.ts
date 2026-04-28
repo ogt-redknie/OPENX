@@ -7,7 +7,7 @@ import {
 } from "./provider-policy.js";
 import { normalizeTalkConfig } from "./talk.js";
 import type { ModelDefinitionConfig } from "./types.models.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { OPNEXConfig } from "./types.opnex.js";
 
 type WarnState = { warned: boolean };
 
@@ -89,7 +89,7 @@ export type SessionDefaultsOptions = {
   warnState?: WarnState;
 };
 
-export function applyMessageDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMessageDefaults(cfg: OPNEXConfig): OPNEXConfig {
   const messages = cfg.messages;
   const hasAckScope = messages?.ackReactionScope !== undefined;
   if (hasAckScope) {
@@ -105,9 +105,9 @@ export function applyMessageDefaults(cfg: OpenClawConfig): OpenClawConfig {
 }
 
 export function applySessionDefaults(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   options: SessionDefaultsOptions = {},
-): OpenClawConfig {
+): OPNEXConfig {
   const session = cfg.session;
   if (!session || session.mainKey === undefined) {
     return cfg;
@@ -117,7 +117,7 @@ export function applySessionDefaults(
   const warn = options.warn ?? console.warn;
   const warnState = options.warnState ?? defaultWarnState;
 
-  const next: OpenClawConfig = {
+  const next: OPNEXConfig = {
     ...cfg,
     session: { ...session, mainKey: "main" },
   };
@@ -130,11 +130,11 @@ export function applySessionDefaults(
   return next;
 }
 
-export function applyTalkConfigNormalization(config: OpenClawConfig): OpenClawConfig {
+export function applyTalkConfigNormalization(config: OPNEXConfig): OPNEXConfig {
   return normalizeTalkConfig(config);
 }
 
-export function applyModelDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyModelDefaults(cfg: OPNEXConfig): OPNEXConfig {
   let mutated = false;
   let nextCfg = cfg;
 
@@ -281,7 +281,7 @@ export function applyModelDefaults(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyAgentDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyAgentDefaults(cfg: OPNEXConfig): OPNEXConfig {
   const agents = cfg.agents;
   const defaults = agents?.defaults;
   const hasMax =
@@ -322,7 +322,7 @@ export function applyAgentDefaults(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyLoggingDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyLoggingDefaults(cfg: OPNEXConfig): OPNEXConfig {
   const logging = cfg.logging;
   if (!logging) {
     return cfg;
@@ -339,7 +339,7 @@ export function applyLoggingDefaults(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-function hasAnthropicDefaultSignal(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function hasAnthropicDefaultSignal(cfg: OPNEXConfig, env: NodeJS.ProcessEnv): boolean {
   if (env.ANTHROPIC_API_KEY?.trim() || env.ANTHROPIC_OAUTH_TOKEN?.trim()) {
     return true;
   }
@@ -365,7 +365,7 @@ function hasAnthropicDefaultSignal(cfg: OpenClawConfig, env: NodeJS.ProcessEnv):
   });
 }
 
-export function applyContextPruningDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyContextPruningDefaults(cfg: OPNEXConfig): OPNEXConfig {
   if (!cfg.agents?.defaults) {
     return cfg;
   }
@@ -381,7 +381,7 @@ export function applyContextPruningDefaults(cfg: OpenClawConfig): OpenClawConfig
   );
 }
 
-export function applyCompactionDefaults(cfg: OpenClawConfig): OpenClawConfig {
+export function applyCompactionDefaults(cfg: OPNEXConfig): OPNEXConfig {
   const defaults = cfg.agents?.defaults;
   if (!defaults) {
     return cfg;

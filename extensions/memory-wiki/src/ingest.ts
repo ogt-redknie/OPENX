@@ -80,8 +80,8 @@ export async function ingestMemoryWikiSource(params: {
       renderMarkdownFence(content, "text"),
       "",
       "## Notes",
-      "<!-- openclaw:human:start -->",
-      "<!-- openclaw:human:end -->",
+      "<!-- opnex:human:start -->",
+      "<!-- opnex:human:end -->",
       "",
     ].join("\n"),
   });

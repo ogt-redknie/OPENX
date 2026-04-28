@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/line",
+  "name": "@opnex/line",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw LINE channel plugin",
+  "description": "OPNEX LINE channel plugin",
   "type": "module",
   "dependencies": {
     "@line/bot-sdk": "^11.0.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.25"
+    "opnex": ">=2026.4.25"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -37,7 +37,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/line",
+      "npmSpec": "@opnex/line",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     }

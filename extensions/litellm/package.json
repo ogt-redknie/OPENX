@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/litellm-provider",
+  "name": "@opnex/litellm-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw LiteLLM provider plugin",
+  "description": "OPNEX LiteLLM provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

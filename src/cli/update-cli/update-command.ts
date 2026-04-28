@@ -91,25 +91,25 @@ import { suppressDeprecations } from "./suppress-deprecations.js";
 const CLI_NAME = resolveCliName();
 const SERVICE_REFRESH_TIMEOUT_MS = 60_000;
 const DEFAULT_UPDATE_STEP_TIMEOUT_MS = 30 * 60_000;
-const POST_CORE_UPDATE_ENV = "OPENCLAW_UPDATE_POST_CORE";
-const POST_CORE_UPDATE_CHANNEL_ENV = "OPENCLAW_UPDATE_POST_CORE_CHANNEL";
-const POST_CORE_UPDATE_RESULT_PATH_ENV = "OPENCLAW_UPDATE_POST_CORE_RESULT_PATH";
+const POST_CORE_UPDATE_ENV = "OPNEX_UPDATE_POST_CORE";
+const POST_CORE_UPDATE_CHANNEL_ENV = "OPNEX_UPDATE_POST_CORE_CHANNEL";
+const POST_CORE_UPDATE_RESULT_PATH_ENV = "OPNEX_UPDATE_POST_CORE_RESULT_PATH";
 const SERVICE_REFRESH_PATH_ENV_KEYS = [
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
+  "OPNEX_HOME",
+  "OPNEX_STATE_DIR",
+  "OPNEX_CONFIG_PATH",
 ] as const;
 
 const UPDATE_QUIPS = [
   "Leveled up! New skills unlocked. You're welcome.",
-  "Fresh code, same lobster. Miss me?",
+  "Fresh code, same opnex. Miss me?",
   "Back and better. Did you even notice I was gone?",
   "Update complete. I learned some new tricks while I was out.",
   "Upgraded! Now with 23% more sass.",
   "I've evolved. Try to keep up.",
   "New version, who dis? Oh right, still me but shinier.",
   "Patched, polished, and ready to pinch. Let's go.",
-  "The lobster has molted. Harder shell, sharper claws.",
+  "The opnex has molted. Harder shell, sharper claws.",
   "Update done! Check the changelog or just trust me, it's good.",
   "Reborn from the boiling waters of npm. Stronger now.",
   "I went away and came back smarter. You should try it sometime.",
@@ -224,10 +224,10 @@ async function maybeRestartServiceAfterFailedPackageUpdate(params: {
 function isRunningInsideGatewayService(
   env: Record<string, string | undefined> = process.env,
 ): boolean {
-  if (env.OPENCLAW_SERVICE_MARKER?.trim() !== GATEWAY_SERVICE_MARKER) {
+  if (env.OPNEX_SERVICE_MARKER?.trim() !== GATEWAY_SERVICE_MARKER) {
     return false;
   }
-  const serviceKind = env.OPENCLAW_SERVICE_KIND?.trim();
+  const serviceKind = env.OPNEX_SERVICE_KIND?.trim();
   return !serviceKind || serviceKind === GATEWAY_SERVICE_KIND;
 }
 
@@ -271,11 +271,11 @@ async function resolvePackageRuntimePreflightError(params: {
   }
   const targetLabel = status.version ?? target;
   return [
-    `Node ${process.versions.node ?? "unknown"} is too old for openclaw@${targetLabel}.`,
+    `Node ${process.versions.node ?? "unknown"} is too old for opnex@${targetLabel}.`,
     `The requested package requires ${status.nodeEngine}.`,
-    "Upgrade Node to 22.14+ or Node 24, then rerun `openclaw update`.",
-    "Bare `npm i -g openclaw` can silently install an older compatible release.",
-    "After upgrading Node, use `npm i -g openclaw@latest`.",
+    "Upgrade Node to 22.14+ or Node 24, then rerun `opnex update`.",
+    "Bare `npm i -g opnex` can silently install an older compatible release.",
+    "After upgrading Node, use `npm i -g opnex@latest`.",
   ].join("\n");
 }
 
@@ -464,7 +464,7 @@ async function tryInstallShellCompletion(opts: {
       if (!opts.skipPrompt) {
         defaultRuntime.log(
           theme.muted(
-            `Skipped. Run \`${replaceCliName(formatCliCommand("openclaw completion --install"), CLI_NAME)}\` later to enable.`,
+            `Skipped. Run \`${replaceCliName(formatCliCommand("opnex completion --install"), CLI_NAME)}\` later to enable.`,
           ),
         );
       }
@@ -554,7 +554,7 @@ async function runPackageInstallUpdate(params: {
           argv: [resolveNodeRunner(), entryPath, "doctor", "--non-interactive", "--fix"],
           env: {
             ...process.env,
-            OPENCLAW_UPDATE_IN_PROGRESS: "1",
+            OPNEX_UPDATE_IN_PROGRESS: "1",
           },
           timeoutMs: params.timeoutMs,
           progress: params.progress,
@@ -925,7 +925,7 @@ async function maybeRestartService(params: {
       "Gateway did not become healthy after restart.",
       ...renderRestartDiagnostics(health),
       `Restart log: ${resolveGatewayRestartLogPath(process.env)}`,
-      `Run \`${replaceCliName(formatCliCommand("openclaw gateway status --deep"), CLI_NAME)}\` for details.`,
+      `Run \`${replaceCliName(formatCliCommand("opnex gateway status --deep"), CLI_NAME)}\` for details.`,
     ];
     if (params.opts.json) {
       defaultRuntime.error(diagnosticLines.join("\n"));
@@ -1014,7 +1014,7 @@ async function maybeRestartService(params: {
       if (!params.opts.json && restarted) {
         defaultRuntime.log(theme.success("Daemon restarted successfully."));
         defaultRuntime.log("");
-        process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+        process.env.OPNEX_UPDATE_IN_PROGRESS = "1";
         try {
           const interactiveDoctor =
             process.stdin.isTTY && !params.opts.json && params.opts.yes !== true;
@@ -1024,7 +1024,7 @@ async function maybeRestartService(params: {
         } catch (err) {
           defaultRuntime.log(theme.warn(`Doctor failed: ${String(err)}`));
         } finally {
-          delete process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+          delete process.env.OPNEX_UPDATE_IN_PROGRESS;
         }
       }
     } catch (err) {
@@ -1032,7 +1032,7 @@ async function maybeRestartService(params: {
         defaultRuntime.log(theme.warn(`Daemon restart failed: ${String(err)}`));
         defaultRuntime.log(
           theme.muted(
-            `You may need to restart the service manually: ${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}`,
+            `You may need to restart the service manually: ${replaceCliName(formatCliCommand("opnex gateway restart"), CLI_NAME)}`,
           ),
         );
       }
@@ -1048,13 +1048,13 @@ async function maybeRestartService(params: {
     if (params.result.mode === "npm" || params.result.mode === "pnpm") {
       defaultRuntime.log(
         theme.muted(
-          `Tip: Run \`${replaceCliName(formatCliCommand("openclaw doctor"), CLI_NAME)}\`, then \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
+          `Tip: Run \`${replaceCliName(formatCliCommand("opnex doctor"), CLI_NAME)}\`, then \`${replaceCliName(formatCliCommand("opnex gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
         ),
       );
     } else {
       defaultRuntime.log(
         theme.muted(
-          `Tip: Run \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
+          `Tip: Run \`${replaceCliName(formatCliCommand("opnex gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
         ),
       );
     }
@@ -1132,7 +1132,7 @@ async function continuePostCoreUpdateInFreshProcess(params: {
   }
   const resultDir =
     params.opts.json === true
-      ? await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-update-post-core-"))
+      ? await fs.mkdtemp(path.join(os.tmpdir(), "opnex-update-post-core-"))
       : null;
   const resultPath = resultDir ? path.join(resultDir, "plugins.json") : null;
 
@@ -1273,7 +1273,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
     updateInstallKind === "git" ? DEFAULT_GIT_CHANNEL : DEFAULT_PACKAGE_CHANNEL;
   const channel = requestedChannel ?? storedChannel ?? defaultChannel;
   const devTargetRef =
-    channel === "dev" ? process.env.OPENCLAW_UPDATE_DEV_TARGET_REF?.trim() || undefined : undefined;
+    channel === "dev" ? process.env.OPNEX_UPDATE_DEV_TARGET_REF?.trim() || undefined : undefined;
 
   const explicitTag = normalizeTag(opts.tag);
   let tag = explicitTag ?? channelToNpmTag(channel);
@@ -1393,8 +1393,8 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
     defaultRuntime.error(
       [
         "Package updates cannot run from inside the gateway service process.",
-        "That path replaces the active OpenClaw dist tree while the live gateway may still lazy-load old chunks.",
-        `Run \`${replaceCliName(formatCliCommand("openclaw update"), CLI_NAME)}\` from a shell outside the gateway service, or stop the gateway service first and then update.`,
+        "That path replaces the active OPNEX dist tree while the live gateway may still lazy-load old chunks.",
+        `Run \`${replaceCliName(formatCliCommand("opnex update"), CLI_NAME)}\` from a shell outside the gateway service, or stop the gateway service first and then update.`,
       ].join("\n"),
     );
     defaultRuntime.exit(1);
@@ -1448,7 +1448,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
 
   const showProgress = !opts.json && process.stdout.isTTY;
   if (!opts.json) {
-    defaultRuntime.log(theme.heading("Updating OpenClaw..."));
+    defaultRuntime.log(theme.heading("Updating OPNEX..."));
     defaultRuntime.log("");
   }
 
@@ -1533,18 +1533,18 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
         ),
       );
       defaultRuntime.log(
-        theme.muted("Commit, stash, or discard the local changes, then rerun `openclaw update`."),
+        theme.muted("Commit, stash, or discard the local changes, then rerun `opnex update`."),
       );
     }
     if (result.reason === "not-git-install") {
       defaultRuntime.log(
         theme.warn(
-          `Skipped: this OpenClaw install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("openclaw doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\`.`,
+          `Skipped: this OPNEX install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("opnex doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("opnex gateway restart"), CLI_NAME)}\`.`,
         ),
       );
       defaultRuntime.log(
         theme.muted(
-          `Examples: \`${replaceCliName("npm i -g openclaw@latest", CLI_NAME)}\` or \`${replaceCliName("pnpm add -g openclaw@latest", CLI_NAME)}\``,
+          `Examples: \`${replaceCliName("npm i -g opnex@latest", CLI_NAME)}\` or \`${replaceCliName("pnpm add -g opnex@latest", CLI_NAME)}\``,
         ),
       );
     }

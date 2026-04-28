@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveCrestodianRescuePolicy } from "./rescue-policy.js";
 
-function decide(cfg: OpenClawConfig, overrides = {}) {
+function decide(cfg: OPNEXConfig, overrides = {}) {
   return resolveCrestodianRescuePolicy({
     cfg,
     senderIsOwner: true,

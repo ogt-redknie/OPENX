@@ -103,7 +103,7 @@ describe("prepareSimpleCompletionModel", () => {
       cfg: undefined,
       provider: "anthropic",
       modelId: "claude-opus-4-6",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/opnex-agent",
     });
 
     expect(result).toEqual(
@@ -400,13 +400,13 @@ describe("prepareSimpleCompletionModel", () => {
       cfg: undefined,
       provider: "amazon-bedrock-mantle",
       modelId: "anthropic.claude-opus-4-7",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/opnex-agent",
     });
 
     expect(hoisted.prepareProviderRuntimeAuthMock).toHaveBeenCalledWith(
       expect.objectContaining({
         provider: "amazon-bedrock-mantle",
-        workspaceDir: "/tmp/openclaw-agent",
+        workspaceDir: "/tmp/opnex-agent",
         context: expect.objectContaining({
           apiKey: "__amazon_bedrock_mantle_iam__",
           authMode: "api-key",
@@ -485,7 +485,7 @@ describe("completeWithPreparedSimpleCompletionModel", () => {
     } satisfies Model<"ollama">;
     const preparedModel = {
       ...model,
-      api: "openclaw-ollama-simple-test",
+      api: "opnex-ollama-simple-test",
     };
     hoisted.prepareModelForSimpleCompletionMock.mockReturnValueOnce(preparedModel);
 

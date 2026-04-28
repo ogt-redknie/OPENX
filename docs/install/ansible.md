@@ -1,5 +1,5 @@
 ---
-summary: "Automated, hardened OpenClaw installation with Ansible, Tailscale VPN, and firewall isolation"
+summary: "Automated, hardened OPNEX installation with Ansible, Tailscale VPN, and firewall isolation"
 read_when:
   - You want automated server deployment with security hardening
   - You need firewall-isolated setup with VPN access
@@ -9,10 +9,10 @@ title: "Ansible"
 
 # Ansible Installation
 
-Deploy OpenClaw to production servers with **[openclaw-ansible](https://github.com/openclaw/openclaw-ansible)** -- an automated installer with security-first architecture.
+Deploy OPNEX to production servers with **[opnex-ansible](https://github.com/opnex/opnex-ansible)** -- an automated installer with security-first architecture.
 
 <Info>
-The [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
+The [opnex-ansible](https://github.com/opnex/opnex-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
 </Info>
 
 ## Prerequisites
@@ -38,7 +38,7 @@ The [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) repo is the
 One-command install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openclaw/openclaw-ansible/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/opnex/opnex-ansible/main/install.sh | bash
 ```
 
 ## What gets installed
@@ -49,7 +49,7 @@ The Ansible playbook installs and configures:
 2. **UFW firewall** -- SSH + Tailscale ports only
 3. **Docker CE + Compose V2** -- for the default agent sandbox backend
 4. **Node.js 24 + pnpm** -- runtime dependencies (Node 22 LTS, currently `22.14+`, remains supported)
-5. **OpenClaw** -- host-based, not containerized
+5. **OPNEX** -- host-based, not containerized
 6. **Systemd service** -- auto-start with security hardening
 
 <Note>
@@ -61,24 +61,24 @@ backend. See [Sandboxing](/gateway/sandboxing) for details and other backends.
 ## Post-Install Setup
 
 <Steps>
-  <Step title="Switch to the openclaw user">
+  <Step title="Switch to the opnex user">
     ```bash
-    sudo -i -u openclaw
+    sudo -i -u opnex
     ```
   </Step>
   <Step title="Run the onboarding wizard">
-    The post-install script guides you through configuring OpenClaw settings.
+    The post-install script guides you through configuring OPNEX settings.
   </Step>
   <Step title="Connect messaging providers">
     Log in to WhatsApp, Telegram, Discord, or Signal:
     ```bash
-    openclaw channels login
+    opnex channels login
     ```
   </Step>
   <Step title="Verify the installation">
     ```bash
-    sudo systemctl status openclaw
-    sudo journalctl -u openclaw -f
+    sudo systemctl status opnex
+    sudo journalctl -u opnex -f
     ```
   </Step>
   <Step title="Connect to Tailscale">
@@ -90,17 +90,17 @@ backend. See [Sandboxing](/gateway/sandboxing) for details and other backends.
 
 ```bash
 # Check service status
-sudo systemctl status openclaw
+sudo systemctl status opnex
 
 # View live logs
-sudo journalctl -u openclaw -f
+sudo journalctl -u opnex -f
 
 # Restart gateway
-sudo systemctl restart openclaw
+sudo systemctl restart opnex
 
-# Provider login (run as openclaw user)
-sudo -i -u openclaw
-openclaw channels login
+# Provider login (run as opnex user)
+sudo -i -u opnex
+opnex channels login
 ```
 
 ## Security architecture
@@ -134,8 +134,8 @@ If you prefer manual control over the automation:
   </Step>
   <Step title="Clone the repository">
     ```bash
-    git clone https://github.com/openclaw/openclaw-ansible.git
-    cd openclaw-ansible
+    git clone https://github.com/opnex/opnex-ansible.git
+    cd opnex-ansible
     ```
   </Step>
   <Step title="Install Ansible collections">
@@ -151,7 +151,7 @@ If you prefer manual control over the automation:
     Alternatively, run directly and then manually execute the setup script afterward:
     ```bash
     ansible-playbook playbook.yml --ask-become-pass
-    # Then run: /tmp/openclaw-setup.sh
+    # Then run: /tmp/opnex-setup.sh
     ```
 
   </Step>
@@ -159,12 +159,12 @@ If you prefer manual control over the automation:
 
 ## Updating
 
-The Ansible installer sets up OpenClaw for manual updates. See [Updating](/install/updating) for the standard update flow.
+The Ansible installer sets up OPNEX for manual updates. See [Updating](/install/updating) for the standard update flow.
 
 To re-run the Ansible playbook (for example, for configuration changes):
 
 ```bash
-cd openclaw-ansible
+cd opnex-ansible
 ./run-playbook.sh
 ```
 
@@ -182,15 +182,15 @@ This is idempotent and safe to run multiple times.
   <Accordion title="Service will not start">
     ```bash
     # Check logs
-    sudo journalctl -u openclaw -n 100
+    sudo journalctl -u opnex -n 100
 
     # Verify permissions
-    sudo ls -la /opt/openclaw
+    sudo ls -la /opt/opnex
 
     # Test manual start
-    sudo -i -u openclaw
-    cd ~/openclaw
-    openclaw gateway run
+    sudo -i -u opnex
+    cd ~/opnex
+    opnex gateway run
     ```
 
   </Accordion>
@@ -200,34 +200,34 @@ This is idempotent and safe to run multiple times.
     sudo systemctl status docker
 
     # Check sandbox image
-    sudo docker images | grep openclaw-sandbox
+    sudo docker images | grep opnex-sandbox
 
     # Build sandbox image if missing
-    cd /opt/openclaw/openclaw
-    sudo -u openclaw ./scripts/sandbox-setup.sh
+    cd /opt/opnex/opnex
+    sudo -u opnex ./scripts/sandbox-setup.sh
     ```
 
   </Accordion>
   <Accordion title="Provider login fails">
-    Make sure you are running as the `openclaw` user:
+    Make sure you are running as the `opnex` user:
     ```bash
-    sudo -i -u openclaw
-    openclaw channels login
+    sudo -i -u opnex
+    opnex channels login
     ```
   </Accordion>
 </AccordionGroup>
 
 ## Advanced configuration
 
-For detailed security architecture and troubleshooting, see the openclaw-ansible repo:
+For detailed security architecture and troubleshooting, see the opnex-ansible repo:
 
-- [Security Architecture](https://github.com/openclaw/openclaw-ansible/blob/main/docs/security.md)
-- [Technical Details](https://github.com/openclaw/openclaw-ansible/blob/main/docs/architecture.md)
-- [Troubleshooting Guide](https://github.com/openclaw/openclaw-ansible/blob/main/docs/troubleshooting.md)
+- [Security Architecture](https://github.com/opnex/opnex-ansible/blob/main/docs/security.md)
+- [Technical Details](https://github.com/opnex/opnex-ansible/blob/main/docs/architecture.md)
+- [Troubleshooting Guide](https://github.com/opnex/opnex-ansible/blob/main/docs/troubleshooting.md)
 
 ## Related
 
-- [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) -- full deployment guide
+- [opnex-ansible](https://github.com/opnex/opnex-ansible) -- full deployment guide
 - [Docker](/install/docker) -- containerized gateway setup
 - [Sandboxing](/gateway/sandboxing) -- agent sandbox configuration
 - [Multi-Agent Sandbox and Tools](/tools/multi-agent-sandbox-tools) -- per-agent isolation

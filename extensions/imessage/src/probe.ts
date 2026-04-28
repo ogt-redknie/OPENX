@@ -1,9 +1,9 @@
-import type { BaseProbeResult } from "openclaw/plugin-sdk/channel-contract";
-import { runCommandWithTimeout } from "openclaw/plugin-sdk/process-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { detectBinary } from "openclaw/plugin-sdk/setup";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+import type { BaseProbeResult } from "opnex/plugin-sdk/channel-contract";
+import { runCommandWithTimeout } from "opnex/plugin-sdk/process-runtime";
+import { getRuntimeConfig } from "opnex/plugin-sdk/runtime-config-snapshot";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
+import { detectBinary } from "opnex/plugin-sdk/setup";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { createIMessageRpcClient } from "./client.js";
 import { DEFAULT_IMESSAGE_PROBE_TIMEOUT_MS } from "./constants.js";
 

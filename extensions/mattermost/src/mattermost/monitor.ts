@@ -1,11 +1,11 @@
-import { deliverFinalizableDraftPreview } from "openclaw/plugin-sdk/channel-lifecycle";
-import { createClaimableDedupe, type ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
-import { isReasoningReplyPayload } from "openclaw/plugin-sdk/reply-payload";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+import { deliverFinalizableDraftPreview } from "opnex/plugin-sdk/channel-lifecycle";
+import { createClaimableDedupe, type ClaimableDedupe } from "opnex/plugin-sdk/persistent-dedupe";
+import { isReasoningReplyPayload } from "opnex/plugin-sdk/reply-payload";
+import { isPrivateNetworkOptInEnabled } from "opnex/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { getMattermostRuntime } from "../runtime.js";
 import { resolveMattermostAccount, resolveMattermostReplyToMode } from "./accounts.js";
 import {
@@ -61,7 +61,7 @@ import { deliverMattermostReplyPayload } from "./reply-delivery.js";
 import type {
   ChannelAccountSnapshot,
   ChatType,
-  OpenClawConfig,
+  OPNEXConfig,
   ReplyPayload,
   RuntimeEnv,
 } from "./runtime-api.js";
@@ -106,7 +106,7 @@ export type MonitorMattermostOpts = {
   botToken?: string;
   baseUrl?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   statusSink?: (patch: Partial<ChannelAccountSnapshot>) => void;
@@ -434,7 +434,7 @@ function buildMattermostWsUrl(baseUrl: string): string {
 export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}): Promise<void> {
   const core = getMattermostRuntime();
   const runtime = resolveRuntime(opts);
-  const cfg = (opts.config ?? core.config.current()) as OpenClawConfig;
+  const cfg = (opts.config ?? core.config.current()) as OPNEXConfig;
   const account = resolveMattermostAccount({
     cfg,
     accountId: opts.accountId,
@@ -589,7 +589,7 @@ export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}
               message: post.message ?? "",
               props: post.props ?? undefined,
             },
-            ephemeral_text: `OpenClaw ignored this action for ${decision.roomLabel}.`,
+            ephemeral_text: `OPNEX ignored this action for ${decision.roomLabel}.`,
           },
         };
       },

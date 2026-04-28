@@ -1,8 +1,8 @@
 /**
- * Bundled-channel config schemas for OpenClaw-maintained plugins.
+ * Bundled-channel config schemas for OPNEX-maintained plugins.
  *
  * Third-party plugins should define plugin-local schemas and import primitives
- * from openclaw/plugin-sdk/channel-config-schema instead of depending on these
+ * from opnex/plugin-sdk/channel-config-schema instead of depending on these
  * bundled channel schemas.
  */
 export {

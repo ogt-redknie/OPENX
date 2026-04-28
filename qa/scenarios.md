@@ -1,4 +1,4 @@
-# OpenClaw QA Scenarios
+# OPNEX QA Scenarios
 
 Canonical scenario source now lives in:
 

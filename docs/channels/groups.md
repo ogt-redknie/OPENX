@@ -6,11 +6,11 @@ title: "Groups"
 sidebarTitle: "Groups"
 ---
 
-OpenClaw treats group chats consistently across surfaces: Discord, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo.
+OPNEX treats group chats consistently across surfaces: Discord, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo.
 
 ## Beginner intro (2 minutes)
 
-OpenClaw "lives" on your own messaging accounts. There is no separate WhatsApp bot user. If **you** are in a group, OpenClaw can see that group and respond there.
+OPNEX "lives" on your own messaging accounts. There is no separate WhatsApp bot user. If **you** are in a group, OPNEX can see that group and respond there.
 
 Default behavior:
 
@@ -18,7 +18,7 @@ Default behavior:
 - Replies require a mention unless you explicitly disable mention gating.
 - Normal final replies in groups/channels are private by default. Visible room output uses the `message` tool.
 
-Translation: allowlisted senders can trigger OpenClaw by mentioning it.
+Translation: allowlisted senders can trigger OPNEX by mentioning it.
 
 <Note>
 **TL;DR**
@@ -40,7 +40,7 @@ otherwise -> reply
 
 ## Visible replies
 
-For group/channel rooms, OpenClaw defaults to `messages.groupChat.visibleReplies: "message_tool"`.
+For group/channel rooms, OPNEX defaults to `messages.groupChat.visibleReplies: "message_tool"`.
 That means the agent still processes the turn and can update memory/session state, but its normal final answer is not automatically posted back into the room. To speak visibly, the agent uses `message(action=send)`.
 
 This replaces the old pattern of forcing the model to answer `NO_REPLY` for most lurk-mode turns. In tool-only mode, doing nothing visible simply means not calling the message tool.
@@ -66,7 +66,7 @@ Two different controls are involved in group safety:
 - **Trigger authorization**: who can trigger the agent (`groupPolicy`, `groups`, `groupAllowFrom`, channel-specific allowlists).
 - **Context visibility**: what supplemental context is injected into the model (reply text, quotes, thread history, forwarded metadata).
 
-By default, OpenClaw prioritizes normal chat behavior and keeps context mostly as received. This means allowlists primarily decide who can trigger actions, not a universal redaction boundary for every quoted or historical snippet.
+By default, OPNEX prioritizes normal chat behavior and keeps context mostly as received. This means allowlists primarily decide who can trigger actions, not a universal redaction boundary for every quoted or historical snippet.
 
 <AccordionGroup>
   <Accordion title="Current behavior is channel-specific">
@@ -299,7 +299,7 @@ Replying to a bot message counts as an implicit mention when the channel support
       {
         id: "main",
         groupChat: {
-          mentionPatterns: ["@openclaw", "openclaw", "\\+15555550123"],
+          mentionPatterns: ["@opnex", "opnex", "\\+15555550123"],
           historyLimit: 50,
         },
       },

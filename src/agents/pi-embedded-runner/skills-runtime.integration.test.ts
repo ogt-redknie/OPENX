@@ -2,20 +2,20 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import { clearPluginManifestRegistryCache } from "../../plugins/manifest-registry.js";
 import { writePluginWithSkill } from "../test-helpers/skill-plugin-fixtures.js";
 import { resolveEmbeddedRunSkillEntries } from "./skills-runtime.js";
 
 const tempDirs: string[] = [];
-const originalBundledDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+const originalBundledDir = process.env.OPNEX_BUNDLED_PLUGINS_DIR;
 
 function restoreBundledPluginsDir() {
   if (originalBundledDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.OPNEX_BUNDLED_PLUGINS_DIR;
     return;
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = originalBundledDir;
+  process.env.OPNEX_BUNDLED_PLUGINS_DIR = originalBundledDir;
 }
 
 async function createTempDir(prefix: string) {
@@ -25,8 +25,8 @@ async function createTempDir(prefix: string) {
 }
 
 async function setupBundledDiffsPlugin() {
-  const bundledPluginsDir = await createTempDir("openclaw-bundled-");
-  const workspaceDir = await createTempDir("openclaw-workspace-");
+  const bundledPluginsDir = await createTempDir("opnex-bundled-");
+  const workspaceDir = await createTempDir("opnex-workspace-");
   const pluginRoot = path.join(bundledPluginsDir, "diffs");
 
   await writePluginWithSkill({
@@ -39,9 +39,9 @@ async function setupBundledDiffsPlugin() {
   return { bundledPluginsDir, workspaceDir };
 }
 
-async function resolveBundledDiffsSkillEntries(config?: OpenClawConfig) {
+async function resolveBundledDiffsSkillEntries(config?: OPNEXConfig) {
   const { bundledPluginsDir, workspaceDir } = await setupBundledDiffsPlugin();
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+  process.env.OPNEX_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
   clearPluginManifestRegistryCache();
 
   return resolveEmbeddedRunSkillEntries({ workspaceDir, ...(config ? { config } : {}) });
@@ -55,7 +55,7 @@ afterEach(async () => {
 
 describe("resolveEmbeddedRunSkillEntries (integration)", () => {
   it("loads bundled diffs skill when explicitly enabled in config", async () => {
-    const config: OpenClawConfig = {
+    const config: OPNEXConfig = {
       plugins: {
         entries: {
           diffs: { enabled: true },

@@ -11,45 +11,45 @@ export type {
   ChannelOutboundAdapter,
   ChannelPlugin,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  OPNEXConfig,
+  OPNEXPluginApi,
   OutboundIdentity,
   PluginRuntime,
   ReplyPayload,
-} from "openclaw/plugin-sdk/core";
-export type { OpenClawConfig as ClawdbotConfig } from "openclaw/plugin-sdk/core";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { GroupToolPolicyConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/core";
+export type { OPNEXConfig as ClawdbotConfig } from "opnex/plugin-sdk/core";
+export type { RuntimeEnv } from "opnex/plugin-sdk/runtime";
+export type { GroupToolPolicyConfig } from "opnex/plugin-sdk/config-types";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
   createActionGate,
   createDedupeCache,
-} from "openclaw/plugin-sdk/core";
+} from "opnex/plugin-sdk/core";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/channel-status";
-export { buildAgentMediaPayload } from "openclaw/plugin-sdk/agent-media-payload";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createReplyPrefixContext } from "openclaw/plugin-sdk/channel-reply-pipeline";
+} from "opnex/plugin-sdk/channel-status";
+export { buildAgentMediaPayload } from "opnex/plugin-sdk/agent-media-payload";
+export { createChannelPairingController } from "opnex/plugin-sdk/channel-pairing";
+export { createReplyPrefixContext } from "opnex/plugin-sdk/channel-reply-pipeline";
 export {
   evaluateSupplementalContextVisibility,
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
-} from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "opnex/plugin-sdk/context-visibility-runtime";
 export {
   loadSessionStore,
   resolveSessionStoreEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-export { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
-export { createPersistentDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
-export { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "opnex/plugin-sdk/session-store-runtime";
+export { readJsonFileWithFallback } from "opnex/plugin-sdk/json-store";
+export { createPersistentDedupe } from "opnex/plugin-sdk/persistent-dedupe";
+export { normalizeAgentId } from "opnex/plugin-sdk/routing";
+export { chunkTextForOutbound } from "opnex/plugin-sdk/text-chunking";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "opnex/plugin-sdk/webhook-ingress";
 export { setFeishuRuntime } from "./src/runtime.js";

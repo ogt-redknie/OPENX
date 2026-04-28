@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/zai-provider",
+  "name": "@opnex/zai-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Z.AI provider plugin",
+  "description": "OPNEX Z.AI provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

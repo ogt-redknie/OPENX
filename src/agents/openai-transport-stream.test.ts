@@ -167,9 +167,9 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe("opnex-openai-responses-transport");
     expect(prepared).toMatchObject({
-      api: "openclaw-openai-responses-transport",
+      api: "opnex-openai-responses-transport",
       provider: "openai",
       id: "gpt-5.4",
     });
@@ -200,9 +200,9 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe("opnex-openai-responses-transport");
     expect(prepared).toMatchObject({
-      api: "openclaw-openai-responses-transport",
+      api: "opnex-openai-responses-transport",
       provider: "openai-codex",
       id: "codex-mini-latest",
     });
@@ -233,9 +233,9 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-anthropic-messages-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe("opnex-anthropic-messages-transport");
     expect(prepared).toMatchObject({
-      api: "openclaw-anthropic-messages-transport",
+      api: "opnex-anthropic-messages-transport",
       provider: "anthropic",
       id: "claude-sonnet-4-6",
     });
@@ -265,7 +265,7 @@ describe("openai transport stream", () => {
     );
 
     expect(resolveTransportAwareSimpleApi(model.api)).toBe(
-      "openclaw-google-generative-ai-transport",
+      "opnex-google-generative-ai-transport",
     );
   });
 
@@ -291,9 +291,9 @@ describe("openai transport stream", () => {
       },
     );
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe("opnex-openai-responses-transport");
     expect(prepareTransportAwareSimpleModel(model)).toMatchObject({
-      api: "openclaw-openai-responses-transport",
+      api: "opnex-openai-responses-transport",
       provider: "github-copilot",
       id: "gpt-5.4",
     });
@@ -322,9 +322,9 @@ describe("openai transport stream", () => {
       },
     );
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-anthropic-messages-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe("opnex-anthropic-messages-transport");
     expect(prepareTransportAwareSimpleModel(model)).toMatchObject({
-      api: "openclaw-anthropic-messages-transport",
+      api: "opnex-anthropic-messages-transport",
       provider: "github-copilot",
       id: "claude-sonnet-4.6",
     });
@@ -735,7 +735,7 @@ describe("openai transport stream", () => {
       {
         id: "anthropic/claude-sonnet-4",
         name: "Claude Sonnet 4",
-        api: "openclaw-openai-completions-transport",
+        api: "opnex-openai-completions-transport",
         provider: "openrouter",
         baseUrl: "https://proxy.example.com/v1",
         reasoning: true,
@@ -743,7 +743,7 @@ describe("openai transport stream", () => {
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 200000,
         maxTokens: 8192,
-      } as Model<"openclaw-openai-completions-transport">,
+      } as Model<"opnex-openai-completions-transport">,
       {
         systemPrompt: "system",
         messages: [],
@@ -803,7 +803,7 @@ describe("openai transport stream", () => {
       {
         id: "anthropic/claude-sonnet-4",
         name: "Claude Sonnet 4",
-        api: "openclaw-openai-completions-transport",
+        api: "opnex-openai-completions-transport",
         provider: "custom-openrouter",
         baseUrl: "https://openrouter.ai/api/v1",
         reasoning: true,
@@ -811,7 +811,7 @@ describe("openai transport stream", () => {
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 200000,
         maxTokens: 8192,
-      } as Model<"openclaw-openai-completions-transport">,
+      } as Model<"opnex-openai-completions-transport">,
       {
         systemPrompt: "system",
         messages: [],
@@ -941,8 +941,8 @@ describe("openai transport stream", () => {
         temperature: 0.2,
       },
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
+        opnex_session_id: "session-123",
+        opnex_turn_id: "turn-123",
       },
     ) as Record<string, unknown> & {
       input?: Array<{ role?: string }>;
@@ -956,8 +956,8 @@ describe("openai transport stream", () => {
     expect(params.prompt_cache_key).toBe("session-123");
     expect(params.prompt_cache_retention).toBeUndefined();
     expect(params.metadata).toEqual({
-      openclaw_session_id: "session-123",
-      openclaw_turn_id: "turn-123",
+      opnex_session_id: "session-123",
+      opnex_turn_id: "turn-123",
     });
     expect(params.store).toBe(false);
     expect(params.max_output_tokens).toBe(1024);
@@ -1532,18 +1532,18 @@ describe("openai transport stream", () => {
       } as never,
       { sessionId: "session-123" } as never,
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
-        openclaw_turn_attempt: "1",
-        openclaw_transport: "stream",
+        opnex_session_id: "session-123",
+        opnex_turn_id: "turn-123",
+        opnex_turn_attempt: "1",
+        opnex_transport: "stream",
       },
     ) as { metadata?: Record<string, string> };
 
     expect(params.metadata).toMatchObject({
-      openclaw_session_id: "session-123",
-      openclaw_turn_id: "turn-123",
-      openclaw_turn_attempt: "1",
-      openclaw_transport: "stream",
+      opnex_session_id: "session-123",
+      opnex_turn_id: "turn-123",
+      opnex_turn_attempt: "1",
+      opnex_transport: "stream",
     });
   });
 

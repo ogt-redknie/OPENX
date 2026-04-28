@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { logVerbose } from "../../globals.js";
 import { withAcpRuntimeErrorBoundary } from "../runtime/errors.js";
 import {
@@ -14,7 +14,7 @@ import type { SessionAcpMeta, SessionEntry } from "./manager.types.js";
 import { hasLegacyAcpIdentityProjection } from "./manager.utils.js";
 
 export async function reconcileManagerRuntimeSessionIdentifiers(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   sessionKey: string;
   runtime: AcpRuntime;
   handle: AcpRuntimeHandle;
@@ -23,7 +23,7 @@ export async function reconcileManagerRuntimeSessionIdentifiers(params: {
   failOnStatusError: boolean;
   setCachedHandle: (sessionKey: string, handle: AcpRuntimeHandle) => void;
   writeSessionMeta: (params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     sessionKey: string;
     mutate: (
       current: SessionAcpMeta | undefined,

@@ -5,7 +5,7 @@ import {
   __testing as acpRuntimeTesting,
   registerAcpRuntimeBackend,
 } from "../../acp/runtime/registry.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import type { PluginManifestRegistry } from "../../plugins/manifest-registry.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 
@@ -46,7 +46,7 @@ function buildRegistry(params: { acpxRoot: string; helperRoot: string }): Plugin
         origin: "workspace",
         rootDir: params.acpxRoot,
         source: params.acpxRoot,
-        manifestPath: path.join(params.acpxRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.acpxRoot, "opnex.plugin.json"),
       },
       {
         id: "helper",
@@ -59,7 +59,7 @@ function buildRegistry(params: { acpxRoot: string; helperRoot: string }): Plugin
         origin: "workspace",
         rootDir: params.helperRoot,
         source: params.helperRoot,
-        manifestPath: path.join(params.helperRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.helperRoot, "opnex.plugin.json"),
       },
     ],
   };
@@ -68,7 +68,7 @@ function buildRegistry(params: { acpxRoot: string; helperRoot: string }): Plugin
 function createSinglePluginRegistry(params: {
   pluginRoot: string;
   skills: string[];
-  format?: "openclaw" | "bundle";
+  format?: "opnex" | "bundle";
   legacyPluginIds?: string[];
 }): PluginManifestRegistry {
   return {
@@ -87,16 +87,16 @@ function createSinglePluginRegistry(params: {
         origin: "workspace",
         rootDir: params.pluginRoot,
         source: params.pluginRoot,
-        manifestPath: path.join(params.pluginRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.pluginRoot, "opnex.plugin.json"),
       },
     ],
   };
 }
 
 async function setupAcpxAndHelperRegistry() {
-  const workspaceDir = await tempDirs.make("openclaw-");
-  const acpxRoot = await tempDirs.make("openclaw-acpx-plugin-");
-  const helperRoot = await tempDirs.make("openclaw-helper-plugin-");
+  const workspaceDir = await tempDirs.make("opnex-");
+  const acpxRoot = await tempDirs.make("opnex-acpx-plugin-");
+  const helperRoot = await tempDirs.make("opnex-helper-plugin-");
   await fs.mkdir(path.join(acpxRoot, "skills"), { recursive: true });
   await fs.mkdir(path.join(helperRoot, "skills"), { recursive: true });
   hoisted.loadPluginManifestRegistryForInstalledIndex.mockReturnValue(
@@ -106,9 +106,9 @@ async function setupAcpxAndHelperRegistry() {
 }
 
 async function setupPluginOutsideSkills() {
-  const workspaceDir = await tempDirs.make("openclaw-");
-  const pluginRoot = await tempDirs.make("openclaw-plugin-");
-  const outsideDir = await tempDirs.make("openclaw-outside-");
+  const workspaceDir = await tempDirs.make("opnex-");
+  const pluginRoot = await tempDirs.make("opnex-plugin-");
+  const outsideDir = await tempDirs.make("opnex-outside-");
   const outsideSkills = path.join(outsideDir, "skills");
   return { workspaceDir, pluginRoot, outsideSkills };
 }
@@ -197,7 +197,7 @@ describe("resolvePluginSkillDirs", () => {
             helper: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(dirs).toEqual(expectedDirs({ acpxRoot, helperRoot }));
@@ -224,7 +224,7 @@ describe("resolvePluginSkillDirs", () => {
             helper: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(dirs).toEqual([path.resolve(pluginRoot, "skills")]);
@@ -255,15 +255,15 @@ describe("resolvePluginSkillDirs", () => {
             helper: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(dirs).toEqual([]);
   });
 
   it("resolves Claude bundle command roots through the normal plugin skill path", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-");
-    const pluginRoot = await tempDirs.make("openclaw-claude-bundle-");
+    const workspaceDir = await tempDirs.make("opnex-");
+    const pluginRoot = await tempDirs.make("opnex-claude-bundle-");
     await fs.mkdir(path.join(pluginRoot, "commands"), { recursive: true });
     await fs.mkdir(path.join(pluginRoot, "skills"), { recursive: true });
 
@@ -283,7 +283,7 @@ describe("resolvePluginSkillDirs", () => {
             helper: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(dirs).toEqual([
@@ -293,8 +293,8 @@ describe("resolvePluginSkillDirs", () => {
   });
 
   it("resolves enabled plugin skills through legacy manifest aliases", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-");
-    const pluginRoot = await tempDirs.make("openclaw-legacy-plugin-");
+    const workspaceDir = await tempDirs.make("opnex-");
+    const pluginRoot = await tempDirs.make("opnex-legacy-plugin-");
     await fs.mkdir(path.join(pluginRoot, "skills"), { recursive: true });
 
     hoisted.loadPluginManifestRegistryForInstalledIndex.mockReturnValue(
@@ -313,7 +313,7 @@ describe("resolvePluginSkillDirs", () => {
             "helper-legacy": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(dirs).toEqual([path.resolve(pluginRoot, "skills")]);

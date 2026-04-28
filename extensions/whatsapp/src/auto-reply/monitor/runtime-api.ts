@@ -1,23 +1,23 @@
-export { resolveIdentityNamePrefix } from "openclaw/plugin-sdk/agent-runtime";
+export { resolveIdentityNamePrefix } from "opnex/plugin-sdk/agent-runtime";
 export {
   formatInboundEnvelope,
   resolveEnvelopeFormatOptions,
-} from "openclaw/plugin-sdk/channel-envelope";
-export { resolveInboundSessionEnvelopeContext } from "openclaw/plugin-sdk/channel-inbound";
-export { toLocationContext } from "openclaw/plugin-sdk/channel-location";
-export { createChannelReplyPipeline } from "openclaw/plugin-sdk/channel-reply-pipeline";
-export { shouldComputeCommandAuthorized } from "openclaw/plugin-sdk/command-detection";
+} from "opnex/plugin-sdk/channel-envelope";
+export { resolveInboundSessionEnvelopeContext } from "opnex/plugin-sdk/channel-inbound";
+export { toLocationContext } from "opnex/plugin-sdk/channel-location";
+export { createChannelReplyPipeline } from "opnex/plugin-sdk/channel-reply-pipeline";
+export { shouldComputeCommandAuthorized } from "opnex/plugin-sdk/command-detection";
 export {
   recordSessionMetaFromInbound,
   resolveChannelContextVisibilityMode,
 } from "../config.runtime.js";
-export { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+export { getAgentScopedMediaLocalRoots } from "opnex/plugin-sdk/media-runtime";
 export type LoadConfigFn = typeof import("../config.runtime.js").getRuntimeConfig;
 export {
   buildHistoryContextFromEntries,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-export { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+} from "opnex/plugin-sdk/reply-history";
+export { resolveSendableOutboundReplyParts } from "opnex/plugin-sdk/reply-payload";
 export {
   dispatchReplyWithBufferedBlockDispatcher,
   finalizeInboundContext,
@@ -25,16 +25,16 @@ export {
   resolveTextChunkLimit,
   type getReplyFromConfig,
   type ReplyPayload,
-} from "openclaw/plugin-sdk/reply-runtime";
+} from "opnex/plugin-sdk/reply-runtime";
 export {
   resolveInboundLastRouteSessionKey,
   type resolveAgentRoute,
-} from "openclaw/plugin-sdk/routing";
-export { logVerbose, shouldLogVerbose, type getChildLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/routing";
+export { logVerbose, shouldLogVerbose, type getChildLogger } from "opnex/plugin-sdk/runtime-env";
 export {
   readStoreAllowFromForDmPolicy,
   resolveDmGroupAccessWithCommandGate,
   resolvePinnedMainDmOwnerFromAllowlist,
-} from "openclaw/plugin-sdk/security-runtime";
-export { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
+} from "opnex/plugin-sdk/security-runtime";
+export { resolveMarkdownTableMode } from "opnex/plugin-sdk/markdown-table-runtime";
 export { jidToE164, normalizeE164 } from "../../text-runtime.js";

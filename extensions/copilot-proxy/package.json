@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/copilot-proxy",
+  "name": "@opnex/copilot-proxy",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Copilot Proxy provider plugin",
+  "description": "OPNEX Copilot Proxy provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

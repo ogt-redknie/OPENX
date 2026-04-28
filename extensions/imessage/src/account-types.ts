@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
 export type IMessageAccountConfig = Omit<
-  NonNullable<NonNullable<OpenClawConfig["channels"]>["imessage"]>,
+  NonNullable<NonNullable<OPNEXConfig["channels"]>["imessage"]>,
   "accounts" | "defaultAccount"
 >;

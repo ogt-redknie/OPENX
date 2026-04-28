@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import type { Api, Model } from "@mariozechner/pi-ai";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { withEnvAsync } from "../test-utils/env.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withOPNEXTestState } from "../test-utils/opnex-test-state.js";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
   ensureAuthProfileStore,
@@ -23,7 +23,7 @@ async function expectVertexAdcEnvApiKey(params: {
   env?: NodeJS.ProcessEnv;
   tempPrefix?: string;
 }) {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), params.tempPrefix ?? "openclaw-adc-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), params.tempPrefix ?? "opnex-adc-"));
   const credentialsPath = path.join(tempDir, "adc.json");
   await fs.writeFile(credentialsPath, params.credentialsJson, "utf8");
 
@@ -236,7 +236,7 @@ function buildDemoLocalStore(keys: string[]) {
   };
 }
 
-function buildDemoLocalProviderCfg(apiKey: string): OpenClawConfig {
+function buildDemoLocalProviderCfg(apiKey: string): OPNEXConfig {
   return {
     models: {
       providers: {
@@ -269,10 +269,10 @@ async function resolveDemoLocalApiKey(params: {
 
 describe("getApiKeyForModel", () => {
   it("reads oauth auth-profiles entries from auth-profiles.json via explicit profile", async () => {
-    await withOpenClawTestState(
+    await withOPNEXTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-oauth-",
+        prefix: "opnex-oauth-",
         agentEnv: "main",
       },
       async (state) => {
@@ -293,14 +293,14 @@ describe("getApiKeyForModel", () => {
           api: "openai-codex-responses",
         } as Model<Api>;
 
-        const store = ensureAuthProfileStore(process.env.OPENCLAW_AGENT_DIR, {
+        const store = ensureAuthProfileStore(process.env.OPNEX_AGENT_DIR, {
           allowKeychainPrompt: false,
         });
         const apiKey = await getApiKeyForModel({
           model,
           profileId: "openai-codex:default",
           store,
-          agentDir: process.env.OPENCLAW_AGENT_DIR,
+          agentDir: process.env.OPNEX_AGENT_DIR,
         });
         expect(apiKey.apiKey).toBe(oauthFixture.access);
       },
@@ -308,10 +308,10 @@ describe("getApiKeyForModel", () => {
   });
 
   it("suggests openai-codex when only Codex OAuth is configured", async () => {
-    await withOpenClawTestState(
+    await withOPNEXTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-auth-",
+        prefix: "opnex-auth-",
         agentEnv: "main",
         env: {
           OPENAI_API_KEY: undefined,
@@ -819,7 +819,7 @@ describe("getApiKeyForModel", () => {
     await expectVertexAdcEnvApiKey({
       provider: "google-vertex",
       credentialsJson: "{}",
-      tempPrefix: "openclaw-google-adc-",
+      tempPrefix: "opnex-google-adc-",
       env: {
         GOOGLE_CLOUD_LOCATION: "us-central1",
         GOOGLE_CLOUD_PROJECT: "vertex-project",

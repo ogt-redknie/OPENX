@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect, it } from "vitest";
 import { matrixApprovalCapability } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<OPNEXConfig["channels"]>["matrix"]>>,
+): OPNEXConfig {
   return {
     channels: {
       matrix: {
@@ -19,7 +19,7 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 describe("matrix approval capability", () => {

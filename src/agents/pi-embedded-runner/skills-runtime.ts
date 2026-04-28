@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { loadWorkspaceSkillEntries, type SkillEntry, type SkillSnapshot } from "../skills.js";
 import { resolveSkillRuntimeConfig } from "../skills/runtime-config.js";
 
 export function resolveEmbeddedRunSkillEntries(params: {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   agentId?: string;
   skillsSnapshot?: SkillSnapshot;
 }): {

@@ -34,7 +34,7 @@ Production-ready for DMs and channels via Slack app integrations. Default mode i
 
       </Step>
 
-      <Step title="Configure OpenClaw">
+      <Step title="Configure OPNEX">
 
 ```json5
 {
@@ -61,7 +61,7 @@ SLACK_BOT_TOKEN=xoxb-...
       <Step title="Start gateway">
 
 ```bash
-openclaw gateway
+opnex gateway
 ```
 
       </Step>
@@ -81,7 +81,7 @@ openclaw gateway
 
       </Step>
 
-      <Step title="Configure OpenClaw">
+      <Step title="Configure OPNEX">
 
 ```json5
 {
@@ -108,7 +108,7 @@ openclaw gateway
       <Step title="Start gateway">
 
 ```bash
-openclaw gateway
+opnex gateway
 ```
 
       </Step>
@@ -119,7 +119,7 @@ openclaw gateway
 
 ## Socket Mode transport tuning
 
-OpenClaw sets the Slack SDK client pong timeout to 15 seconds by default for Socket Mode. Override the transport settings only when you need workspace- or host-specific tuning:
+OPNEX sets the Slack SDK client pong timeout to 15 seconds by default for Socket Mode. Override the transport settings only when you need workspace- or host-specific tuning:
 
 ```json5
 {
@@ -147,19 +147,19 @@ Base manifest (Socket Mode default):
 ```json
 {
   "display_information": {
-    "name": "OpenClaw",
-    "description": "Slack connector for OpenClaw"
+    "name": "OPNEX",
+    "description": "Slack connector for OPNEX"
   },
   "features": {
-    "bot_user": { "display_name": "OpenClaw", "always_online": true },
+    "bot_user": { "display_name": "OPNEX", "always_online": true },
     "app_home": {
       "messages_tab_enabled": true,
       "messages_tab_read_only_enabled": false
     },
     "slash_commands": [
       {
-        "command": "/openclaw",
-        "description": "Send a message to OpenClaw",
+        "command": "/opnex",
+        "description": "Send a message to OPNEX",
         "should_escape": false
       }
     ]
@@ -221,8 +221,8 @@ For **HTTP Request URLs mode**, replace `settings` with the HTTP variant and add
   "features": {
     "slash_commands": [
       {
-        "command": "/openclaw",
-        "description": "Send a message to OpenClaw",
+        "command": "/opnex",
+        "description": "Send a message to OPNEX",
         "should_escape": false,
         "url": "https://gateway-host.example.com/slack/events"
       }
@@ -485,7 +485,7 @@ Current Slack message actions include `send`, `upload-file`, `download-file`, `r
     - Named accounts inherit `channels.slack.allowFrom` when their own `allowFrom` is unset.
     - Named accounts do not inherit `channels.slack.accounts.default.allowFrom`.
 
-    Pairing in DMs uses `openclaw pairing approve slack <code>`.
+    Pairing in DMs uses `opnex pairing approve slack <code>`.
 
   </Tab>
 
@@ -558,7 +558,7 @@ Manual reply tags are supported:
 
 ## Ack reactions
 
-`ackReaction` sends an acknowledgement emoji while OpenClaw is processing an inbound message.
+`ackReaction` sends an acknowledgement emoji while OPNEX is processing an inbound message.
 
 Resolution order:
 
@@ -589,7 +589,7 @@ Notes:
 - Top-level Slack DMs stay off-thread by default, so they do not show the thread-style preview; use thread replies or `typingReaction` if you want visible progress there.
 - Media and non-text payloads fall back to normal delivery.
 - Media/error finals cancel pending preview edits; eligible text/block finals flush only when they can edit the preview in place.
-- If streaming fails mid-reply, OpenClaw falls back to normal delivery for remaining payloads.
+- If streaming fails mid-reply, OPNEX falls back to normal delivery for remaining payloads.
 
 Use draft preview instead of Slack native text streaming:
 
@@ -614,7 +614,7 @@ Legacy keys:
 
 ## Typing reaction fallback
 
-`typingReaction` adds a temporary reaction to the inbound Slack message while OpenClaw is processing a reply, then removes it when the run finishes. This is most useful outside of thread replies, which use a default "is typing..." status indicator.
+`typingReaction` adds a temporary reaction to the inbound Slack message while OPNEX is processing a reply, then removes it when the run finishes. This is most useful outside of thread replies, which use a default "is typing..." status indicator.
 
 Resolution order:
 
@@ -632,7 +632,7 @@ Notes:
   <Accordion title="Inbound attachments">
     Slack file attachments are downloaded from Slack-hosted private URLs (token-authenticated request flow) and written to the media store when fetch succeeds and size limits permit. File placeholders include the Slack `fileId` so agents can fetch the original file with `download-file`.
 
-    Downloads use bounded idle and total timeouts. If Slack file retrieval stalls or fails, OpenClaw keeps processing the message and falls back to the file placeholder.
+    Downloads use bounded idle and total timeouts. If Slack file retrieval stalls or fails, OPNEX keeps processing the message and falls back to the file placeholder.
 
     Runtime inbound size cap defaults to `20MB` unless overridden by `channels.slack.mediaMaxMb`.
 
@@ -662,12 +662,12 @@ Notes:
 Slash commands appear in Slack as either a single configured command or multiple native commands. Configure `channels.slack.slashCommand` to change command defaults:
 
 - `enabled: false`
-- `name: "openclaw"`
+- `name: "opnex"`
 - `sessionPrefix: "slack:slash"`
 - `ephemeral: true`
 
 ```txt
-/openclaw /help
+/opnex /help
 ```
 
 Native commands require [additional manifest settings](#additional-manifest-settings) in your Slack app and are enabled with `channels.slack.commands.native: true` or `commands.native: true` in global configurations instead.
@@ -737,8 +737,8 @@ These directives compile into Slack Block Kit and route clicks or selections bac
 Notes:
 
 - This is Slack-specific UI. Other channels do not translate Slack Block Kit directives into their own button systems.
-- The interactive callback values are OpenClaw-generated opaque tokens, not raw agent-authored values.
-- If generated interactive blocks would exceed Slack Block Kit limits, OpenClaw falls back to the original text reply instead of sending an invalid blocks payload.
+- The interactive callback values are OPNEX-generated opaque tokens, not raw agent-authored values.
+- If generated interactive blocks would exceed Slack Block Kit limits, OPNEX falls back to the original text reply instead of sending an invalid blocks payload.
 
 ## Exec approvals in Slack
 
@@ -749,7 +749,7 @@ Slack can act as a native approval client with interactive buttons and interacti
 - Approver authorization is still enforced: only users identified as approvers can approve or deny requests through Slack.
 
 This uses the same shared approval button surface as other channels. When `interactivity` is enabled in your Slack app settings, approval prompts render as Block Kit buttons directly in the conversation.
-When those buttons are present, they are the primary approval UX; OpenClaw
+When those buttons are present, they are the primary approval UX; OPNEX
 should only include a manual `/approve` command when the tool result says chat
 approvals are unavailable or manual approval is the only path.
 
@@ -841,9 +841,9 @@ Primary reference: [Configuration reference - Slack](/gateway/config-channels#sl
     Useful commands:
 
 ```bash
-openclaw channels status --probe
-openclaw logs --follow
-openclaw doctor
+opnex channels status --probe
+opnex logs --follow
+opnex doctor
 ```
 
   </Accordion>
@@ -859,7 +859,7 @@ openclaw doctor
       recoverable human sender in message metadata
 
 ```bash
-openclaw pairing list slack
+opnex pairing list slack
 ```
 
   </Accordion>
@@ -867,7 +867,7 @@ openclaw pairing list slack
   <Accordion title="Socket mode not connecting">
     Validate bot + app tokens and Socket Mode enablement in Slack app settings.
 
-    If `openclaw channels status --probe --json` shows `botTokenStatus` or
+    If `opnex channels status --probe --json` shows `botTokenStatus` or
     `appTokenStatus: "configured_unavailable"`, the Slack account is
     configured but the current runtime could not resolve the SecretRef-backed
     value.

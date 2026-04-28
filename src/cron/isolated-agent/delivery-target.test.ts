@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import {
   forumMessagingForTest,
   telegramMessagingForTest,
@@ -137,7 +137,7 @@ beforeEach(() => {
           config: {
             listAccountIds: () => [],
             resolveAccount: () => ({}),
-            resolveAllowFrom: ({ cfg }: { cfg: OpenClawConfig }) =>
+            resolveAllowFrom: ({ cfg }: { cfg: OPNEXConfig }) =>
               (cfg.channels?.alpha as { allowFrom?: string[] } | undefined)?.allowFrom,
           },
         },
@@ -159,15 +159,15 @@ afterEach(() => {
   resetPluginRuntimeStateForTest();
 });
 
-function makeCfg(overrides?: Partial<OpenClawConfig>): OpenClawConfig {
+function makeCfg(overrides?: Partial<OPNEXConfig>): OPNEXConfig {
   return {
     bindings: [],
     channels: {},
     ...overrides,
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
-function makeForumBoundCfg(accountId = "account-b"): OpenClawConfig {
+function makeForumBoundCfg(accountId = "account-b"): OPNEXConfig {
   return makeCfg({
     bindings: [
       {
@@ -217,7 +217,7 @@ function setStoredAlphaAllowFrom(allowFrom: string[]) {
 }
 
 async function resolveForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   target?: { channel?: "last" | "forum" | "alpha"; to?: string };
 }) {
   const channel = params.target ? params.target.channel : DEFAULT_TARGET.channel;
@@ -228,7 +228,7 @@ async function resolveForAgent(params: {
   });
 }
 
-async function resolveLastTarget(cfg: OpenClawConfig) {
+async function resolveLastTarget(cfg: OPNEXConfig) {
   return resolveForAgent({
     cfg,
     target: { channel: "last", to: undefined },

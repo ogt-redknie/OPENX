@@ -1,10 +1,10 @@
-import type { ChannelSetupAdapter, ChannelSetupInput } from "openclaw/plugin-sdk/channel-setup";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/routing";
+import type { ChannelSetupAdapter, ChannelSetupInput } from "opnex/plugin-sdk/channel-setup";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "opnex/plugin-sdk/routing";
 import {
   applyAccountNameToChannelSection,
   patchScopedAccountConfig,
-} from "openclaw/plugin-sdk/setup";
+} from "opnex/plugin-sdk/setup";
 import {
   createSetupInputPresenceValidator,
   mergeAllowFromEntries,
@@ -12,9 +12,9 @@ import {
   resolveSetupAccountId,
   type ChannelSetupDmPolicy,
   type WizardPrompter,
-} from "openclaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "opnex/plugin-sdk/setup-tools";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { resolveDefaultNextcloudTalkAccountId, resolveNextcloudTalkAccount } from "./accounts.js";
 import type { CoreConfig } from "./types.js";
 
@@ -147,10 +147,10 @@ async function promptNextcloudTalkAllowFrom(params: {
 }
 
 async function promptNextcloudTalkAllowFromForAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   prompter: WizardPrompter;
   accountId?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<OPNEXConfig> {
   const accountId = resolveSetupAccountId({
     accountId: params.accountId,
     defaultAccountId: resolveDefaultNextcloudTalkAccountId(params.cfg as CoreConfig),

@@ -1,26 +1,26 @@
 import { ChannelType, MessageType, type Message, type User } from "@buape/carbon";
 import { Routes, type APIMessage } from "discord-api-types/v10";
-import { formatAllowlistMatchMeta } from "openclaw/plugin-sdk/allow-from";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
+import { formatAllowlistMatchMeta } from "opnex/plugin-sdk/allow-from";
+import { recordChannelActivity } from "opnex/plugin-sdk/channel-activity-runtime";
 import {
   buildMentionRegexes,
   implicitMentionKindWhen,
   logInboundDrop,
   matchesMentionWithExplicit,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveControlCommandGate } from "openclaw/plugin-sdk/command-auth-native";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import { shouldHandleTextCommands } from "openclaw/plugin-sdk/command-surface";
-import type { SessionBindingRecord } from "openclaw/plugin-sdk/conversation-binding-runtime";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
+} from "opnex/plugin-sdk/channel-inbound";
+import { resolveControlCommandGate } from "opnex/plugin-sdk/command-auth-native";
+import { hasControlCommand } from "opnex/plugin-sdk/command-detection";
+import { shouldHandleTextCommands } from "opnex/plugin-sdk/command-surface";
+import type { SessionBindingRecord } from "opnex/plugin-sdk/conversation-binding-runtime";
+import { isDangerousNameMatchingEnabled } from "opnex/plugin-sdk/dangerous-name-runtime";
 import {
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { getChildLogger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
-import { logDebug, normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/reply-history";
+import { getChildLogger, logVerbose, shouldLogVerbose } from "opnex/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "opnex/plugin-sdk/system-event-runtime";
+import { logDebug, normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { resolveDefaultDiscordAccountId } from "../accounts.js";
 import { resolveDiscordConversationIdentity } from "../conversation-identity.js";
 import {
@@ -66,7 +66,7 @@ export type {
 const DISCORD_BOUND_THREAD_SYSTEM_PREFIXES = ["⚙️", "🤖", "🧰"];
 
 let conversationRuntimePromise:
-  | Promise<typeof import("openclaw/plugin-sdk/conversation-binding-runtime")>
+  | Promise<typeof import("opnex/plugin-sdk/conversation-binding-runtime")>
   | undefined;
 let pluralkitRuntimePromise: Promise<typeof import("../pluralkit.js")> | undefined;
 let discordSendRuntimePromise: Promise<typeof import("../send.js")> | undefined;
@@ -75,7 +75,7 @@ let systemEventsRuntimePromise: Promise<typeof import("./system-events.js")> | u
 let discordThreadingRuntimePromise: Promise<typeof import("./threading.js")> | undefined;
 
 async function loadConversationRuntime() {
-  conversationRuntimePromise ??= import("openclaw/plugin-sdk/conversation-binding-runtime");
+  conversationRuntimePromise ??= import("opnex/plugin-sdk/conversation-binding-runtime");
   return await conversationRuntimePromise;
 }
 

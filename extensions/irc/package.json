@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/irc",
+  "name": "@opnex/irc",
   "version": "2026.4.25",
-  "description": "OpenClaw IRC channel plugin",
+  "description": "OPNEX IRC channel plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],

@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw voicecall` (voice-call plugin command surface)"
+summary: "CLI reference for `opnex voicecall` (voice-call plugin command surface)"
 read_when:
   - You use the voice-call plugin and want the CLI entry points
   - You want quick examples for `voicecall setup|smoke|call|continue|dtmf|status|tail|expose`
 title: "Voicecall"
 ---
 
-# `openclaw voicecall`
+# `opnex voicecall`
 
 `voicecall` is a plugin-provided command. It only appears if the voice-call plugin is installed and enabled.
 
@@ -17,20 +17,20 @@ Primary doc:
 ## Common commands
 
 ```bash
-openclaw voicecall setup
-openclaw voicecall smoke
-openclaw voicecall status --call-id <id>
-openclaw voicecall call --to "+15555550123" --message "Hello" --mode notify
-openclaw voicecall continue --call-id <id> --message "Any questions?"
-openclaw voicecall dtmf --call-id <id> --digits "ww123456#"
-openclaw voicecall end --call-id <id>
+opnex voicecall setup
+opnex voicecall smoke
+opnex voicecall status --call-id <id>
+opnex voicecall call --to "+15555550123" --message "Hello" --mode notify
+opnex voicecall continue --call-id <id> --message "Any questions?"
+opnex voicecall dtmf --call-id <id> --digits "ww123456#"
+opnex voicecall end --call-id <id>
 ```
 
 `setup` prints human-readable readiness checks by default. Use `--json` for
 scripts:
 
 ```bash
-openclaw voicecall setup --json
+opnex voicecall setup --json
 ```
 
 For external providers (`twilio`, `telnyx`, `plivo`), setup must resolve a public
@@ -41,16 +41,16 @@ serve fallback is rejected because carriers cannot reach it.
 unless both `--to` and `--yes` are present:
 
 ```bash
-openclaw voicecall smoke --to "+15555550123"        # dry run
-openclaw voicecall smoke --to "+15555550123" --yes  # live notify call
+opnex voicecall smoke --to "+15555550123"        # dry run
+opnex voicecall smoke --to "+15555550123" --yes  # live notify call
 ```
 
 ## Exposing webhooks (Tailscale)
 
 ```bash
-openclaw voicecall expose --mode serve
-openclaw voicecall expose --mode funnel
-openclaw voicecall expose --mode off
+opnex voicecall expose --mode serve
+opnex voicecall expose --mode funnel
+opnex voicecall expose --mode off
 ```
 
 Security note: only expose the webhook endpoint to networks you trust. Prefer Tailscale Serve over Funnel when possible.

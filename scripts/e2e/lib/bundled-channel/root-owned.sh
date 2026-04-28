@@ -15,9 +15,9 @@ run_root_owned_global_scenario() {
 set -euo pipefail
 
 export HOME="/root"
-export OPENAI_API_KEY="sk-openclaw-bundled-channel-root-owned-e2e"
-export OPENCLAW_NO_ONBOARD=1
-export OPENCLAW_PLUGIN_STAGE_DIR="/var/lib/openclaw/plugin-runtime-deps"
+export OPENAI_API_KEY="sk-opnex-bundled-channel-root-owned-e2e"
+export OPNEX_NO_ONBOARD=1
+export OPNEX_PLUGIN_STAGE_DIR="/var/lib/opnex/plugin-runtime-deps"
 
 TOKEN="bundled-channel-root-owned-token"
 PORT="18791"
@@ -26,7 +26,7 @@ DEP_SENTINEL="@slack/web-api"
 gateway_pid=""
 
 package_root() {
-  printf "%s/openclaw" "$(npm root -g)"
+  printf "%s/opnex" "$(npm root -g)"
 }
 
 cleanup() {
@@ -37,11 +37,11 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "Installing mounted OpenClaw package into root-owned global npm..."
-package_tgz="${OPENCLAW_CURRENT_PACKAGE_TGZ:?missing OPENCLAW_CURRENT_PACKAGE_TGZ}"
-if ! npm install -g "$package_tgz" --no-fund --no-audit >/tmp/openclaw-root-owned-install.log 2>&1; then
+echo "Installing mounted OPNEX package into root-owned global npm..."
+package_tgz="${OPNEX_CURRENT_PACKAGE_TGZ:?missing OPNEX_CURRENT_PACKAGE_TGZ}"
+if ! npm install -g "$package_tgz" --no-fund --no-audit >/tmp/opnex-root-owned-install.log 2>&1; then
   echo "root-owned global npm install failed" >&2
-  cat /tmp/openclaw-root-owned-install.log >&2
+  cat /tmp/opnex-root-owned-install.log >&2
   exit 1
 fi
 
@@ -49,8 +49,8 @@ root="$(package_root)"
 test -d "$root/dist/extensions/$CHANNEL"
 rm -rf "$root/dist/extensions/$CHANNEL/node_modules"
 chmod -R a-w "$root"
-mkdir -p "$OPENCLAW_PLUGIN_STAGE_DIR" /home/appuser/.openclaw
-chown -R appuser:appuser /home/appuser/.openclaw /var/lib/openclaw
+mkdir -p "$OPNEX_PLUGIN_STAGE_DIR" /home/appuser/.opnex
+chown -R appuser:appuser /home/appuser/.opnex /var/lib/opnex
 
 if runuser -u appuser -- test -w "$root"; then
   echo "expected package root to be unwritable for appuser" >&2
@@ -62,7 +62,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const token = process.argv[2];
 const port = Number(process.argv[3]);
-const configPath = "/home/appuser/.openclaw/openclaw.json";
+const configPath = "/home/appuser/.opnex/opnex.json";
 const config = {
   gateway: {
     port,
@@ -95,7 +95,7 @@ const config = {
 fs.mkdirSync(path.dirname(configPath), { recursive: true });
 fs.writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
 NODE
-chown appuser:appuser /home/appuser/.openclaw/openclaw.json
+chown appuser:appuser /home/appuser/.opnex/opnex.json
 
 start_gateway() {
   local log_file="$1"
@@ -104,10 +104,10 @@ start_gateway() {
   runuser -u appuser -- env \
     HOME=/home/appuser \
     OPENAI_API_KEY="$OPENAI_API_KEY" \
-    OPENCLAW_NO_ONBOARD=1 \
-    OPENCLAW_PLUGIN_STAGE_DIR="$OPENCLAW_PLUGIN_STAGE_DIR" \
-    npm_config_cache=/tmp/openclaw-root-owned-npm-cache \
-    bash -c 'openclaw gateway --port "$1" --bind loopback --allow-unconfigured >"$2" 2>&1' \
+    OPNEX_NO_ONBOARD=1 \
+    OPNEX_PLUGIN_STAGE_DIR="$OPNEX_PLUGIN_STAGE_DIR" \
+    npm_config_cache=/tmp/opnex-root-owned-npm-cache \
+    bash -c 'opnex gateway --port "$1" --bind loopback --allow-unconfigured >"$2" 2>&1' \
     bash "$PORT" "$log_file" &
   gateway_pid="$!"
 
@@ -131,17 +131,17 @@ start_gateway() {
 
 wait_for_slack_provider_start() {
   for _ in $(seq 1 180); do
-    if grep -Eq "\\[slack\\] \\[default\\] starting provider|An API error occurred: invalid_auth|\\[plugins\\] slack installed bundled runtime deps|\\[gateway\\] ready \\(.*\\bslack\\b" /tmp/openclaw-root-owned-gateway.log; then
+    if grep -Eq "\\[slack\\] \\[default\\] starting provider|An API error occurred: invalid_auth|\\[plugins\\] slack installed bundled runtime deps|\\[gateway\\] ready \\(.*\\bslack\\b" /tmp/opnex-root-owned-gateway.log; then
       return 0
     fi
     sleep 1
   done
   echo "timed out waiting for slack provider startup" >&2
-  cat /tmp/openclaw-root-owned-gateway.log >&2
+  cat /tmp/opnex-root-owned-gateway.log >&2
   exit 1
 }
 
-start_gateway /tmp/openclaw-root-owned-gateway.log
+start_gateway /tmp/opnex-root-owned-gateway.log
 wait_for_slack_provider_start
 
 if [ -e "$root/dist/extensions/$CHANNEL/node_modules/$DEP_SENTINEL/package.json" ]; then
@@ -149,26 +149,26 @@ if [ -e "$root/dist/extensions/$CHANNEL/node_modules/$DEP_SENTINEL/package.json"
   find "$root/dist/extensions/$CHANNEL/node_modules" -maxdepth 4 -type f | sort | head -80 >&2 || true
   exit 1
 fi
-if ! find "$OPENCLAW_PLUGIN_STAGE_DIR" -maxdepth 12 -path "*/node_modules/$DEP_SENTINEL/package.json" -type f | grep -q .; then
+if ! find "$OPNEX_PLUGIN_STAGE_DIR" -maxdepth 12 -path "*/node_modules/$DEP_SENTINEL/package.json" -type f | grep -q .; then
   echo "missing external staged dependency sentinel for $DEP_SENTINEL" >&2
-  find "$OPENCLAW_PLUGIN_STAGE_DIR" -maxdepth 12 -type f | sort | head -120 >&2 || true
-  cat /tmp/openclaw-root-owned-gateway.log >&2
+  find "$OPNEX_PLUGIN_STAGE_DIR" -maxdepth 12 -type f | sort | head -120 >&2 || true
+  cat /tmp/opnex-root-owned-gateway.log >&2
   exit 1
 fi
-if [ -e "$root/dist/extensions/node_modules/openclaw/package.json" ]; then
+if [ -e "$root/dist/extensions/node_modules/opnex/package.json" ]; then
   echo "root-owned package tree was mutated with SDK alias" >&2
-  find "$root/dist/extensions/node_modules/openclaw" -maxdepth 4 -type f | sort | head -80 >&2 || true
+  find "$root/dist/extensions/node_modules/opnex" -maxdepth 4 -type f | sort | head -80 >&2 || true
   exit 1
 fi
-if ! find "$OPENCLAW_PLUGIN_STAGE_DIR" -maxdepth 12 -path "*/dist/extensions/node_modules/openclaw/package.json" -type f | grep -q .; then
-  echo "missing external staged openclaw/plugin-sdk alias" >&2
-  find "$OPENCLAW_PLUGIN_STAGE_DIR" -maxdepth 12 -type f | sort | head -120 >&2 || true
-  cat /tmp/openclaw-root-owned-gateway.log >&2
+if ! find "$OPNEX_PLUGIN_STAGE_DIR" -maxdepth 12 -path "*/dist/extensions/node_modules/opnex/package.json" -type f | grep -q .; then
+  echo "missing external staged opnex/plugin-sdk alias" >&2
+  find "$OPNEX_PLUGIN_STAGE_DIR" -maxdepth 12 -type f | sort | head -120 >&2 || true
+  cat /tmp/opnex-root-owned-gateway.log >&2
   exit 1
 fi
-if grep -Eq "failed to install bundled runtime deps|Cannot find package 'openclaw'|Cannot find module 'openclaw/plugin-sdk'" /tmp/openclaw-root-owned-gateway.log; then
+if grep -Eq "failed to install bundled runtime deps|Cannot find package 'opnex'|Cannot find module 'opnex/plugin-sdk'" /tmp/opnex-root-owned-gateway.log; then
   echo "root-owned gateway hit bundled runtime dependency errors" >&2
-  cat /tmp/openclaw-root-owned-gateway.log >&2
+  cat /tmp/opnex-root-owned-gateway.log >&2
   exit 1
 fi
 

@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import {
   defaultRuntime,
   resetLifecycleRuntimeLogs,
@@ -9,7 +9,7 @@ import {
   stubEmptyGatewayEnv,
 } from "./test-helpers/lifecycle-core-harness.js";
 
-const loadConfig = vi.fn<() => OpenClawConfig>(() => ({
+const loadConfig = vi.fn<() => OPNEXConfig>(() => ({
   gateway: {
     auth: {
       token: "config-token",
@@ -78,7 +78,7 @@ function stubServiceGatewayTokenEnv() {
   service.readCommand.mockResolvedValue({
     programArguments: [],
     environment: {
-      OPENCLAW_GATEWAY_TOKEN: "service-token",
+      OPNEX_GATEWAY_TOKEN: "service-token",
       SERVICE_GATEWAY_TOKEN: "service-token",
     },
   });
@@ -104,28 +104,28 @@ describe("runServiceRestart token drift", () => {
     clearGatewayRestartIntentSync.mockClear();
     service.readCommand.mockResolvedValue({
       programArguments: [],
-      environment: { OPENCLAW_GATEWAY_TOKEN: "service-token" },
+      environment: { OPNEX_GATEWAY_TOKEN: "service-token" },
     });
     stubEmptyGatewayEnv();
   });
 
   it("prints the container restart hint when restart is requested for a not-loaded service", async () => {
     service.isLoaded.mockResolvedValue(false);
-    vi.stubEnv("OPENCLAW_CONTAINER_HINT", "openclaw-demo-container");
+    vi.stubEnv("OPNEX_CONTAINER_HINT", "opnex-demo-container");
 
     await runServiceRestart({
       serviceNoun: "Gateway",
       service,
       renderStartHints: () => [
-        "Restart the container or the service that manages it for openclaw-demo-container.",
-        "openclaw gateway install",
+        "Restart the container or the service that manages it for opnex-demo-container.",
+        "opnex gateway install",
       ],
       opts: { json: false },
     });
 
     expect(runtimeLogs).toContain("Gateway service not loaded.");
     expect(runtimeLogs).toContain(
-      "Start with: Restart the container or the service that manages it for openclaw-demo-container.",
+      "Start with: Restart the container or the service that manages it for opnex-demo-container.",
     );
   });
 
@@ -149,9 +149,9 @@ describe("runServiceRestart token drift", () => {
     });
     service.readCommand.mockResolvedValue({
       programArguments: [],
-      environment: { OPENCLAW_GATEWAY_TOKEN: "env-token" },
+      environment: { OPNEX_GATEWAY_TOKEN: "env-token" },
     });
-    vi.stubEnv("OPENCLAW_GATEWAY_TOKEN", "env-token");
+    vi.stubEnv("OPNEX_GATEWAY_TOKEN", "env-token");
 
     await runServiceRestart(createServiceRunArgs(true));
 
@@ -371,7 +371,7 @@ describe("runServiceRestart token drift", () => {
     await runServiceStart({
       serviceNoun: "Gateway",
       service,
-      renderStartHints: () => ["openclaw gateway install"],
+      renderStartHints: () => ["opnex gateway install"],
       opts: { json: true },
     });
 
@@ -383,12 +383,12 @@ describe("runServiceRestart token drift", () => {
     }>();
     expect(payload.ok).toBe(true);
     expect(payload.result).toBe("not-loaded");
-    expect(payload.hints).toEqual(expect.arrayContaining(["openclaw gateway install"]));
+    expect(payload.hints).toEqual(expect.arrayContaining(["opnex gateway install"]));
     expect(payload.hintItems).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           kind: "install",
-          text: "openclaw gateway install",
+          text: "opnex gateway install",
         }),
       ]),
     );

@@ -1,5 +1,5 @@
 import { STATE_DIR } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   emitTrustedDiagnosticEvent,
   onInternalDiagnosticEvent,
@@ -7,7 +7,7 @@ import {
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type { PluginServiceRegistration } from "./registry-types.js";
 import type { PluginRegistry } from "./registry.js";
-import type { OpenClawPluginServiceContext, PluginLogger } from "./types.js";
+import type { OPNEXPluginServiceContext, PluginLogger } from "./types.js";
 
 const log = createSubsystemLogger("plugins");
 function createPluginLogger(): PluginLogger {
@@ -20,10 +20,10 @@ function createPluginLogger(): PluginLogger {
 }
 
 function createServiceContext(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   workspaceDir?: string;
   service?: PluginServiceRegistration;
-}): OpenClawPluginServiceContext {
+}): OPNEXPluginServiceContext {
   const grantsInternalDiagnostics =
     params.service?.origin === "bundled" &&
     params.service.pluginId === params.service.service.id &&
@@ -52,7 +52,7 @@ export type PluginServicesHandle = {
 
 export async function startPluginServices(params: {
   registry: PluginRegistry;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   workspaceDir?: string;
 }): Promise<PluginServicesHandle> {
   const running: Array<{

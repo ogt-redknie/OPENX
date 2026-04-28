@@ -6,29 +6,29 @@ import {
   matchesMentionWithExplicit,
   resolveInboundMentionDecision,
   type NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelGroupPolicy } from "openclaw/plugin-sdk/channel-policy";
-import { resolveControlCommandGate } from "openclaw/plugin-sdk/command-auth-native";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-inbound";
+import { resolveChannelGroupPolicy } from "opnex/plugin-sdk/channel-policy";
+import { resolveControlCommandGate } from "opnex/plugin-sdk/command-auth-native";
+import { hasControlCommand } from "opnex/plugin-sdk/command-detection";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/config-types";
 import {
   createInternalHookEvent,
   fireAndForgetHook,
   toInternalMessageReceivedContext,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
+} from "opnex/plugin-sdk/hook-runtime";
 import {
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/reply-history";
+import type { MsgContext } from "opnex/plugin-sdk/reply-runtime";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { normalizeOptionalLowercaseString } from "opnex/plugin-sdk/text-runtime";
 import type { NormalizedAllowFrom } from "./bot-access.js";
 import { isSenderAllowed } from "./bot-access.js";
 import type {
@@ -83,7 +83,7 @@ function formatAudioTranscriptForAgent(transcript: string): string {
 }
 
 async function resolveStickerVisionSupport(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId?: string;
 }): Promise<boolean> {
   try {
@@ -95,7 +95,7 @@ async function resolveStickerVisionSupport(params: {
 }
 
 export async function resolveTelegramInboundBody(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

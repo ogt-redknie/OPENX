@@ -1,8 +1,8 @@
 import type { Guild } from "@buape/carbon";
-import { resolveCommandAuthorizedFromAuthorizers } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+import { resolveCommandAuthorizedFromAuthorizers } from "opnex/plugin-sdk/command-auth-native";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { DiscordAccountConfig } from "opnex/plugin-sdk/config-types";
+import { resolveOpenProviderRuntimeGroupPolicy } from "opnex/plugin-sdk/runtime-group-policy";
 import {
   isDiscordGroupAllowedByPolicy,
   resolveDiscordChannelConfigWithFallback,
@@ -12,7 +12,7 @@ import {
 } from "../monitor/allow-list.js";
 
 export async function authorizeDiscordVoiceIngress(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   discordConfig: DiscordAccountConfig;
   groupPolicy?: "open" | "disabled" | "allowlist";
   useAccessGroups?: boolean;

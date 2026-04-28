@@ -3,9 +3,9 @@ import {
   buildChannelConfigSchema,
   DmPolicySchema,
   MarkdownConfigSchema,
-} from "openclaw/plugin-sdk/channel-config-primitives";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
-import { z } from "openclaw/plugin-sdk/zod";
+} from "opnex/plugin-sdk/channel-config-primitives";
+import { buildSecretInputSchema } from "opnex/plugin-sdk/secret-input";
+import { z } from "opnex/plugin-sdk/zod";
 
 /**
  * Validates https:// URLs only (no javascript:, data:, file:, etc.)

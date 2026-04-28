@@ -1,1 +1,1 @@
-export { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+export { resolveConfiguredSecretInputString } from "opnex/plugin-sdk/secret-input-runtime";

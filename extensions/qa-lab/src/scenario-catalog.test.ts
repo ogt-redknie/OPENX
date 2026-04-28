@@ -15,7 +15,7 @@ describe("qa scenario catalog", () => {
 
     expect(pack.version).toBe(1);
     expect(pack.agent.identityMarkdown).toContain("Dev C-3PO");
-    expect(pack.kickoffTask).toContain("Lobster Invaders");
+    expect(pack.kickoffTask).toContain("OPNEX Invaders");
     expect(listQaScenarioMarkdownPaths().length).toBe(pack.scenarios.length);
     expect(listQaScenarioMarkdownPaths()).toContain(
       "qa/scenarios/media/image-generation-roundtrip.md",

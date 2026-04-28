@@ -1,9 +1,9 @@
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+export type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 export type {
   MemoryEmbeddingProbeResult,
   MemoryProviderStatus,
   MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "opnex/plugin-sdk/memory-core-host-engine-storage";
 export {
   dedupeDreamDiaryEntries,
   removeBackfillDiaryEntries,

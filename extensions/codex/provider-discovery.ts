@@ -1,5 +1,5 @@
-import type { ProviderCatalogContext } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderCatalogContext } from "opnex/plugin-sdk/provider-catalog-shared";
+import type { ProviderPlugin } from "opnex/plugin-sdk/provider-model-shared";
 import {
   buildCodexProviderConfig,
   CODEX_APP_SERVER_AUTH_MARKER,

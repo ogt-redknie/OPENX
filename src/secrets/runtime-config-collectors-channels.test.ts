@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import type { ResolverContext } from "./runtime-shared.js";
 
 const getBootstrapChannelSecrets = vi.fn();
@@ -37,7 +37,7 @@ describe("runtime channel config collectors", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       defaults: undefined,
       context: {} as ResolverContext,
     });
@@ -61,7 +61,7 @@ describe("runtime channel config collectors", () => {
         channels: {
           legacy: {},
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       defaults: undefined,
       context: {} as ResolverContext,
     });

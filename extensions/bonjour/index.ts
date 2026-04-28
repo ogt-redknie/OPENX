@@ -1,25 +1,25 @@
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "opnex/plugin-sdk/plugin-entry";
 import {
   registerUncaughtExceptionHandler,
   registerUnhandledRejectionHandler,
-} from "openclaw/plugin-sdk/runtime";
+} from "opnex/plugin-sdk/runtime";
 import { startGatewayBonjourAdvertiser } from "./src/advertiser.js";
 
 function formatBonjourInstanceName(displayName: string) {
   const trimmed = displayName.trim();
   if (!trimmed) {
-    return "OpenClaw";
+    return "OPNEX";
   }
-  if (/openclaw/i.test(trimmed)) {
+  if (/opnex/i.test(trimmed)) {
     return trimmed;
   }
-  return `${trimmed} (OpenClaw)`;
+  return `${trimmed} (OPNEX)`;
 }
 
 export default definePluginEntry({
   id: "bonjour",
   name: "Bonjour Gateway Discovery",
-  description: "Advertise the local OpenClaw gateway over Bonjour/mDNS.",
+  description: "Advertise the local OPNEX gateway over Bonjour/mDNS.",
   register(api) {
     api.registerGatewayDiscoveryService({
       id: "bonjour",

@@ -2,13 +2,13 @@ import {
   resolveOutboundMediaUrls,
   resolveTextChunksWithFallback,
   sendMediaWithLeadingCaption,
-} from "openclaw/plugin-sdk/reply-payload";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "opnex/plugin-sdk/reply-payload";
+import { isPrivateNetworkOptInEnabled } from "opnex/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "opnex/plugin-sdk/string-coerce-runtime";
 import {
   downloadBlueBubblesAttachment,
   fetchBlueBubblesMessageAttachments,
@@ -72,7 +72,7 @@ import type {
 import { enrichBlueBubblesParticipantsWithContactNames } from "./participant-contact-names.js";
 import { isBlueBubblesPrivateApiEnabled } from "./probe.js";
 import { normalizeBlueBubblesReactionInputStrict, sendBlueBubblesReaction } from "./reactions.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { OPNEXConfig } from "./runtime-api.js";
 import { normalizeSecretInputString } from "./secret-input.js";
 import { resolveChatGuidForTarget, sendMessageBlueBubbles } from "./send.js";
 import {
@@ -384,7 +384,7 @@ function logGroupAllowlistHint(params: {
 }
 
 function resolveBlueBubblesAckReaction(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   core: BlueBubblesCoreRuntime;
   runtime: BlueBubblesRuntimeEnv;

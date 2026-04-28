@@ -3,19 +3,19 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { serializePayload, type MessagePayloadObject, type RequestClient } from "@buape/carbon";
 import { ChannelType, Routes } from "discord-api-types/v10";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { maxBytesForKind } from "openclaw/plugin-sdk/media-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-runtime";
-import { unlinkIfExists } from "openclaw/plugin-sdk/media-runtime";
-import type { PollInput } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { resolveChunkMode, type ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { RetryConfig } from "openclaw/plugin-sdk/retry-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
-import { convertMarkdownTables, normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
-import { loadWebMediaRaw } from "openclaw/plugin-sdk/web-media";
+import { recordChannelActivity } from "opnex/plugin-sdk/channel-activity-runtime";
+import type { MarkdownTableMode, OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveMarkdownTableMode } from "opnex/plugin-sdk/markdown-table-runtime";
+import { maxBytesForKind } from "opnex/plugin-sdk/media-runtime";
+import { extensionForMime } from "opnex/plugin-sdk/media-runtime";
+import { unlinkIfExists } from "opnex/plugin-sdk/media-runtime";
+import type { PollInput } from "opnex/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "opnex/plugin-sdk/plugin-config-runtime";
+import { resolveChunkMode, type ChunkMode } from "opnex/plugin-sdk/reply-chunking";
+import type { RetryConfig } from "opnex/plugin-sdk/retry-runtime";
+import { resolvePreferredOPNEXTmpDir } from "opnex/plugin-sdk/temp-path";
+import { convertMarkdownTables, normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
+import { loadWebMediaRaw } from "opnex/plugin-sdk/web-media";
 import { resolveDiscordAccount } from "./accounts.js";
 import { resolveDiscordClientAccountContext } from "./client.js";
 import { rewriteDiscordKnownMentions } from "./mentions.js";
@@ -46,7 +46,7 @@ import {
 } from "./voice-message.js";
 
 type DiscordSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;
@@ -349,7 +349,7 @@ export async function sendMessageDiscord(
 }
 
 type DiscordWebhookSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   webhookId: string;
   webhookToken: string;
   accountId?: string;
@@ -518,7 +518,7 @@ async function resolveDiscordStructuredSendContext(
 }
 
 type VoiceMessageOpts = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -535,7 +535,7 @@ async function materializeVoiceMessageInput(mediaUrl: string): Promise<{ filePat
   const extFromName = media.fileName ? path.extname(media.fileName) : "";
   const extFromMime = media.contentType ? extensionForMime(media.contentType) : "";
   const ext = extFromName || extFromMime || ".bin";
-  const tempDir = resolvePreferredOpenClawTmpDir();
+  const tempDir = resolvePreferredOPNEXTmpDir();
   const filePath = path.join(tempDir, `voice-src-${crypto.randomUUID()}${ext}`);
   await fs.writeFile(filePath, media.buffer, { mode: 0o600 });
   return { filePath };

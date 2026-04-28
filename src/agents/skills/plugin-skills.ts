@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { isAcpRuntimeSpawnAvailable } from "../../acp/runtime/availability.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import {
   normalizePluginsConfigWithResolver,
@@ -44,7 +44,7 @@ function createRegistryPluginIdNormalizer(
 
 export function resolvePluginSkillDirs(params: {
   workspaceDir: string | undefined;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): string[] {
   const workspaceDir = (params.workspaceDir ?? "").trim();
   if (!workspaceDir) {

@@ -2,8 +2,8 @@ import {
   createOpenAiCompatibleImageGenerationProvider,
   imageSourceUploadFileName,
   type ImageGenerationProvider,
-} from "openclaw/plugin-sdk/image-generation";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/image-generation";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   DEEPINFRA_BASE_URL,
   DEEPINFRA_IMAGE_MODELS,

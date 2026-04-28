@@ -4,12 +4,12 @@ import {
   normalizeAccountId,
   normalizeOptionalAccountId,
   resolveAccountWithDefaultFallback,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/account-core";
-import type { TelegramAccountConfig, TelegramActionConfig } from "openclaw/plugin-sdk/config-types";
-import { formatSetExplicitDefaultInstruction } from "openclaw/plugin-sdk/routing";
-import { createSubsystemLogger, isTruthyEnvValue } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/account-core";
+import type { TelegramAccountConfig, TelegramActionConfig } from "opnex/plugin-sdk/config-types";
+import { formatSetExplicitDefaultInstruction } from "opnex/plugin-sdk/routing";
+import { createSubsystemLogger, isTruthyEnvValue } from "opnex/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "opnex/plugin-sdk/string-coerce-runtime";
 import { mergeTelegramAccountConfig, resolveTelegramAccountConfig } from "./account-config.js";
 import {
   listTelegramAccountIds as listSelectedTelegramAccountIds,
@@ -40,7 +40,7 @@ function formatDebugArg(value: unknown): string {
 }
 
 const debugAccounts = (...args: unknown[]) => {
-  if (isTruthyEnvValue(process.env.OPENCLAW_DEBUG_TELEGRAM_ACCOUNTS)) {
+  if (isTruthyEnvValue(process.env.OPNEX_DEBUG_TELEGRAM_ACCOUNTS)) {
     const parts = args.map((arg) => formatDebugArg(arg));
     getLog().warn(parts.join(" ").trim());
   }
@@ -63,7 +63,7 @@ export type TelegramMediaRuntimeOptions = {
   dangerouslyAllowPrivateNetwork?: boolean;
 };
 
-export function listTelegramAccountIds(cfg: OpenClawConfig): string[] {
+export function listTelegramAccountIds(cfg: OPNEXConfig): string[] {
   const ids = listSelectedTelegramAccountIds(cfg);
   debugAccounts("listTelegramAccountIds", ids);
   return ids;
@@ -76,7 +76,7 @@ export function resetMissingDefaultWarnFlag(): void {
   emittedMissingDefaultWarn = false;
 }
 
-export function resolveDefaultTelegramAccountId(cfg: OpenClawConfig): string {
+export function resolveDefaultTelegramAccountId(cfg: OPNEXConfig): string {
   const selection = resolveDefaultTelegramAccountSelection(cfg);
   if (selection.shouldWarnMissingDefault && !emittedMissingDefaultWarn) {
     emittedMissingDefaultWarn = true;
@@ -89,7 +89,7 @@ export function resolveDefaultTelegramAccountId(cfg: OpenClawConfig): string {
 }
 
 export function createTelegramActionGate(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
 }): (key: keyof TelegramActionConfig, defaultValue?: boolean) => boolean {
   const accountId = normalizeAccountId(
@@ -102,7 +102,7 @@ export function createTelegramActionGate(params: {
 }
 
 export function resolveTelegramMediaRuntimeOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   token: string;
   transport?: TelegramTransport;
@@ -139,7 +139,7 @@ export function resolveTelegramPollActionGateState(
 }
 
 export function resolveTelegramAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
 }): ResolvedTelegramAccount {
   const baseEnabled = params.cfg.channels?.telegram?.enabled !== false;
@@ -176,7 +176,7 @@ export function resolveTelegramAccount(params: {
   });
 }
 
-export function listEnabledTelegramAccounts(cfg: OpenClawConfig): ResolvedTelegramAccount[] {
+export function listEnabledTelegramAccounts(cfg: OPNEXConfig): ResolvedTelegramAccount[] {
   return listTelegramAccountIds(cfg)
     .map((accountId) => resolveTelegramAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

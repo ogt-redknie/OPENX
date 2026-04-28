@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { Type } from "typebox";
-import { jsonResult, type OpenClawPluginApi } from "../api.js";
+import { jsonResult, type OPNEXPluginApi } from "../api.js";
 import type { SkillWorkshopConfig } from "./config.js";
 import {
   applyProposalToWorkspace,
@@ -84,7 +84,7 @@ function buildProposal(params: {
 }
 
 export function createSkillWorkshopTool(params: {
-  api: OpenClawPluginApi;
+  api: OPNEXPluginApi;
   config: SkillWorkshopConfig;
   ctx: { workspaceDir?: string };
 }) {

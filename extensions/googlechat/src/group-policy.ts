@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+import { resolveChannelGroupRequireMention } from "opnex/plugin-sdk/channel-policy";
+import type { OPNEXConfig } from "opnex/plugin-sdk/core";
 
 type GoogleChatGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

@@ -19,13 +19,13 @@
     "types": ["node"],
     "useDefineForClassFields": false,
     "paths": {
-      "openclaw/extension-api": ["./src/extensionAPI.ts"],
-      "openclaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "openclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "@openclaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "@openclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "openclaw/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
-      "@openclaw/*": ["./extensions/*"]
+      "opnex/extension-api": ["./src/extensionAPI.ts"],
+      "opnex/plugin-sdk": ["./src/plugin-sdk/index.ts"],
+      "opnex/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "@opnex/plugin-sdk": ["./src/plugin-sdk/index.ts"],
+      "@opnex/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "opnex/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
+      "@opnex/*": ["./extensions/*"]
     }
   },
   "include": ["src/**/*", "ui/**/*", "extensions/**/*", "packages/**/*"],

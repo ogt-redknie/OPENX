@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredOPNEXTmpDir } from "../../infra/tmp-opnex-dir.js";
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 import type { SkillSnapshot } from "../skills.js";
 import { cliBackendLog } from "./log.js";
 
 const CLAUDE_CLI_BACKEND_ID = "claude-cli";
-const OPENCLAW_CLAUDE_PLUGIN_NAME = "openclaw-skills";
+const OPNEX_CLAUDE_PLUGIN_NAME = "opnex-skills";
 
 type MaterializedSkill = {
   name: string;
@@ -89,18 +89,18 @@ export async function prepareClaudeCliSkillsPlugin(params: {
   }
 
   const tempDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-claude-skills-"),
+    path.join(resolvePreferredOPNEXTmpDir(), "opnex-claude-skills-"),
   );
-  const pluginDir = path.join(tempDir, OPENCLAW_CLAUDE_PLUGIN_NAME);
+  const pluginDir = path.join(tempDir, OPNEX_CLAUDE_PLUGIN_NAME);
   const manifestDir = path.join(pluginDir, ".claude-plugin");
   const skillsDir = path.join(pluginDir, "skills");
   await fs.mkdir(manifestDir, { recursive: true, mode: 0o700 });
   await fs.mkdir(skillsDir, { recursive: true, mode: 0o700 });
 
   const manifest = {
-    name: OPENCLAW_CLAUDE_PLUGIN_NAME,
+    name: OPNEX_CLAUDE_PLUGIN_NAME,
     version: "0.0.0",
-    description: "Session-scoped OpenClaw skills selected for this agent run.",
+    description: "Session-scoped OPNEX skills selected for this agent run.",
     skills: "./skills",
   };
   await fs.writeFile(

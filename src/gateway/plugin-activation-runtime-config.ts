@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { isRecord } from "../utils.js";
 
 function hasOwnValue(record: Record<string, unknown>, key: string): boolean {
@@ -6,9 +6,9 @@ function hasOwnValue(record: Record<string, unknown>, key: string): boolean {
 }
 
 function mergeChannelActivationSections(params: {
-  runtimeConfig: OpenClawConfig;
-  activationConfig: OpenClawConfig;
-}): OpenClawConfig {
+  runtimeConfig: OPNEXConfig;
+  activationConfig: OPNEXConfig;
+}): OPNEXConfig {
   const activationChannels = params.activationConfig.channels;
   if (!isRecord(activationChannels)) {
     return params.runtimeConfig;
@@ -37,14 +37,14 @@ function mergeChannelActivationSections(params: {
   }
   return {
     ...params.runtimeConfig,
-    channels: nextChannels as OpenClawConfig["channels"],
+    channels: nextChannels as OPNEXConfig["channels"],
   };
 }
 
 function mergePluginActivationSections(params: {
-  runtimeConfig: OpenClawConfig;
-  activationConfig: OpenClawConfig;
-}): OpenClawConfig {
+  runtimeConfig: OPNEXConfig;
+  activationConfig: OPNEXConfig;
+}): OPNEXConfig {
   const activationPlugins = params.activationConfig.plugins;
   if (!isRecord(activationPlugins)) {
     return params.runtimeConfig;
@@ -90,14 +90,14 @@ function mergePluginActivationSections(params: {
   }
   return {
     ...params.runtimeConfig,
-    plugins: nextPlugins as OpenClawConfig["plugins"],
+    plugins: nextPlugins as OPNEXConfig["plugins"],
   };
 }
 
 export function mergeActivationSectionsIntoRuntimeConfig(params: {
-  runtimeConfig: OpenClawConfig;
-  activationConfig: OpenClawConfig;
-}): OpenClawConfig {
+  runtimeConfig: OPNEXConfig;
+  activationConfig: OPNEXConfig;
+}): OPNEXConfig {
   return mergePluginActivationSections({
     ...params,
     runtimeConfig: mergeChannelActivationSections(params),

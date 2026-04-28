@@ -13,7 +13,7 @@ export {
   dispatchInboundReplyWithBase,
   getChatChannelMeta,
   jsonResult,
-  type OpenClawConfig,
+  type OPNEXConfig,
   type PluginRuntime,
   readStringParam,
   type RuntimeEnv,

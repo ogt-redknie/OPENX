@@ -1,15 +1,15 @@
-import type { OpenClawPluginApi } from "./plugin-runtime.js";
+import type { OPNEXPluginApi } from "./plugin-runtime.js";
 
-export type TestPluginApiInput = Partial<OpenClawPluginApi>;
+export type TestPluginApiInput = Partial<OPNEXPluginApi>;
 
-export function createTestPluginApi(api: TestPluginApiInput = {}): OpenClawPluginApi {
+export function createTestPluginApi(api: TestPluginApiInput = {}): OPNEXPluginApi {
   return {
     id: "test-plugin",
     name: "test-plugin",
     source: "test",
     registrationMode: "full",
     config: {},
-    runtime: {} as OpenClawPluginApi["runtime"],
+    runtime: {} as OPNEXPluginApi["runtime"],
     logger: { info() {}, warn() {}, error() {}, debug() {} },
     registerTool() {},
     registerHook() {},

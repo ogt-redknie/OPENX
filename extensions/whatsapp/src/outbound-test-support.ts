@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import type { MockInstance } from "vitest";
 
 export function createWhatsAppPollFixture() {
-  const cfg = { marker: "resolved-cfg" } as OpenClawConfig;
+  const cfg = { marker: "resolved-cfg" } as OPNEXConfig;
   const poll = {
     question: "Lunch?",
     options: ["Pizza", "Sushi"],
@@ -19,7 +19,7 @@ export function createWhatsAppPollFixture() {
 export function expectWhatsAppPollSent(
   sendPollWhatsApp: MockInstance,
   params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     poll: { question: string; options: string[]; maxSelections: number };
     to?: string;
     accountId?: string;

@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
-import type { OpenClawConfig } from "./types.js";
+import type { OPNEXConfig } from "./types.js";
 
 export type RuntimeConfigSnapshotRefreshParams = {
-  sourceConfig: OpenClawConfig;
+  sourceConfig: OPNEXConfig;
 };
 
 export type ConfigWriteAfterWrite =
@@ -63,8 +63,8 @@ export type RuntimeConfigSnapshotRefreshHandler = {
 
 export type RuntimeConfigWriteNotification = {
   configPath: string;
-  sourceConfig: OpenClawConfig;
-  runtimeConfig: OpenClawConfig;
+  sourceConfig: OPNEXConfig;
+  runtimeConfig: OPNEXConfig;
   persistedHash: string;
   revision: number;
   fingerprint: string;
@@ -80,8 +80,8 @@ export type RuntimeConfigSnapshotMetadata = {
   updatedAtMs: number;
 };
 
-let runtimeConfigSnapshot: OpenClawConfig | null = null;
-let runtimeConfigSourceSnapshot: OpenClawConfig | null = null;
+let runtimeConfigSnapshot: OPNEXConfig | null = null;
+let runtimeConfigSourceSnapshot: OPNEXConfig | null = null;
 let runtimeConfigSnapshotMetadata: RuntimeConfigSnapshotMetadata | null = null;
 let runtimeConfigSnapshotRevision = 0;
 let runtimeConfigSnapshotRefreshHandler: RuntimeConfigSnapshotRefreshHandler | null = null;
@@ -101,7 +101,7 @@ function stableConfigStringify(value: unknown): string {
     .join(",")}}`;
 }
 
-function configSnapshotsMatch(left: OpenClawConfig, right: OpenClawConfig): boolean {
+function configSnapshotsMatch(left: OPNEXConfig, right: OPNEXConfig): boolean {
   if (left === right) {
     return true;
   }
@@ -112,13 +112,13 @@ function configSnapshotsMatch(left: OpenClawConfig, right: OpenClawConfig): bool
   }
 }
 
-export function hashRuntimeConfigValue(value: OpenClawConfig): string {
+export function hashRuntimeConfigValue(value: OPNEXConfig): string {
   return createHash("sha256").update(stableConfigStringify(value)).digest("base64url");
 }
 
 function createRuntimeConfigSnapshotMetadata(
-  config: OpenClawConfig,
-  sourceConfig?: OpenClawConfig,
+  config: OPNEXConfig,
+  sourceConfig?: OPNEXConfig,
 ): RuntimeConfigSnapshotMetadata {
   runtimeConfigSnapshotRevision += 1;
   return {
@@ -130,8 +130,8 @@ function createRuntimeConfigSnapshotMetadata(
 }
 
 export function setRuntimeConfigSnapshot(
-  config: OpenClawConfig,
-  sourceConfig?: OpenClawConfig,
+  config: OPNEXConfig,
+  sourceConfig?: OPNEXConfig,
 ): void {
   runtimeConfigSnapshot = config;
   runtimeConfigSourceSnapshot = sourceConfig ?? null;
@@ -149,11 +149,11 @@ export function clearRuntimeConfigSnapshot(): void {
   resetConfigRuntimeState();
 }
 
-export function getRuntimeConfigSnapshot(): OpenClawConfig | null {
+export function getRuntimeConfigSnapshot(): OPNEXConfig | null {
   return runtimeConfigSnapshot;
 }
 
-export function getRuntimeConfigSourceSnapshot(): OpenClawConfig | null {
+export function getRuntimeConfigSourceSnapshot(): OPNEXConfig | null {
   return runtimeConfigSourceSnapshot;
 }
 
@@ -161,7 +161,7 @@ export function getRuntimeConfigSnapshotMetadata(): RuntimeConfigSnapshotMetadat
   return runtimeConfigSnapshotMetadata;
 }
 
-export function resolveRuntimeConfigCacheKey(config: OpenClawConfig): string {
+export function resolveRuntimeConfigCacheKey(config: OPNEXConfig): string {
   const metadata = runtimeConfigSnapshotMetadata;
   if (metadata && config === runtimeConfigSnapshot) {
     return `runtime:${metadata.revision}:${metadata.fingerprint}`;
@@ -171,8 +171,8 @@ export function resolveRuntimeConfigCacheKey(config: OpenClawConfig): string {
 
 export function createRuntimeConfigWriteNotification(params: {
   configPath: string;
-  sourceConfig: OpenClawConfig;
-  runtimeConfig: OpenClawConfig;
+  sourceConfig: OPNEXConfig;
+  runtimeConfig: OPNEXConfig;
   persistedHash: string;
   writtenAtMs?: number;
   afterWrite?: ConfigWriteAfterWrite;
@@ -200,10 +200,10 @@ export function createRuntimeConfigWriteNotification(params: {
 }
 
 export function selectApplicableRuntimeConfig(params: {
-  inputConfig?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig | null;
-  runtimeSourceConfig?: OpenClawConfig | null;
-}): OpenClawConfig | undefined {
+  inputConfig?: OPNEXConfig;
+  runtimeConfig?: OPNEXConfig | null;
+  runtimeSourceConfig?: OPNEXConfig | null;
+}): OPNEXConfig | undefined {
   const runtimeConfig = params.runtimeConfig ?? null;
   if (!runtimeConfig) {
     return params.inputConfig;
@@ -254,7 +254,7 @@ export function notifyRuntimeConfigWriteListeners(event: RuntimeConfigWriteNotif
   }
 }
 
-export function loadPinnedRuntimeConfig(loadFresh: () => OpenClawConfig): OpenClawConfig {
+export function loadPinnedRuntimeConfig(loadFresh: () => OPNEXConfig): OPNEXConfig {
   if (runtimeConfigSnapshot) {
     return runtimeConfigSnapshot;
   }
@@ -264,10 +264,10 @@ export function loadPinnedRuntimeConfig(loadFresh: () => OpenClawConfig): OpenCl
 }
 
 export async function finalizeRuntimeSnapshotWrite(params: {
-  nextSourceConfig: OpenClawConfig;
+  nextSourceConfig: OPNEXConfig;
   hadRuntimeSnapshot: boolean;
   hadBothSnapshots: boolean;
-  loadFreshConfig: () => OpenClawConfig;
+  loadFreshConfig: () => OPNEXConfig;
   notifyCommittedWrite: () => void;
   createRefreshError: (detail: string, cause: unknown) => Error;
   formatRefreshError: (error: unknown) => string;

@@ -1,16 +1,16 @@
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { isProviderApiKeyConfigured } from "opnex/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "opnex/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
-} from "openclaw/plugin-sdk/video-generation";
+} from "opnex/plugin-sdk/video-generation";
 import {
   DEEPINFRA_NATIVE_BASE_URL,
   DEEPINFRA_VIDEO_ASPECT_RATIOS,

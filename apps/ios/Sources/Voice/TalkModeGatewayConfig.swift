@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import OPNEXKit
 
 struct TalkModeGatewayConfigState {
     let activeProvider: String

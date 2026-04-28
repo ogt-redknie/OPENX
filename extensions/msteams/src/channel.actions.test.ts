@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { msteamsActionsAdapter } from "./actions.js";
 import { msteamsPlugin } from "./channel.js";
@@ -243,7 +243,7 @@ describe("msteamsPlugin message actions", () => {
               tenantId: "tenant-id",
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
       })?.actions,
     ).toContain("upload-file");
   });
@@ -450,7 +450,7 @@ describe("msteamsPlugin message actions", () => {
             tenantId: "tenant-id",
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
     const schema = discovery?.schema;
     expect(schema).toBeTruthy();
@@ -692,7 +692,7 @@ describe("msteamsPlugin.threading.buildToolContext", () => {
       throw new Error("msteams threading.buildToolContext unavailable");
     }
     return build({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as OPNEXConfig,
       accountId: undefined,
       context,
     });

@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OPNEXConfig } from "../../config/config.js";
 import { normalizeResolvedSecretInputString } from "../../config/types.secrets.js";
 import { talkHandlers } from "./talk.js";
 
 const mocks = vi.hoisted(() => ({
-  getRuntimeConfig: vi.fn<() => OpenClawConfig>(),
+  getRuntimeConfig: vi.fn<() => OPNEXConfig>(),
   readConfigFileSnapshot: vi.fn(),
   canonicalizeSpeechProviderId: vi.fn((providerId: string | undefined) => providerId),
   getSpeechProvider: vi.fn(),
@@ -43,7 +43,7 @@ vi.mock("../talk-realtime-relay.js", async (importOriginal) => {
   };
 });
 
-function createTalkConfig(apiKey: unknown): OpenClawConfig {
+function createTalkConfig(apiKey: unknown): OPNEXConfig {
   return {
     talk: {
       provider: "acme",
@@ -54,7 +54,7 @@ function createTalkConfig(apiKey: unknown): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 describe("talk.speak handler", () => {
@@ -72,7 +72,7 @@ describe("talk.speak handler", () => {
 
     mocks.getRuntimeConfig.mockReturnValue(runtimeConfig);
     mocks.readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/opnex.json",
       hash: "test-hash",
       valid: true,
       config: diskConfig,
@@ -87,7 +87,7 @@ describe("talk.speak handler", () => {
       }) => talkProviderConfig,
     });
     mocks.synthesizeSpeech.mockImplementation(
-      async ({ cfg }: { cfg: OpenClawConfig; text: string; disableFallback: boolean }) => {
+      async ({ cfg }: { cfg: OPNEXConfig; text: string; disableFallback: boolean }) => {
         expect(cfg.messages?.tts?.provider).toBe("acme");
         expect(cfg.messages?.tts?.providers?.acme?.apiKey).toBe("env-acme-key");
         return {
@@ -159,7 +159,7 @@ describe("talk.config handler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const runtimeConfig = {
       ...sourceConfig,
       messages: {
@@ -173,10 +173,10 @@ describe("talk.config handler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     mocks.readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/opnex.json",
       hash: "test-hash",
       valid: true,
       config: sourceConfig,
@@ -227,7 +227,7 @@ describe("talk.config handler", () => {
             resolved: {
               provider: "acme",
               config: expect.objectContaining({
-                apiKey: "__OPENCLAW_REDACTED__",
+                apiKey: "__OPNEX_REDACTED__",
               }),
             },
           }),
@@ -287,7 +287,7 @@ describe("talk.realtime.session handler", () => {
               provider: "google",
               providers: { google: { apiKey: "gemini-key" } },
             },
-          }) as OpenClawConfig,
+          }) as OPNEXConfig,
       } as never,
     });
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { resolveSendPolicy } from "./send-policy.js";
 
 describe("resolveSendPolicy", () => {
   const cfgWithRules = (
-    rules: NonNullable<NonNullable<OpenClawConfig["session"]>["sendPolicy"]>["rules"],
+    rules: NonNullable<NonNullable<OPNEXConfig["session"]>["sendPolicy"]>["rules"],
   ) =>
     ({
       session: {
@@ -14,17 +14,17 @@ describe("resolveSendPolicy", () => {
           rules,
         },
       },
-    }) as OpenClawConfig;
+    }) as OPNEXConfig;
 
   it("defaults to allow", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as OPNEXConfig;
     expect(resolveSendPolicy({ cfg })).toBe("allow");
   });
 
   it("entry override wins", () => {
     const cfg = {
       session: { sendPolicy: { default: "allow" } },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const entry: SessionEntry = {
       sessionId: "s",
       updatedAt: 0,

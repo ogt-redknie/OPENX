@@ -8,10 +8,10 @@ import {
   type SilentReplyRewriteShape,
 } from "../shared/silent-reply-policy.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { OPNEXConfig } from "./types.opnex.js";
 
 type ResolveSilentReplyParams = {
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   sessionKey?: string;
   surface?: string;
   conversationType?: SilentReplyConversationType;

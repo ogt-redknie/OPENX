@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/deepgram-provider",
+  "name": "@opnex/deepgram-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Deepgram media-understanding provider",
+  "description": "OPNEX Deepgram media-understanding provider",
   "type": "module",
   "dependencies": {
     "ws": "^8.20.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { clearSessionStoreCacheForTest } from "openclaw/plugin-sdk/session-store-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { clearSessionStoreCacheForTest } from "opnex/plugin-sdk/session-store-runtime";
 import { describe, expect, it } from "vitest";
 import { slackApprovalCapability, slackNativeApprovalAdapter } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<OPNEXConfig["channels"]>["slack"]>>,
+): OPNEXConfig {
   return {
     channels: {
       slack: {
@@ -22,10 +22,10 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
-const STORE_PATH = path.join(os.tmpdir(), "openclaw-slack-approval-native-test.json");
+const STORE_PATH = path.join(os.tmpdir(), "opnex-slack-approval-native-test.json");
 
 function writeStore(store: Record<string, unknown>) {
   fs.writeFileSync(STORE_PATH, `${JSON.stringify(store, null, 2)}\n`, "utf8");

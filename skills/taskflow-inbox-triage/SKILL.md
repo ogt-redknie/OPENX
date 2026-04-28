@@ -1,7 +1,7 @@
 ---
 name: taskflow-inbox-triage
 description: Example TaskFlow pattern for inbox triage, intent routing, waiting on replies, and later summaries.
-metadata: { "openclaw": { "emoji": "📥" } }
+metadata: { "opnex": { "emoji": "📥" } }
 ---
 
 # TaskFlow inbox triage
@@ -116,4 +116,4 @@ taskFlow.finish({
 
 ## Related example
 
-- `skills/taskflow/examples/inbox-triage.lobster`
+- `skills/taskflow/examples/inbox-triage.opnex`

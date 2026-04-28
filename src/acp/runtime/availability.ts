@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { isAcpEnabledByPolicy } from "../policy.js";
 import { getAcpRuntimeBackend } from "./registry.js";
 
 export function isAcpRuntimeSpawnAvailable(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   sandboxed?: boolean;
   backendId?: string;
 }): boolean {

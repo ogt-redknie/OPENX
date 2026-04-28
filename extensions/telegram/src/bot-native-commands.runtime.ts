@@ -1,15 +1,15 @@
 export {
   ensureConfiguredBindingRouteReady,
   recordInboundSessionMetaSafe,
-} from "openclaw/plugin-sdk/conversation-runtime";
-export { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+} from "opnex/plugin-sdk/conversation-runtime";
+export { getAgentScopedMediaLocalRoots } from "opnex/plugin-sdk/media-runtime";
 export {
   executePluginCommand,
   getPluginCommandSpecs,
   matchPluginCommand,
-} from "openclaw/plugin-sdk/plugin-runtime";
+} from "opnex/plugin-sdk/plugin-runtime";
 export {
   finalizeInboundContext,
   resolveChunkMode,
-} from "openclaw/plugin-sdk/reply-dispatch-runtime";
-export { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/reply-dispatch-runtime";
+export { resolveThreadSessionKeys } from "opnex/plugin-sdk/routing";

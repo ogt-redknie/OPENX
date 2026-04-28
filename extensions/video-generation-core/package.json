@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/video-generation-core",
+  "name": "@opnex/video-generation-core",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw video generation runtime package",
+  "description": "OPNEX video generation runtime package",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   }
 }

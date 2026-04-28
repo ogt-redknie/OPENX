@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { ExecApprovalRequest, ExecApprovalResolved } from "./exec-approvals.js";
 import type { PluginApprovalRequest, PluginApprovalResolved } from "./plugin-approvals.js";
 
@@ -14,7 +14,7 @@ export type ExecApprovalChannelRuntimeAdapter<
 > = {
   label: string;
   clientDisplayName: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   gatewayUrl?: string;
   eventKinds?: readonly ExecApprovalChannelRuntimeEventKind[];
   isConfigured: () => boolean;

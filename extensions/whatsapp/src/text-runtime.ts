@@ -1,4 +1,4 @@
-export * from "openclaw/plugin-sdk/text-runtime";
+export * from "opnex/plugin-sdk/text-runtime";
 export {
   assertWebChannel,
   isSelfChatMode,

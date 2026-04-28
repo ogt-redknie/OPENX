@@ -1,16 +1,16 @@
 import type { ChannelType, Client, Message } from "@buape/carbon";
 import { StickerFormatType, type APIAttachment, type APIStickerItem } from "discord-api-types/v10";
-import { getFileExtension } from "openclaw/plugin-sdk/media-mime";
-import { fetchRemoteMedia, type FetchLike } from "openclaw/plugin-sdk/media-runtime";
-import { saveMediaBuffer } from "openclaw/plugin-sdk/media-runtime";
-import { buildMediaPayload } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+import { getFileExtension } from "opnex/plugin-sdk/media-mime";
+import { fetchRemoteMedia, type FetchLike } from "opnex/plugin-sdk/media-runtime";
+import { saveMediaBuffer } from "opnex/plugin-sdk/media-runtime";
+import { buildMediaPayload } from "opnex/plugin-sdk/reply-payload";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import type { SsrFPolicy } from "opnex/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { resolveDiscordChannelInfoSafe } from "./channel-access.js";
 import { mergeAbortSignals } from "./timeouts.js";
 

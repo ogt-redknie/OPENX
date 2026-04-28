@@ -1,8 +1,8 @@
 import {
   createPluginRuntimeMock,
   createStartAccountContext,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-test-helpers";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { telegramPlugin } from "./channel.js";
 import type { TelegramMonitorFn } from "./monitor.types.js";
@@ -27,7 +27,7 @@ function installTelegramRuntime() {
   } as unknown as TelegramRuntime);
 }
 
-function createTelegramConfig(accountId = "default"): OpenClawConfig {
+function createTelegramConfig(accountId = "default"): OPNEXConfig {
   if (accountId === "default") {
     return {
       channels: {
@@ -35,7 +35,7 @@ function createTelegramConfig(accountId = "default"): OpenClawConfig {
           botToken: "123456:bad-token",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
   }
 
   return {
@@ -48,7 +48,7 @@ function createTelegramConfig(accountId = "default"): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as OPNEXConfig;
 }
 
 function startTelegramAccount(accountId = "default") {

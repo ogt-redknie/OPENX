@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/microsoft-foundry",
+  "name": "@opnex/microsoft-foundry",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Microsoft Foundry provider plugin",
+  "description": "OPNEX Microsoft Foundry provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

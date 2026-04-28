@@ -1,4 +1,4 @@
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
+import { resolveFetch } from "opnex/plugin-sdk/fetch-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const setDefaultResultOrder = vi.hoisted(() => vi.fn());
@@ -66,7 +66,7 @@ vi.mock("undici", () => ({
   setGlobalDispatcher,
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("opnex/plugin-sdk/runtime-env", () => ({
   createSubsystemLogger: () => ({
     info: loggerInfo,
     debug: loggerDebug,
@@ -113,8 +113,8 @@ beforeAll(async () => {
 beforeEach(() => {
   vi.unstubAllEnvs();
   for (const key of [
-    "OPENCLAW_DEBUG_PROXY_ENABLED",
-    "OPENCLAW_DEBUG_PROXY_URL",
+    "OPNEX_DEBUG_PROXY_ENABLED",
+    "OPNEX_DEBUG_PROXY_URL",
     "ALL_PROXY",
     "all_proxy",
     "HTTP_PROXY",
@@ -404,9 +404,9 @@ describe("resolveTelegramFetch", () => {
     );
   });
 
-  it("uses the OpenClaw debug proxy URL when no explicit proxy fetch is provided", async () => {
-    vi.stubEnv("OPENCLAW_DEBUG_PROXY_ENABLED", "1");
-    vi.stubEnv("OPENCLAW_DEBUG_PROXY_URL", "http://127.0.0.1:7777");
+  it("uses the OPNEX debug proxy URL when no explicit proxy fetch is provided", async () => {
+    vi.stubEnv("OPNEX_DEBUG_PROXY_ENABLED", "1");
+    vi.stubEnv("OPNEX_DEBUG_PROXY_URL", "http://127.0.0.1:7777");
     undiciFetch.mockResolvedValue({ ok: true } as Response);
 
     const resolved = resolveTelegramFetch(undefined);
@@ -450,7 +450,7 @@ describe("resolveTelegramFetch", () => {
     );
   });
 
-  it("keeps resolver-scoped transport policy for OpenClaw proxy fetches", async () => {
+  it("keeps resolver-scoped transport policy for OPNEX proxy fetches", async () => {
     const { makeProxyFetch } = await import("./proxy.js");
     const proxyFetch = makeProxyFetch("http://127.0.0.1:7890");
     ProxyAgentCtor.mockClear();

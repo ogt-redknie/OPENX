@@ -14,15 +14,15 @@ run_disabled_config_scenario() {
     -i "$IMAGE_NAME" bash -s >"$run_log" 2>&1 <<'EOF'
 set -euo pipefail
 
-export HOME="$(mktemp -d "/tmp/openclaw-bundled-channel-disabled-config.XXXXXX")"
+export HOME="$(mktemp -d "/tmp/opnex-bundled-channel-disabled-config.XXXXXX")"
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
-export OPENCLAW_NO_ONBOARD=1
-export OPENCLAW_PLUGIN_STAGE_DIR="$HOME/.openclaw/plugin-runtime-deps"
-mkdir -p "$OPENCLAW_PLUGIN_STAGE_DIR"
+export OPNEX_NO_ONBOARD=1
+export OPNEX_PLUGIN_STAGE_DIR="$HOME/.opnex/plugin-runtime-deps"
+mkdir -p "$OPNEX_PLUGIN_STAGE_DIR"
 
 package_root() {
-  printf "%s/openclaw" "$(npm root -g)"
+  printf "%s/opnex" "$(npm root -g)"
 }
 
 assert_dep_absent_everywhere() {
@@ -39,13 +39,13 @@ assert_dep_absent_everywhere() {
     fi
   done
 
-  if ! node - <<'NODE' "$OPENCLAW_PLUGIN_STAGE_DIR" "$dep_path"
+  if ! node - <<'NODE' "$OPNEX_PLUGIN_STAGE_DIR" "$dep_path"
 const fs = require("node:fs");
 const path = require("node:path");
 
 const stageDir = process.argv[2];
 const depName = process.argv[3];
-const manifestName = ".openclaw-runtime-deps.json";
+const manifestName = ".opnex-runtime-deps.json";
 const matches = [];
 
 function visit(dir) {
@@ -87,14 +87,14 @@ if (matches.length > 0) {
 NODE
   then
     echo "disabled $channel unexpectedly selected $dep_path for external runtime deps" >&2
-    cat /tmp/openclaw-disabled-config-doctor.log >&2
+    cat /tmp/opnex-disabled-config-doctor.log >&2
     exit 1
   fi
 }
 
-echo "Installing mounted OpenClaw package..."
-package_tgz="${OPENCLAW_CURRENT_PACKAGE_TGZ:?missing OPENCLAW_CURRENT_PACKAGE_TGZ}"
-npm install -g "$package_tgz" --no-fund --no-audit >/tmp/openclaw-disabled-config-install.log 2>&1
+echo "Installing mounted OPNEX package..."
+package_tgz="${OPNEX_CURRENT_PACKAGE_TGZ:?missing OPNEX_CURRENT_PACKAGE_TGZ}"
+npm install -g "$package_tgz" --no-fund --no-audit >/tmp/opnex-disabled-config-install.log 2>&1
 
 root="$(package_root)"
 test -d "$root/dist/extensions/telegram"
@@ -108,7 +108,7 @@ node - <<'NODE'
 const fs = require("node:fs");
 const path = require("node:path");
 
-const configPath = path.join(process.env.HOME, ".openclaw", "openclaw.json");
+const configPath = path.join(process.env.HOME, ".opnex", "opnex.json");
 const stateDir = path.dirname(configPath);
 const config = {
   gateway: {
@@ -150,9 +150,9 @@ fs.chmodSync(stateDir, 0o700);
 fs.chmodSync(configPath, 0o600);
 NODE
 
-if ! openclaw doctor --non-interactive >/tmp/openclaw-disabled-config-doctor.log 2>&1; then
+if ! opnex doctor --non-interactive >/tmp/opnex-disabled-config-doctor.log 2>&1; then
   echo "doctor failed for disabled-config runtime deps smoke" >&2
-  cat /tmp/openclaw-disabled-config-doctor.log >&2
+  cat /tmp/opnex-disabled-config-doctor.log >&2
   exit 1
 fi
 
@@ -160,9 +160,9 @@ assert_dep_absent_everywhere telegram grammy "$root"
 assert_dep_absent_everywhere slack @slack/web-api "$root"
 assert_dep_absent_everywhere discord discord-api-types "$root"
 
-if grep -Eq "(grammy|@slack/web-api|discord-api-types)" /tmp/openclaw-disabled-config-doctor.log; then
+if grep -Eq "(grammy|@slack/web-api|discord-api-types)" /tmp/opnex-disabled-config-doctor.log; then
   echo "doctor installed runtime deps for an explicitly disabled channel/plugin" >&2
-  cat /tmp/openclaw-disabled-config-doctor.log >&2
+  cat /tmp/opnex-disabled-config-doctor.log >&2
   exit 1
 fi
 

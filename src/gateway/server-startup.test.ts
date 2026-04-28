@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 
-const ensureOpenClawModelsJsonMock = vi.fn<
+const ensureOPNEXModelsJsonMock = vi.fn<
   (
     config: unknown,
     agentDir: unknown,
@@ -12,12 +12,12 @@ const piModelModuleLoadedMock = vi.fn();
 const resolveEmbeddedAgentRuntimeMock = vi.fn(() => "auto");
 
 vi.mock("../agents/agent-paths.js", () => ({
-  resolveOpenClawAgentDir: () => "/tmp/agent",
+  resolveOPNEXAgentDir: () => "/tmp/agent",
 }));
 
 vi.mock("../agents/models-config.js", () => ({
-  ensureOpenClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
-    ensureOpenClawModelsJsonMock(config, agentDir, options),
+  ensureOPNEXModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
+    ensureOPNEXModelsJsonMock(config, agentDir, options),
 }));
 
 vi.mock("../agents/pi-embedded-runner/model.js", () => {
@@ -41,7 +41,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   beforeEach(() => {
-    ensureOpenClawModelsJsonMock.mockClear();
+    ensureOPNEXModelsJsonMock.mockClear();
     piModelModuleLoadedMock.mockClear();
     resolveEmbeddedAgentRuntimeMock.mockClear();
     resolveEmbeddedAgentRuntimeMock.mockReturnValue("auto");
@@ -56,14 +56,14 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).toHaveBeenCalledWith(
+    expect(ensureOPNEXModelsJsonMock).toHaveBeenCalledWith(
       cfg,
       "/tmp/agent",
       expect.objectContaining({
@@ -76,11 +76,11 @@ describe("gateway startup primary model warmup", () => {
 
   it("skips warmup when no explicit primary model is configured", async () => {
     await prewarmConfiguredPrimaryModel({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as OPNEXConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureOPNEXModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -100,11 +100,11 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureOPNEXModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -119,11 +119,11 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureOPNEXModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -137,14 +137,14 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).toHaveBeenCalledWith(
+    expect(ensureOPNEXModelsJsonMock).toHaveBeenCalledWith(
       cfg,
       "/tmp/agent",
       expect.objectContaining({
@@ -156,7 +156,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   it("warns when scoped models.json preparation fails", async () => {
-    ensureOpenClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
+    ensureOPNEXModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
     const warn = vi.fn();
 
     await prewarmConfiguredPrimaryModel({
@@ -168,7 +168,7 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       log: { warn },
     });
 

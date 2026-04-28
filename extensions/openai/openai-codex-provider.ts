@@ -1,25 +1,25 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
 import type {
   ProviderAuthContext,
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "opnex/plugin-sdk/plugin-entry";
 import {
   CODEX_CLI_PROFILE_ID,
   ensureAuthProfileStoreForLocalUpdate,
   listProfilesForProvider,
   type OAuthCredential,
-} from "openclaw/plugin-sdk/provider-auth";
-import { buildOauthProviderAuthResult } from "openclaw/plugin-sdk/provider-auth";
-import { loginOpenAICodexOAuth } from "openclaw/plugin-sdk/provider-auth-login";
+} from "opnex/plugin-sdk/provider-auth";
+import { buildOauthProviderAuthResult } from "opnex/plugin-sdk/provider-auth";
+import { loginOpenAICodexOAuth } from "opnex/plugin-sdk/provider-auth-login";
 import {
   DEFAULT_CONTEXT_TOKENS,
   normalizeModelCompat,
   normalizeProviderId,
   type ProviderPlugin,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { fetchCodexUsage } from "openclaw/plugin-sdk/provider-usage";
-import { normalizeLowercaseStringOrEmpty, readStringValue } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/provider-model-shared";
+import { fetchCodexUsage } from "opnex/plugin-sdk/provider-usage";
+import { normalizeLowercaseStringOrEmpty, readStringValue } from "opnex/plugin-sdk/text-runtime";
 import {
   OPENAI_CODEX_DEVICE_PAIRING_HINT,
   OPENAI_CODEX_DEVICE_PAIRING_LABEL,
@@ -397,7 +397,7 @@ async function runOpenAICodexDeviceCode(ctx: ProviderAuthContext) {
     spin.stop("OpenAI device code failed");
     ctx.runtime.error(formatErrorMessage(error));
     await ctx.prompter.note(
-      "Trouble with device code login? See https://docs.openclaw.ai/start/faq",
+      "Trouble with device code login? See https://docs.opnex.ai/start/faq",
       "OAuth help",
     );
     throw error;
@@ -408,7 +408,7 @@ function buildOpenAICodexAuthDoctorHint(ctx: { profileId?: string }) {
   if (ctx.profileId !== CODEX_CLI_PROFILE_ID) {
     return undefined;
   }
-  return "Deprecated profile. Run `openclaw models auth login --provider openai-codex` or `openclaw configure`.";
+  return "Deprecated profile. Run `opnex models auth login --provider openai-codex` or `opnex configure`.";
 }
 
 export function buildOpenAICodexProviderPlugin(): ProviderPlugin {

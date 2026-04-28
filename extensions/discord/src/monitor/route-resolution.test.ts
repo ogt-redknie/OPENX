@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import type { ResolvedAgentRoute } from "opnex/plugin-sdk/routing";
 import { describe, expect, it } from "vitest";
 import {
   buildDiscordRoutePeer,
@@ -11,7 +11,7 @@ import {
 function buildWorkerBindingConfig(peer: {
   kind: "channel" | "direct";
   id: string;
-}): OpenClawConfig {
+}): OPNEXConfig {
   return {
     agents: {
       list: [{ id: "worker" }],

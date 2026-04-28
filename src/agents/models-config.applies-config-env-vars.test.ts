@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { unsetEnv, withTempEnv } from "./models-config.e2e-harness.js";
 import {
-  planOpenClawModelsJsonWithDeps,
+  planOPNEXModelsJsonWithDeps,
   resolveProvidersForModelsJsonWithDeps,
 } from "./models-config.plan.js";
 import type { ProviderConfig } from "./models-config.providers.secrets.js";
 
-const TEST_ENV_VAR = "OPENCLAW_MODELS_CONFIG_TEST_ENV";
+const TEST_ENV_VAR = "OPNEX_MODELS_CONFIG_TEST_ENV";
 
 function createImplicitOpenRouterProvider(): ProviderConfig {
   return {
@@ -31,14 +31,14 @@ function createImplicitOpenRouterProvider(): ProviderConfig {
 }
 
 async function resolveProvidersForConfigEnvTest(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   onResolveImplicitProviders: (env: NodeJS.ProcessEnv) => void;
 }) {
   const env = createConfigRuntimeEnv(params.cfg);
   return await resolveProvidersForModelsJsonWithDeps(
     {
       cfg: params.cfg,
-      agentDir: "/tmp/openclaw-models-config-env-vars-test",
+      agentDir: "/tmp/opnex-models-config-env-vars-test",
       env,
     },
     {
@@ -52,7 +52,7 @@ async function resolveProvidersForConfigEnvTest(params: {
   );
 }
 
-function createConfigEnvVarsConfig(): OpenClawConfig {
+function createConfigEnvVarsConfig(): OPNEXConfig {
   return {
     models: { providers: {} },
     env: {
@@ -64,7 +64,7 @@ function createConfigEnvVarsConfig(): OpenClawConfig {
   };
 }
 
-async function resolveProvidersAndCaptureDiscoveryEnv(cfg: OpenClawConfig) {
+async function resolveProvidersAndCaptureDiscoveryEnv(cfg: OPNEXConfig) {
   let discoveryEnv: NodeJS.ProcessEnv | undefined;
   const providers = await resolveProvidersForConfigEnvTest({
     cfg,
@@ -89,7 +89,7 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/opnex-models-config-env-vars-test",
         env: {},
         pluginMetadataSnapshot,
       },
@@ -110,9 +110,9 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/opnex-models-config-env-vars-test",
         env: {},
-        workspaceDir: "/tmp/openclaw-workspace",
+        workspaceDir: "/tmp/opnex-workspace",
       },
       {
         resolveImplicitProviders: async ({ workspaceDir }) => {
@@ -122,7 +122,7 @@ describe("models-config", () => {
       },
     );
 
-    expect(observedWorkspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(observedWorkspaceDir).toBe("/tmp/opnex-workspace");
   });
 
   it("threads startup provider discovery scope into implicit provider discovery", async () => {
@@ -132,7 +132,7 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/opnex-models-config-env-vars-test",
         env: {},
         providerDiscoveryProviderIds: ["openai"],
         providerDiscoveryTimeoutMs: 5000,
@@ -163,10 +163,10 @@ describe("models-config", () => {
       | Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">
       | undefined;
 
-    await planOpenClawModelsJsonWithDeps(
+    await planOPNEXModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/opnex-models-config-env-vars-test",
         env: {},
         existingRaw: "",
         existingParsed: null,

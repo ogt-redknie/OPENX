@@ -8,7 +8,7 @@ import { prepareBundledPluginRuntimeRoot } from "./bundled-runtime-root.js";
 const tempRoots: string[] = [];
 
 function makeTempRoot(): string {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-bundled-runtime-root-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "opnex-bundled-runtime-root-"));
   tempRoots.push(root);
   return root;
 }
@@ -40,11 +40,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     const packageRoot = makeTempRoot();
     const stageDir = makeTempRoot();
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "browser");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.24", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.24", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(
@@ -77,13 +77,13 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/browser",
+          name: "@opnex/browser",
           version: "1.0.0",
           type: "module",
           dependencies: {
             "playwright-core": "1.0.0",
           },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -142,14 +142,14 @@ describe("prepareBundledPluginRuntimeRoot", () => {
 
   it("does not copy staged runtime mirror dist files onto themselves", () => {
     const stageDir = makeTempRoot();
-    const installRoot = path.join(stageDir, "openclaw-2026.4.26-alpha");
+    const installRoot = path.join(stageDir, "opnex-2026.4.26-alpha");
     const pluginRoot = path.join(installRoot, "dist", "extensions", "qqbot");
     const distChunk = path.join(installRoot, "dist", "accounts-abc123.js");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(installRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.26", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.26", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(distChunk, "export const marker = 'same-root';\n", "utf8");
@@ -162,11 +162,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/qqbot",
+          name: "@opnex/qqbot",
           version: "1.0.0",
           type: "module",
           dependencies: { "qqbot-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -197,12 +197,12 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     const stageDir = makeTempRoot();
     const canonicalPluginRoot = path.join(packageRoot, "dist", "extensions", "qqbot");
     const runtimePluginRoot = path.join(packageRoot, "dist-runtime", "extensions", "qqbot");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(canonicalPluginRoot, { recursive: true });
     fs.mkdirSync(runtimePluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.27", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.27", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(
@@ -219,11 +219,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(canonicalPluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/qqbot",
+          name: "@opnex/qqbot",
           version: "1.0.0",
           type: "module",
           dependencies: { "qqbot-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -244,11 +244,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(runtimePluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/qqbot",
+          name: "@opnex/qqbot",
           version: "1.0.0",
           type: "module",
           dependencies: { "qqbot-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -282,12 +282,12 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     const stageDir = makeTempRoot();
     const canonicalPluginRoot = path.join(packageRoot, "dist", "extensions", "qqbot");
     const runtimePluginRoot = path.join(packageRoot, "dist-runtime", "extensions", "qqbot");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(canonicalPluginRoot, { recursive: true });
     fs.mkdirSync(runtimePluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.27", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.27", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(
@@ -297,7 +297,7 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     );
     fs.writeFileSync(
       path.join(canonicalPluginRoot, "package.json"),
-      JSON.stringify({ name: "@openclaw/qqbot", version: "1.0.0", type: "module" }, null, 2),
+      JSON.stringify({ name: "@opnex/qqbot", version: "1.0.0", type: "module" }, null, 2),
       "utf8",
     );
     fs.writeFileSync(
@@ -309,11 +309,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(runtimePluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/qqbot",
+          name: "@opnex/qqbot",
           version: "1.0.0",
           type: "module",
           dependencies: { "qqbot-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -328,7 +328,7 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       "utf8",
     );
 
-    const lockPath = path.join(installRoot, ".openclaw-runtime-mirror.lock");
+    const lockPath = path.join(installRoot, ".opnex-runtime-mirror.lock");
     const fingerprintLockStates: Array<{ source: "runtime" | "canonical"; locked: boolean }> = [];
     const realLstatSync = fs.lstatSync.bind(fs) as typeof fs.lstatSync;
     vi.spyOn(fs, "lstatSync").mockImplementation(((target, options) => {
@@ -359,11 +359,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     const packageRoot = makeTempRoot();
     const stageDir = makeTempRoot();
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "whatsapp");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.27", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.27", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(path.join(pluginRoot, "index.js"), "export const marker = 'v1';\n", "utf8");
@@ -371,11 +371,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/whatsapp",
+          name: "@opnex/whatsapp",
           version: "1.0.0",
           type: "module",
           dependencies: { "whatsapp-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -418,11 +418,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
     const packageRoot = makeTempRoot();
     const stageDir = makeTempRoot();
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "whatsapp");
-    const env = { ...process.env, OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { ...process.env, OPNEX_PLUGIN_STAGE_DIR: stageDir };
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.27", type: "module" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.27", type: "module" }),
       "utf8",
     );
     fs.writeFileSync(path.join(pluginRoot, "index.js"), "export const marker = 'v1';\n", "utf8");
@@ -430,11 +430,11 @@ describe("prepareBundledPluginRuntimeRoot", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/whatsapp",
+          name: "@opnex/whatsapp",
           version: "1.0.0",
           type: "module",
           dependencies: { "whatsapp-runtime": "1.0.0" },
-          openclaw: { extensions: ["./index.js"] },
+          opnex: { extensions: ["./index.js"] },
         },
         null,
         2,

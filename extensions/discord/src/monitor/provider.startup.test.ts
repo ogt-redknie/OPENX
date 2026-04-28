@@ -24,15 +24,15 @@ vi.mock("@buape/carbon/voice", () => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/dangerous-name-runtime", () => ({
+vi.mock("opnex/plugin-sdk/dangerous-name-runtime", () => ({
   isDangerousNameMatchingEnabled: () => false,
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("opnex/plugin-sdk/runtime-env", () => ({
   danger: (value: string) => value,
 }));
 
-vi.mock("openclaw/plugin-sdk/text-runtime", () => ({
+vi.mock("opnex/plugin-sdk/text-runtime", () => ({
   normalizeOptionalString: (value: string | null | undefined) => {
     if (typeof value !== "string") {
       return undefined;

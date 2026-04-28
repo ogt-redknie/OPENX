@@ -1,6 +1,6 @@
-# OpenClaw iOS Versioning
+# OPNEX iOS Versioning
 
-OpenClaw iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
+OPNEX iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
 
 ## Goals
 

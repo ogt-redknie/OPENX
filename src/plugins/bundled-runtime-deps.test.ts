@@ -39,7 +39,7 @@ const spawnSyncMock = vi.mocked(spawnSync);
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-runtime-deps-test-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "opnex-runtime-deps-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -68,7 +68,7 @@ function writeBundledPluginPackage(params: {
     JSON.stringify({ dependencies: params.deps }),
   );
   fs.writeFileSync(
-    path.join(pluginRoot, "openclaw.plugin.json"),
+    path.join(pluginRoot, "opnex.plugin.json"),
     JSON.stringify({
       id: params.pluginId,
       enabledByDefault: params.enabledByDefault === true,
@@ -140,11 +140,11 @@ describe("resolveBundledRuntimeDepsNpmRunner", () => {
           npm_config_location: "global",
           npm_config_prefix: "/opt/homebrew",
         },
-        { cacheDir: "/opt/openclaw/runtime-cache" },
+        { cacheDir: "/opt/opnex/runtime-cache" },
       ),
     ).toEqual({
       PATH: "/usr/bin:/bin",
-      npm_config_cache: "/opt/openclaw/runtime-cache",
+      npm_config_cache: "/opt/opnex/runtime-cache",
       npm_config_dry_run: "false",
       npm_config_global: "false",
       npm_config_legacy_peer_deps: "true",
@@ -280,10 +280,10 @@ describe("installBundledRuntimeDeps", () => {
       throw error;
     });
 
-    expect(isWritableDirectory("/usr/lib/node_modules/openclaw")).toBe(false);
+    expect(isWritableDirectory("/usr/lib/node_modules/opnex")).toBe(false);
     expect(accessSpy).not.toHaveBeenCalled();
     expect(mkdirSpy).toHaveBeenCalledWith(
-      path.join("/usr/lib/node_modules/openclaw", ".openclaw-write-probe-"),
+      path.join("/usr/lib/node_modules/opnex", ".opnex-write-probe-"),
     );
   });
 
@@ -440,13 +440,13 @@ describe("installBundledRuntimeDeps", () => {
 
   it("anchors non-isolated external install roots with a package manifest", () => {
     const parentRoot = makeTempDir();
-    const installRoot = path.join(parentRoot, ".openclaw", "plugin-runtime-deps", "openclaw-test");
+    const installRoot = path.join(parentRoot, ".opnex", "plugin-runtime-deps", "opnex-test");
     fs.mkdirSync(path.join(parentRoot, "node_modules", "@grammyjs"), { recursive: true });
     spawnSyncMock.mockImplementation((_command, _args, options) => {
       const cwd = String(options?.cwd ?? "");
       expect(cwd).toBe(installRoot);
       expect(JSON.parse(fs.readFileSync(path.join(cwd, "package.json"), "utf8"))).toEqual({
-        name: "openclaw-runtime-deps-install",
+        name: "opnex-runtime-deps-install",
         private: true,
         dependencies: {
           "@grammyjs/runner": "^2.0.3",
@@ -489,7 +489,7 @@ describe("installBundledRuntimeDeps", () => {
       const cwd = String(options?.cwd ?? "");
       expect(args.slice(-3)).toEqual(["install", "--ignore-scripts", "beta-runtime@2.0.0"]);
       expect(JSON.parse(fs.readFileSync(path.join(cwd, "package.json"), "utf8"))).toEqual({
-        name: "openclaw-runtime-deps-install",
+        name: "opnex-runtime-deps-install",
         private: true,
         dependencies: {
           "alpha-runtime": "1.0.0",
@@ -520,7 +520,7 @@ describe("installBundledRuntimeDeps", () => {
     const installRoot = makeTempDir();
     writeInstalledPackage(installRoot, "alpha-runtime", "1.0.0");
     fs.writeFileSync(
-      path.join(installRoot, ".openclaw-runtime-deps.json"),
+      path.join(installRoot, ".opnex-runtime-deps.json"),
       `${JSON.stringify({ specs: ["alpha-runtime@1.0.0"] }, null, 2)}\n`,
       "utf8",
     );
@@ -546,7 +546,7 @@ describe("installBundledRuntimeDeps", () => {
       fs.existsSync(path.join(installRoot, "node_modules", "alpha-runtime", "package.json")),
     ).toBe(false);
     expect(
-      JSON.parse(fs.readFileSync(path.join(installRoot, ".openclaw-runtime-deps.json"), "utf8")),
+      JSON.parse(fs.readFileSync(path.join(installRoot, ".opnex-runtime-deps.json"), "utf8")),
     ).toEqual({ specs: ["beta-runtime@2.0.0"] });
   });
 
@@ -615,7 +615,7 @@ describe("installBundledRuntimeDeps", () => {
     expect(
       JSON.parse(fs.readFileSync(path.join(installExecutionRoot, "package.json"), "utf8")),
     ).toEqual({
-      name: "openclaw-runtime-deps-install",
+      name: "opnex-runtime-deps-install",
       private: true,
       dependencies: {
         tokenjuice: "0.6.1",
@@ -655,7 +655,7 @@ describe("installBundledRuntimeDeps", () => {
     writeInstalledPackage(pluginRoot, "alpha-runtime", "1.0.0");
     spawnSyncMock.mockImplementation((_command, args, options) => {
       const cwd = String(options?.cwd ?? "");
-      expect(cwd).toBe(path.join(pluginRoot, ".openclaw-install-stage"));
+      expect(cwd).toBe(path.join(pluginRoot, ".opnex-install-stage"));
       expect((args ?? []).slice(-4)).toEqual([
         "install",
         "--ignore-scripts",
@@ -695,7 +695,7 @@ describe("installBundledRuntimeDeps", () => {
     ).toEqual({ name: "alpha-runtime", version: "1.0.0" });
   });
 
-  it("uses an OpenClaw-owned npm cache for runtime dependency installs", () => {
+  it("uses an OPNEX-owned npm cache for runtime dependency installs", () => {
     const installRoot = makeTempDir();
     spawnSyncMock.mockImplementation((_command, _args, options) => {
       writeInstalledPackage(String(options?.cwd ?? ""), "tokenjuice", "0.6.1");
@@ -726,7 +726,7 @@ describe("installBundledRuntimeDeps", () => {
     });
 
     expect(JSON.parse(fs.readFileSync(path.join(installRoot, "package.json"), "utf8"))).toEqual({
-      name: "openclaw-runtime-deps-install",
+      name: "opnex-runtime-deps-install",
       private: true,
       dependencies: {
         tokenjuice: "0.6.1",
@@ -739,7 +739,7 @@ describe("installBundledRuntimeDeps", () => {
         cwd: installRoot,
         env: expect.objectContaining({
           HOME: "/Users/alice",
-          npm_config_cache: path.join(installRoot, ".openclaw-npm-cache"),
+          npm_config_cache: path.join(installRoot, ".opnex-npm-cache"),
         }),
       }),
     );
@@ -782,7 +782,7 @@ describe("installBundledRuntimeDeps", () => {
 
   it("cleans an owned isolated execution root after copying node_modules back", () => {
     const installRoot = makeTempDir();
-    const installExecutionRoot = path.join(installRoot, ".openclaw-install-stage");
+    const installExecutionRoot = path.join(installRoot, ".opnex-install-stage");
     spawnSyncMock.mockImplementation((_command, _args, options) => {
       const cwd = String(options?.cwd ?? "");
       fs.mkdirSync(path.join(cwd, "node_modules", "tokenjuice"), { recursive: true });
@@ -829,7 +829,7 @@ describe("installBundledRuntimeDeps", () => {
     vi.spyOn(fs, "rmSync").mockImplementation((target, options) => {
       if (
         !blockedCleanup &&
-        path.basename(String(target)).startsWith(".openclaw-runtime-deps-copy-")
+        path.basename(String(target)).startsWith(".opnex-runtime-deps-copy-")
       ) {
         blockedCleanup = true;
         const error = new Error("Directory not empty") as NodeJS.ErrnoException;
@@ -897,7 +897,7 @@ describe("installBundledRuntimeDeps", () => {
 
     expect(() =>
       installBundledRuntimeDeps({
-        installRoot: "/tmp/openclaw",
+        installRoot: "/tmp/opnex",
         missingSpecs: ["browser-runtime@1.0.0"],
         env: {},
       }),
@@ -1091,7 +1091,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
       enabledByDefault: true,
       channels: ["alpha"],
     });
-    const manifestPath = path.join(pluginRoot, "openclaw.plugin.json");
+    const manifestPath = path.join(pluginRoot, "opnex.plugin.json");
     const readFileSyncSpy = vi.spyOn(fs, "readFileSync");
 
     scanBundledPluginRuntimeDeps({ packageRoot, config: {} });
@@ -1107,7 +1107,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { semver: "7.7.4", tslog: "^4.10.2" },
       }),
@@ -1122,7 +1122,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     const result = scanBundledPluginRuntimeDeps({
       packageRoot,
       config: {},
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
 
     expect(result.deps.map((dep) => `${dep.name}@${dep.version}`)).toEqual([
@@ -1143,7 +1143,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { chokidar: "^5.0.0" },
       }),
@@ -1162,7 +1162,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     const result = scanBundledPluginRuntimeDeps({
       packageRoot,
       config: {},
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
 
     expect(result.deps.map((dep) => `${dep.name}@${dep.version}`)).toEqual(["chokidar@^5.0.0"]);
@@ -1176,7 +1176,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { chokidar: "^5.0.0" },
       }),
@@ -1203,7 +1203,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
       config: {
         channels: { slack: { botToken: "xoxb-token" } },
       },
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
 
     expect(result.deps).toEqual([]);
@@ -1216,7 +1216,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { tslog: "^4.10.2" },
       }),
@@ -1234,11 +1234,11 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
       config: {
         channels: { slack: { botToken: "xoxb-token" } },
       },
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
 
     expect(result.deps.map((dep) => `${dep.name}@${dep.version}`)).toEqual(["tslog@^4.10.2"]);
-    expect(result.deps[0]?.pluginIds).toEqual(["openclaw-core"]);
+    expect(result.deps[0]?.pluginIds).toEqual(["opnex-core"]);
     expect(result.missing.map((dep) => `${dep.name}@${dep.version}`)).toEqual(["tslog@^4.10.2"]);
   });
 
@@ -1248,7 +1248,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { tslog: "^4.10.2" },
       }),
@@ -1263,11 +1263,11 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     const result = scanBundledPluginRuntimeDeps({
       packageRoot,
       config: {},
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
 
     expect(result.deps.map((dep) => `${dep.name}@${dep.version}`)).toEqual(["tslog@^4.10.2"]);
-    expect(result.deps[0]?.pluginIds).toEqual(["logger-plugin", "openclaw-core"]);
+    expect(result.deps[0]?.pluginIds).toEqual(["logger-plugin", "opnex-core"]);
     expect(result.missing.map((dep) => `${dep.name}@${dep.version}`)).toEqual(["tslog@^4.10.2"]);
   });
 
@@ -1277,7 +1277,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
     const writableStageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.25" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.25" }),
     );
     const pluginRoot = writeBundledPluginPackage({
       packageRoot,
@@ -1289,7 +1289,7 @@ describe("scanBundledPluginRuntimeDeps config policy", () => {
       enabledByDefault: true,
     });
     const env = {
-      OPENCLAW_PLUGIN_STAGE_DIR: [baselineStageDir, writableStageDir].join(path.delimiter),
+      OPNEX_PLUGIN_STAGE_DIR: [baselineStageDir, writableStageDir].join(path.delimiter),
     };
     const installRootPlan = resolveBundledRuntimeDependencyInstallRootPlan(pluginRoot, { env });
     writeInstalledPackage(
@@ -1377,9 +1377,9 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify({
         dependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
+          "@opnex/plugin-sdk": "workspace:*",
           "external-runtime": "^1.2.3",
-          openclaw: "workspace:*",
+          opnex: "workspace:*",
         },
       }),
     );
@@ -1415,7 +1415,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "opnex",
         version: "2026.4.25",
         dependencies: { tslog: "^4.10.2" },
       }),
@@ -1426,7 +1426,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const result = ensureBundledPluginRuntimeDeps({
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
       installDeps: (params) => {
         calls.push(params);
       },
@@ -1435,7 +1435,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     });
 
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, {
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
     expect(result).toEqual({
       installedSpecs: ["tslog@^4.10.2"],
@@ -1452,7 +1452,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
   it("uses external staging when a packaged plugin declares workspace:* deps", () => {
     // Regression guard for packaged/Docker bundled plugins whose `package.json`
-    // still lists `"@openclaw/plugin-sdk": "workspace:*"` (and similar) alongside
+    // still lists `"@opnex/plugin-sdk": "workspace:*"` (and similar) alongside
     // concrete runtime deps. Without a distinct execution root, `npm install`
     // would resolve the plugin's own cwd manifest and fail with
     // EUNSUPPORTEDPROTOCOL on the `workspace:` protocol.
@@ -1464,7 +1464,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify({
         dependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
+          "@opnex/plugin-sdk": "workspace:*",
           "@anthropic-ai/sdk": "^0.50.0",
         },
       }),
@@ -1500,7 +1500,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.22" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.22" }),
     );
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "slack");
     fs.mkdirSync(pluginRoot, { recursive: true });
@@ -1513,7 +1513,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       }),
     );
 
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const result = ensureBundledPluginRuntimeDeps({
       env,
@@ -1566,7 +1566,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const writableStageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.25" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.25" }),
     );
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "slack");
     fs.mkdirSync(pluginRoot, { recursive: true });
@@ -1580,7 +1580,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       }),
     );
     const env = {
-      OPENCLAW_PLUGIN_STAGE_DIR: [baselineStageDir, writableStageDir].join(path.delimiter),
+      OPNEX_PLUGIN_STAGE_DIR: [baselineStageDir, writableStageDir].join(path.delimiter),
     };
     const installRootPlan = resolveBundledRuntimeDependencyInstallRootPlan(pluginRoot, { env });
     const baselineRoot = installRootPlan.searchRoots[0] ?? baselineStageDir;
@@ -1623,7 +1623,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.22" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.22" }),
     );
     const alphaRoot = path.join(packageRoot, "dist", "extensions", "alpha");
     const betaRoot = path.join(packageRoot, "dist", "extensions", "beta");
@@ -1638,7 +1638,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       JSON.stringify({ dependencies: { "beta-runtime": "2.0.0" } }),
     );
 
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const installDeps = (params: BundledRuntimeDepsInstallParams) => {
       calls.push(params);
@@ -1685,7 +1685,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.27" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.27" }),
     );
     const browserRoot = writeBundledPluginPackage({
       packageRoot,
@@ -1699,12 +1699,12 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       deps: { grammy: "1.37.0" },
       channels: ["telegram"],
     });
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(browserRoot, { env });
     writeInstalledPackage(installRoot, "browser-runtime", "1.0.0");
     writeInstalledPackage(installRoot, "grammy", "1.37.0");
     fs.writeFileSync(
-      path.join(installRoot, ".openclaw-runtime-deps.json"),
+      path.join(installRoot, ".opnex-runtime-deps.json"),
       `${JSON.stringify({ specs: ["grammy@1.37.0"] }, null, 2)}\n`,
       "utf8",
     );
@@ -1726,7 +1726,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
     expect(result).toEqual({ installedSpecs: [], retainSpecs: [] });
     expect(
-      JSON.parse(fs.readFileSync(path.join(installRoot, ".openclaw-runtime-deps.json"), "utf8")),
+      JSON.parse(fs.readFileSync(path.join(installRoot, ".opnex-runtime-deps.json"), "utf8")),
     ).toEqual({ specs: ["browser-runtime@1.0.0"] });
   });
 
@@ -1735,7 +1735,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.25" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.25" }),
     );
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "telegram");
     fs.mkdirSync(pluginRoot, { recursive: true });
@@ -1743,7 +1743,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify({ dependencies: { grammy: "^1.42.0" } }),
     );
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env });
     const mirroredPluginRoot = path.join(installRoot, "dist", "extensions", "telegram");
     fs.mkdirSync(mirroredPluginRoot, { recursive: true });
@@ -1759,7 +1759,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
     const nestedUnknownRoot = path.join(
       stageDir,
-      `openclaw-unknown-${createHash("sha256").update(path.resolve(installRoot)).digest("hex").slice(0, 12)}`,
+      `opnex-unknown-${createHash("sha256").update(path.resolve(installRoot)).digest("hex").slice(0, 12)}`,
     );
 
     expect(resolveBundledRuntimeDependencyInstallRoot(mirroredPluginRoot, { env })).toBe(
@@ -1785,7 +1785,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.25" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.25" }),
     );
     const pluginRoot = path.join(packageRoot, "dist", "extensions", "telegram");
     fs.mkdirSync(pluginRoot, { recursive: true });
@@ -1793,7 +1793,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify({ dependencies: { grammy: "^1.42.0" } }),
     );
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env });
 
     const nestedPluginRoot = path.join(
@@ -1801,21 +1801,21 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       "dist",
       "extensions",
       "node_modules",
-      "openclaw",
+      "opnex",
       "plugin-sdk",
     );
     fs.mkdirSync(nestedPluginRoot, { recursive: true });
 
     const resolved = resolveBundledRuntimeDependencyInstallRoot(nestedPluginRoot, { env });
     expect(resolved).toBe(installRoot);
-    expect(path.basename(resolved).startsWith("openclaw-unknown-")).toBe(false);
+    expect(path.basename(resolved).startsWith("opnex-unknown-")).toBe(false);
   });
 
   it("links source-checkout runtime deps from the cache instead of copying them", () => {
     const packageRoot = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.25" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.25" }),
     );
     fs.writeFileSync(path.join(packageRoot, "pnpm-workspace.yaml"), "packages: []\n");
     fs.mkdirSync(path.join(packageRoot, "src"), { recursive: true });
@@ -1870,7 +1870,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const stageDir = makeTempDir();
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.22" }),
+      JSON.stringify({ name: "opnex", version: "2026.4.22" }),
     );
     const alphaRoot = path.join(packageRoot, "dist", "extensions", "alpha");
     const betaRoot = path.join(packageRoot, "dist", "extensions", "beta");
@@ -1885,14 +1885,14 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       JSON.stringify({ dependencies: { "beta-runtime": "2.0.0" } }),
     );
 
-    const env = { OPENCLAW_PLUGIN_STAGE_DIR: stageDir };
+    const env = { OPNEX_PLUGIN_STAGE_DIR: stageDir };
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(alphaRoot, { env });
     fs.mkdirSync(path.join(installRoot, "node_modules", "alpha-runtime"), { recursive: true });
     fs.writeFileSync(
       path.join(installRoot, "node_modules", "alpha-runtime", "package.json"),
       JSON.stringify({ name: "alpha-runtime", version: "1.0.0" }),
     );
-    expect(fs.existsSync(path.join(installRoot, ".openclaw-runtime-deps.json"))).toBe(false);
+    expect(fs.existsSync(path.join(installRoot, ".opnex-runtime-deps.json"))).toBe(false);
 
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const result = ensureBundledPluginRuntimeDeps({
@@ -1949,7 +1949,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
   it("keeps async repair locks and activity active until npm staging settles", async () => {
     const installRoot = makeTempDir();
-    const lockDir = path.join(installRoot, ".openclaw-runtime-deps.lock");
+    const lockDir = path.join(installRoot, ".opnex-runtime-deps.lock");
     let releaseInstall!: () => void;
     const repair = repairBundledRuntimeDepsInstallRootAsync({
       installRoot,
@@ -2030,12 +2030,12 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
   it("includes runtime-deps lock owner details in timeout messages", () => {
     const message = bundledRuntimeDepsTesting.formatRuntimeDepsLockTimeoutMessage({
-      lockDir: "/tmp/openclaw-plugin/.openclaw-runtime-deps.lock",
+      lockDir: "/tmp/opnex-plugin/.opnex-runtime-deps.lock",
       owner: {
         pid: 0,
         createdAtMs: 1_000,
         ownerFileState: "invalid",
-        ownerFilePath: "/tmp/openclaw-plugin/.openclaw-runtime-deps.lock/owner.json",
+        ownerFilePath: "/tmp/opnex-plugin/.opnex-runtime-deps.lock/owner.json",
         ownerFileMtimeMs: 2_500,
         ownerFileIsSymlink: true,
         lockDirMtimeMs: 2_000,
@@ -2051,7 +2051,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     expect(message).toContain("ownerAge=302000ms");
     expect(message).toContain("ownerFileAge=300500ms");
     expect(message).toContain("lockAge=301000ms");
-    expect(message).toContain(".openclaw-runtime-deps.lock/owner.json");
+    expect(message).toContain(".opnex-runtime-deps.lock/owner.json");
   });
 
   it("removes stale runtime-deps install locks before repairing deps", () => {
@@ -2067,7 +2067,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       }),
     );
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env: {} });
-    const lockDir = path.join(installRoot, ".openclaw-runtime-deps.lock");
+    const lockDir = path.join(installRoot, ".opnex-runtime-deps.lock");
     fs.mkdirSync(lockDir, { recursive: true });
     fs.writeFileSync(path.join(lockDir, "owner.json"), JSON.stringify({ pid: 0, createdAtMs: 0 }));
 
@@ -2109,7 +2109,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       }),
     );
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env: {} });
-    const lockDir = path.join(installRoot, ".openclaw-runtime-deps.lock");
+    const lockDir = path.join(installRoot, ".opnex-runtime-deps.lock");
     fs.mkdirSync(lockDir, { recursive: true });
     const ownerPath = path.join(lockDir, "owner.json");
     fs.writeFileSync(ownerPath, "{", "utf8");
@@ -2157,7 +2157,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
         }),
       );
       const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env: {} });
-      const lockDir = path.join(installRoot, ".openclaw-runtime-deps.lock");
+      const lockDir = path.join(installRoot, ".opnex-runtime-deps.lock");
       fs.mkdirSync(lockDir, { recursive: true });
       const ownerPath = path.join(lockDir, "owner.json");
       fs.symlinkSync("../missing-owner.json", ownerPath);
@@ -2199,8 +2199,8 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify({
         dependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
-          openclaw: "workspace:*",
+          "@opnex/plugin-sdk": "workspace:*",
+          opnex: "workspace:*",
         },
       }),
     );
@@ -2235,7 +2235,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const result = ensureBundledPluginRuntimeDeps({
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
       installDeps: (params) => {
         calls.push(params);
       },
@@ -2248,7 +2248,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       retainSpecs: ["tokenjuice@0.6.1"],
     });
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, {
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
     expect(calls).toEqual([
       {
@@ -2260,7 +2260,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     expect(installRoot).toContain(stageDir);
     expect(installRoot).not.toBe(pluginRoot);
     expect(
-      JSON.parse(fs.readFileSync(path.join(installRoot, ".openclaw-runtime-deps.json"), "utf8")),
+      JSON.parse(fs.readFileSync(path.join(installRoot, ".opnex-runtime-deps.json"), "utf8")),
     ).toEqual({ specs: ["tokenjuice@0.6.1"] });
   });
 
@@ -2271,7 +2271,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const pluginRoot = path.join(packageRoot, "extensions", "tokenjuice");
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
-      path.join(pluginRoot, ".openclaw-runtime-deps.json"),
+      path.join(pluginRoot, ".opnex-runtime-deps.json"),
       JSON.stringify({ specs: ["stale@9.9.9"] }),
     );
     fs.writeFileSync(
@@ -2309,7 +2309,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       },
     ]);
     expect(resolveBundledRuntimeDependencyInstallRoot(pluginRoot, { env: {} })).toBe(pluginRoot);
-    expect(fs.existsSync(path.join(pluginRoot, ".openclaw-runtime-deps.json"))).toBe(false);
+    expect(fs.existsSync(path.join(pluginRoot, ".opnex-runtime-deps.json"))).toBe(false);
   });
 
   it("removes stale source-checkout manifests even when runtime deps are present", () => {
@@ -2331,7 +2331,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       JSON.stringify({ name: "tokenjuice", version: "0.6.1" }),
     );
     fs.writeFileSync(
-      path.join(pluginRoot, ".openclaw-runtime-deps.json"),
+      path.join(pluginRoot, ".opnex-runtime-deps.json"),
       JSON.stringify({ specs: ["stale@9.9.9"] }),
     );
 
@@ -2345,7 +2345,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     });
 
     expect(result).toEqual({ installedSpecs: [], retainSpecs: [] });
-    expect(fs.existsSync(path.join(pluginRoot, ".openclaw-runtime-deps.json"))).toBe(false);
+    expect(fs.existsSync(path.join(pluginRoot, ".opnex-runtime-deps.json"))).toBe(false);
   });
 
   it("treats Docker build source trees without .git as source checkouts", () => {
@@ -2361,7 +2361,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
           acpx: "0.5.3",
         },
         devDependencies: {
-          "@openclaw/plugin-sdk": "workspace:*",
+          "@opnex/plugin-sdk": "workspace:*",
         },
       }),
     );
@@ -2418,7 +2418,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     const calls: BundledRuntimeDepsInstallParams[] = [];
 
     const result = ensureBundledPluginRuntimeDeps({
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
       installDeps: (params) => {
         calls.push(params);
       },
@@ -2433,7 +2433,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
     expect(calls).toEqual([
       {
         installRoot: resolveBundledRuntimeDependencyInstallRoot(pluginRoot, {
-          env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+          env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
         }),
         missingSpecs: ["tokenjuice@0.6.1"],
         installSpecs: ["tokenjuice@0.6.1"],
@@ -2466,7 +2466,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
 
     const calls: BundledRuntimeDepsInstallParams[] = [];
     const result = ensureBundledPluginRuntimeDeps({
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
       installDeps: (params) => {
         calls.push(params);
       },
@@ -2479,7 +2479,7 @@ describe("ensureBundledPluginRuntimeDeps", () => {
       retainSpecs: ["tokenjuice@0.6.1"],
     });
     const installRoot = resolveBundledRuntimeDependencyInstallRoot(pluginRoot, {
-      env: { OPENCLAW_PLUGIN_STAGE_DIR: stageDir },
+      env: { OPNEX_PLUGIN_STAGE_DIR: stageDir },
     });
     expect(calls).toEqual([
       {

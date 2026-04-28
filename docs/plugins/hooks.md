@@ -7,7 +7,7 @@ read_when:
   - You are deciding between internal hooks and plugin hooks
 ---
 
-Plugin hooks are in-process extension points for OpenClaw plugins. Use them
+Plugin hooks are in-process extension points for OPNEX plugins. Use them
 when a plugin needs to inspect or change agent runs, tool calls, message flow,
 session lifecycle, subagent routing, installs, or Gateway startup.
 
@@ -20,7 +20,7 @@ operator-installed `HOOK.md` script for command and Gateway events such as
 Register typed plugin hooks with `api.on(...)` from your plugin entry:
 
 ```typescript
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "opnex/plugin-sdk/plugin-entry";
 
 export default definePluginEntry({
   id: "tool-preflight",
@@ -54,7 +54,7 @@ keep registration order.
 
 Each hook receives `event.context.pluginConfig`, the resolved config for the
 plugin that registered that handler. Use it for hook decisions that need
-current plugin options; OpenClaw injects it per handler without mutating the
+current plugin options; OPNEX injects it per handler without mutating the
 shared event object seen by other plugins.
 
 ## Hook catalog
@@ -168,7 +168,7 @@ Tool results can include structured `details` for UI rendering, diagnostics,
 media routing, or plugin-owned metadata. Treat `details` as runtime metadata,
 not prompt content:
 
-- OpenClaw strips `toolResult.details` before provider replay and compaction
+- OPNEX strips `toolResult.details` before provider replay and compaction
   input so metadata does not become model context.
 - Persisted session entries keep only bounded `details`. Oversized details are
   replaced with a compact summary and `persistedDetailsTruncated: true`.
@@ -196,7 +196,7 @@ Use the phase-specific hooks for new plugins:
 `before_agent_start` remains for compatibility. Prefer the explicit hooks above
 so your plugin does not depend on a legacy combined phase.
 
-`before_agent_start` and `agent_end` include `event.runId` when OpenClaw can
+`before_agent_start` and `agent_end` include `event.runId` when OPNEX can
 identify the active run. The same value is also available on `ctx.runId`.
 Cron-driven runs also expose `ctx.jobId` (the originating cron job id) so
 plugin hooks can scope metrics, side effects, or state to a specific scheduled
@@ -205,14 +205,14 @@ job.
 `agent_end` is an observation hook and runs fire-and-forget after the turn. The
 hook runner applies a 30 second timeout so a wedged plugin or embedding
 endpoint cannot leave the hook promise pending forever. A timeout is logged and
-OpenClaw continues; it does not cancel plugin-owned network work unless the
+OPNEX continues; it does not cancel plugin-owned network work unless the
 plugin also uses its own abort signal.
 
 Use `model_call_started` and `model_call_ended` for provider-call telemetry
 that should not receive raw prompts, history, responses, headers, request
 bodies, or provider request IDs. These hooks include stable metadata such as
 `runId`, `callId`, `provider`, `model`, optional `api`/`transport`, terminal
-`durationMs`/`outcome`, and `upstreamRequestIdHash` when OpenClaw can derive a
+`durationMs`/`outcome`, and `upstreamRequestIdHash` when OPNEX can derive a
 bounded provider request-id hash.
 
 `before_agent_finalize` runs only when a harness is about to accept a natural
@@ -220,7 +220,7 @@ final assistant answer. It is not the `/stop` cancellation path and does not
 run when the user aborts a turn. Return `{ action: "revise", reason }` to ask
 the harness for one more model pass before finalization, `{ action:
 "finalize", reason? }` to force finalization, or omit a result to continue.
-Codex native `Stop` hooks are relayed into this hook as OpenClaw
+Codex native `Stop` hooks are relayed into this hook as OPNEX
 `before_agent_finalize` decisions.
 
 Non-bundled plugins that need `llm_input`, `llm_output`,
@@ -252,7 +252,7 @@ through `pluginExtensions`, letting Control UI and other clients render
 plugin-owned status without learning plugin internals.
 
 Use `api.enqueueNextTurnInjection(...)` when a plugin needs durable context to
-reach the next model turn exactly once. OpenClaw drains queued injections before
+reach the next model turn exactly once. OPNEX drains queued injections before
 prompt hooks, drops expired injections, and deduplicates by `idempotencyKey`
 per plugin. This is the right seam for approval resumes, policy summaries,
 background monitor deltas, and command continuations that should be visible to

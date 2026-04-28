@@ -145,39 +145,39 @@ describe("command-path-policy", () => {
   });
 
   it("defaults unknown command paths to network proxy routing", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "googlemeet", "login"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "googlemeet", "login"])).toBe(
       "default",
     );
   });
 
   it("resolves static network proxy bypass policies from the catalog", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "status"])).toBe("bypass");
     expect(
-      resolveCliNetworkProxyPolicy(["node", "openclaw", "config", "get", "proxy.enabled"]),
+      resolveCliNetworkProxyPolicy(["node", "opnex", "config", "get", "proxy.enabled"]),
     ).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "proxy", "start"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "proxy", "start"])).toBe("bypass");
   });
 
   it("resolves mixed network proxy policies from argv-sensitive catalog entries", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "gateway"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "gateway", "run"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "gateway", "health"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "node", "run"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "node", "status"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "agent", "--local"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "agent", "run"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "channels", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "gateway"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "gateway", "run"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "gateway", "health"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "node", "run"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "node", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "agent", "--local"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "agent", "run"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "channels", "status"])).toBe("bypass");
     expect(
-      resolveCliNetworkProxyPolicy(["node", "openclaw", "channels", "status", "--probe"]),
+      resolveCliNetworkProxyPolicy(["node", "opnex", "channels", "status", "--probe"]),
     ).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "models", "status"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "models", "status", "--probe"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "models", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "models", "status", "--probe"])).toBe(
       "default",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "skills", "info", "browser"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "skills", "info", "browser"])).toBe(
       "bypass",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "skills", "search", "browser"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "skills", "search", "browser"])).toBe(
       "default",
     );
   });
@@ -200,30 +200,30 @@ describe("command-path-policy", () => {
     const { resolveCliCatalogCommandPath, resolveCliNetworkProxyPolicy } =
       await import("./command-path-policy.js");
 
-    expect(resolveCliCatalogCommandPath(["node", "openclaw", "nodes", "camera", "snap"])).toEqual([
+    expect(resolveCliCatalogCommandPath(["node", "opnex", "nodes", "camera", "snap"])).toEqual([
       "nodes",
       "camera",
       "snap",
     ]);
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "nodes", "camera", "snap"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "nodes", "camera", "snap"])).toBe(
       "default",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "nodes", "camera", "list"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "nodes", "camera", "list"])).toBe(
       "bypass",
     );
   });
 
   it("stops catalog command path resolution before positional arguments", () => {
     expect(
-      resolveCliCatalogCommandPath(["node", "openclaw", "config", "get", "proxy.enabled"]),
+      resolveCliCatalogCommandPath(["node", "opnex", "config", "get", "proxy.enabled"]),
     ).toEqual(["config", "get"]);
     expect(
-      resolveCliCatalogCommandPath(["node", "openclaw", "message", "send", "--to", "demo"]),
+      resolveCliCatalogCommandPath(["node", "opnex", "message", "send", "--to", "demo"]),
     ).toEqual(["message"]);
   });
 
   it("treats bare gateway invocations with options as the gateway runtime", () => {
-    const argv = ["node", "openclaw", "gateway", "--port", "1234"];
+    const argv = ["node", "opnex", "gateway", "--port", "1234"];
 
     expect(resolveCliCatalogCommandPath(argv)).toEqual(["gateway"]);
     expect(resolveCliNetworkProxyPolicy(argv)).toBe("default");
@@ -231,11 +231,11 @@ describe("command-path-policy", () => {
 
   it("does not let gateway run option values spoof bypass subcommands", () => {
     for (const argv of [
-      ["node", "openclaw", "gateway", "--token", "status"],
-      ["node", "openclaw", "gateway", "--token=status"],
-      ["node", "openclaw", "gateway", "--password", "health"],
-      ["node", "openclaw", "gateway", "--password-file", "status"],
-      ["node", "openclaw", "gateway", "--ws-log", "compact"],
+      ["node", "opnex", "gateway", "--token", "status"],
+      ["node", "opnex", "gateway", "--token=status"],
+      ["node", "opnex", "gateway", "--password", "health"],
+      ["node", "opnex", "gateway", "--password-file", "status"],
+      ["node", "opnex", "gateway", "--ws-log", "compact"],
     ]) {
       expect(resolveCliCatalogCommandPath(argv), argv.join(" ")).toEqual(["gateway"]);
       expect(resolveCliNetworkProxyPolicy(argv), argv.join(" ")).toBe("default");
@@ -243,13 +243,13 @@ describe("command-path-policy", () => {
   });
 
   it("still resolves real gateway bypass subcommands after their command token", () => {
-    expect(resolveCliCatalogCommandPath(["node", "openclaw", "gateway", "status"])).toEqual([
+    expect(resolveCliCatalogCommandPath(["node", "opnex", "gateway", "status"])).toEqual([
       "gateway",
       "status",
     ]);
     expect(
-      resolveCliCatalogCommandPath(["node", "openclaw", "gateway", "status", "--token", "secret"]),
+      resolveCliCatalogCommandPath(["node", "opnex", "gateway", "status", "--token", "secret"]),
     ).toEqual(["gateway", "status"]);
-    expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "gateway", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "opnex", "gateway", "status"])).toBe("bypass");
   });
 });

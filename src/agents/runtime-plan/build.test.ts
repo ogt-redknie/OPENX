@@ -1,4 +1,4 @@
-import { createParameterFreeTool } from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+import { createParameterFreeTool } from "opnex/plugin-sdk/agent-runtime-test-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { buildAgentRuntimePlan } from "./build.js";
 
@@ -27,7 +27,7 @@ describe("AgentRuntimePlan", () => {
       authProfileProvider: "openai-codex",
       sessionAuthProfileId: "openai-codex:work",
       config: {},
-      workspaceDir: "/tmp/openclaw-runtime-plan",
+      workspaceDir: "/tmp/opnex-runtime-plan",
       model: {
         id: "gpt-5.4",
         name: "GPT-5.4",
@@ -89,13 +89,13 @@ describe("AgentRuntimePlan", () => {
     expect(plan.observability.harnessId).toBe("codex");
   });
 
-  it("keeps OpenClaw-owned tool-schema normalization reachable from the plan", () => {
+  it("keeps OPNEX-owned tool-schema normalization reachable from the plan", () => {
     const plan = buildAgentRuntimePlan({
       provider: "openai",
       modelId: "gpt-5.4",
       modelApi: "openai-responses",
       config: {},
-      workspaceDir: "/tmp/openclaw-runtime-plan",
+      workspaceDir: "/tmp/opnex-runtime-plan",
       model: {
         id: "gpt-5.4",
         name: "GPT-5.4",

@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { isRecord } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "opnex/plugin-sdk/plugin-entry";
+import { isRecord } from "opnex/plugin-sdk/text-runtime";
 import { migrateVoiceCallLegacyConfigInput } from "./config-api.js";
 
-function migrateVoiceCallPluginConfig(config: OpenClawConfig): {
-  config: OpenClawConfig;
+function migrateVoiceCallPluginConfig(config: OPNEXConfig): {
+  config: OPNEXConfig;
   changes: string[];
 } | null {
   const rawVoiceCallConfig = config.plugins?.entries?.["voice-call"]?.config;

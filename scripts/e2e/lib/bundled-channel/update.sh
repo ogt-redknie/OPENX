@@ -10,33 +10,33 @@ run_update_scenario() {
   echo "Running bundled channel runtime deps Docker update E2E..."
   if ! timeout "$DOCKER_RUN_TIMEOUT" docker run --rm \
     -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
-    -e OPENCLAW_BUNDLED_CHANNEL_UPDATE_BASELINE_VERSION="$UPDATE_BASELINE_VERSION" \
-    -e "OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS=${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}" \
+    -e OPNEX_BUNDLED_CHANNEL_UPDATE_BASELINE_VERSION="$UPDATE_BASELINE_VERSION" \
+    -e "OPNEX_BUNDLED_CHANNEL_UPDATE_TARGETS=${OPNEX_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}" \
     "${DOCKER_E2E_PACKAGE_ARGS[@]}" \
     -i "$IMAGE_NAME" bash -s >"$run_log" 2>&1 <<'EOF'
 set -euo pipefail
 
-export HOME="$(mktemp -d "/tmp/openclaw-bundled-channel-update.XXXXXX")"
+export HOME="$(mktemp -d "/tmp/opnex-bundled-channel-update.XXXXXX")"
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
-export OPENAI_API_KEY="sk-openclaw-bundled-channel-update-e2e"
-export OPENCLAW_NO_ONBOARD=1
-export OPENCLAW_UPDATE_PACKAGE_SPEC=""
+export OPENAI_API_KEY="sk-opnex-bundled-channel-update-e2e"
+export OPNEX_NO_ONBOARD=1
+export OPNEX_UPDATE_PACKAGE_SPEC=""
 
 TOKEN="bundled-channel-update-token"
 PORT="18790"
-UPDATE_TARGETS="${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}"
+UPDATE_TARGETS="${OPNEX_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}"
 
 package_root() {
-  printf "%s/openclaw" "$(npm root -g)"
+  printf "%s/opnex" "$(npm root -g)"
 }
 
 stage_root() {
-  printf "%s/.openclaw/plugin-runtime-deps" "$HOME"
+  printf "%s/.opnex/plugin-runtime-deps" "$HOME"
 }
 
 poison_home_npm_project() {
-  printf '{"name":"openclaw-home-prefix-poison","private":true}\n' >"$HOME/package.json"
+  printf '{"name":"opnex-home-prefix-poison","private":true}\n' >"$HOME/package.json"
   rm -rf "$HOME/node_modules"
   mkdir -p "$HOME/node_modules"
   chmod 500 "$HOME/node_modules"
@@ -48,14 +48,14 @@ find_external_dep_package() {
 }
 
 assert_no_unknown_stage_roots() {
-  if find "$(stage_root)" -maxdepth 1 -type d -name 'openclaw-unknown-*' -print -quit 2>/dev/null | grep -q .; then
+  if find "$(stage_root)" -maxdepth 1 -type d -name 'opnex-unknown-*' -print -quit 2>/dev/null | grep -q .; then
     echo "runtime deps created second-generation unknown stage roots" >&2
-    find "$(stage_root)" -maxdepth 1 -type d -name 'openclaw-*' -print | sort >&2 || true
+    find "$(stage_root)" -maxdepth 1 -type d -name 'opnex-*' -print | sort >&2 || true
     exit 1
   fi
 }
 
-package_tgz="${OPENCLAW_CURRENT_PACKAGE_TGZ:?missing OPENCLAW_CURRENT_PACKAGE_TGZ}"
+package_tgz="${OPNEX_CURRENT_PACKAGE_TGZ:?missing OPNEX_CURRENT_PACKAGE_TGZ}"
 update_target="file:$package_tgz"
 candidate_version="$(node - <<'NODE' "$package_tgz"
 const { execFileSync } = require("node:child_process");
@@ -75,7 +75,7 @@ const path = require("node:path");
 const mode = process.argv[2];
 const token = process.argv[3];
 const port = Number(process.argv[4]);
-const configPath = path.join(process.env.HOME, ".openclaw", "openclaw.json");
+const configPath = path.join(process.env.HOME, ".opnex", "opnex.json");
 const config = fs.existsSync(configPath)
   ? JSON.parse(fs.readFileSync(configPath, "utf8"))
   : {};
@@ -156,7 +156,7 @@ if (mode === "memory-lancedb") {
             apiKey: process.env.OPENAI_API_KEY,
             model: "text-embedding-3-small",
           },
-          dbPath: "~/.openclaw/memory/lancedb-update-e2e",
+          dbPath: "~/.opnex/memory/lancedb-update-e2e",
           autoCapture: false,
           autoRecall: false,
         },
@@ -296,12 +296,12 @@ if ((payload.after?.version ?? null) !== expectedAfter) {
   );
 }
 const steps = Array.isArray(payload.steps) ? payload.steps : [];
-const doctor = steps.find((step) => step?.name === "openclaw doctor");
+const doctor = steps.find((step) => step?.name === "opnex doctor");
 if (!doctor) {
-  throw new Error("missing openclaw doctor step");
+  throw new Error("missing opnex doctor step");
 }
 if (Number(doctor.exitCode ?? 1) !== 0) {
-  throw new Error(`openclaw doctor step failed: ${JSON.stringify(doctor)}`);
+  throw new Error(`opnex doctor step failed: ${JSON.stringify(doctor)}`);
 }
 NODE
 }
@@ -310,13 +310,13 @@ run_update_and_capture() {
   local label="$1"
   local out_file="$2"
   set +e
-  openclaw update --tag "$update_target" --yes --json >"$out_file" 2>"/tmp/openclaw-$label-update.stderr"
+  opnex update --tag "$update_target" --yes --json >"$out_file" 2>"/tmp/opnex-$label-update.stderr"
   local status=$?
   set -e
   if [ "$status" -ne 0 ]; then
-    echo "openclaw update failed for $label with exit code $status" >&2
+    echo "opnex update failed for $label with exit code $status" >&2
     cat "$out_file" >&2 || true
-    cat "/tmp/openclaw-$label-update.stderr" >&2 || true
+    cat "/tmp/opnex-$label-update.stderr" >&2 || true
     exit "$status"
   fi
 }
@@ -331,8 +331,8 @@ should_run_update_target() {
 
 echo "Installing current candidate as update baseline..."
 echo "Update targets: $UPDATE_TARGETS"
-npm install -g "$package_tgz" --no-fund --no-audit >/tmp/openclaw-update-baseline-install.log 2>&1
-command -v openclaw >/dev/null
+npm install -g "$package_tgz" --no-fund --no-audit >/tmp/opnex-update-baseline-install.log 2>&1
+command -v opnex >/dev/null
 poison_home_npm_project
 baseline_root="$(package_root)"
 test -d "$baseline_root/dist/extensions/telegram"
@@ -344,7 +344,7 @@ if should_run_update_target telegram; then
   write_config telegram
   assert_no_dep_available telegram grammy
   set +e
-  openclaw doctor --non-interactive >/tmp/openclaw-baseline-doctor.log 2>&1
+  opnex doctor --non-interactive >/tmp/opnex-baseline-doctor.log 2>&1
   baseline_doctor_status=$?
   set -e
   echo "baseline doctor exited with $baseline_doctor_status"
@@ -352,18 +352,18 @@ if should_run_update_target telegram; then
   assert_no_dep_available telegram grammy
 
   echo "Updating from baseline to current candidate; candidate doctor must repair Telegram deps..."
-  run_update_and_capture telegram /tmp/openclaw-update-telegram.json
-  cat /tmp/openclaw-update-telegram.json
-  assert_update_ok /tmp/openclaw-update-telegram.json "$candidate_version"
+  run_update_and_capture telegram /tmp/opnex-update-telegram.json
+  cat /tmp/opnex-update-telegram.json
+  assert_update_ok /tmp/opnex-update-telegram.json "$candidate_version"
   assert_dep_available telegram grammy
   assert_no_unknown_stage_roots
 
   echo "Mutating installed package: remove Telegram deps, then update-mode doctor repairs them..."
   remove_runtime_dep telegram grammy
   assert_no_dep_available telegram grammy
-  if ! OPENCLAW_UPDATE_IN_PROGRESS=1 openclaw doctor --non-interactive >/tmp/openclaw-update-mode-doctor.log 2>&1; then
+  if ! OPNEX_UPDATE_IN_PROGRESS=1 opnex doctor --non-interactive >/tmp/opnex-update-mode-doctor.log 2>&1; then
     echo "update-mode doctor failed while repairing Telegram deps" >&2
-    cat /tmp/openclaw-update-mode-doctor.log >&2
+    cat /tmp/opnex-update-mode-doctor.log >&2
     exit 1
   fi
   assert_dep_available telegram grammy
@@ -375,9 +375,9 @@ if should_run_update_target discord; then
   write_config discord
   remove_runtime_dep discord discord-api-types
   assert_no_dep_available discord discord-api-types
-  run_update_and_capture discord /tmp/openclaw-update-discord.json
-  cat /tmp/openclaw-update-discord.json
-  assert_update_ok /tmp/openclaw-update-discord.json "$candidate_version"
+  run_update_and_capture discord /tmp/opnex-update-discord.json
+  cat /tmp/opnex-update-discord.json
+  assert_update_ok /tmp/opnex-update-discord.json "$candidate_version"
   assert_dep_available discord discord-api-types
 fi
 
@@ -386,9 +386,9 @@ if should_run_update_target slack; then
   write_config slack
   remove_runtime_dep slack @slack/web-api
   assert_no_dep_available slack @slack/web-api
-  run_update_and_capture slack /tmp/openclaw-update-slack.json
-  cat /tmp/openclaw-update-slack.json
-  assert_update_ok /tmp/openclaw-update-slack.json "$candidate_version"
+  run_update_and_capture slack /tmp/opnex-update-slack.json
+  cat /tmp/opnex-update-slack.json
+  assert_update_ok /tmp/opnex-update-slack.json "$candidate_version"
   assert_dep_available slack @slack/web-api
 fi
 
@@ -397,9 +397,9 @@ if should_run_update_target feishu; then
   write_config feishu
   remove_runtime_dep feishu @larksuiteoapi/node-sdk
   assert_no_dep_available feishu @larksuiteoapi/node-sdk
-  run_update_and_capture feishu /tmp/openclaw-update-feishu.json
-  cat /tmp/openclaw-update-feishu.json
-  assert_update_ok /tmp/openclaw-update-feishu.json "$candidate_version"
+  run_update_and_capture feishu /tmp/opnex-update-feishu.json
+  cat /tmp/opnex-update-feishu.json
+  assert_update_ok /tmp/opnex-update-feishu.json "$candidate_version"
   assert_dep_available feishu @larksuiteoapi/node-sdk
 fi
 
@@ -408,9 +408,9 @@ if should_run_update_target memory-lancedb; then
   write_config memory-lancedb
   remove_runtime_dep memory-lancedb @lancedb/lancedb
   assert_no_dep_available memory-lancedb @lancedb/lancedb
-  run_update_and_capture memory-lancedb /tmp/openclaw-update-memory-lancedb.json
-  cat /tmp/openclaw-update-memory-lancedb.json
-  assert_update_ok /tmp/openclaw-update-memory-lancedb.json "$candidate_version"
+  run_update_and_capture memory-lancedb /tmp/opnex-update-memory-lancedb.json
+  cat /tmp/opnex-update-memory-lancedb.json
+  assert_update_ok /tmp/opnex-update-memory-lancedb.json "$candidate_version"
   assert_dep_available memory-lancedb @lancedb/lancedb
 fi
 
@@ -419,9 +419,9 @@ if should_run_update_target acpx; then
   write_config acpx
   remove_runtime_dep acpx acpx
   assert_no_dep_available acpx acpx
-  run_update_and_capture acpx /tmp/openclaw-update-acpx.json
-  cat /tmp/openclaw-update-acpx.json
-  assert_update_ok /tmp/openclaw-update-acpx.json "$candidate_version"
+  run_update_and_capture acpx /tmp/opnex-update-acpx.json
+  cat /tmp/opnex-update-acpx.json
+  assert_update_ok /tmp/opnex-update-acpx.json "$candidate_version"
   assert_dep_available acpx acpx
 fi
 

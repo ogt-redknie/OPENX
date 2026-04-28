@@ -1,6 +1,6 @@
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
 type SessionDisplayModelRow = {
   key: string;
@@ -30,7 +30,7 @@ function parseModelRef(raw: string, defaultProvider: string): { provider: string
 }
 
 function resolveAgentPrimaryModel(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   agentId: string | undefined,
 ): string | undefined {
   if (!agentId) {
@@ -60,7 +60,7 @@ function normalizeStoredOverrideModel(params: {
 }
 
 function resolveDefaultModelRef(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   agentId?: string,
 ): { provider: string; model: string } {
   const primary =
@@ -71,7 +71,7 @@ function resolveDefaultModelRef(
 }
 
 export function resolveSessionDisplayDefaults(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   agentId?: string,
 ): SessionDisplayDefaults {
   return {
@@ -80,7 +80,7 @@ export function resolveSessionDisplayDefaults(
 }
 
 export function resolveSessionDisplayModel(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   row: SessionDisplayModelRow,
 ): string {
   const agentId = row.key.startsWith("agent:") ? row.key.split(":")[1] : undefined;

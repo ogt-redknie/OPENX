@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   normalizeSecretInputString,
   resolveSecretInputRef,
@@ -6,10 +6,10 @@ import {
 } from "../config/types.secrets.js";
 import { resolveSecretRefString } from "./resolve.js";
 
-type SecretDefaults = NonNullable<OpenClawConfig["secrets"]>["defaults"];
+type SecretDefaults = NonNullable<OPNEXConfig["secrets"]>["defaults"];
 
 export async function resolveSecretInputString(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   value: unknown;
   env: NodeJS.ProcessEnv;
   defaults?: SecretDefaults;

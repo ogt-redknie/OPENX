@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import type { RuntimeEnv } from "opnex/plugin-sdk/runtime-env";
 import type { createIMessageRpcClient } from "../client.js";
 import { sendMessageIMessage } from "../send.js";
 import {
@@ -17,7 +17,7 @@ import type { SentMessageCache } from "./echo-cache.js";
 import { sanitizeOutboundText } from "./sanitize-outbound.js";
 
 export async function deliverReplies(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   replies: ReplyPayload[];
   target: string;
   client: Awaited<ReturnType<typeof createIMessageRpcClient>>;

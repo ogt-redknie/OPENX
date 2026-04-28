@@ -1,11 +1,11 @@
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-} from "openclaw/plugin-sdk/channel-entry-contract";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/channel-entry-contract";
+} from "opnex/plugin-sdk/channel-entry-contract";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/channel-entry-contract";
 
-function registerSlackPluginHttpRoutes(api: OpenClawPluginApi): void {
-  const register = loadBundledEntryExportSync<(api: OpenClawPluginApi) => void>(import.meta.url, {
+function registerSlackPluginHttpRoutes(api: OPNEXPluginApi): void {
+  const register = loadBundledEntryExportSync<(api: OPNEXPluginApi) => void>(import.meta.url, {
     specifier: "./http-routes-api.js",
     exportName: "registerSlackPluginHttpRoutes",
   });

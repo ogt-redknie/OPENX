@@ -1,24 +1,24 @@
-import { formatAllowlistMatchMeta } from "openclaw/plugin-sdk/allow-from";
-import { resolveInboundMentionDecision } from "openclaw/plugin-sdk/channel-inbound";
+import { formatAllowlistMatchMeta } from "opnex/plugin-sdk/allow-from";
+import { resolveInboundMentionDecision } from "opnex/plugin-sdk/channel-inbound";
 import {
   logInboundDrop,
   resolveInboundSessionEnvelopeContext,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveDualTextControlCommandGate } from "openclaw/plugin-sdk/command-gating";
+} from "opnex/plugin-sdk/channel-inbound";
+import { resolveDualTextControlCommandGate } from "opnex/plugin-sdk/command-gating";
 import {
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
   shouldIncludeSupplementalContext,
-} from "openclaw/plugin-sdk/context-visibility-runtime";
-import { evaluateSenderGroupAccessForPolicy } from "openclaw/plugin-sdk/group-access";
-import { dispatchReplyFromConfigWithSettledDispatcher } from "openclaw/plugin-sdk/inbound-reply-dispatch";
+} from "opnex/plugin-sdk/context-visibility-runtime";
+import { evaluateSenderGroupAccessForPolicy } from "opnex/plugin-sdk/group-access";
+import { dispatchReplyFromConfigWithSettledDispatcher } from "opnex/plugin-sdk/inbound-reply-dispatch";
 import {
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   DEFAULT_GROUP_HISTORY_LIMIT,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
+} from "opnex/plugin-sdk/reply-history";
 import {
   buildMSTeamsAttachmentPlaceholder,
   buildMSTeamsMediaPayload,

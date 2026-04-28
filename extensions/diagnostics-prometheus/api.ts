@@ -1,12 +1,12 @@
 export type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "opnex/plugin-sdk/diagnostic-runtime";
 export {
   emptyPluginConfigSchema,
-  type OpenClawPluginApi,
-  type OpenClawPluginHttpRouteHandler,
-  type OpenClawPluginService,
-  type OpenClawPluginServiceContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-export { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
+  type OPNEXPluginApi,
+  type OPNEXPluginHttpRouteHandler,
+  type OPNEXPluginService,
+  type OPNEXPluginServiceContext,
+} from "opnex/plugin-sdk/plugin-entry";
+export { redactSensitiveText } from "opnex/plugin-sdk/security-runtime";

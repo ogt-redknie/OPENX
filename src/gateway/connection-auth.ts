@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { resolveGatewayCredentialsWithSecretInputs } from "./credentials-secret-inputs.js";
 import type {
   ExplicitGatewayAuth,
@@ -10,7 +10,7 @@ import type {
 import { resolveGatewayCredentialsFromConfig } from "./credentials.js";
 
 export type GatewayConnectionAuthOptions = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
@@ -25,7 +25,7 @@ export type GatewayConnectionAuthOptions = {
 };
 
 function toGatewayCredentialOptions(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OpenClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OPNEXConfig },
 ) {
   return {
     cfg: params.cfg,
@@ -53,7 +53,7 @@ export async function resolveGatewayConnectionAuth(
 }
 
 export function resolveGatewayConnectionAuthFromConfig(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OpenClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OPNEXConfig },
 ): { token?: string; password?: string } {
   return resolveGatewayCredentialsFromConfig(toGatewayCredentialOptions(params));
 }

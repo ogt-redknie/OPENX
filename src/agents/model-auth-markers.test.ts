@@ -2,22 +2,22 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { captureEnv, withEnvAsync } from "../test-utils/env.js";
 
 const PLUGIN_MANIFEST_ENV_KEYS = [
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "OPNEX_BUNDLED_PLUGINS_DIR",
+  "OPNEX_DISABLE_BUNDLED_PLUGINS",
+  "OPNEX_SKIP_PROVIDERS",
+  "OPNEX_SKIP_CHANNELS",
+  "OPNEX_SKIP_CRON",
+  "OPNEX_TEST_MINIMAL_GATEWAY",
 ] as const;
 
 function cleanPluginManifestEnv(): Record<(typeof PLUGIN_MANIFEST_ENV_KEYS)[number], undefined> {
   return {
-    OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-    OPENCLAW_SKIP_PROVIDERS: undefined,
-    OPENCLAW_SKIP_CHANNELS: undefined,
-    OPENCLAW_SKIP_CRON: undefined,
-    OPENCLAW_TEST_MINIMAL_GATEWAY: undefined,
+    OPNEX_BUNDLED_PLUGINS_DIR: undefined,
+    OPNEX_DISABLE_BUNDLED_PLUGINS: undefined,
+    OPNEX_SKIP_PROVIDERS: undefined,
+    OPNEX_SKIP_CHANNELS: undefined,
+    OPNEX_SKIP_CRON: undefined,
+    OPNEX_TEST_MINIMAL_GATEWAY: undefined,
   };
 }
 

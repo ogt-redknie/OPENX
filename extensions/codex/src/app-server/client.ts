@@ -1,5 +1,5 @@
 import { createInterface, type Interface as ReadlineInterface } from "node:readline";
-import { embeddedAgentLog, OPENCLAW_VERSION } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog, OPNEX_VERSION } from "opnex/plugin-sdk/agent-harness-runtime";
 import { resolveCodexAppServerRuntimeOptions, type CodexAppServerStartOptions } from "./config.js";
 import {
   type CodexAppServerRequestMethod,
@@ -121,9 +121,9 @@ export class CodexAppServerClient {
     // which matters when callers override the binary or app-server args.
     const response = await this.request("initialize", {
       clientInfo: {
-        name: "openclaw",
-        title: "OpenClaw",
-        version: OPENCLAW_VERSION,
+        name: "opnex",
+        title: "OPNEX",
+        version: OPNEX_VERSION,
       },
       capabilities: {
         experimentalApi: true,
@@ -373,7 +373,7 @@ export function defaultServerRequestResponse(
       contentItems: [
         {
           type: "inputText",
-          text: "OpenClaw did not register a handler for this app-server tool call.",
+          text: "OPNEX did not register a handler for this app-server tool call.",
         },
       ],
       success: false,
@@ -391,7 +391,7 @@ export function defaultServerRequestResponse(
   if (isCodexAppServerApprovalRequest(request.method)) {
     return {
       decision: "decline",
-      reason: "OpenClaw codex app-server bridge does not grant native approvals yet.",
+      reason: "OPNEX codex app-server bridge does not grant native approvals yet.",
     };
   }
   if (request.method === "item/tool/requestUserInput") {
@@ -411,7 +411,7 @@ function assertSupportedCodexAppServerVersion(response: CodexInitializeResponse)
   const detectedVersion = readCodexVersionFromUserAgent(response.userAgent);
   if (!detectedVersion) {
     throw new Error(
-      `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required, but OpenClaw could not determine the running Codex version. Update the configured Codex app-server binary, or remove custom command overrides to use the managed binary.`,
+      `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required, but OPNEX could not determine the running Codex version. Update the configured Codex app-server binary, or remove custom command overrides to use the managed binary.`,
     );
   }
   if (compareVersions(detectedVersion, MIN_CODEX_APP_SERVER_VERSION) < 0) {
@@ -423,7 +423,7 @@ function assertSupportedCodexAppServerVersion(response: CodexInitializeResponse)
 
 export function readCodexVersionFromUserAgent(userAgent: string | undefined): string | undefined {
   // Codex returns `<originator>/<codex-version> ...`; the originator can be
-  // OpenClaw, Codex Desktop, or an env override, so only the slash-delimited
+  // OPNEX, Codex Desktop, or an env override, so only the slash-delimited
   // version in the leading product field is stable.
   const match = userAgent?.match(
     /^[^/]+\/(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)(?:[\s(]|$)/,

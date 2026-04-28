@@ -6,19 +6,19 @@ import {
   abortAgentHarnessRun,
   queueAgentHarnessMessage,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness";
+} from "opnex/plugin-sdk/agent-harness";
 import {
   buildAgentRuntimePlan,
   nativeHookRelayTesting,
   onAgentEvent,
   resetAgentEventsForTest,
   type AgentEventPayload,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "opnex/plugin-sdk/agent-harness-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "opnex/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "opnex/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CODEX_GPT5_BEHAVIOR_CONTRACT } from "../../prompt-overlay.js";
 import * as elicitationBridge from "./elicitation-bridge.js";
@@ -87,7 +87,7 @@ function threadStartResult(threadId = "thread-1") {
       updatedAt: 1,
       status: { type: "idle" },
       path: null,
-      cwd: tempDir || "/tmp/openclaw-codex-test",
+      cwd: tempDir || "/tmp/opnex-codex-test",
       cliVersion: "0.125.0",
       source: "unknown",
       agentNickname: null,
@@ -99,7 +99,7 @@ function threadStartResult(threadId = "thread-1") {
     model: "gpt-5.4-codex",
     modelProvider: "openai",
     serviceTier: null,
-    cwd: tempDir || "/tmp/openclaw-codex-test",
+    cwd: tempDir || "/tmp/opnex-codex-test",
     instructionSources: [],
     approvalPolicy: "never",
     approvalsReviewer: "user",
@@ -305,7 +305,7 @@ function extractRelayIdFromThreadRequest(params: unknown): string {
 describe("runCodexAppServerAttempt", () => {
   beforeEach(async () => {
     resetAgentEventsForTest();
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-run-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-codex-run-"));
   });
 
   afterEach(async () => {
@@ -1140,7 +1140,7 @@ describe("runCodexAppServerAttempt", () => {
   });
 
   it("releases completion when a projector callback throws during turn/completed", async () => {
-    // Regression for openclaw/openclaw#67996: a throw inside the projector's
+    // Regression for opnex/opnex#67996: a throw inside the projector's
     // turn/completed handler must not strand resolveCompletion, otherwise the
     // gateway session lane stays locked and every follow-up message queues
     // behind a run that will never resolve.
@@ -1563,7 +1563,7 @@ describe("runCodexAppServerAttempt", () => {
     );
   });
 
-  it("builds resume and turn params from the currently selected OpenClaw model", () => {
+  it("builds resume and turn params from the currently selected OPNEX model", () => {
     const params = createParams("/tmp/session.jsonl", "/tmp/workspace");
     const appServer = {
       start: {

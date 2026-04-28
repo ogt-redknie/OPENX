@@ -11,7 +11,7 @@ function runInstallShell(script: string, env: NodeJS.ProcessEnv = {}) {
     encoding: "utf8",
     env: {
       ...process.env,
-      OPENCLAW_INSTALL_SH_NO_RUN: "1",
+      OPNEX_INSTALL_SH_NO_RUN: "1",
       ...env,
     },
   });
@@ -48,7 +48,7 @@ describe("install.sh", () => {
       /# Step 2: Node\.js\s+load_nvm_for_node_detection\s+if ! check_node; then/,
     );
 
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-nvm-"));
+    const tmp = mkdtempSync(join(tmpdir(), "opnex-install-nvm-"));
     const home = join(tmp, "home");
     const systemBin = join(tmp, "system-bin");
     const nvmBin = join(home, ".nvm/versions/node/v22.22.1/bin");
@@ -208,7 +208,7 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 
   it("reruns spinner-wrapped commands when gum reports ioctl failure", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-install-sh-gum-"));
+    const dir = mkdtempSync(join(tmpdir(), "opnex-install-sh-gum-"));
     try {
       const gumPath = join(dir, "gum");
       const commandPath = join(dir, "command");
@@ -242,46 +242,46 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 });
 
-describe("install.sh duplicate OpenClaw install detection", () => {
+describe("install.sh duplicate OPNEX install detection", () => {
   it("warns with concrete package paths and versions for duplicate npm roots", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/brew/openclaw" "$root/fnm/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/brew/openclaw/package.json"
-      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
-      OPENCLAW_BIN="$root/fnm/.bin/openclaw"
+      mkdir -p "$root/brew/opnex" "$root/fnm/opnex"
+      printf '{"version":"2026.3.7"}\\n' > "$root/brew/opnex/package.json"
+      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/opnex/package.json"
+      collect_opnex_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
+      OPNEX_BIN="$root/fnm/.bin/opnex"
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_opnex_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).toContain("Multiple OPNEX global installs detected");
     expect(result.stdout).toContain("2026.3.7");
     expect(result.stdout).toContain("2026.3.1");
-    expect(result.stdout).toContain("/brew/openclaw");
-    expect(result.stdout).toContain("/fnm/openclaw");
-    expect(result.stdout).toContain("Active openclaw:");
-    expect(result.stdout).toContain("npm uninstall -g openclaw");
+    expect(result.stdout).toContain("/brew/opnex");
+    expect(result.stdout).toContain("/fnm/opnex");
+    expect(result.stdout).toContain("Active opnex:");
+    expect(result.stdout).toContain("npm uninstall -g opnex");
   });
 
-  it("stays quiet when only one OpenClaw npm root exists", () => {
+  it("stays quiet when only one OPNEX npm root exists", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/only/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/only/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
+      mkdir -p "$root/only/opnex"
+      printf '{"version":"2026.3.7"}\\n' > "$root/only/opnex/package.json"
+      collect_opnex_npm_root_candidates() { printf '%s\\n' "$root/only"; }
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_opnex_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).not.toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).not.toContain("Multiple OPNEX global installs detected");
   });
 });

@@ -2,21 +2,21 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type {
   CreateSandboxBackendParams,
-  OpenClawConfig,
+  OPNEXConfig,
   SandboxBackendCommandParams,
   SandboxBackendCommandResult,
   SandboxBackendFactory,
   SandboxBackendManager,
   SshSandboxSession,
-} from "openclaw/plugin-sdk/sandbox";
+} from "opnex/plugin-sdk/sandbox";
 import {
   createRemoteShellSandboxFsBridge,
   disposeSshSandboxSession,
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredOPNEXTmpDir,
   runSshSandboxCommand,
   sanitizeEnvVars,
-} from "openclaw/plugin-sdk/sandbox";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/sandbox";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import type { OpenShellSandboxBackend } from "./backend.types.js";
 import {
   buildExecRemoteCommand,
@@ -272,7 +272,7 @@ class OpenShellSandboxBackendImpl {
           "/bin/sh",
           "-c",
           params.script,
-          "openclaw-openshell-fs",
+          "opnex-openshell-fs",
           ...(params.args ?? []),
         ]),
         stdin: params.stdin,
@@ -412,7 +412,7 @@ class OpenShellSandboxBackendImpl {
 
   private async syncWorkspaceFromRemote(): Promise<void> {
     const tmpDir = await fs.mkdtemp(
-      path.join(resolveOpenShellTmpRoot(), "openclaw-openshell-sync-"),
+      path.join(resolveOpenShellTmpRoot(), "opnex-openshell-sync-"),
     );
     try {
       const result = await runOpenShellCli({
@@ -443,7 +443,7 @@ class OpenShellSandboxBackendImpl {
 
   private async uploadPathToRemote(localPath: string, remotePath: string): Promise<void> {
     const tmpDir = await fs.mkdtemp(
-      path.join(resolveOpenShellTmpRoot(), "openclaw-openshell-upload-"),
+      path.join(resolveOpenShellTmpRoot(), "opnex-openshell-upload-"),
     );
     try {
       // Stage a symlink-free snapshot so upload never dereferences host paths
@@ -487,7 +487,7 @@ class OpenShellSandboxBackendImpl {
 }
 
 function resolveOpenShellPluginConfigFromConfig(
-  config: OpenClawConfig,
+  config: OPNEXConfig,
   fallback: ResolvedOpenShellPluginConfig,
 ): ResolvedOpenShellPluginConfig {
   const pluginConfig = config.plugins?.entries?.openshell?.config;
@@ -507,9 +507,9 @@ function buildOpenShellSandboxName(scopeKey: string): string {
     (acc, char) => ((acc * 33) ^ char.charCodeAt(0)) >>> 0,
     5381,
   );
-  return `openclaw-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
+  return `opnex-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
 }
 
 function resolveOpenShellTmpRoot(): string {
-  return path.resolve(resolvePreferredOpenClawTmpDir());
+  return path.resolve(resolvePreferredOPNEXTmpDir());
 }

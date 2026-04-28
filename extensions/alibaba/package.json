@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/alibaba-provider",
+  "name": "@opnex/alibaba-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Alibaba Model Studio video provider plugin",
+  "description": "OPNEX Alibaba Model Studio video provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

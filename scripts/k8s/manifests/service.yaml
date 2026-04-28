@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openclaw
+  name: opnex
   labels:
-    app: openclaw
+    app: opnex
 spec:
   type: ClusterIP
   selector:
-    app: openclaw
+    app: opnex
   ports:
     - name: gateway
       port: 18789

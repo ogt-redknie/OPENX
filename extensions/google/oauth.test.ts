@@ -1,9 +1,9 @@
 import { join, parse } from "node:path";
 import { describe, expect, it, vi, beforeAll, beforeEach, afterEach } from "vitest";
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("opnex/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/runtime-env")>(
+    "opnex/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -11,9 +11,9 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+vi.mock("opnex/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/ssrf-runtime")>(
+    "opnex/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -335,7 +335,7 @@ describe("extractGeminiCliCredentials", () => {
     oauth2Content: string;
     unrelatedOauth2Content: string;
   }) {
-    const nvmRoot = join(rootDir, "fake", "Users", "lobster", "AppData", "Local", "nvm");
+    const nvmRoot = join(rootDir, "fake", "Users", "opnex", "AppData", "Local", "nvm");
     const versionDir = join(nvmRoot, "v24.1.0");
     const geminiPath = join(versionDir, process.platform === "win32" ? "gemini.cmd" : "gemini");
     const resolvedPath = geminiPath;
@@ -550,8 +550,8 @@ describe("loginGeminiCliOAuth", () => {
     "https://autopush-cloudcode-pa.sandbox.googleapis.com/v1internal:loadCodeAssist";
 
   const ENV_KEYS = [
-    "OPENCLAW_GEMINI_OAUTH_CLIENT_ID",
-    "OPENCLAW_GEMINI_OAUTH_CLIENT_SECRET",
+    "OPNEX_GEMINI_OAUTH_CLIENT_ID",
+    "OPNEX_GEMINI_OAUTH_CLIENT_SECRET",
     "GEMINI_CLI_OAUTH_CLIENT_ID",
     "GEMINI_CLI_OAUTH_CLIENT_SECRET",
     "GOOGLE_CLOUD_PROJECT",
@@ -604,7 +604,7 @@ describe("loginGeminiCliOAuth", () => {
   }
 
   function userInfoResponse(): Response {
-    return responseJson({ email: "lobster@openclaw.ai" });
+    return responseJson({ email: "opnex@opnex.ai" });
   }
 
   type RecordedFetchRequest = {
@@ -696,8 +696,8 @@ describe("loginGeminiCliOAuth", () => {
 
   beforeEach(() => {
     envSnapshot = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[key]]));
-    process.env.OPENCLAW_GEMINI_OAUTH_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
-    process.env.OPENCLAW_GEMINI_OAUTH_CLIENT_SECRET = "GOCSPX-test-client-secret"; // pragma: allowlist secret
+    process.env.OPNEX_GEMINI_OAUTH_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
+    process.env.OPNEX_GEMINI_OAUTH_CLIENT_SECRET = "GOCSPX-test-client-secret"; // pragma: allowlist secret
     delete process.env.GEMINI_CLI_OAUTH_CLIENT_ID;
     delete process.env.GEMINI_CLI_OAUTH_CLIENT_SECRET;
     delete process.env.GOOGLE_CLOUD_PROJECT;

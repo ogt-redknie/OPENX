@@ -137,7 +137,7 @@ function instantiatePiModelRegistry(
   return new Registry(authStorage, modelsJsonPath);
 }
 
-function createOpenClawModelRegistry(
+function createOPNEXModelRegistry(
   authStorage: PiAuthStorage,
   modelsJsonPath: string,
   agentDir: string,
@@ -235,7 +235,7 @@ export function discoverModels(
   agentDir: string,
   options?: DiscoverModelsOptions,
 ): PiModelRegistry {
-  return createOpenClawModelRegistry(
+  return createOPNEXModelRegistry(
     authStorage,
     path.join(agentDir, "models.json"),
     agentDir,

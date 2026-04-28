@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   DEFAULT_SEARCH_COUNT,
@@ -12,11 +12,11 @@ import {
   withTrustedWebSearchEndpoint,
   wrapWebContent,
   writeCache,
-} from "openclaw/plugin-sdk/provider-web-search";
+} from "opnex/plugin-sdk/provider-web-search";
 import {
   assertHttpUrlTargetsPrivateNetwork,
   type LookupFn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "opnex/plugin-sdk/ssrf-runtime";
 import {
   resolveSearxngBaseUrl,
   resolveSearxngCategories,
@@ -131,7 +131,7 @@ function parseSearxngResponseText(text: string, count: number): SearxngResult[] 
 }
 
 export async function runSearxngSearch(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   query: string;
   count?: number;
   categories?: string;

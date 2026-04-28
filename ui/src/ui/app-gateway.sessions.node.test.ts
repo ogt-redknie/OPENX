@@ -98,7 +98,7 @@ function createHost() {
     toolsCatalogError: null,
     toolsCatalogResult: null,
     debugHealth: null,
-    assistantName: "OpenClaw",
+    assistantName: "OPNEX",
     assistantAvatar: null,
     assistantAgentId: null,
     serverVersion: null,

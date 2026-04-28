@@ -1,15 +1,15 @@
 import { ChannelType, type Client, type MessageCreateListener } from "@buape/carbon";
 import { Routes, type APIAttachment, type APIStickerItem } from "discord-api-types/v10";
-import type { OpenClawConfig, ReplyToMode } from "openclaw/plugin-sdk/config-types";
-import { resolveChannelModelOverride } from "openclaw/plugin-sdk/model-session-runtime";
-import { createReplyReferencePlanner } from "openclaw/plugin-sdk/reply-reference";
-import { buildAgentSessionKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import type { OPNEXConfig, ReplyToMode } from "opnex/plugin-sdk/config-types";
+import { resolveChannelModelOverride } from "opnex/plugin-sdk/model-session-runtime";
+import { createReplyReferencePlanner } from "opnex/plugin-sdk/reply-reference";
+import { buildAgentSessionKey } from "opnex/plugin-sdk/routing";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
 import {
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
   truncateUtf16Safe,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { DiscordChannelConfigResolved } from "./allow-list.js";
 import {
   resolveDiscordChannelIdSafe,
@@ -446,7 +446,7 @@ type MaybeCreateDiscordAutoThreadParams = {
   channelDescription?: string;
   baseText: string;
   combinedBody: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId?: string;
 };
 
@@ -455,7 +455,7 @@ export async function resolveDiscordAutoThreadReplyPlan(
     replyToMode: ReplyToMode;
     agentId: string;
     channel: string;
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     threadParentInheritanceEnabled?: boolean;
   },
 ): Promise<DiscordAutoThreadReplyPlan> {
@@ -596,7 +596,7 @@ export async function maybeCreateDiscordAutoThread(
 }
 
 function resolveDiscordThreadTitleModelRef(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   channel?: string;
   agentId: string;
   threadId: string;
@@ -635,7 +635,7 @@ async function maybeRenameDiscordAutoThread(params: {
   modelRef?: string;
   channelName?: string;
   channelDescription?: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
 }): Promise<void> {
   try {

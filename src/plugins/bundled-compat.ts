@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { PluginEntryConfig } from "../config/types.plugins.js";
 import { hasExplicitPluginConfig } from "./config-policy.js";
 
 export function withBundledPluginAllowlistCompat(params: {
-  config: OpenClawConfig | undefined;
+  config: OPNEXConfig | undefined;
   pluginIds: readonly string[];
-}): OpenClawConfig | undefined {
+}): OPNEXConfig | undefined {
   const allow = params.config?.plugins?.allow;
   if (!Array.isArray(allow) || allow.length === 0) {
     return params.config;
@@ -34,9 +34,9 @@ export function withBundledPluginAllowlistCompat(params: {
 }
 
 export function withBundledPluginEnablementCompat(params: {
-  config: OpenClawConfig | undefined;
+  config: OPNEXConfig | undefined;
   pluginIds: readonly string[];
-}): OpenClawConfig | undefined {
+}): OPNEXConfig | undefined {
   const existingEntries = params.config?.plugins?.entries ?? {};
   const forcePluginsEnabled = params.config?.plugins?.enabled === false;
   let changed = false;
@@ -70,10 +70,10 @@ export function withBundledPluginEnablementCompat(params: {
 }
 
 export function withBundledPluginVitestCompat(params: {
-  config: OpenClawConfig | undefined;
+  config: OPNEXConfig | undefined;
   pluginIds: readonly string[];
   env?: NodeJS.ProcessEnv;
-}): OpenClawConfig | undefined {
+}): OPNEXConfig | undefined {
   const env = params.env ?? process.env;
   const isVitest = Boolean(env.VITEST);
   if (

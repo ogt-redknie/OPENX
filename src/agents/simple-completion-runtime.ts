@@ -1,5 +1,5 @@
 import { complete, type Api, type Model } from "@mariozechner/pi-ai";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { prepareProviderRuntimeAuth } from "../plugins/provider-runtime.runtime.js";
 import { resolveAgentDir, resolveAgentEffectiveModelPrimary } from "./agent-scope.js";
@@ -64,7 +64,7 @@ export type PreparedSimpleCompletionModelForAgent =
     };
 
 export function resolveSimpleCompletionSelectionForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   modelRef?: string;
 }): AgentSimpleCompletionSelection | null {
@@ -104,7 +104,7 @@ async function setRuntimeApiKeyForCompletion(params: {
   model: Model<Api>;
   apiKey: string;
   authMode: ResolvedProviderAuth["mode"];
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   workspaceDir?: string;
   profileId?: string;
 }): Promise<CompletionRuntimeCredential> {
@@ -152,7 +152,7 @@ function hasMissingApiKeyAllowance(params: {
 }
 
 export async function prepareSimpleCompletionModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: OPNEXConfig | undefined;
   provider: string;
   modelId: string;
   agentDir?: string;
@@ -234,7 +234,7 @@ export async function prepareSimpleCompletionModel(params: {
 }
 
 export async function prepareSimpleCompletionModelForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   modelRef?: string;
   preferredProfile?: string;

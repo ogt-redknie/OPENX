@@ -1,16 +1,16 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveMemoryDreamingConfig } from "openclaw/plugin-sdk/memory-core-host-status";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveMemoryDreamingConfig } from "opnex/plugin-sdk/memory-core-host-status";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/plugin-entry";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { asRecord } from "./dreaming-shared.js";
 import { resolveShortTermPromotionDreamingConfig } from "./dreaming.js";
 
-function resolveMemoryCorePluginConfig(cfg: OpenClawConfig): Record<string, unknown> {
+function resolveMemoryCorePluginConfig(cfg: OPNEXConfig): Record<string, unknown> {
   const entry = asRecord(cfg.plugins?.entries?.["memory-core"]);
   return asRecord(entry?.config) ?? {};
 }
 
-function updateDreamingEnabledInConfig(cfg: OpenClawConfig, enabled: boolean): OpenClawConfig {
+function updateDreamingEnabledInConfig(cfg: OPNEXConfig, enabled: boolean): OPNEXConfig {
   const entries = { ...cfg.plugins?.entries };
   const existingEntry = asRecord(entries["memory-core"]) ?? {};
   const existingConfig = asRecord(existingEntry.config) ?? {};
@@ -47,7 +47,7 @@ function formatPhaseGuide(): string {
   ].join("\n");
 }
 
-function formatStatus(cfg: OpenClawConfig): string {
+function formatStatus(cfg: OPNEXConfig): string {
   const pluginConfig = resolveMemoryCorePluginConfig(cfg);
   const dreaming = resolveMemoryDreamingConfig({
     pluginConfig,
@@ -80,7 +80,7 @@ function requiresAdminToMutateDreaming(gatewayClientScopes?: readonly string[]):
   return Array.isArray(gatewayClientScopes) && !gatewayClientScopes.includes("operator.admin");
 }
 
-export function registerDreamingCommand(api: OpenClawPluginApi): void {
+export function registerDreamingCommand(api: OPNEXPluginApi): void {
   api.registerCommand({
     name: "dreaming",
     description: "Enable or disable memory dreaming.",
@@ -91,7 +91,7 @@ export function registerDreamingCommand(api: OpenClawPluginApi): void {
         .split(/\s+/)
         .filter(Boolean)
         .map((token) => normalizeLowercaseStringOrEmpty(token));
-      const currentConfig = api.runtime.config.current() as OpenClawConfig;
+      const currentConfig = api.runtime.config.current() as OPNEXConfig;
 
       if (
         !firstToken ||

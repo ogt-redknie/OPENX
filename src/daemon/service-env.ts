@@ -48,7 +48,7 @@ type SharedServiceEnvironmentFields = {
 };
 
 export const SERVICE_PROXY_ENV_KEYS = [
-  "OPENCLAW_PROXY_URL",
+  "OPNEX_PROXY_URL",
   "HTTP_PROXY",
   "HTTPS_PROXY",
   "NO_PROXY",
@@ -62,8 +62,8 @@ export const SERVICE_PROXY_ENV_KEYS = [
 function readServiceProxyEnvironment(
   env: Record<string, string | undefined>,
 ): Record<string, string | undefined> {
-  const proxyUrl = normalizeOptionalString(env.OPENCLAW_PROXY_URL);
-  return proxyUrl ? { OPENCLAW_PROXY_URL: proxyUrl } : {};
+  const proxyUrl = normalizeOptionalString(env.OPNEX_PROXY_URL);
+  return proxyUrl ? { OPNEX_PROXY_URL: proxyUrl } : {};
 }
 
 function addNonEmptyDir(dirs: string[], dir: string | undefined): void {
@@ -303,22 +303,22 @@ export function buildServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const profile = env.OPENCLAW_PROFILE;
-  const wrapperPath = normalizeOptionalString(env.OPENCLAW_WRAPPER);
+  const profile = env.OPNEX_PROFILE;
+  const wrapperPath = normalizeOptionalString(env.OPNEX_WRAPPER);
   const resolvedLaunchdLabel =
     launchdLabel || (platform === "darwin" ? resolveGatewayLaunchAgentLabel(profile) : undefined);
   const systemdUnit = `${resolveGatewaySystemdServiceName(profile)}.service`;
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
-    OPENCLAW_PROFILE: profile,
-    OPENCLAW_WRAPPER: wrapperPath,
-    OPENCLAW_GATEWAY_PORT: String(port),
-    OPENCLAW_LAUNCHD_LABEL: resolvedLaunchdLabel,
-    OPENCLAW_SYSTEMD_UNIT: systemdUnit,
-    OPENCLAW_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
-    OPENCLAW_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
-    OPENCLAW_SERVICE_KIND: GATEWAY_SERVICE_KIND,
-    OPENCLAW_SERVICE_VERSION: VERSION,
+    OPNEX_PROFILE: profile,
+    OPNEX_WRAPPER: wrapperPath,
+    OPNEX_GATEWAY_PORT: String(port),
+    OPNEX_LAUNCHD_LABEL: resolvedLaunchdLabel,
+    OPNEX_SYSTEMD_UNIT: systemdUnit,
+    OPNEX_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
+    OPNEX_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
+    OPNEX_SERVICE_KIND: GATEWAY_SERVICE_KIND,
+    OPNEX_SERVICE_VERSION: VERSION,
   };
 }
 
@@ -336,20 +336,20 @@ export function buildNodeServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const gatewayToken = normalizeOptionalString(env.OPENCLAW_GATEWAY_TOKEN);
-  const allowInsecurePrivateWs = normalizeOptionalString(env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS);
+  const gatewayToken = normalizeOptionalString(env.OPNEX_GATEWAY_TOKEN);
+  const allowInsecurePrivateWs = normalizeOptionalString(env.OPNEX_ALLOW_INSECURE_PRIVATE_WS);
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
-    OPENCLAW_GATEWAY_TOKEN: gatewayToken,
-    OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
-    OPENCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
-    OPENCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
-    OPENCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
-    OPENCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
-    OPENCLAW_LOG_PREFIX: "node",
-    OPENCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
-    OPENCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
-    OPENCLAW_SERVICE_VERSION: VERSION,
+    OPNEX_GATEWAY_TOKEN: gatewayToken,
+    OPNEX_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
+    OPNEX_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
+    OPNEX_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
+    OPNEX_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
+    OPNEX_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
+    OPNEX_LOG_PREFIX: "node",
+    OPNEX_SERVICE_MARKER: NODE_SERVICE_MARKER,
+    OPNEX_SERVICE_KIND: NODE_SERVICE_KIND,
+    OPNEX_SERVICE_VERSION: VERSION,
   };
 }
 
@@ -362,8 +362,8 @@ function buildCommonServiceEnvironment(
     TMPDIR: sharedEnv.tmpDir,
     NODE_EXTRA_CA_CERTS: sharedEnv.nodeCaCerts,
     NODE_USE_SYSTEM_CA: sharedEnv.nodeUseSystemCa,
-    OPENCLAW_STATE_DIR: sharedEnv.stateDir,
-    OPENCLAW_CONFIG_PATH: sharedEnv.configPath,
+    OPNEX_STATE_DIR: sharedEnv.stateDir,
+    OPNEX_CONFIG_PATH: sharedEnv.configPath,
     ...sharedEnv.proxyEnv,
   };
   if (sharedEnv.minimalPath) {
@@ -392,8 +392,8 @@ function resolveSharedServiceEnvironmentFields(
   extraPathDirs: string[] | undefined,
   execPath?: string,
 ): SharedServiceEnvironmentFields {
-  const stateDir = env.OPENCLAW_STATE_DIR;
-  const configPath = env.OPENCLAW_CONFIG_PATH;
+  const stateDir = env.OPNEX_STATE_DIR;
+  const configPath = env.OPNEX_CONFIG_PATH;
   const tmpDir = resolveServiceTmpDir(env, platform);
   // On macOS, launchd services don't inherit the shell environment, so Node's undici/fetch
   // cannot locate the system CA bundle. Default to /etc/ssl/cert.pem so TLS verification

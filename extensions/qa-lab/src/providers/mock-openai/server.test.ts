@@ -392,7 +392,7 @@ describe("qa mock openai server", () => {
     });
   });
 
-  it("drives the Lobster Invaders write flow and memory recall responses", async () => {
+  it("drives the OPNEX Invaders write flow and memory recall responses", async () => {
     const server = await startQaMockOpenAiServer({
       host: "127.0.0.1",
       port: 0,
@@ -401,7 +401,7 @@ describe("qa mock openai server", () => {
       await server.stop();
     });
 
-    const lobster = await fetch(`${server.baseUrl}/v1/responses`, {
+    const opnex = await fetch(`${server.baseUrl}/v1/responses`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -413,7 +413,7 @@ describe("qa mock openai server", () => {
           {
             role: "user",
             content: [
-              { type: "input_text", text: "Please build Lobster Invaders after reading context." },
+              { type: "input_text", text: "Please build OPNEX Invaders after reading context." },
             ],
           },
           {
@@ -423,10 +423,10 @@ describe("qa mock openai server", () => {
         ],
       }),
     });
-    expect(lobster.status).toBe(200);
-    const lobsterBody = await lobster.text();
-    expect(lobsterBody).toContain('"name":"write"');
-    expect(lobsterBody).toContain("lobster-invaders.html");
+    expect(opnex.status).toBe(200);
+    const opnexBody = await opnex.text();
+    expect(opnexBody).toContain('"name":"write"');
+    expect(opnexBody).toContain("opnex-invaders.html");
 
     const recall = await fetch(`${server.baseUrl}/v1/responses`, {
       method: "POST",
@@ -1093,7 +1093,7 @@ describe("qa mock openai server", () => {
       body: JSON.stringify({
         stream: true,
         instructions:
-          "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+          "@opnex Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
         input: [
           {
             role: "user",
@@ -1120,7 +1120,7 @@ describe("qa mock openai server", () => {
       body: JSON.stringify({
         stream: false,
         instructions:
-          "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+          "@opnex Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
         input: [
           {
             type: "function_call_output",
@@ -2151,7 +2151,7 @@ describe("qa mock openai server", () => {
           },
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
           },
         ],
       }),
@@ -2770,7 +2770,7 @@ describe("qa mock openai server", () => {
           makeUserInput(QA_REASONING_ONLY_RECOVERY_PROMPT),
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
           },
         ],
       }),
@@ -2795,7 +2795,7 @@ describe("qa mock openai server", () => {
           makeUserInput(QA_REASONING_ONLY_RETRY_INSTRUCTION),
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
           },
         ],
       }),
@@ -2918,7 +2918,7 @@ describe("qa mock openai server", () => {
           makeUserInput(QA_EMPTY_RESPONSE_RECOVERY_PROMPT),
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
           },
         ],
       }),
@@ -2941,7 +2941,7 @@ describe("qa mock openai server", () => {
           makeUserInput(QA_EMPTY_RESPONSE_RETRY_INSTRUCTION),
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
           },
         ],
       }),
@@ -2972,7 +2972,7 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_EXHAUSTION_PROMPT),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
         },
       ],
     });
@@ -2988,7 +2988,7 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_RETRY_INSTRUCTION),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output: "QA mission: Understand this OPNEX repo from source + docs before acting.",
         },
       ],
     });

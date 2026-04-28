@@ -1,6 +1,6 @@
 export {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type OPNEXPluginApi,
   type PluginLogger,
   type PluginRuntime,
-} from "openclaw/plugin-sdk/core";
+} from "opnex/plugin-sdk/core";

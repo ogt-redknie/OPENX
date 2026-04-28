@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
   createAgentToAgentPolicy,
   createSessionVisibilityChecker,
@@ -30,7 +30,7 @@ export {
 } from "../../plugin-sdk/session-visibility.js";
 
 export function resolveSandboxedSessionToolContext(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentSessionKey?: string;
   sandboxed?: boolean;
 }): {

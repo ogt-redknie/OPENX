@@ -1,24 +1,24 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { buildDmGroupAccountAllowlistAdapter } from "openclaw/plugin-sdk/allowlist-config-edit";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+import { DEFAULT_ACCOUNT_ID } from "opnex/plugin-sdk/account-id";
+import { buildDmGroupAccountAllowlistAdapter } from "opnex/plugin-sdk/allowlist-config-edit";
+import { createChatChannelPlugin, type ChannelPlugin } from "opnex/plugin-sdk/channel-core";
+import { createPairingPrefixStripper } from "opnex/plugin-sdk/channel-pairing";
 import {
   attachChannelToResult,
   attachChannelToResults,
-} from "openclaw/plugin-sdk/channel-send-result";
-import { PAIRING_APPROVED_MESSAGE } from "openclaw/plugin-sdk/channel-status";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveChannelMediaMaxBytes } from "openclaw/plugin-sdk/media-runtime";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/outbound-send-deps";
-import { chunkText, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/channel-send-result";
+import { PAIRING_APPROVED_MESSAGE } from "opnex/plugin-sdk/channel-status";
+import { resolveMarkdownTableMode } from "opnex/plugin-sdk/markdown-table-runtime";
+import { resolveChannelMediaMaxBytes } from "opnex/plugin-sdk/media-runtime";
+import { resolveOutboundSendDep } from "opnex/plugin-sdk/outbound-send-deps";
+import { chunkText, resolveTextChunkLimit } from "opnex/plugin-sdk/reply-chunking";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "opnex/plugin-sdk/routing";
 import {
   buildBaseChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/status-helpers";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import { resolveSignalAccount, type ResolvedSignalAccount } from "./accounts.js";
 import { signalApprovalAuth } from "./approval-auth.js";
 import { markdownToSignalTextChunks } from "./format.js";

@@ -6,14 +6,14 @@ import {
   type BindingTargetKind,
   type SessionBindingAdapter,
   type SessionBindingRecord,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { normalizeAccountId, resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
+} from "opnex/plugin-sdk/conversation-runtime";
+import { normalizeAccountId, resolveAgentIdFromSessionKey } from "opnex/plugin-sdk/routing";
 import {
   getRuntimeConfigSnapshot,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/runtime-config-snapshot";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { createDiscordRestClient } from "../client.js";
 import { resolveDiscordChannelId } from "../target-parsing.js";
 import {
@@ -188,7 +188,7 @@ function toSessionBindingRecord(
 export function createThreadBindingManager(params: {
   accountId?: string;
   token?: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   persist?: boolean;
   enableSweeper?: boolean;
   idleTimeoutMs?: number;

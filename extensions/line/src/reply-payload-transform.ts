@@ -1,5 +1,5 @@
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import {
   createAgendaCard,
   createAppleTvRemoteCard,

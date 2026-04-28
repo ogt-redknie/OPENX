@@ -1,13 +1,13 @@
 import type { ModelCatalogEntry } from "../../agents/model-catalog.js";
 import type { ModelAliasIndex } from "../../agents/model-selection.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import type { MsgContext } from "../templating.js";
 import type { InlineDirectives } from "./directive-handling.parse.js";
 import type { ElevatedLevel, ReasoningLevel, ThinkLevel, VerboseLevel } from "./directives.js";
 
 export type HandleDirectiveOnlyCoreParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   directives: InlineDirectives;
   sessionEntry: SessionEntry;
   sessionStore: Record<string, SessionEntry>;
@@ -51,7 +51,7 @@ export type ApplyInlineDirectivesFastLaneParams = HandleDirectiveOnlyCoreParams 
   ctx: MsgContext;
   agentId?: string;
   isGroup: boolean;
-  agentCfg?: NonNullable<OpenClawConfig["agents"]>["defaults"];
+  agentCfg?: NonNullable<OPNEXConfig["agents"]>["defaults"];
   modelState: {
     resolveDefaultThinkingLevel: () => Promise<ThinkLevel | undefined>;
     resolveThinkingCatalog: () => Promise<ModelCatalogEntry[] | undefined>;

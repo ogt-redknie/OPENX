@@ -1,4 +1,4 @@
-import { expectExplicitVideoGenerationCapabilities } from "openclaw/plugin-sdk/provider-test-contracts";
+import { expectExplicitVideoGenerationCapabilities } from "opnex/plugin-sdk/provider-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildComfyConfig,
@@ -89,7 +89,7 @@ describe("comfy video-generation provider", () => {
     const result = await provider.generateVideo({
       provider: "comfy",
       model: "workflow",
-      prompt: "animate a lobster",
+      prompt: "animate a opnex",
       cfg: buildComfyConfig({
         video: {
           workflow: {
@@ -111,7 +111,7 @@ describe("comfy video-generation provider", () => {
     );
     expect(parseJsonBody(1)).toEqual({
       prompt: {
-        "6": { inputs: { text: "animate a lobster" } },
+        "6": { inputs: { text: "animate a opnex" } },
         "9": { inputs: {} },
       },
     });

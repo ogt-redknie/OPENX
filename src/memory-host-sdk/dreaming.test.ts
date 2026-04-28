@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OPNEXConfig } from "../config/config.js";
 import {
   formatMemoryDreamingDay,
   isSameMemoryDreamingDay,
@@ -92,7 +92,7 @@ describe("memory dreaming host helpers", () => {
           userTimezone: "America/Los_Angeles",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     const resolved = resolveMemoryDreamingConfig({
       pluginConfig: {},
@@ -161,7 +161,7 @@ describe("memory dreaming host helpers", () => {
           { id: "gamma", workspace: "/workspace/shared" },
         ],
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(resolveMemoryDreamingWorkspaces(cfg)).toEqual([
       {
@@ -182,7 +182,7 @@ describe("memory dreaming host helpers", () => {
           workspace: "/workspace",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(resolveMemoryDreamingWorkspaces(cfg)).toEqual([
       {
@@ -208,11 +208,11 @@ describe("memory dreaming host helpers", () => {
       resolveMemoryDreamingPluginId({
         plugins: {
           slots: {
-            memory: "memos-local-openclaw-plugin",
+            memory: "memos-local-opnex-plugin",
           },
         },
-      } as OpenClawConfig),
-    ).toBe("memos-local-openclaw-plugin");
+      } as OPNEXConfig),
+    ).toBe("memos-local-opnex-plugin");
   });
 
   it("reads dreaming config from the configured memory-slot owner", () => {
@@ -220,10 +220,10 @@ describe("memory dreaming host helpers", () => {
       resolveMemoryDreamingPluginConfig({
         plugins: {
           slots: {
-            memory: "memos-local-openclaw-plugin",
+            memory: "memos-local-opnex-plugin",
           },
           entries: {
-            "memos-local-openclaw-plugin": {
+            "memos-local-opnex-plugin": {
               config: {
                 dreaming: {
                   enabled: true,
@@ -232,7 +232,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -258,7 +258,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -281,7 +281,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -297,7 +297,7 @@ describe("memory dreaming host helpers", () => {
             memory: "none",
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toBe("memory-core");
 
     expect(
@@ -316,7 +316,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as OpenClawConfig),
+      } as OPNEXConfig),
     ).toEqual({
       dreaming: {
         enabled: true,

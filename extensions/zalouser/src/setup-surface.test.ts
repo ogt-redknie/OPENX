@@ -2,9 +2,9 @@ import {
   createPluginSetupWizardConfigure,
   createTestWizardPrompter,
   runSetupWizardConfigure,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "opnex/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { OPNEXConfig } from "../runtime-api.js";
 import "./zalo-js.test-mocks.js";
 import { zalouserSetupWizard } from "./setup-surface.js";
 import { zalouserSetupPlugin } from "./setup-test-helpers.js";
@@ -12,7 +12,7 @@ import { zalouserSetupPlugin } from "./setup-test-helpers.js";
 const zalouserConfigure = createPluginSetupWizardConfigure(zalouserSetupPlugin);
 
 async function runSetup(params: {
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   prompter: ReturnType<typeof createTestWizardPrompter>;
   options?: Record<string, unknown>;
   forceAllowFrom?: boolean;
@@ -234,7 +234,7 @@ describe("zalouser setup wizard", () => {
         plugins: {
           allow: ["telegram"],
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       prompter,
     });
 
@@ -257,14 +257,14 @@ describe("zalouser setup wizard", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
         "work",
       ),
     ).toBe("allowlist");
   });
 
   it("reports account-scoped config keys for named accounts", () => {
-    expect(zalouserSetupWizard.dmPolicy?.resolveConfigKeys?.({} as OpenClawConfig, "work")).toEqual(
+    expect(zalouserSetupWizard.dmPolicy?.resolveConfigKeys?.({} as OPNEXConfig, "work")).toEqual(
       {
         policyKey: "channels.zalouser.accounts.work.dmPolicy",
         allowFromKey: "channels.zalouser.accounts.work.allowFrom",
@@ -287,7 +287,7 @@ describe("zalouser setup wizard", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     expect(zalouserSetupWizard.dmPolicy?.getCurrent(cfg)).toBe("allowlist");
     expect(zalouserSetupWizard.dmPolicy?.resolveConfigKeys?.(cfg)).toEqual({
@@ -316,7 +316,7 @@ describe("zalouser setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       "open",
       "work",
     );
@@ -348,7 +348,7 @@ describe("zalouser setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
       prompter,
       options: { quickstartDefaults: true },
       accountOverrides: { zalouser: "work" },

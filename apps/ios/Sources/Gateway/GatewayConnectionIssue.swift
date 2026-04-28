@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import OPNEXKit
 
 enum GatewayConnectionIssue: Equatable {
     case none

@@ -1,10 +1,10 @@
-import type { OpenClawPluginApi } from "../plugin-entry.js";
+import type { OPNEXPluginApi } from "../plugin-entry.js";
 import {
   createPluginRecord,
   createPluginRegistry,
   registerProviderPlugins as registerProviders,
   requireRegisteredProvider as requireProvider,
-  type OpenClawConfig,
+  type OPNEXConfig,
   type PluginRecord,
   type PluginRuntime,
 } from "../testing.js";
@@ -55,7 +55,7 @@ export function assertNoImportTimeSideEffects(params: {
   );
 }
 
-export function createPluginRegistryFixture(config = {} as OpenClawConfig) {
+export function createPluginRegistryFixture(config = {} as OPNEXConfig) {
   return {
     config,
     registry: createPluginRegistry({
@@ -72,9 +72,9 @@ export function createPluginRegistryFixture(config = {} as OpenClawConfig) {
 
 export function registerTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   record: PluginRecord;
-  register(api: OpenClawPluginApi): void;
+  register(api: OPNEXPluginApi): void;
 }) {
   params.registry.registry.plugins.push(params.record);
   params.register(
@@ -86,13 +86,13 @@ export function registerTestPlugin(params: {
 
 export function registerVirtualTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   id: string;
   name: string;
   source?: string;
   kind?: PluginRecord["kind"];
   contracts?: PluginRecord["contracts"];
-  register(this: void, api: OpenClawPluginApi): void;
+  register(this: void, api: OPNEXPluginApi): void;
 }) {
   registerTestPlugin({
     registry: params.registry,

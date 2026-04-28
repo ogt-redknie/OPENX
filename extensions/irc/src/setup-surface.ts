@@ -1,20 +1,20 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/routing";
+import { DEFAULT_ACCOUNT_ID } from "opnex/plugin-sdk/routing";
 import type {
   ChannelSetupDmPolicy,
   ChannelSetupWizard,
   WizardPrompter,
-} from "openclaw/plugin-sdk/setup";
+} from "opnex/plugin-sdk/setup";
 import {
   createAllowFromSection,
   createPromptParsedAllowFromForAccount,
   createStandardChannelSetupStatus,
   formatDocsLink,
   setSetupChannelEnabled,
-} from "openclaw/plugin-sdk/setup";
+} from "opnex/plugin-sdk/setup";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { resolveDefaultIrcAccountId, resolveIrcAccount } from "./accounts.js";
 import {
   isChannelTarget,
@@ -303,7 +303,7 @@ export const ircSetupWizard: ChannelSetupWizard = {
       initialValue: ({ cfg, accountId, credentialValues }) =>
         resolveIrcAccount({ cfg: cfg as CoreConfig, accountId }).config.username ||
         credentialValues.token ||
-        "openclaw",
+        "opnex",
       validate: ({ value }) => (normalizeStringifiedOptionalString(value) ? undefined : "Required"),
       normalizeValue: ({ value }) => normalizeStringifiedOptionalString(value) ?? "",
       applySet: async ({ cfg, accountId, value }) =>
@@ -319,7 +319,7 @@ export const ircSetupWizard: ChannelSetupWizard = {
         resolveIrcAccount({ cfg: cfg as CoreConfig, accountId }).config.realname || undefined,
       shouldPrompt: ({ credentialValues }) => credentialValues[USE_ENV_FLAG] !== "1",
       initialValue: ({ cfg, accountId }) =>
-        resolveIrcAccount({ cfg: cfg as CoreConfig, accountId }).config.realname || "OpenClaw",
+        resolveIrcAccount({ cfg: cfg as CoreConfig, accountId }).config.realname || "OPNEX",
       validate: ({ value }) => (normalizeStringifiedOptionalString(value) ? undefined : "Required"),
       normalizeValue: ({ value }) => normalizeStringifiedOptionalString(value) ?? "",
       applySet: async ({ cfg, accountId, value }) =>
@@ -331,7 +331,7 @@ export const ircSetupWizard: ChannelSetupWizard = {
     {
       inputKey: "groupChannels",
       message: "Auto-join IRC channels (optional, comma-separated)",
-      placeholder: "#openclaw, #ops",
+      placeholder: "#opnex, #ops",
       required: false,
       applyEmptyValue: true,
       currentValue: ({ cfg, accountId }) =>
@@ -357,7 +357,7 @@ export const ircSetupWizard: ChannelSetupWizard = {
   ],
   groupAccess: {
     label: "IRC channels",
-    placeholder: "#openclaw, #ops, *",
+    placeholder: "#opnex, #ops, *",
     currentPolicy: ({ cfg, accountId }) =>
       resolveIrcAccount({ cfg: cfg as CoreConfig, accountId }).config.groupPolicy ?? "allowlist",
     currentEntries: ({ cfg, accountId }) =>
@@ -430,7 +430,7 @@ export const ircSetupWizard: ChannelSetupWizard = {
     title: "IRC next steps",
     lines: [
       "Next: restart gateway and verify status.",
-      "Command: openclaw channels status --probe",
+      "Command: opnex channels status --probe",
       `Docs: ${formatDocsLink("/channels/irc", "channels/irc")}`,
     ],
   },

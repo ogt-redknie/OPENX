@@ -18,14 +18,14 @@ import { isNixMode } from "../config/paths.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import { applyConfigOverrides } from "../config/runtime-overrides.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { clearAgentRunContext } from "../infra/agent-events.js";
 import {
   isDiagnosticsEnabled,
   setDiagnosticsEnabledForProcess,
 } from "../infra/diagnostic-events.js";
 import { isTruthyEnvValue, isVitestRuntimeEnv, logAcceptedEnvOption } from "../infra/env.js";
-import { ensureOpenClawCliOnPath } from "../infra/path-env.js";
+import { ensureOPNEXCliOnPath } from "../infra/path-env.js";
 import { setGatewaySigusr1RestartPolicy, setPreRestartDeferralCheck } from "../infra/restart.js";
 import { enqueueSystemEvent } from "../infra/system-events.js";
 import type { VoiceWakeRoutingConfig } from "../infra/voicewake-routing.js";
@@ -101,7 +101,7 @@ import { maybeSeedControlUiAllowedOriginsAtStartup } from "./startup-control-ui-
 
 export { __resetModelCatalogCacheForTest } from "./server-model-catalog.js";
 
-ensureOpenClawCliOnPath();
+ensureOPNEXCliOnPath();
 
 const MAX_MEDIA_TTL_HOURS = 24 * 7;
 
@@ -163,7 +163,7 @@ const gatewayRuntime = runtimeForLogger(log);
 const canvasRuntime = runtimeForLogger(logCanvas);
 
 function createGatewayStartupTrace() {
-  const enabled = isTruthyEnvValue(process.env.OPENCLAW_GATEWAY_STARTUP_TRACE);
+  const enabled = isTruthyEnvValue(process.env.OPNEX_GATEWAY_STARTUP_TRACE);
   const eventLoopDelay = enabled ? monitorEventLoopDelay({ resolution: 10 }) : undefined;
   eventLoopDelay?.enable();
   const started = performance.now();
@@ -317,16 +317,16 @@ export async function startGatewayServer(
   bootstrapGatewayNetworkRuntime();
 
   const minimalTestGateway =
-    isVitestRuntimeEnv() && process.env.OPENCLAW_TEST_MINIMAL_GATEWAY === "1";
+    isVitestRuntimeEnv() && process.env.OPNEX_TEST_MINIMAL_GATEWAY === "1";
 
   // Ensure all default port derivations (browser/canvas) see the actual runtime port.
-  process.env.OPENCLAW_GATEWAY_PORT = String(port);
+  process.env.OPNEX_GATEWAY_PORT = String(port);
   logAcceptedEnvOption({
-    key: "OPENCLAW_RAW_STREAM",
+    key: "OPNEX_RAW_STREAM",
     description: "raw stream logging enabled",
   });
   logAcceptedEnvOption({
-    key: "OPENCLAW_RAW_STREAM_PATH",
+    key: "OPNEX_RAW_STREAM_PATH",
     description: "raw stream log path override",
   });
   const startupTrace = createGatewayStartupTrace();
@@ -343,7 +343,7 @@ export async function startGatewayServer(
   const emitSecretsStateEvent = (
     code: "SECRETS_RELOADER_DEGRADED" | "SECRETS_RELOADER_RECOVERED",
     message: string,
-    cfg: OpenClawConfig,
+    cfg: OPNEXConfig,
   ) => {
     enqueueSystemEvent(`[${code}] ${message}`, {
       sessionKey: resolveMainSessionKey(cfg),
@@ -355,7 +355,7 @@ export async function startGatewayServer(
     emitStateEvent: emitSecretsStateEvent,
   });
 
-  let cfgAtStart: OpenClawConfig;
+  let cfgAtStart: OPNEXConfig;
   let startupInternalWriteHash: string | null = null;
   let startupLastGoodSnapshot = configSnapshot;
   const startupActivationSourceConfig = configSnapshot.sourceConfig;
@@ -377,7 +377,7 @@ export async function startGatewayServer(
       );
     } else {
       log.warn(
-        "Gateway auth token was missing. Generated a runtime token for this startup without changing config; restart will generate a different token. Persist one with `openclaw config set gateway.auth.mode token` and `openclaw config set gateway.auth.token <token>`.",
+        "Gateway auth token was missing. Generated a runtime token for this startup without changing config; restart will generate a different token. Persist one with `opnex config set gateway.auth.mode token` and `opnex config set gateway.auth.token <token>`.",
       );
     }
   }
@@ -510,7 +510,7 @@ export async function startGatewayServer(
       env: process.env,
       tailscaleMode,
     });
-  const resolveSharedGatewaySessionGenerationForConfig = (config: OpenClawConfig) =>
+  const resolveSharedGatewaySessionGenerationForConfig = (config: OPNEXConfig) =>
     resolveSharedGatewaySessionGeneration(
       resolveGatewayAuth({
         authConfig: config.gateway?.auth,
@@ -852,7 +852,7 @@ export async function startGatewayServer(
       nodeUnsubscribeAll,
       hasConnectedMobileNode: hasMobileNodeConnected,
       clients,
-      enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: OpenClawConfig) => {
+      enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: OPNEXConfig) => {
         enforceSharedGatewaySessionGenerationForConfigWrite({
           state: sharedGatewaySessionGenerationState,
           nextConfig,

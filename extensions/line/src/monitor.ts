@@ -1,24 +1,24 @@
 import type { webhook } from "@line/bot-sdk";
-import { createChannelReplyPipeline } from "openclaw/plugin-sdk/channel-reply-pipeline";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import { createChannelReplyPipeline } from "opnex/plugin-sdk/channel-reply-pipeline";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   dispatchReplyWithBufferedBlockDispatcher,
   chunkMarkdownText,
-} from "openclaw/plugin-sdk/reply-runtime";
+} from "opnex/plugin-sdk/reply-runtime";
 import {
   danger,
   logVerbose,
   waitForAbortSignal,
   type RuntimeEnv,
-} from "openclaw/plugin-sdk/runtime-env";
+} from "opnex/plugin-sdk/runtime-env";
 import {
   normalizePluginHttpPath,
   registerPluginHttpRoute,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "opnex/plugin-sdk/webhook-ingress";
 import {
   beginWebhookRequestPipelineOrReject,
   createWebhookInFlightLimiter,
-} from "openclaw/plugin-sdk/webhook-request-guards";
+} from "opnex/plugin-sdk/webhook-request-guards";
 import { resolveDefaultLineAccountId } from "./accounts.js";
 import { deliverLineAutoReply } from "./auto-reply-delivery.js";
 import { createLineBot } from "./bot.js";
@@ -45,7 +45,7 @@ export interface MonitorLineProviderOptions {
   channelAccessToken: string;
   channelSecret: string;
   accountId?: string;
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   runtime: RuntimeEnv;
   abortSignal?: AbortSignal;
   webhookUrl?: string;
@@ -102,7 +102,7 @@ export function clearLineRuntimeStateForTests() {
 }
 
 function startLineLoadingKeepalive(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   userId: string;
   accountId?: string;
   intervalMs?: number;

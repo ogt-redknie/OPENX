@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/together-provider",
+  "name": "@opnex/together-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Together provider plugin",
+  "description": "OPNEX Together provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

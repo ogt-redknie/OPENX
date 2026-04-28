@@ -1,21 +1,21 @@
 {
-  "name": "@openclaw/bluebubbles",
+  "name": "@opnex/bluebubbles",
   "version": "2026.4.25",
-  "description": "OpenClaw BlueBubbles channel plugin",
+  "description": "OPNEX BlueBubbles channel plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*",
+    "opnex": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.4.25"
+    "opnex": ">=2026.4.25"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "opnex": {
       "optional": true
     }
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],
@@ -44,7 +44,7 @@
       ]
     },
     "install": {
-      "npmSpec": "@openclaw/bluebubbles",
+      "npmSpec": "@opnex/bluebubbles",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -52,7 +52,7 @@
       "pluginApi": ">=2026.4.25"
     },
     "build": {
-      "openclawVersion": "2026.4.25"
+      "opnexVersion": "2026.4.25"
     },
     "release": {
       "publishToClawHub": true,

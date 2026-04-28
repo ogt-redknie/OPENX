@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { vi } from "vitest";
 import type { createDiscordMessageHandler } from "./message-handler.js";
 import { createNoopThreadBindingManager } from "./thread-bindings.js";
@@ -11,7 +11,7 @@ export function createDiscordHandlerParams(overrides?: {
   abortSignal?: AbortSignal;
   workerRunTimeoutMs?: number;
 }): Parameters<typeof createDiscordMessageHandler>[0] {
-  const cfg: OpenClawConfig = {
+  const cfg: OPNEXConfig = {
     channels: {
       discord: {
         enabled: true,

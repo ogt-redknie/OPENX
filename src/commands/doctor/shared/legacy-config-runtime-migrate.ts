@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../../config/types.opnex.js";
 import { normalizeBaseCompatibilityConfigValues } from "./legacy-config-compatibility-base.js";
 
-export function normalizeRuntimeCompatibilityConfigValues(cfg: OpenClawConfig): {
-  config: OpenClawConfig;
+export function normalizeRuntimeCompatibilityConfigValues(cfg: OPNEXConfig): {
+  config: OPNEXConfig;
   changes: string[];
 } {
   const changes: string[] = [];

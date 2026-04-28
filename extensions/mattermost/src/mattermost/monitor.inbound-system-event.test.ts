@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, RuntimeEnv } from "./runtime-api.js";
+import type { OPNEXConfig, RuntimeEnv } from "./runtime-api.js";
 
 class FakeWebSocket {
   public readonly sent: string[] = [];
@@ -131,7 +131,7 @@ vi.mock("./runtime-api.js", async () => {
   };
 });
 
-function createRuntimeCore(cfg: OpenClawConfig) {
+function createRuntimeCore(cfg: OPNEXConfig) {
   return {
     config: {
       current: () => cfg,
@@ -211,7 +211,7 @@ function createRuntimeCore(cfg: OpenClawConfig) {
         }),
       },
       session: {
-        resolveStorePath: () => "/tmp/openclaw-test-sessions.json",
+        resolveStorePath: () => "/tmp/opnex-test-sessions.json",
         updateLastRoute: vi.fn(async () => {}),
       },
       text: {
@@ -226,7 +226,7 @@ function createRuntimeCore(cfg: OpenClawConfig) {
   };
 }
 
-const testConfig: OpenClawConfig = {
+const testConfig: OPNEXConfig = {
   channels: {
     mattermost: {
       enabled: true,
@@ -264,7 +264,7 @@ describe("mattermost inbound user posts", () => {
     });
     mockState.fetchMattermostMe.mockResolvedValue({
       id: "bot-user",
-      username: "openclaw",
+      username: "opnex",
       update_at: 1,
     });
     mockState.registerMattermostMonitorSlashCommands.mockResolvedValue(undefined);

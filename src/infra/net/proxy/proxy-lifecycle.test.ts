@@ -44,8 +44,8 @@ describe("startProxy", () => {
     "GLOBAL_AGENT_HTTPS_PROXY",
     "GLOBAL_AGENT_FORCE_GLOBAL_AGENT",
     "GLOBAL_AGENT_NO_PROXY",
-    "OPENCLAW_PROXY_ACTIVE",
-    "OPENCLAW_PROXY_URL",
+    "OPNEX_PROXY_ACTIVE",
+    "OPNEX_PROXY_URL",
   ];
   const originalHttpRequest = http.request;
   const originalHttpGet = http.get;
@@ -111,8 +111,8 @@ describe("startProxy", () => {
     expect(mockLogWarn).not.toHaveBeenCalled();
   });
 
-  it("uses OPENCLAW_PROXY_URL when config proxyUrl is omitted", async () => {
-    process.env["OPENCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
+  it("uses OPNEX_PROXY_URL when config proxyUrl is omitted", async () => {
+    process.env["OPNEX_PROXY_URL"] = "http://127.0.0.1:3128";
 
     const handle = await startProxy({ enabled: true });
 
@@ -120,8 +120,8 @@ describe("startProxy", () => {
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
   });
 
-  it("prefers config proxyUrl over OPENCLAW_PROXY_URL", async () => {
-    process.env["OPENCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
+  it("prefers config proxyUrl over OPNEX_PROXY_URL", async () => {
+    process.env["OPNEX_PROXY_URL"] = "http://127.0.0.1:3128";
 
     const handle = await startProxy({
       enabled: true,
@@ -132,8 +132,8 @@ describe("startProxy", () => {
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3129");
   });
 
-  it("throws for HTTPS proxy URLs from OPENCLAW_PROXY_URL", async () => {
-    process.env["OPENCLAW_PROXY_URL"] = "https://127.0.0.1:3128";
+  it("throws for HTTPS proxy URLs from OPNEX_PROXY_URL", async () => {
+    process.env["OPNEX_PROXY_URL"] = "https://127.0.0.1:3128";
 
     await expect(startProxy({ enabled: true })).rejects.toThrow("http:// forward proxy");
 
@@ -155,7 +155,7 @@ describe("startProxy", () => {
     expect(process.env["GLOBAL_AGENT_HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
     expect(process.env["GLOBAL_AGENT_HTTPS_PROXY"]).toBe("http://127.0.0.1:3128");
     expect(process.env["GLOBAL_AGENT_FORCE_GLOBAL_AGENT"]).toBe("true");
-    expect(process.env["OPENCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["OPNEX_PROXY_ACTIVE"]).toBe("1");
   });
 
   it("redacts proxy credentials before logging the active proxy URL", async () => {
@@ -223,7 +223,7 @@ describe("startProxy", () => {
     expect(process.env["GLOBAL_AGENT_HTTP_PROXY"]).toBe("http://previous-global.example.com:8080");
     expect(process.env["GLOBAL_AGENT_HTTPS_PROXY"]).toBe("http://previous-global.example.com:8443");
     expect(process.env["GLOBAL_AGENT_NO_PROXY"]).toBe("global.corp.example.com");
-    expect(process.env["OPENCLAW_PROXY_ACTIVE"]).toBeUndefined();
+    expect(process.env["OPNEX_PROXY_ACTIVE"]).toBeUndefined();
     const agent = (global as Record<string, unknown>)["GLOBAL_AGENT"] as Record<string, unknown>;
     expect(agent["HTTP_PROXY"]).toBe("http://previous-global.example.com:8080");
     expect(agent["HTTPS_PROXY"]).toBe("http://previous-global.example.com:8443");
@@ -304,7 +304,7 @@ describe("startProxy", () => {
     expect(http.request).toBe(patchedHttpRequest);
     expect(https.request).toBe(patchedHttpsRequest);
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3129");
-    expect(process.env["OPENCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["OPNEX_PROXY_ACTIVE"]).toBe("1");
 
     await stopProxy(secondHandle);
 
@@ -313,7 +313,7 @@ describe("startProxy", () => {
     expect(https.request).toBe(originalHttpsRequest);
     expect(https.get).toBe(originalHttpsGet);
     expect(process.env["HTTP_PROXY"]).toBeUndefined();
-    expect(process.env["OPENCLAW_PROXY_ACTIVE"]).toBeUndefined();
+    expect(process.env["OPNEX_PROXY_ACTIVE"]).toBeUndefined();
   });
 
   it("restores env and throws when undici activation fails", async () => {

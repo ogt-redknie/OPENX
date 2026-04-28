@@ -26,7 +26,7 @@ on:
       package_spec:
         description: Published package spec when source=npm
         required: false
-        default: openclaw@beta
+        default: opnex@beta
         type: string
       package_url:
         description: HTTPS .tgz URL when source=url
@@ -97,7 +97,7 @@ on:
       package_spec:
         description: Published package spec when source=npm
         required: false
-        default: openclaw@beta
+        default: opnex@beta
         type: string
       package_url:
         description: HTTPS .tgz URL when source=url
@@ -174,15 +174,15 @@ on:
         required: false
       OPENCODE_ZEN_API_KEY:
         required: false
-      OPENCLAW_LIVE_BROWSER_CDP_URL:
+      OPNEX_LIVE_BROWSER_CDP_URL:
         required: false
-      OPENCLAW_LIVE_SETUP_TOKEN:
+      OPNEX_LIVE_SETUP_TOKEN:
         required: false
-      OPENCLAW_LIVE_SETUP_TOKEN_MODEL:
+      OPNEX_LIVE_SETUP_TOKEN_MODEL:
         required: false
-      OPENCLAW_LIVE_SETUP_TOKEN_PROFILE:
+      OPNEX_LIVE_SETUP_TOKEN_PROFILE:
         required: false
-      OPENCLAW_LIVE_SETUP_TOKEN_VALUE:
+      OPNEX_LIVE_SETUP_TOKEN_VALUE:
         required: false
       GEMINI_API_KEY:
         required: false
@@ -214,25 +214,25 @@ on:
         required: false
       CLAUDE_CODE_OAUTH_TOKEN:
         required: false
-      OPENCLAW_CODEX_AUTH_JSON:
+      OPNEX_CODEX_AUTH_JSON:
         required: false
-      OPENCLAW_CODEX_CONFIG_TOML:
+      OPNEX_CODEX_CONFIG_TOML:
         required: false
-      OPENCLAW_CLAUDE_JSON:
+      OPNEX_CLAUDE_JSON:
         required: false
-      OPENCLAW_CLAUDE_CREDENTIALS_JSON:
+      OPNEX_CLAUDE_CREDENTIALS_JSON:
         required: false
-      OPENCLAW_CLAUDE_SETTINGS_JSON:
+      OPNEX_CLAUDE_SETTINGS_JSON:
         required: false
-      OPENCLAW_CLAUDE_SETTINGS_LOCAL_JSON:
+      OPNEX_CLAUDE_SETTINGS_LOCAL_JSON:
         required: false
-      OPENCLAW_GEMINI_SETTINGS_JSON:
+      OPNEX_GEMINI_SETTINGS_JSON:
         required: false
       FIREWORKS_API_KEY:
         required: false
-      OPENCLAW_QA_CONVEX_SITE_URL:
+      OPNEX_QA_CONVEX_SITE_URL:
         required: false
-      OPENCLAW_QA_CONVEX_SECRET_CI:
+      OPNEX_QA_CONVEX_SECRET_CI:
         required: false
 
 permissions:
@@ -317,7 +317,7 @@ jobs:
             artifact_dir=".artifacts/package-candidate-input"
           fi
 
-          node scripts/resolve-openclaw-package-candidate.mjs \
+          node scripts/resolve-opnex-package-candidate.mjs \
             --source "$SOURCE" \
             --package-ref "$PACKAGE_REF" \
             --package-spec "$PACKAGE_SPEC" \
@@ -325,7 +325,7 @@ jobs:
             --package-sha256 "$PACKAGE_SHA256" \
             --artifact-dir "${artifact_dir:-.}" \
             --output-dir .artifacts/docker-e2e-package \
-            --output-name openclaw-current.tgz \
+            --output-name opnex-current.tgz \
             --metadata .artifacts/docker-e2e-package/package-candidate.json \
             --github-output "$GITHUB_OUTPUT"
 
@@ -396,7 +396,7 @@ jobs:
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
           path: |
-            .artifacts/docker-e2e-package/openclaw-current.tgz
+            .artifacts/docker-e2e-package/opnex-current.tgz
             .artifacts/docker-e2e-package/package-candidate.json
           retention-days: 14
           if-no-files-found: error
@@ -427,7 +427,7 @@ jobs:
   docker_acceptance:
     name: Docker product acceptance
     needs: resolve_package
-    uses: ./.github/workflows/openclaw-live-and-e2e-checks-reusable.yml
+    uses: ./.github/workflows/opnex-live-and-e2e-checks-reusable.yml
     with:
       ref: ${{ inputs.workflow_ref }}
       include_repo_e2e: false
@@ -455,11 +455,11 @@ jobs:
       MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
       OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
       OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
-      OPENCLAW_LIVE_BROWSER_CDP_URL: ${{ secrets.OPENCLAW_LIVE_BROWSER_CDP_URL }}
-      OPENCLAW_LIVE_SETUP_TOKEN: ${{ secrets.OPENCLAW_LIVE_SETUP_TOKEN }}
-      OPENCLAW_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.OPENCLAW_LIVE_SETUP_TOKEN_MODEL }}
-      OPENCLAW_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.OPENCLAW_LIVE_SETUP_TOKEN_PROFILE }}
-      OPENCLAW_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.OPENCLAW_LIVE_SETUP_TOKEN_VALUE }}
+      OPNEX_LIVE_BROWSER_CDP_URL: ${{ secrets.OPNEX_LIVE_BROWSER_CDP_URL }}
+      OPNEX_LIVE_SETUP_TOKEN: ${{ secrets.OPNEX_LIVE_SETUP_TOKEN }}
+      OPNEX_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.OPNEX_LIVE_SETUP_TOKEN_MODEL }}
+      OPNEX_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.OPNEX_LIVE_SETUP_TOKEN_PROFILE }}
+      OPNEX_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.OPNEX_LIVE_SETUP_TOKEN_VALUE }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -475,13 +475,13 @@ jobs:
       BYTEPLUS_ACCESS_KEY_ID: ${{ secrets.BYTEPLUS_ACCESS_KEY_ID }}
       BYTEPLUS_SECRET_ACCESS_KEY: ${{ secrets.BYTEPLUS_SECRET_ACCESS_KEY }}
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-      OPENCLAW_CODEX_AUTH_JSON: ${{ secrets.OPENCLAW_CODEX_AUTH_JSON }}
-      OPENCLAW_CODEX_CONFIG_TOML: ${{ secrets.OPENCLAW_CODEX_CONFIG_TOML }}
-      OPENCLAW_CLAUDE_JSON: ${{ secrets.OPENCLAW_CLAUDE_JSON }}
-      OPENCLAW_CLAUDE_CREDENTIALS_JSON: ${{ secrets.OPENCLAW_CLAUDE_CREDENTIALS_JSON }}
-      OPENCLAW_CLAUDE_SETTINGS_JSON: ${{ secrets.OPENCLAW_CLAUDE_SETTINGS_JSON }}
-      OPENCLAW_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.OPENCLAW_CLAUDE_SETTINGS_LOCAL_JSON }}
-      OPENCLAW_GEMINI_SETTINGS_JSON: ${{ secrets.OPENCLAW_GEMINI_SETTINGS_JSON }}
+      OPNEX_CODEX_AUTH_JSON: ${{ secrets.OPNEX_CODEX_AUTH_JSON }}
+      OPNEX_CODEX_CONFIG_TOML: ${{ secrets.OPNEX_CODEX_CONFIG_TOML }}
+      OPNEX_CLAUDE_JSON: ${{ secrets.OPNEX_CLAUDE_JSON }}
+      OPNEX_CLAUDE_CREDENTIALS_JSON: ${{ secrets.OPNEX_CLAUDE_CREDENTIALS_JSON }}
+      OPNEX_CLAUDE_SETTINGS_JSON: ${{ secrets.OPNEX_CLAUDE_SETTINGS_JSON }}
+      OPNEX_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.OPNEX_CLAUDE_SETTINGS_LOCAL_JSON }}
+      OPNEX_GEMINI_SETTINGS_JSON: ${{ secrets.OPNEX_GEMINI_SETTINGS_JSON }}
       FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}
 
   package_telegram:
@@ -492,14 +492,14 @@ jobs:
     with:
       package_spec: ${{ inputs.package_spec }}
       package_artifact_name: ${{ needs.resolve_package.outputs.package_artifact_name }}
-      package_label: openclaw@${{ needs.resolve_package.outputs.package_version }}
+      package_label: opnex@${{ needs.resolve_package.outputs.package_version }}
       harness_ref: ${{ inputs.source == 'ref' && inputs.package_ref || inputs.workflow_ref }}
       provider_mode: ${{ needs.resolve_package.outputs.telegram_mode }}
       scenario: ${{ inputs.telegram_scenarios }}
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      OPENCLAW_QA_CONVEX_SITE_URL: ${{ secrets.OPENCLAW_QA_CONVEX_SITE_URL }}
-      OPENCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.OPENCLAW_QA_CONVEX_SECRET_CI }}
+      OPNEX_QA_CONVEX_SITE_URL: ${{ secrets.OPNEX_QA_CONVEX_SITE_URL }}
+      OPNEX_QA_CONVEX_SECRET_CI: ${{ secrets.OPNEX_QA_CONVEX_SECRET_CI }}
 
   summary:
     name: Verify package acceptance

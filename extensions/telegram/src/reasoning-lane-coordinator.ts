@@ -1,10 +1,10 @@
-import { formatReasoningMessage } from "openclaw/plugin-sdk/agent-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { findCodeRegions, isInsideCode } from "openclaw/plugin-sdk/text-runtime";
+import { formatReasoningMessage } from "opnex/plugin-sdk/agent-runtime";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import { findCodeRegions, isInsideCode } from "opnex/plugin-sdk/text-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   stripReasoningTagsFromText,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 
 const REASONING_MESSAGE_PREFIX = "Reasoning:\n";
 const REASONING_TAG_PREFIXES = [

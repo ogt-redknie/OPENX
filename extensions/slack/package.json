@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@opnex/slack",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw Slack channel plugin",
+  "description": "OPNEX Slack channel plugin",
   "type": "module",
   "dependencies": {
     "@slack/bolt": "^4.7.1",
@@ -11,9 +11,9 @@
     "typebox": "1.1.33"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ],

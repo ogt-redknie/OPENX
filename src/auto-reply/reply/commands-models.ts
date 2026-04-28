@@ -13,7 +13,7 @@ import {
 } from "../../agents/model-selection.js";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -61,7 +61,7 @@ type ParsedModelsCommand =
     };
 
 export async function buildModelsProviderData(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   agentId?: string,
 ): Promise<ModelsProviderData> {
   const resolvedDefault = resolveDefaultModelForAgent({
@@ -166,8 +166,8 @@ export async function buildModelsProviderData(
     const choices = runtimeChoicesByProvider.get(provider) ?? [
       {
         id: "pi",
-        label: "OpenClaw Pi Default",
-        description: "Use the built-in OpenClaw Pi runtime.",
+        label: "OPNEX Pi Default",
+        description: "Use the built-in OPNEX Pi runtime.",
       },
     ];
     choices.push({
@@ -260,7 +260,7 @@ function parseModelsArgs(raw: string): ParsedModelsCommand {
 
 function resolveProviderLabel(params: {
   provider: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentDir?: string;
   sessionEntry?: ModelsCommandSessionEntry;
 }): string {
@@ -279,7 +279,7 @@ function resolveProviderLabel(params: {
 export function formatModelsAvailableHeader(params: {
   provider: string;
   total: number;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentDir?: string;
   sessionEntry?: ModelsCommandSessionEntry;
 }): string {
@@ -321,7 +321,7 @@ function buildProviderInfos(params: {
 }
 
 export async function resolveModelsCommandReply(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   commandBodyNormalized: string;
   surface?: string;
   currentModel?: string;

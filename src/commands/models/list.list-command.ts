@@ -64,7 +64,7 @@ export async function modelsListCommand(
   if (providerFilter === null) {
     return;
   }
-  const [{ loadAuthProfileStoreWithoutExternalProfiles }, { resolveOpenClawAgentDir }] =
+  const [{ loadAuthProfileStoreWithoutExternalProfiles }, { resolveOPNEXAgentDir }] =
     await Promise.all([
       import("../../agents/auth-profiles/store.js"),
       import("../../agents/agent-paths.js"),
@@ -74,7 +74,7 @@ export async function modelsListCommand(
     runtime,
   });
   const authStore = loadAuthProfileStoreWithoutExternalProfiles();
-  const agentDir = resolveOpenClawAgentDir();
+  const agentDir = resolveOPNEXAgentDir();
 
   let modelRegistry: ModelRegistry | undefined;
   let registryModels: Model<Api>[] = [];

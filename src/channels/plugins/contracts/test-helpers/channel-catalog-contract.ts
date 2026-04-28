@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { resolvePreferredOpenClawTmpDir } from "../../../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredOPNEXTmpDir } from "../../../../infra/tmp-opnex-dir.js";
 import { getChannelPluginCatalogEntry, listChannelPluginCatalogEntries } from "../../catalog.js";
 
 type CatalogEntryMeta = {
@@ -45,20 +45,20 @@ export function describeBundledMetadataOnlyChannelCatalogContract(params: {
   describe(`${params.pluginId} bundled metadata-only channel catalog contract`, () => {
     it("includes the bundled metadata-only channel entry when the runtime entrypoint is omitted", () => {
       const packageRoot = fs.mkdtempSync(
-        path.join(resolvePreferredOpenClawTmpDir(), "openclaw-bundled-catalog-"),
+        path.join(resolvePreferredOPNEXTmpDir(), "opnex-bundled-catalog-"),
       );
       const bundledDir = path.join(packageRoot, "dist", "extensions", params.pluginId);
       fs.mkdirSync(bundledDir, { recursive: true });
       fs.writeFileSync(
         path.join(packageRoot, "package.json"),
-        JSON.stringify({ name: "openclaw" }),
+        JSON.stringify({ name: "opnex" }),
         "utf8",
       );
       fs.writeFileSync(
         path.join(bundledDir, "package.json"),
         JSON.stringify({
           name: params.packageName,
-          openclaw: {
+          opnex: {
             extensions: ["./index.js"],
             channel: params.meta,
             install: {
@@ -71,7 +71,7 @@ export function describeBundledMetadataOnlyChannelCatalogContract(params: {
       );
       fs.writeFileSync(path.join(bundledDir, "index.js"), "export default {};\n", "utf8");
       fs.writeFileSync(
-        path.join(bundledDir, "openclaw.plugin.json"),
+        path.join(bundledDir, "opnex.plugin.json"),
         JSON.stringify({ id: params.pluginId, channels: [params.meta.id], configSchema: {} }),
         "utf8",
       );
@@ -79,7 +79,7 @@ export function describeBundledMetadataOnlyChannelCatalogContract(params: {
       const entry = listChannelPluginCatalogEntries({
         env: {
           ...process.env,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(packageRoot, "dist", "extensions"),
+          OPNEX_BUNDLED_PLUGINS_DIR: path.join(packageRoot, "dist", "extensions"),
         },
       }).find((item) => item.id === params.meta.id);
 
@@ -101,7 +101,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
   describe(`${params.channelId} official fallback channel catalog contract`, () => {
     it("includes shipped official channel catalog entries when bundled metadata is omitted", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredOpenClawTmpDir(), "openclaw-official-catalog-"),
+        path.join(resolvePreferredOPNEXTmpDir(), "opnex-official-catalog-"),
       );
       const catalogPath = path.join(dir, "channel-catalog.json");
       fs.writeFileSync(
@@ -110,7 +110,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              openclaw: {
+              opnex: {
                 channel: params.meta,
                 install: {
                   npmSpec: params.npmSpec,
@@ -125,7 +125,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
       const entry = listChannelPluginCatalogEntries({
         env: {
           ...process.env,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          OPNEX_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
         officialCatalogPaths: [catalogPath],
       }).find((item) => item.id === params.channelId);
@@ -136,7 +136,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
 
     it("lets external catalogs override shipped fallback channel metadata", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredOpenClawTmpDir(), "openclaw-fallback-catalog-"),
+        path.join(resolvePreferredOPNEXTmpDir(), "opnex-fallback-catalog-"),
       );
       const bundledDir = path.join(dir, "dist", "extensions", params.pluginId);
       const officialCatalogPath = path.join(dir, "channel-catalog.json");
@@ -146,7 +146,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
         path.join(bundledDir, "package.json"),
         JSON.stringify({
           name: params.packageName,
-          openclaw: {
+          opnex: {
             channel: {
               ...params.meta,
               label: `${params.meta.label} Bundled`,
@@ -164,7 +164,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              openclaw: {
+              opnex: {
                 channel: {
                   ...params.meta,
                   label: `${params.meta.label} Official`,
@@ -184,7 +184,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.externalNpmSpec,
-              openclaw: {
+              opnex: {
                 channel: {
                   ...params.meta,
                   label: params.externalLabel,
@@ -204,7 +204,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
         officialCatalogPaths: [officialCatalogPath],
         env: {
           ...process.env,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(dir, "dist", "extensions"),
+          OPNEX_BUNDLED_PLUGINS_DIR: path.join(dir, "dist", "extensions"),
         },
       }).find((item) => item.id === params.channelId);
 
@@ -215,7 +215,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
 
     it("surfaces package-name drift in external channel catalog install metadata", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredOpenClawTmpDir(), "openclaw-drifted-catalog-"),
+        path.join(resolvePreferredOPNEXTmpDir(), "opnex-drifted-catalog-"),
       );
       const catalogPath = path.join(dir, "catalog.json");
       fs.writeFileSync(
@@ -224,7 +224,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              openclaw: {
+              opnex: {
                 channel: params.meta,
                 install: {
                   npmSpec: `${params.packageName}-fork@1.2.3`,
@@ -242,7 +242,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
         officialCatalogPaths: [],
         env: {
           ...process.env,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          OPNEX_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
       }).find((item) => item.id === params.channelId);
 

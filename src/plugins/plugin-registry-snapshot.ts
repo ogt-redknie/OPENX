@@ -58,10 +58,10 @@ export function clearPluginRegistrySnapshotCache(): void {
   derivedSnapshotCache.clear();
 }
 
-export const DISABLE_PERSISTED_PLUGIN_REGISTRY_ENV = "OPENCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY";
+export const DISABLE_PERSISTED_PLUGIN_REGISTRY_ENV = "OPNEX_DISABLE_PERSISTED_PLUGIN_REGISTRY";
 
 function formatDeprecatedPersistedRegistryDisableWarning(): string {
-  return `${DISABLE_PERSISTED_PLUGIN_REGISTRY_ENV} is a deprecated break-glass compatibility switch; use \`openclaw plugins registry --refresh\` or \`openclaw doctor --fix\` to repair registry state.`;
+  return `${DISABLE_PERSISTED_PLUGIN_REGISTRY_ENV} is a deprecated break-glass compatibility switch; use \`opnex plugins registry --refresh\` or \`opnex doctor --fix\` to repair registry state.`;
 }
 
 export type LoadPluginRegistryParams = LoadInstalledPluginIndexParams &
@@ -152,7 +152,7 @@ function resolveDerivedSnapshotCacheKey(
     policyHash: resolveInstalledPluginIndexPolicyHash(params.config),
     hostContractVersion: resolveCompatibilityHostVersion(env),
     disablePersisted: env[DISABLE_PERSISTED_PLUGIN_REGISTRY_ENV] ?? "",
-    disableBundled: env.OPENCLAW_DISABLE_BUNDLED_PLUGINS ?? "",
+    disableBundled: env.OPNEX_DISABLE_BUNDLED_PLUGINS ?? "",
     vitest: env.VITEST ?? "",
   });
 }
@@ -195,21 +195,21 @@ export function loadPluginRegistrySnapshotWithMetadata(
           level: "warn",
           code: "persisted-registry-stale-policy",
           message:
-            "Persisted plugin registry policy does not match current config; using derived plugin index. Run `openclaw plugins registry --refresh` to update the persisted registry.",
+            "Persisted plugin registry policy does not match current config; using derived plugin index. Run `opnex plugins registry --refresh` to update the persisted registry.",
         });
       } else if (hasMissingPersistedPluginSource(persistedIndex)) {
         diagnostics.push({
           level: "warn",
           code: "persisted-registry-stale-source",
           message:
-            "Persisted plugin registry points at missing plugin files; using derived plugin index. Run `openclaw plugins registry --refresh` to update the persisted registry.",
+            "Persisted plugin registry points at missing plugin files; using derived plugin index. Run `opnex plugins registry --refresh` to update the persisted registry.",
         });
       } else if (hasMismatchedPersistedBundledPluginRoot(persistedIndex, env)) {
         diagnostics.push({
           level: "warn",
           code: "persisted-registry-stale-source",
           message:
-            "Persisted plugin registry points at a different bundled plugin tree; using derived plugin index. Run `openclaw plugins registry --refresh` to update the persisted registry.",
+            "Persisted plugin registry points at a different bundled plugin tree; using derived plugin index. Run `opnex plugins registry --refresh` to update the persisted registry.",
         });
       } else {
         return {

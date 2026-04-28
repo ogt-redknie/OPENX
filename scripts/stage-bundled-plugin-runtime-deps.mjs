@@ -68,7 +68,7 @@ function sanitizeTempPrefixSegment(value) {
 }
 
 function makePluginOwnedTempDir(pluginDir, label) {
-  return makeOwnedTempDir(pluginDir, `.openclaw-runtime-deps-${label}-`);
+  return makeOwnedTempDir(pluginDir, `.opnex-runtime-deps-${label}-`);
 }
 
 function assertPathIsNotSymlink(targetPath, label) {
@@ -90,7 +90,7 @@ function replaceDirAtomically(targetPath, sourcePath) {
   fs.mkdirSync(targetParentDir, { recursive: true });
   const backupPath = makeTempDir(
     targetParentDir,
-    `.openclaw-runtime-deps-backup-${sanitizeTempPrefixSegment(path.basename(targetPath))}-`,
+    `.opnex-runtime-deps-backup-${sanitizeTempPrefixSegment(path.basename(targetPath))}-`,
   );
   removePathIfExists(backupPath);
 
@@ -118,7 +118,7 @@ function writeJsonAtomically(targetPath, value) {
   fs.mkdirSync(targetParentDir, { recursive: true });
   const tempDir = makeOwnedTempDir(
     targetParentDir,
-    `.openclaw-runtime-deps-stamp-${sanitizeTempPrefixSegment(path.basename(targetPath))}-`,
+    `.opnex-runtime-deps-stamp-${sanitizeTempPrefixSegment(path.basename(targetPath))}-`,
   );
   const tempPath = path.join(tempDir, path.basename(targetPath));
   try {
@@ -711,7 +711,7 @@ function hasRuntimeDeps(packageJson) {
 }
 
 function shouldStageRuntimeDeps(packageJson) {
-  return packageJson.openclaw?.bundle?.stageRuntimeDependencies === true;
+  return packageJson.opnex?.bundle?.stageRuntimeDependencies === true;
 }
 
 function sanitizeBundledManifestForRuntimeInstall(pluginDir) {
@@ -867,7 +867,7 @@ export function collectRuntimeDependencyInstallSpecs(packageJson, params = {}) {
 
 function createRuntimeInstallManifest(pluginId, pinnedGroups) {
   const manifest = {
-    name: `openclaw-runtime-deps-${sanitizeTempPrefixSegment(pluginId)}`,
+    name: `opnex-runtime-deps-${sanitizeTempPrefixSegment(pluginId)}`,
     private: true,
     version: "0.0.0",
   };
@@ -913,7 +913,7 @@ function runNpmInstall(params) {
 }
 
 function resolveLegacyRuntimeDepsStampPath(pluginDir) {
-  return path.join(pluginDir, ".openclaw-runtime-deps-stamp.json");
+  return path.join(pluginDir, ".opnex-runtime-deps-stamp.json");
 }
 
 function resolveRuntimeDepsStampPath(repoRoot, pluginId) {
@@ -1005,7 +1005,7 @@ function removeStaleRuntimeDepsTempDirs(pluginDir) {
     return;
   }
   for (const entry of fs.readdirSync(pluginDir, { withFileTypes: true })) {
-    if (entry.name.startsWith(".openclaw-runtime-deps-")) {
+    if (entry.name.startsWith(".opnex-runtime-deps-")) {
       const targetPath = path.join(pluginDir, entry.name);
       if (!shouldRemoveRuntimeDepsTempDir(targetPath)) {
         continue;

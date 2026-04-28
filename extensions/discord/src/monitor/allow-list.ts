@@ -1,16 +1,16 @@
 import type { Guild, User } from "@buape/carbon";
-import type { AllowlistMatch } from "openclaw/plugin-sdk/allow-from";
+import type { AllowlistMatch } from "opnex/plugin-sdk/allow-from";
 import {
   buildChannelKeyCandidates,
   resolveChannelEntryMatchWithFallback,
   resolveChannelMatchConfig,
   type ChannelMatchSource,
-} from "openclaw/plugin-sdk/channel-targets";
-import { evaluateGroupRouteAccessForPolicy } from "openclaw/plugin-sdk/group-access";
+} from "opnex/plugin-sdk/channel-targets";
+import { evaluateGroupRouteAccessForPolicy } from "opnex/plugin-sdk/group-access";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import { formatDiscordUserTag } from "./format.js";
 
 export type DiscordAllowList = {

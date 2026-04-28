@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import {
   createOpenAiCompatibleImageGenerationProvider,
   type ImageGenerationProvider,
   type ImageGenerationSourceImage,
   toImageDataUrl,
-} from "openclaw/plugin-sdk/image-generation";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/image-generation";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { LITELLM_BASE_URL } from "./onboard.js";
 
 const DEFAULT_SIZE = "1024x1024";
@@ -26,16 +26,16 @@ const LITELLM_SUPPORTED_SIZES = [
 const LITELLM_MAX_INPUT_IMAGES = 5;
 
 type LitellmProviderConfig = NonNullable<
-  NonNullable<OpenClawConfig["models"]>["providers"]
+  NonNullable<OPNEXConfig["models"]>["providers"]
 >[string];
 
 function resolveLitellmProviderConfig(
-  cfg: OpenClawConfig | undefined,
+  cfg: OPNEXConfig | undefined,
 ): LitellmProviderConfig | undefined {
   return cfg?.models?.providers?.litellm;
 }
 
-function resolveConfiguredLitellmBaseUrl(cfg: OpenClawConfig | undefined): string {
+function resolveConfiguredLitellmBaseUrl(cfg: OPNEXConfig | undefined): string {
   return normalizeOptionalString(resolveLitellmProviderConfig(cfg)?.baseUrl) ?? LITELLM_BASE_URL;
 }
 

@@ -1,5 +1,5 @@
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
@@ -44,7 +44,7 @@ function createSessionRouteTestPlugin(params: {
 }
 
 function buildThreadedChannelRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   channel: string;
   accountId?: string | null;

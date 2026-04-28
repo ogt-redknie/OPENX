@@ -1082,21 +1082,21 @@ function normalizeCommandBaseName(token: string | undefined): string {
   return base.replace(/\.(?:cmd|exe)$/u, "");
 }
 
-function stripOpenClawPackageRunner(argv: string[]): string[] {
+function stripOPNEXPackageRunner(argv: string[]): string[] {
   const commandName = normalizeCommandBaseName(argv[0]);
-  if (commandName === "openclaw") {
+  if (commandName === "opnex") {
     return argv;
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
-    normalizeCommandBaseName(argv[1]) === "openclaw"
+    normalizeCommandBaseName(argv[1]) === "opnex"
   ) {
     return argv.slice(1);
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
     (argv[1] === "exec" || argv[1] === "dlx" || argv[1] === "run") &&
-    normalizeCommandBaseName(argv[2]) === "openclaw"
+    normalizeCommandBaseName(argv[2]) === "opnex"
   ) {
     return argv.slice(2);
   }
@@ -1116,23 +1116,23 @@ function stripOpenClawPackageRunner(argv: string[]): string[] {
         idx += 1;
       }
     }
-    if (normalizeCommandBaseName(argv[idx]) === "openclaw") {
+    if (normalizeCommandBaseName(argv[idx]) === "opnex") {
       return argv.slice(idx);
     }
   }
   return argv;
 }
 
-function parseOpenClawChannelsLoginShellCommand(raw: string): boolean {
+function parseOPNEXChannelsLoginShellCommand(raw: string): boolean {
   const argv = splitShellArgs(raw);
   if (!argv) {
     return false;
   }
-  const openclawArgv = stripOpenClawPackageRunner(argv);
+  const opnexArgv = stripOPNEXPackageRunner(argv);
   return (
-    normalizeCommandBaseName(openclawArgv[0]) === "openclaw" &&
-    (openclawArgv[1] === "channels" || openclawArgv[1] === "channel") &&
-    openclawArgv[2] === "login"
+    normalizeCommandBaseName(opnexArgv[0]) === "opnex" &&
+    (opnexArgv[1] === "channels" || opnexArgv[1] === "channel") &&
+    opnexArgv[2] === "login"
   );
 }
 
@@ -1365,11 +1365,11 @@ function rejectUnsafeControlShellCommand(command: string): void {
         ].join(" "),
       );
     }
-    if (parseOpenClawChannelsLoginShellCommand(candidate)) {
+    if (parseOPNEXChannelsLoginShellCommand(candidate)) {
       throw new Error(
         [
-          "exec cannot run interactive OpenClaw channel login commands.",
-          "Run `openclaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
+          "exec cannot run interactive OPNEX channel login commands.",
+          "Run `opnex channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
         ].join(" "),
       );
     }
@@ -1882,6 +1882,6 @@ export function createExecTool(
 export const execTool = createExecTool();
 
 export const __testing = {
-  parseOpenClawChannelsLoginShellCommand,
+  parseOPNEXChannelsLoginShellCommand,
   validateScriptFileForShellBleed,
 };

@@ -1,0 +1,51 @@
+import Foundation
+
+// Stable identifier used for both the macOS LaunchAgent label and Nix-managed defaults suite.
+// nix-opnex writes app defaults into this suite to survive app bundle identifier churn.
+let launchdLabel = "ai.opnex.mac"
+let gatewayLaunchdLabel = "ai.opnex.gateway"
+let onboardingVersionKey = "opnex.onboardingVersion"
+let onboardingSeenKey = "opnex.onboardingSeen"
+let currentOnboardingVersion = 7
+let pauseDefaultsKey = "opnex.pauseEnabled"
+let iconAnimationsEnabledKey = "opnex.iconAnimationsEnabled"
+let swabbleEnabledKey = "opnex.swabbleEnabled"
+let swabbleTriggersKey = "opnex.swabbleTriggers"
+let voiceWakeTriggerChimeKey = "opnex.voiceWakeTriggerChime"
+let voiceWakeSendChimeKey = "opnex.voiceWakeSendChime"
+let showDockIconKey = "opnex.showDockIcon"
+let defaultVoiceWakeTriggers = ["opnex"]
+let voiceWakeMaxWords = 32
+let voiceWakeMaxWordLength = 64
+let voiceWakeMicKey = "opnex.voiceWakeMicID"
+let voiceWakeMicNameKey = "opnex.voiceWakeMicName"
+let voiceWakeLocaleKey = "opnex.voiceWakeLocaleID"
+let voiceWakeAdditionalLocalesKey = "opnex.voiceWakeAdditionalLocaleIDs"
+let voicePushToTalkEnabledKey = "opnex.voicePushToTalkEnabled"
+let voiceWakeTriggersTalkModeKey = "opnex.voiceWakeTriggersTalkMode"
+let talkEnabledKey = "opnex.talkEnabled"
+let talkPhaseSoundsEnabledKey = "opnex.talkPhaseSoundsEnabled"
+let talkShiftToStopEnabledKey = "opnex.talkShiftToStopEnabled"
+let iconOverrideKey = "opnex.iconOverride"
+let connectionModeKey = "opnex.connectionMode"
+let remoteTargetKey = "opnex.remoteTarget"
+let remoteIdentityKey = "opnex.remoteIdentity"
+let remoteProjectRootKey = "opnex.remoteProjectRoot"
+let remoteCliPathKey = "opnex.remoteCliPath"
+let canvasEnabledKey = "opnex.canvasEnabled"
+let cameraEnabledKey = "opnex.cameraEnabled"
+let systemRunPolicyKey = "opnex.systemRunPolicy"
+let systemRunAllowlistKey = "opnex.systemRunAllowlist"
+let systemRunEnabledKey = "opnex.systemRunEnabled"
+let locationModeKey = "opnex.locationMode"
+let locationPreciseKey = "opnex.locationPreciseEnabled"
+let peekabooBridgeEnabledKey = "opnex.peekabooBridgeEnabled"
+let deepLinkKeyKey = "opnex.deepLinkKey"
+let modelCatalogPathKey = "opnex.modelCatalogPath"
+let modelCatalogReloadKey = "opnex.modelCatalogReload"
+let cliInstallPromptedVersionKey = "opnex.cliInstallPromptedVersion"
+let heartbeatsEnabledKey = "opnex.heartbeatsEnabled"
+let debugPaneEnabledKey = "opnex.debugPaneEnabled"
+let debugFileLogEnabledKey = "opnex.debug.fileLogEnabled"
+let appLogLevelKey = "opnex.debug.appLogLevel"
+let voiceWakeSupported: Bool = ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26

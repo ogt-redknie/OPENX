@@ -49,7 +49,7 @@ afterEach(() => {
 
 describe("scripts/changed-lanes", () => {
   it("includes untracked worktree files in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-");
+    const dir = makeTempRepoRoot(tempDirs, "opnex-changed-lanes-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -106,32 +106,32 @@ describe("scripts/changed-lanes", () => {
     expect(plan.commands.map((command) => command.args[0])).toContain("tsgo:core:test");
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toMatchObject({
       PATH: "/usr/bin",
-      OPENCLAW_TSGO_SPARSE_SKIP: "1",
+      OPNEX_TSGO_SPARSE_SKIP: "1",
     });
     expect(plan.commands.find((command) => command.args[0] === "lint:core")?.env).toMatchObject({
       PATH: "/usr/bin",
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
+      OPNEX_OXLINT_SKIP_LOCK: "1",
     });
   });
 
   it("reenables local-check policy for changed typecheck commands", () => {
     const result = detectChangedLanes(["src/shared/string-normalization.ts"]);
     const plan = createChangedCheckPlan(result, {
-      env: { OPENCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" },
+      env: { OPNEX_LOCAL_CHECK: "0", PATH: "/usr/bin" },
     });
 
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toMatchObject({
-      OPENCLAW_LOCAL_CHECK: "1",
-      OPENCLAW_TSGO_SPARSE_SKIP: "1",
+      OPNEX_LOCAL_CHECK: "1",
+      OPNEX_TSGO_SPARSE_SKIP: "1",
       PATH: "/usr/bin",
     });
   });
 
   it("marks changed-check children as covered by the parent heavy-check lock", () => {
     expect(createChangedCheckChildEnv({ PATH: "/usr/bin" })).toMatchObject({
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      OPNEX_OXLINT_SKIP_LOCK: "1",
+      OPNEX_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      OPNEX_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -142,9 +142,9 @@ describe("scripts/changed-lanes", () => {
     const lintCommand = plan.commands.find((command) => command.args[0] === "lint:extensions");
 
     expect(lintCommand?.env).toMatchObject({
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      OPNEX_OXLINT_SKIP_LOCK: "1",
+      OPNEX_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      OPNEX_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -279,8 +279,8 @@ describe("scripts/changed-lanes", () => {
       bin: "node",
       args: ["scripts/test-docker-all.mjs"],
       env: expect.objectContaining({
-        OPENCLAW_DOCKER_ALL_DRY_RUN: "1",
-        OPENCLAW_DOCKER_ALL_LIVE_MODE: "only",
+        OPNEX_DOCKER_ALL_DRY_RUN: "1",
+        OPNEX_DOCKER_ALL_LIVE_MODE: "only",
       }),
     });
   });
@@ -305,7 +305,7 @@ describe("scripts/changed-lanes", () => {
         scripts: {
           "test:docker:all": "node scripts/test-docker-all.mjs",
           "test:docker:live-acp-bind:droid":
-            "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "OPNEX_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: {
           leftpad: "1.0.0",
@@ -331,7 +331,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies live Docker package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-live-docker-package-");
+    const dir = makeTempRepoRoot(tempDirs, "opnex-live-docker-package-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -367,7 +367,7 @@ describe("scripts/changed-lanes", () => {
           scripts: {
             "test:docker:all": "node scripts/test-docker-all.mjs",
             "test:docker:live-acp-bind:droid":
-              "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+              "OPNEX_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
           },
         },
         null,
@@ -397,7 +397,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies normal package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-package-scripts-");
+    const dir = makeTempRepoRoot(tempDirs, "opnex-package-scripts-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -478,7 +478,7 @@ describe("scripts/changed-lanes", () => {
         name: "fixture",
         scripts: {
           "test:docker:live-acp-bind:droid":
-            "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "OPNEX_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: { leftpad: "1.0.1" },
       },
@@ -532,7 +532,7 @@ describe("scripts/changed-lanes", () => {
       "apps/ios/Config/Version.xcconfig",
       "apps/ios/fastlane/metadata/en-US/release_notes.txt",
       "apps/ios/version.json",
-      "apps/macos/Sources/OpenClaw/Resources/Info.plist",
+      "apps/macos/Sources/OPNEX/Resources/Info.plist",
       "docs/.generated/config-baseline.sha256",
       "package.json",
       "src/config/schema.base.generated.ts",
@@ -572,7 +572,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("guards release metadata package changes to the top-level version field", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-release-metadata-");
+    const dir = makeTempRepoRoot(tempDirs, "opnex-release-metadata-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),

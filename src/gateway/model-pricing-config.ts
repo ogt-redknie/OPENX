@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 
-export function isGatewayModelPricingEnabled(config: OpenClawConfig): boolean {
+export function isGatewayModelPricingEnabled(config: OPNEXConfig): boolean {
   return config.models?.pricing?.enabled !== false;
 }

@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect, it } from "vitest";
 import { inspectDiscordAccount } from "./account-inspect.js";
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): OPNEXConfig {
+  return value as OPNEXConfig;
 }
 
 describe("inspectDiscordAccount", () => {

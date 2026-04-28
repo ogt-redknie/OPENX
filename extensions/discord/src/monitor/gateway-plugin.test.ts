@@ -62,14 +62,14 @@ vi.mock("@buape/carbon/dist/src/plugins/gateway/index.js", () => ({
   GatewayPlugin,
 }));
 
-vi.mock("openclaw/plugin-sdk/proxy-capture", () => ({
+vi.mock("opnex/plugin-sdk/proxy-capture", () => ({
   captureHttpExchange: vi.fn(),
   captureWsEvent: vi.fn(),
   resolveEffectiveDebugProxyUrl: () => undefined,
   resolveDebugProxySettings: () => ({ enabled: false }),
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("opnex/plugin-sdk/runtime-env", () => ({
   danger: (value: string) => value,
 }));
 
@@ -117,7 +117,7 @@ describe("SafeGatewayPlugin.connect()", () => {
     }
   });
 
-  it("leaves Carbon autoInteractions disabled so OpenClaw owns interaction handoff", () => {
+  it("leaves Carbon autoInteractions disabled so OPNEX owns interaction handoff", () => {
     const plugin = createPlugin();
 
     expect((plugin as unknown as { options?: { autoInteractions?: boolean } }).options).toEqual(

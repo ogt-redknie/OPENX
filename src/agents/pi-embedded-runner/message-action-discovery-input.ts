@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 
 export function buildEmbeddedMessageActionDiscoveryInput(params: {
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   channel: string;
   currentChannelId?: string | null;
   currentThreadTs?: string | null;

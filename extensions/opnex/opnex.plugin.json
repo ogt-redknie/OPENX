@@ -1,0 +1,13 @@
+{
+  "id": "opnex",
+  "activation": {
+    "onStartup": true
+  },
+  "name": "OPNEX",
+  "description": "Typed workflow tool with resumable approvals.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

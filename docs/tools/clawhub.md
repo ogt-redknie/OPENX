@@ -1,5 +1,5 @@
 ---
-summary: "ClawHub: public registry for OpenClaw skills and plugins, native install flows, and the clawhub CLI"
+summary: "ClawHub: public registry for OPNEX skills and plugins, native install flows, and the clawhub CLI"
 read_when:
   - Searching for, installing, or updating skills or plugins
   - Publishing skills or plugins to the registry
@@ -8,9 +8,9 @@ title: "ClawHub"
 sidebarTitle: "ClawHub"
 ---
 
-ClawHub is the public registry for **OpenClaw skills and plugins**.
+ClawHub is the public registry for **OPNEX skills and plugins**.
 
-- Use native `openclaw` commands to search, install, and update skills, and to install plugins from ClawHub.
+- Use native `opnex` commands to search, install, and update skills, and to install plugins from ClawHub.
 - Use the separate `clawhub` CLI for registry auth, publish, delete/undelete, and sync workflows.
 
 Site: [clawhub.ai](https://clawhub.ai)
@@ -20,16 +20,16 @@ Site: [clawhub.ai](https://clawhub.ai)
 <Steps>
   <Step title="Search">
     ```bash
-    openclaw skills search "calendar"
+    opnex skills search "calendar"
     ```
   </Step>
   <Step title="Install">
     ```bash
-    openclaw skills install <skill-slug>
+    opnex skills install <skill-slug>
     ```
   </Step>
   <Step title="Use">
-    Start a new OpenClaw session — it picks up the new skill.
+    Start a new OPNEX session — it picks up the new skill.
   </Step>
   <Step title="Publish (optional)">
     For registry-authenticated workflows (publish, sync, manage), install
@@ -44,37 +44,37 @@ Site: [clawhub.ai](https://clawhub.ai)
   </Step>
 </Steps>
 
-## Native OpenClaw flows
+## Native OPNEX flows
 
 <Tabs>
   <Tab title="Skills">
     ```bash
-    openclaw skills search "calendar"
-    openclaw skills install <skill-slug>
-    openclaw skills update --all
+    opnex skills search "calendar"
+    opnex skills install <skill-slug>
+    opnex skills update --all
     ```
 
-    Native `openclaw` commands install into your active workspace and
+    Native `opnex` commands install into your active workspace and
     persist source metadata so later `update` calls can stay on ClawHub.
 
   </Tab>
   <Tab title="Plugins">
     ```bash
-    openclaw plugins install clawhub:<package>
-    openclaw plugins update --all
+    opnex plugins install clawhub:<package>
+    opnex plugins update --all
     ```
 
     Bare npm-safe plugin specs are also tried against ClawHub before npm:
 
     ```bash
-    openclaw plugins install openclaw-codex-app-server
+    opnex plugins install opnex-codex-app-server
     ```
 
     Use `npm:<package>` when you want npm-only resolution without a
     ClawHub lookup:
 
     ```bash
-    openclaw plugins install npm:openclaw-codex-app-server
+    opnex plugins install npm:opnex-codex-app-server
     ```
 
     Plugin installs validate advertised `pluginApi` and
@@ -86,19 +86,19 @@ Site: [clawhub.ai](https://clawhub.ai)
 </Tabs>
 
 <Note>
-`openclaw plugins install clawhub:...` only accepts installable plugin
-families. If a ClawHub package is actually a skill, OpenClaw stops and
-points you at `openclaw skills install <slug>` instead.
+`opnex plugins install clawhub:...` only accepts installable plugin
+families. If a ClawHub package is actually a skill, OPNEX stops and
+points you at `opnex skills install <slug>` instead.
 
 Anonymous ClawHub plugin installs also fail closed for private packages.
-Community or other non-official channels can still install, but OpenClaw
+Community or other non-official channels can still install, but OPNEX
 warns so operators can review source and verification before enabling
 them.
 </Note>
 
 ## What ClawHub is
 
-- A public registry for OpenClaw skills and plugins.
+- A public registry for OPNEX skills and plugins.
 - A versioned store of skill bundles and metadata.
 - A discovery surface for search, tags, and usage signals.
 
@@ -117,12 +117,12 @@ changes.
 ## Workspace and skill loading
 
 The separate `clawhub` CLI also installs skills into `./skills` under
-your current working directory. If an OpenClaw workspace is configured,
+your current working directory. If an OPNEX workspace is configured,
 `clawhub` falls back to that workspace unless you override `--workdir`
-(or `CLAWHUB_WORKDIR`). OpenClaw loads workspace skills from
+(or `CLAWHUB_WORKDIR`). OPNEX loads workspace skills from
 `<workspace>/skills` and picks them up in the **next** session.
 
-If you already use `~/.openclaw/skills` or bundled skills, workspace
+If you already use `~/.opnex/skills` or bundled skills, workspace
 skills take precedence. For more detail on how skills are loaded,
 shared, and gated, see [Skills](/tools/skills).
 
@@ -155,7 +155,7 @@ abuse without blocking legitimate contributors.
   <Accordion title="Moderation">
     - Moderators can view hidden skills, unhide them, delete them, or ban users.
     - Abusing the report feature can result in account bans.
-    - Interested in becoming a moderator? Ask in the OpenClaw Discord and contact a moderator or maintainer.
+    - Interested in becoming a moderator? Ask in the OPNEX Discord and contact a moderator or maintainer.
 
   </Accordion>
 </AccordionGroup>
@@ -168,7 +168,7 @@ publish/sync.
 ### Global options
 
 <ParamField path="--workdir <dir>" type="string">
-  Working directory. Default: current dir; falls back to OpenClaw workspace.
+  Working directory. Default: current dir; falls back to OPNEX workspace.
 </ParamField>
 <ParamField path="--dir <dir>" type="string" default="skills">
   Skills directory, relative to workdir.
@@ -221,7 +221,7 @@ publish/sync.
     clawhub package inspect episodic-claw
     ```
 
-    `package explore` and `package inspect` are the ClawHub CLI surfaces for plugin/package discovery and metadata inspection. Native OpenClaw installs still use `openclaw plugins install clawhub:<package>`.
+    `package explore` and `package inspect` are the ClawHub CLI surfaces for plugin/package discovery and metadata inspection. Native OPNEX installs still use `opnex plugins install clawhub:<package>`.
 
     Options:
 
@@ -348,15 +348,15 @@ publish/sync.
 
 ### Plugin package metadata
 
-Code plugins must include the required OpenClaw metadata in
+Code plugins must include the required OPNEX metadata in
 `package.json`:
 
 ```json
 {
-  "name": "@myorg/openclaw-my-plugin",
+  "name": "@myorg/opnex-my-plugin",
   "version": "1.0.0",
   "type": "module",
-  "openclaw": {
+  "opnex": {
     "extensions": ["./src/index.ts"],
     "runtimeExtensions": ["./dist/index.js"],
     "compat": {
@@ -364,7 +364,7 @@ Code plugins must include the required OpenClaw metadata in
       "minGatewayVersion": "2026.3.24-beta.2"
     },
     "build": {
-      "openclawVersion": "2026.3.24-beta.2",
+      "opnexVersion": "2026.3.24-beta.2",
       "pluginSdkVersion": "2026.3.24-beta.2"
     }
   }
@@ -395,7 +395,7 @@ plugin loading paths.
   <Accordion title="Sync scanning and fallback roots">
     `clawhub sync` scans your current workdir first. If no skills are
     found, it falls back to known legacy locations (for example
-    `~/openclaw/skills` and `~/.openclaw/skills`). This is designed to
+    `~/opnex/skills` and `~/.opnex/skills`). This is designed to
     find older skill installs without extra flags.
   </Accordion>
   <Accordion title="Storage and lockfile">

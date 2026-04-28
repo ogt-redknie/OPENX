@@ -1,13 +1,13 @@
 import { setTimeout as sleep } from "node:timers/promises";
 import type { CliDeps } from "../cli/deps.types.js";
 import type { GatewayTailscaleMode } from "../config/types.gateway.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { hasConfiguredInternalHooks } from "../hooks/configured.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { scheduleGatewayUpdateCheck } from "../infra/update-startup.js";
 import type { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import type { PluginHookGatewayCronService } from "../plugins/hook-types.js";
-import type { loadOpenClawPlugins } from "../plugins/loader.js";
+import type { loadOPNEXPlugins } from "../plugins/loader.js";
 import type { PluginServicesHandle } from "../plugins/services.js";
 import {
   GATEWAY_EVENT_UPDATE_AVAILABLE,
@@ -43,16 +43,16 @@ function shouldCheckRestartSentinel(env: NodeJS.ProcessEnv = process.env): boole
   return !env.VITEST && env.NODE_ENV !== "test";
 }
 
-function shouldStartGatewayMemoryBackend(cfg: OpenClawConfig): boolean {
+function shouldStartGatewayMemoryBackend(cfg: OPNEXConfig): boolean {
   return cfg.memory?.backend === "qmd";
 }
 
-function hasGatewayStartHooks(pluginRegistry: ReturnType<typeof loadOpenClawPlugins>): boolean {
+function hasGatewayStartHooks(pluginRegistry: ReturnType<typeof loadOPNEXPlugins>): boolean {
   return pluginRegistry.typedHooks.some((hook) => hook.hookName === "gateway_start");
 }
 
 function isConfiguredCliBackendPrimary(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   explicitPrimary: string;
   normalizeProviderId: (provider: string) => string;
 }): boolean {
@@ -99,7 +99,7 @@ async function waitForAcpRuntimeBackendReady(params: {
 }
 
 async function prewarmConfiguredPrimaryModel(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   log: { warn: (msg: string) => void };
 }): Promise<void> {
   const { resolveAgentModelPrimaryValue } = await import("../config/model-input.js");
@@ -118,7 +118,7 @@ async function prewarmConfiguredPrimaryModel(params: {
     return;
   }
   const [
-    { resolveOpenClawAgentDir },
+    { resolveOPNEXAgentDir },
     { DEFAULT_MODEL, DEFAULT_PROVIDER },
     { isCliProvider, resolveConfiguredModelRef },
     { resolveEmbeddedAgentRuntime },
@@ -141,10 +141,10 @@ async function prewarmConfiguredPrimaryModel(params: {
     return;
   }
   // Keep startup prewarm metadata-only; resolving models can import provider runtimes and block readiness.
-  const { ensureOpenClawModelsJson } = await import("../agents/models-config.js");
-  const agentDir = resolveOpenClawAgentDir();
+  const { ensureOPNEXModelsJson } = await import("../agents/models-config.js");
+  const agentDir = resolveOPNEXAgentDir();
   try {
-    await ensureOpenClawModelsJson(params.cfg, agentDir, {
+    await ensureOPNEXModelsJson(params.cfg, agentDir, {
       providerDiscoveryProviderIds: [provider],
       providerDiscoveryTimeoutMs: STARTUP_PROVIDER_DISCOVERY_TIMEOUT_MS,
     });
@@ -155,7 +155,7 @@ async function prewarmConfiguredPrimaryModel(params: {
 
 async function prewarmConfiguredPrimaryModelWithTimeout(
   params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     log: { warn: (msg: string) => void };
     timeoutMs?: number;
   },
@@ -183,7 +183,7 @@ async function prewarmConfiguredPrimaryModelWithTimeout(
 
 function schedulePrimaryModelPrewarm(
   params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     log: { warn: (msg: string) => void };
     startupTrace?: GatewayStartupTrace;
   },
@@ -203,8 +203,8 @@ function schedulePrimaryModelPrewarm(
 }
 
 export async function startGatewaySidecars(params: {
-  cfg: OpenClawConfig;
-  pluginRegistry: ReturnType<typeof loadOpenClawPlugins>;
+  cfg: OPNEXConfig;
+  pluginRegistry: ReturnType<typeof loadOPNEXPlugins>;
   defaultWorkspaceDir: string;
   deps: CliDeps;
   startChannels: () => Promise<void>;
@@ -325,8 +325,8 @@ export async function startGatewaySidecars(params: {
   });
 
   const skipChannels =
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_CHANNELS) ||
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_PROVIDERS);
+    isTruthyEnvValue(process.env.OPNEX_SKIP_CHANNELS) ||
+    isTruthyEnvValue(process.env.OPNEX_SKIP_PROVIDERS);
   await measureStartup(params.startupTrace, "sidecars.channels", async () => {
     if (!skipChannels) {
       try {
@@ -346,7 +346,7 @@ export async function startGatewaySidecars(params: {
       }
     } else {
       params.logChannels.info(
-        "skipping channel start (OPENCLAW_SKIP_CHANNELS=1 or OPENCLAW_SKIP_PROVIDERS=1)",
+        "skipping channel start (OPNEX_SKIP_CHANNELS=1 or OPNEX_SKIP_PROVIDERS=1)",
       );
     }
   });
@@ -484,7 +484,7 @@ const defaultGatewayPostAttachRuntimeDeps: GatewayPostAttachRuntimeDeps = {
 export async function startGatewayPostAttachRuntime(
   params: {
     minimalTestGateway: boolean;
-    cfgAtStart: OpenClawConfig;
+    cfgAtStart: OPNEXConfig;
     bindHost: string;
     bindHosts: string[];
     port: number;
@@ -505,8 +505,8 @@ export async function startGatewayPostAttachRuntime(
       error: (msg: string) => void;
       debug?: (msg: string) => void;
     };
-    gatewayPluginConfigAtStart: OpenClawConfig;
-    pluginRegistry: ReturnType<typeof loadOpenClawPlugins>;
+    gatewayPluginConfigAtStart: OPNEXConfig;
+    pluginRegistry: ReturnType<typeof loadOPNEXPlugins>;
     defaultWorkspaceDir: string;
     deps: CliDeps;
     startChannels: () => Promise<void>;

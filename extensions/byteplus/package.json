@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/byteplus-provider",
+  "name": "@opnex/byteplus-provider",
   "version": "2026.4.25",
   "private": true,
-  "description": "OpenClaw BytePlus provider plugin",
+  "description": "OPNEX BytePlus provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@opnex/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "opnex": {
     "extensions": [
       "./index.ts"
     ]

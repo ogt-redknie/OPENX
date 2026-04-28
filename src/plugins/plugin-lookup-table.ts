@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   resolveChannelPluginIdsFromRegistry,
   resolveConfiguredDeferredChannelPluginIdsFromRegistry,
@@ -44,8 +44,8 @@ export type PluginLookUpTable = PluginMetadataSnapshot & {
 };
 
 export type LoadPluginLookUpTableParams = {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: OPNEXConfig;
+  activationSourceConfig?: OPNEXConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   index?: PluginRegistrySnapshot;

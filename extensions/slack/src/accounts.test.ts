@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { describe, expect, it } from "vitest";
 import { resolveSlackAccount } from "./accounts.js";
 
@@ -122,7 +122,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as OPNEXConfig;
 
   it("throws when an enabled account still has an unresolved active bot token SecretRef", () => {
     expect(() =>
@@ -149,7 +149,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as OPNEXConfig,
       accountId: "default",
     });
 
@@ -178,7 +178,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as OPNEXConfig,
       accountId: "default",
     });
 
@@ -203,7 +203,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig,
+        } as unknown as OPNEXConfig,
         accountId: "default",
       }),
     ).toThrowError(/channels\.slack\.accounts\.default\.appToken/);

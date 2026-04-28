@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import type { AgentToolResult } from "@mariozechner/pi-agent-core";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { logDebug, logWarn } from "../logger.js";
 import { setPluginToolMeta } from "../plugins/tools.js";
 import { killProcessTree } from "../process/kill-tree.js";
@@ -379,7 +379,7 @@ function formatLspResult(
 
 export async function createBundleLspToolRuntime(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: OPNEXConfig;
   reservedToolNames?: Iterable<string>;
 }): Promise<BundleLspToolRuntime> {
   const loaded = loadEmbeddedPiLspConfig({

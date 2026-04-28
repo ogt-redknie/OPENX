@@ -1,6 +1,6 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXPluginApi } from "opnex/plugin-sdk/core";
+import type { ReplyPayload } from "opnex/plugin-sdk/reply-runtime";
+import { normalizeLowercaseStringOrEmpty } from "opnex/plugin-sdk/text-runtime";
 import {
   createActionCard,
   createImageCard,
@@ -157,7 +157,7 @@ function parseCardArgs(argsStr: string): {
   return result;
 }
 
-export function registerLineCardCommand(api: OpenClawPluginApi): void {
+export function registerLineCardCommand(api: OPNEXPluginApi): void {
   api.registerCommand({
     name: "card",
     description: "Send a rich card message (LINE).",

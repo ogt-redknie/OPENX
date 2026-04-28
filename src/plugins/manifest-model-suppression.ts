@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   buildModelCatalogMergeKey,
   planManifestModelCatalogSuppressions,
@@ -11,12 +11,12 @@ type ManifestSuppressionCache = Map<string, readonly ManifestModelCatalogSuppres
 
 let cacheWithoutConfig = new WeakMap<NodeJS.ProcessEnv, ManifestSuppressionCache>();
 let cacheByConfig = new WeakMap<
-  OpenClawConfig,
+  OPNEXConfig,
   WeakMap<NodeJS.ProcessEnv, ManifestSuppressionCache>
 >();
 
 function resolveSuppressionCache(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   env: NodeJS.ProcessEnv;
 }): ManifestSuppressionCache {
   if (!params.config) {
@@ -45,7 +45,7 @@ function cacheKey(params: { workspaceDir?: string }): string {
 }
 
 function listManifestModelCatalogSuppressions(params: {
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
 }): readonly ManifestModelCatalogSuppressionEntry[] {
@@ -95,7 +95,7 @@ function normalizeSuppressionHost(host: string): string {
 
 function resolveConfiguredProviderValue(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): { api?: string; baseUrl?: string } | undefined {
   const providers = params.config?.models?.providers;
   if (!providers) {
@@ -117,7 +117,7 @@ function manifestSuppressionMatchesConditions(params: {
   suppression: ManifestModelCatalogSuppressionEntry;
   provider: string;
   baseUrl?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
 }): boolean {
   const when = params.suppression.when;
   if (!when) {
@@ -149,7 +149,7 @@ function manifestSuppressionMatchesConditions(params: {
 export function clearManifestModelSuppressionCacheForTest(): void {
   cacheWithoutConfig = new WeakMap<NodeJS.ProcessEnv, ManifestSuppressionCache>();
   cacheByConfig = new WeakMap<
-    OpenClawConfig,
+    OPNEXConfig,
     WeakMap<NodeJS.ProcessEnv, ManifestSuppressionCache>
   >();
 }
@@ -157,7 +157,7 @@ export function clearManifestModelSuppressionCacheForTest(): void {
 export function resolveManifestBuiltInModelSuppression(params: {
   provider?: string | null;
   id?: string | null;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   baseUrl?: string | null;

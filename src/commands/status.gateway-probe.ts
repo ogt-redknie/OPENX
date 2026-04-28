@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   resolveGatewayProbeAuthSafeWithSecretInputs,
   resolveGatewayProbeTarget,
 } from "../gateway/probe-auth.js";
 export { pickGatewaySelfPresence } from "./gateway-presence.js";
 
-export async function resolveGatewayProbeAuthResolution(cfg: OpenClawConfig): Promise<{
+export async function resolveGatewayProbeAuthResolution(cfg: OPNEXConfig): Promise<{
   auth: {
     token?: string;
     password?: string;
@@ -20,7 +20,7 @@ export async function resolveGatewayProbeAuthResolution(cfg: OpenClawConfig): Pr
   });
 }
 
-export async function resolveGatewayProbeAuth(cfg: OpenClawConfig): Promise<{
+export async function resolveGatewayProbeAuth(cfg: OPNEXConfig): Promise<{
   token?: string;
   password?: string;
 }> {

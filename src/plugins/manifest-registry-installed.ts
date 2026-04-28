@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { PluginCandidate } from "./discovery.js";
 import { hashJson } from "./installed-plugin-index-hash.js";
 import { resolveInstalledPluginIndexPolicyHash } from "./installed-plugin-index-policy.js";
@@ -11,7 +11,7 @@ import type { BundledChannelConfigCollector } from "./manifest-registry.js";
 import {
   DEFAULT_PLUGIN_ENTRY_CANDIDATES,
   getPackageManifestMetadata,
-  type OpenClawPackageManifest,
+  type OPNEXPackageManifest,
   type PackageManifest,
 } from "./manifest.js";
 
@@ -67,10 +67,10 @@ function shouldUseInstalledManifestRegistryCache(params: {
   if (params.bundledChannelConfigCollector) {
     return false;
   }
-  if (params.env.OPENCLAW_DISABLE_INSTALLED_PLUGIN_MANIFEST_REGISTRY_CACHE?.trim()) {
+  if (params.env.OPNEX_DISABLE_INSTALLED_PLUGIN_MANIFEST_REGISTRY_CACHE?.trim()) {
     return false;
   }
-  return !params.env.OPENCLAW_DISABLE_PLUGIN_MANIFEST_CACHE?.trim();
+  return !params.env.OPNEX_DISABLE_PLUGIN_MANIFEST_CACHE?.trim();
 }
 
 function buildInstalledManifestRegistryIndexKey(index: InstalledPluginIndex) {
@@ -121,7 +121,7 @@ export function resolveInstalledManifestRegistryIndexFingerprint(
 
 function buildInstalledManifestRegistryCacheKey(params: {
   index: InstalledPluginIndex;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -135,7 +135,7 @@ function buildInstalledManifestRegistryCacheKey(params: {
       includeDisabled: params.includeDisabled === true,
       configPolicyHash: resolveInstalledPluginIndexPolicyHash(params.config),
       env: {
-        OPENCLAW_VERSION: params.env.OPENCLAW_VERSION,
+        OPNEX_VERSION: params.env.OPNEX_VERSION,
         HOME: params.env.HOME,
         USERPROFILE: params.env.USERPROFILE,
       },
@@ -201,7 +201,7 @@ function resolveFallbackPluginSource(record: InstalledPluginIndexRecord): string
 
 function resolveInstalledPackageManifest(
   record: InstalledPluginIndexRecord,
-): OpenClawPackageManifest | undefined {
+): OPNEXPackageManifest | undefined {
   if (!record.packageChannel) {
     return undefined;
   }
@@ -255,7 +255,7 @@ function toPluginCandidate(record: InstalledPluginIndexRecord): PluginCandidate 
 
 export function loadPluginManifestRegistryForInstalledIndex(params: {
   index: InstalledPluginIndex;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];

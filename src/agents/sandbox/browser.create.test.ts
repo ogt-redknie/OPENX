@@ -54,8 +54,8 @@ vi.mock("../../plugin-sdk/browser-bridge.js", () => ({
 vi.mock("../../plugin-sdk/browser-profiles.js", () => ({
   DEFAULT_BROWSER_ACTION_TIMEOUT_MS: 60_000,
   DEFAULT_BROWSER_EVALUATE_ENABLED: true,
-  DEFAULT_OPENCLAW_BROWSER_COLOR: "#FF4500",
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME: "openclaw",
+  DEFAULT_OPNEX_BROWSER_COLOR: "#FF4500",
+  DEFAULT_OPNEX_BROWSER_PROFILE_NAME: "opnex",
   resolveProfile: (
     resolved: { cdpHost: string; cdpIsLoopback: boolean; profiles?: Record<string, unknown> },
     profileName: string,
@@ -71,7 +71,7 @@ vi.mock("../../plugin-sdk/browser-profiles.js", () => ({
       cdpHost: resolved.cdpHost,
       cdpIsLoopback: resolved.cdpIsLoopback,
       color: profile.color ?? "#FF4500",
-      driver: "openclaw",
+      driver: "opnex",
       attachOnly: true,
     };
   },
@@ -90,10 +90,10 @@ function buildConfig(enableNoVnc: boolean): SandboxConfig {
     backend: "docker",
     scope: "session",
     workspaceAccess: "none",
-    workspaceRoot: "/tmp/openclaw-sandboxes",
+    workspaceRoot: "/tmp/opnex-sandboxes",
     docker: {
-      image: "openclaw-sandbox:bookworm-slim",
-      containerPrefix: "openclaw-sbx-",
+      image: "opnex-sandbox:bookworm-slim",
+      containerPrefix: "opnex-sbx-",
       workdir: "/workspace",
       readOnlyRoot: true,
       tmpfs: ["/tmp", "/var/tmp", "/run"],
@@ -103,15 +103,15 @@ function buildConfig(enableNoVnc: boolean): SandboxConfig {
     },
     ssh: {
       command: "ssh",
-      workspaceRoot: "/tmp/openclaw-sandboxes",
+      workspaceRoot: "/tmp/opnex-sandboxes",
       strictHostKeyChecking: true,
       updateHostKeys: true,
     },
     browser: {
       enabled: true,
-      image: "openclaw-sandbox-browser:bookworm-slim",
-      containerPrefix: "openclaw-sbx-browser-",
-      network: "openclaw-sandbox-browser",
+      image: "opnex-sandbox-browser:bookworm-slim",
+      containerPrefix: "opnex-sbx-browser-",
+      network: "opnex-sandbox-browser",
       cdpPort: 9222,
       vncPort: 5900,
       noVncPort: 6080,
@@ -211,11 +211,11 @@ describe("ensureSandboxBrowser create args", () => {
     expect(createArgs).toBeDefined();
     expect(createArgs).toContain("127.0.0.1::6080");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_NO_SANDBOX=1");
+    expect(envEntries).toContain("OPNEX_BROWSER_NO_SANDBOX=1");
     const passwordEntry = envEntries.find((entry) =>
-      entry.startsWith("OPENCLAW_BROWSER_NOVNC_PASSWORD="),
+      entry.startsWith("OPNEX_BROWSER_NOVNC_PASSWORD="),
     );
-    expect(passwordEntry).toMatch(/^OPENCLAW_BROWSER_NOVNC_PASSWORD=[A-Za-z0-9]{8}$/);
+    expect(passwordEntry).toMatch(/^OPNEX_BROWSER_NOVNC_PASSWORD=[A-Za-z0-9]{8}$/);
     expect(result?.noVncUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/sandbox\/novnc\?token=/);
     expect(result?.noVncUrl).not.toContain("password=");
   });
@@ -230,7 +230,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries.some((entry) => entry.startsWith("OPENCLAW_BROWSER_NOVNC_PASSWORD="))).toBe(
+    expect(envEntries.some((entry) => entry.startsWith("OPNEX_BROWSER_NOVNC_PASSWORD="))).toBe(
       false,
     );
     expect(result?.noVncUrl).toBeUndefined();
@@ -277,7 +277,7 @@ describe("ensureSandboxBrowser create args", () => {
           headless: false,
           noSandbox: false,
           attachOnly: true,
-          defaultProfile: "openclaw",
+          defaultProfile: "opnex",
           extraArgs: [],
           tabCleanup: {
             enabled: true,
@@ -286,7 +286,7 @@ describe("ensureSandboxBrowser create args", () => {
             sweepMinutes: 5,
           },
           profiles: {
-            openclaw: {
+            opnex: {
               cdpPort: 49100,
               color: "#FF4500",
             },
@@ -297,7 +297,7 @@ describe("ensureSandboxBrowser create args", () => {
     };
     BROWSER_BRIDGES.set("session:test", {
       bridge: existingBridge,
-      containerName: "openclaw-sbx-browser-session-test-0661d10a",
+      containerName: "opnex-sbx-browser-session-test-0661d10a",
       authToken: "test-bridge-token",
     });
     dockerMocks.dockerContainerState.mockResolvedValue({ exists: true, running: true });
@@ -365,7 +365,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const labels = collectDockerFlagValues(createArgs ?? [], "--label");
-    expect(labels).toContain(`openclaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
+    expect(labels).toContain(`opnex.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
   });
 
   it("force-removes the browser container when CDP never becomes reachable", async () => {
@@ -398,7 +398,7 @@ describe("ensureSandboxBrowser create args", () => {
     ).rejects.toThrow("hung container has been forcefully removed");
 
     expect(dockerMocks.execDocker).toHaveBeenCalledWith(
-      ["rm", "-f", expect.stringMatching(/^openclaw-sbx-browser-session-test-/)],
+      ["rm", "-f", expect.stringMatching(/^opnex-sbx-browser-session-test-/)],
       { allowFailure: true },
     );
   });
@@ -415,7 +415,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_CDP_SOURCE_RANGE=172.21.0.1/32");
+    expect(envEntries).toContain("OPNEX_BROWSER_CDP_SOURCE_RANGE=172.21.0.1/32");
   });
 
   it("uses explicit cdpSourceRange over auto-derived gateway", async () => {
@@ -432,7 +432,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_CDP_SOURCE_RANGE=10.0.0.0/24");
+    expect(envEntries).toContain("OPNEX_BROWSER_CDP_SOURCE_RANGE=10.0.0.0/24");
     expect(dockerMocks.readDockerNetworkGateway).not.toHaveBeenCalled();
   });
 
@@ -493,6 +493,6 @@ describe("ensureSandboxBrowser create args", () => {
     expect(result).toBeDefined();
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_CDP_SOURCE_RANGE=127.0.0.1/32");
+    expect(envEntries).toContain("OPNEX_BROWSER_CDP_SOURCE_RANGE=127.0.0.1/32");
   });
 });

@@ -1,6 +1,6 @@
 import fsSync from "node:fs";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { sleep } from "openclaw/plugin-sdk/text-runtime";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { sleep } from "opnex/plugin-sdk/text-runtime";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { loadWebMedia } from "../media.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
@@ -10,9 +10,9 @@ const hoisted = vi.hoisted(() => ({
   runFfmpeg: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("opnex/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/media-runtime")>(
+    "opnex/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -20,9 +20,9 @@ vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("opnex/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/runtime-env")>(
+    "opnex/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -31,9 +31,9 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/text-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/text-runtime")>(
-    "openclaw/plugin-sdk/text-runtime",
+vi.mock("opnex/plugin-sdk/text-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/text-runtime")>(
+    "opnex/plugin-sdk/text-runtime",
   );
   return {
     ...actual,

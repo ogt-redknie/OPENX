@@ -1,0 +1,29 @@
+{
+  "name": "@opnex/opnex",
+  "version": "2026.4.25",
+  "description": "OPNEX workflow tool plugin (typed pipelines + resumable approvals)",
+  "type": "module",
+  "dependencies": {
+    "opnex": "workspace:*",
+    "ajv": "^8.20.0",
+    "typebox": "1.1.33"
+  },
+  "devDependencies": {
+    "@opnex/plugin-sdk": "workspace:*"
+  },
+  "opnex": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.4.25"
+    },
+    "build": {
+      "opnexVersion": "2026.4.25"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

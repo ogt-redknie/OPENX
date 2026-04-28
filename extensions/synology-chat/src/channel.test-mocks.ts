@@ -46,24 +46,24 @@ async function readRequestBodyWithLimitForTest(req: IncomingMessage): Promise<st
   });
 }
 
-vi.mock("openclaw/plugin-sdk/setup", async () => {
-  const actual = await vi.importActual<object>("openclaw/plugin-sdk/setup");
+vi.mock("opnex/plugin-sdk/setup", async () => {
+  const actual = await vi.importActual<object>("opnex/plugin-sdk/setup");
   return {
     ...actual,
     DEFAULT_ACCOUNT_ID: "default",
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-config-schema", async () => {
-  const actual = await vi.importActual<object>("openclaw/plugin-sdk/channel-config-schema");
+vi.mock("opnex/plugin-sdk/channel-config-schema", async () => {
+  const actual = await vi.importActual<object>("opnex/plugin-sdk/channel-config-schema");
   return {
     ...actual,
     buildChannelConfigSchema: vi.fn((schema: unknown) => ({ schema })),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/webhook-ingress", async () => {
-  const actual = await vi.importActual<object>("openclaw/plugin-sdk/webhook-ingress");
+vi.mock("opnex/plugin-sdk/webhook-ingress", async () => {
+  const actual = await vi.importActual<object>("opnex/plugin-sdk/webhook-ingress");
   return {
     ...actual,
     registerPluginHttpRoute: registerPluginHttpRouteMock,

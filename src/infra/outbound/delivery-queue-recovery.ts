@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { formatErrorMessage } from "../errors.js";
 import {
   ackDelivery,
@@ -19,7 +19,7 @@ export type RecoverySummary = {
 
 export type DeliverFn = (
   params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
   } & QueuedDeliveryPayload & {
       skipQueue?: boolean;
     },
@@ -109,7 +109,7 @@ export async function withActiveDeliveryClaim<T>(
   }
 }
 
-function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: OpenClawConfig) {
+function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: OPNEXConfig) {
   return {
     cfg,
     channel: entry.channel,
@@ -194,7 +194,7 @@ export function isPermanentDeliveryError(error: string): boolean {
 
 async function drainQueuedEntry(opts: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   deliver: DeliverFn;
   stateDir?: string;
   onRecovered?: (entry: QueuedDelivery) => void;
@@ -235,7 +235,7 @@ async function drainQueuedEntry(opts: {
 export async function drainPendingDeliveries(opts: {
   drainKey: string;
   logLabel: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   log: RecoveryLogger;
   stateDir?: string;
   deliver: DeliverFn;
@@ -346,7 +346,7 @@ export async function drainPendingDeliveries(opts: {
 export async function recoverPendingDeliveries(opts: {
   deliver: DeliverFn;
   log: RecoveryLogger;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   stateDir?: string;
   /** Maximum wall-clock time for recovery in ms. Remaining entries are deferred to next startup. Default: 60 000. */
   maxRecoveryMs?: number;

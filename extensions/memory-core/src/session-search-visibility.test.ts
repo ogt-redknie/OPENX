@@ -1,8 +1,8 @@
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
-import * as sessionTranscriptHit from "openclaw/plugin-sdk/session-transcript-hit";
+import type { MemorySearchResult } from "opnex/plugin-sdk/memory-core-host-runtime-files";
+import * as sessionTranscriptHit from "opnex/plugin-sdk/session-transcript-hit";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { filterMemorySearchHitsBySessionVisibility } from "./session-search-visibility.js";
-import { asOpenClawConfig } from "./tools.test-helpers.js";
+import { asOPNEXConfig } from "./tools.test-helpers.js";
 
 const crossAgentStore = {
   "agent:peer:only": {
@@ -12,9 +12,9 @@ const crossAgentStore = {
   },
 };
 
-vi.mock("openclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
+vi.mock("opnex/plugin-sdk/session-transcript-hit", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-hit")>();
+    await importOriginal<typeof import("opnex/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: vi.fn(() => ({
@@ -30,7 +30,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("drops sessions-sourced hits when requester key is missing (fail closed)", async () => {
-    const cfg = asOpenClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asOPNEXConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "sessions/u1.jsonl",
@@ -51,7 +51,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("keeps non-session hits unchanged", async () => {
-    const cfg = asOpenClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asOPNEXConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "memory/foo.md",
@@ -72,7 +72,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("loads the combined session store once per filter pass", async () => {
-    const cfg = asOpenClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asOPNEXConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "sessions/w1.jsonl",
@@ -110,7 +110,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asOpenClawConfig({
+    const cfg = asOPNEXConfig({
       tools: {
         sessions: { visibility: "all" },
         agentToAgent: { enabled: true, allow: ["*"] },
@@ -134,7 +134,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asOpenClawConfig({
+    const cfg = asOPNEXConfig({
       tools: {
         sessions: { visibility: "all" },
         agentToAgent: { enabled: false },

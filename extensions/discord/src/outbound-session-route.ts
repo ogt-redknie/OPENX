@@ -1,10 +1,10 @@
-import { buildThreadAwareOutboundSessionRoute } from "openclaw/plugin-sdk/channel-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "openclaw/plugin-sdk/routing";
+import { buildThreadAwareOutboundSessionRoute } from "opnex/plugin-sdk/channel-core";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "opnex/plugin-sdk/routing";
 import { parseDiscordTarget } from "./target-parsing.js";
 
 export type ResolveDiscordOutboundSessionRouteParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

@@ -4,7 +4,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import { clearCliSession, setCliSessionBinding, setCliSessionId } from "../cli-session.js";
 import { DEFAULT_CONTEXT_TOKENS } from "../defaults.js";
@@ -38,7 +38,7 @@ function resolvePositiveInteger(value: number | undefined): number | undefined {
 }
 
 export async function updateSessionStoreAfterAgentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   contextTokensOverride?: number;
   sessionId: string;
   sessionKey: string;

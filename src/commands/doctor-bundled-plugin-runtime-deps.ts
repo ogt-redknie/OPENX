@@ -1,7 +1,7 @@
 import path from "node:path";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
+import { resolveOPNEXPackageRootSync } from "../infra/opnex-root.js";
 import {
   createBundledRuntimeDepsWritableInstallSpecs,
   repairBundledRuntimeDepsInstallRootAsync,
@@ -36,7 +36,7 @@ function logRuntimeDepsInstallProgress(runtime: RuntimeEnv, message: string): vo
 export async function maybeRepairBundledPluginRuntimeDeps(params: {
   runtime: RuntimeEnv;
   prompter: DoctorPrompter;
-  config?: OpenClawConfig;
+  config?: OPNEXConfig;
   env?: NodeJS.ProcessEnv;
   packageRoot?: string | null;
   includeConfiguredChannels?: boolean;
@@ -44,7 +44,7 @@ export async function maybeRepairBundledPluginRuntimeDeps(params: {
 }): Promise<void> {
   const packageRoot =
     params.packageRoot ??
-    resolveOpenClawPackageRootSync({
+    resolveOPNEXPackageRootSync({
       argv1: process.argv[1],
       cwd: process.cwd(),
       moduleUrl: import.meta.url,
@@ -60,7 +60,7 @@ export async function maybeRepairBundledPluginRuntimeDeps(params: {
         config: params.config,
         env: {
           ...env,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+          OPNEX_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
         },
       })
     : undefined;
@@ -84,7 +84,7 @@ export async function maybeRepairBundledPluginRuntimeDeps(params: {
       [
         "Bundled plugin runtime deps use conflicting versions.",
         ...conflictLines,
-        `Update bundled plugins and rerun ${formatCliCommand("openclaw doctor")}.`,
+        `Update bundled plugins and rerun ${formatCliCommand("opnex doctor")}.`,
       ].join("\n"),
       "Bundled plugins",
     );
@@ -107,7 +107,7 @@ export async function maybeRepairBundledPluginRuntimeDeps(params: {
     [
       "Bundled plugin runtime deps are missing.",
       ...missing.map((dep) => `- ${dep.name}@${dep.version} (used by ${dep.pluginIds.join(", ")})`),
-      `Fix: run ${formatCliCommand("openclaw doctor --fix")} to install them.`,
+      `Fix: run ${formatCliCommand("opnex doctor --fix")} to install them.`,
     ].join("\n"),
     "Bundled plugins",
   );
@@ -130,7 +130,7 @@ export async function maybeRepairBundledPluginRuntimeDeps(params: {
     progress = createCliProgress({
       label: `Installing bundled plugin runtime deps (${missingSpecs.length})`,
       indeterminate: true,
-      enabled: process.env.VITEST !== "true" || process.env.OPENCLAW_TEST_RUNTIME_LOG === "1",
+      enabled: process.env.VITEST !== "true" || process.env.OPNEX_TEST_RUNTIME_LOG === "1",
     });
     const installStartedAt = Date.now();
     logRuntimeDepsInstallProgress(

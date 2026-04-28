@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import {
   resolveCommandConversationResolution,
   type ResolveCommandConversationResolutionInput,
@@ -16,7 +16,7 @@ export type ResolveConversationBindingContextInput = Omit<
   ResolveCommandConversationResolutionInput,
   "includePlacementHint"
 > & {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 };
 
 export function resolveConversationBindingContext(

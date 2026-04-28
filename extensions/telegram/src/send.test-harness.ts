@@ -1,11 +1,11 @@
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
+import { resolveMarkdownTableMode } from "opnex/plugin-sdk/markdown-table-runtime";
 import {
   buildOutboundMediaLoadOptions,
   isGifMedia,
   kindFromMime,
   normalizePollInput,
-} from "openclaw/plugin-sdk/media-runtime";
-import type { MockFn } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "opnex/plugin-sdk/media-runtime";
+import type { MockFn } from "opnex/plugin-sdk/plugin-test-runtime";
 import { beforeEach, vi } from "vitest";
 
 const { botApi, botCtorSpy } = vi.hoisted(() => ({
@@ -45,7 +45,7 @@ const { imageMetadata } = vi.hoisted(() => ({
 const { loadConfig, resolveStorePath } = vi.hoisted(() => ({
   loadConfig: vi.fn(() => ({})),
   resolveStorePath: vi.fn(
-    (storePath?: string) => storePath ?? "/tmp/openclaw-telegram-send-tests.json",
+    (storePath?: string) => storePath ?? "/tmp/opnex-telegram-send-tests.json",
   ),
 }));
 
@@ -92,7 +92,7 @@ type TelegramSendTestMocks = {
   imageMetadata: { width: number | undefined; height: number | undefined };
 };
 
-vi.mock("openclaw/plugin-sdk/web-media", () => ({
+vi.mock("opnex/plugin-sdk/web-media", () => ({
   loadWebMedia,
 }));
 
@@ -135,9 +135,9 @@ vi.mock("undici", () => ({
   setGlobalDispatcher: undiciSetGlobalDispatcher,
 }));
 
-vi.mock("openclaw/plugin-sdk/plugin-config-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/plugin-config-runtime")>(
-    "openclaw/plugin-sdk/plugin-config-runtime",
+vi.mock("opnex/plugin-sdk/plugin-config-runtime", async () => {
+  const actual = await vi.importActual<typeof import("opnex/plugin-sdk/plugin-config-runtime")>(
+    "opnex/plugin-sdk/plugin-config-runtime",
   );
   return {
     ...actual,
@@ -177,7 +177,7 @@ export function getTelegramSendTestMocks(): TelegramSendTestMocks {
 export function installTelegramSendTestHooks() {
   beforeEach(() => {
     loadConfig.mockReturnValue({});
-    resolveStorePath.mockReturnValue("/tmp/openclaw-telegram-send-tests.json");
+    resolveStorePath.mockReturnValue("/tmp/opnex-telegram-send-tests.json");
     loadWebMedia.mockReset();
     imageMetadata.width = 1200;
     imageMetadata.height = 800;

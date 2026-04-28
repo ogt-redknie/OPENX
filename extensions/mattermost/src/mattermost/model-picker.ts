@@ -1,13 +1,13 @@
 import { createHash } from "node:crypto";
-import type { ModelsProviderData } from "openclaw/plugin-sdk/command-auth";
-import { resolveStoredModelOverride } from "openclaw/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
-import { loadSessionStore, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+import type { ModelsProviderData } from "opnex/plugin-sdk/command-auth";
+import { resolveStoredModelOverride } from "opnex/plugin-sdk/command-auth";
+import type { OPNEXConfig } from "opnex/plugin-sdk/core";
+import { normalizeProviderId } from "opnex/plugin-sdk/provider-model-shared";
+import { loadSessionStore, resolveStorePath } from "opnex/plugin-sdk/session-store-runtime";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { MattermostInteractiveButtonInput } from "./interactions.js";
 
 const MATTERMOST_MODEL_PICKER_CONTEXT_KEY = "oc_model_picker";
@@ -233,7 +233,7 @@ export function buildMattermostAllowedModelRefs(data: ModelsProviderData): Set<s
 }
 
 export function resolveMattermostModelPickerCurrentModel(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   route: { agentId: string; sessionKey: string };
   data: ModelsProviderData;
   skipCache?: boolean;

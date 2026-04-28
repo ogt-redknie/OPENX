@@ -1,12 +1,12 @@
 import http from "node:http";
 import { URL } from "node:url";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { resolveConfiguredCapabilityProvider } from "openclaw/plugin-sdk/provider-selection-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { resolveConfiguredCapabilityProvider } from "opnex/plugin-sdk/provider-selection-runtime";
+import { normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import {
   createWebhookInFlightLimiter,
   WEBHOOK_BODY_READ_DEFAULTS,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "opnex/plugin-sdk/webhook-ingress";
 import {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
@@ -155,7 +155,7 @@ export class VoiceCallWebhookServer {
   private manager: CallManager;
   private provider: VoiceCallProvider;
   private coreConfig: CoreConfig | null;
-  private fullConfig: OpenClawConfig | null;
+  private fullConfig: OPNEXConfig | null;
   private agentRuntime: CoreAgentDeps | null;
   private stopStaleCallReaper: (() => void) | null = null;
   private readonly webhookInFlightLimiter = createWebhookInFlightLimiter();
@@ -172,7 +172,7 @@ export class VoiceCallWebhookServer {
     manager: CallManager,
     provider: VoiceCallProvider,
     coreConfig?: CoreConfig,
-    fullConfig?: OpenClawConfig,
+    fullConfig?: OPNEXConfig,
     agentRuntime?: CoreAgentDeps,
   ) {
     this.config = normalizeVoiceCallConfig(config);
@@ -257,14 +257,14 @@ export class VoiceCallWebhookServer {
   private async initializeMediaStreaming(): Promise<void> {
     const streaming = this.config.streaming;
     const pluginConfig =
-      this.fullConfig ?? (this.coreConfig as unknown as OpenClawConfig | undefined);
+      this.fullConfig ?? (this.coreConfig as unknown as OPNEXConfig | undefined);
     const { getRealtimeTranscriptionProvider, listRealtimeTranscriptionProviders } =
       await loadRealtimeTranscriptionRuntime();
     const resolution = resolveConfiguredCapabilityProvider({
       configuredProviderId: streaming.provider,
       providerConfigs: streaming.providers,
       cfg: pluginConfig,
-      cfgForResolve: pluginConfig ?? ({} as OpenClawConfig),
+      cfgForResolve: pluginConfig ?? ({} as OPNEXConfig),
       getConfiguredProvider: (providerId) =>
         getRealtimeTranscriptionProvider(providerId, pluginConfig),
       listProviders: () => listRealtimeTranscriptionProviders(pluginConfig),

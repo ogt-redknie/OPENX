@@ -1,5 +1,5 @@
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
-import { listOpenClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
+import { listOPNEXPluginManifestMetadata } from "./manifest-metadata-scan.js";
 import type { PluginManifestModelIdNormalizationProvider } from "./manifest.js";
 
 let manifestModelIdNormalizationCache:
@@ -102,7 +102,7 @@ function collectManifestModelIdNormalizationPolicies(): Map<
   PluginManifestModelIdNormalizationProvider
 > {
   const policies = new Map<string, PluginManifestModelIdNormalizationProvider>();
-  for (const { manifest } of listOpenClawPluginManifestMetadata()) {
+  for (const { manifest } of listOPNEXPluginManifestMetadata()) {
     for (const [provider, policy] of readManifestModelIdNormalizationPolicies(manifest)) {
       policies.set(provider, policy);
     }

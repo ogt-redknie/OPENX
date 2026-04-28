@@ -2,13 +2,13 @@ import fs from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/store.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createOPNEXTestState,
+  type OPNEXTestState,
+} from "../test-utils/opnex-test-state.js";
 import { maybeRepairLegacyFlatAuthProfileStores } from "./doctor-auth-flat-profiles.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
-const states: OpenClawTestState[] = [];
+const states: OPNEXTestState[] = [];
 
 function makePrompter(shouldRepair: boolean): DoctorPrompter {
   return {
@@ -29,12 +29,12 @@ function makePrompter(shouldRepair: boolean): DoctorPrompter {
   };
 }
 
-async function makeTestState(): Promise<OpenClawTestState> {
-  const state = await createOpenClawTestState({
+async function makeTestState(): Promise<OPNEXTestState> {
+  const state = await createOPNEXTestState({
     layout: "state-only",
-    prefix: "openclaw-doctor-flat-auth-",
+    prefix: "opnex-doctor-flat-auth-",
     env: {
-      OPENCLAW_AGENT_DIR: undefined,
+      OPNEX_AGENT_DIR: undefined,
     },
   });
   states.push(state);

@@ -1,4 +1,4 @@
-import { assertNoImportTimeSideEffects } from "openclaw/plugin-sdk/plugin-test-contracts";
+import { assertNoImportTimeSideEffects } from "opnex/plugin-sdk/plugin-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const listChannelPlugins = vi.hoisted(() =>

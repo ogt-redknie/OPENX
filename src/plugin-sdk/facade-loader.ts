@@ -31,7 +31,7 @@ const cachedFacadeModuleLocationsByKey = new Map<
   } | null
 >();
 let facadeLoaderJitiFactory: PluginJitiLoaderFactory | undefined;
-let cachedOpenClawPackageRoot: string | undefined;
+let cachedOPNEXPackageRoot: string | undefined;
 
 function getJitiFactory() {
   if (facadeLoaderJitiFactory) {
@@ -42,16 +42,16 @@ function getJitiFactory() {
   return facadeLoaderJitiFactory;
 }
 
-function getOpenClawPackageRoot() {
-  if (cachedOpenClawPackageRoot) {
-    return cachedOpenClawPackageRoot;
+function getOPNEXPackageRoot() {
+  if (cachedOPNEXPackageRoot) {
+    return cachedOPNEXPackageRoot;
   }
-  cachedOpenClawPackageRoot =
+  cachedOPNEXPackageRoot =
     resolveLoaderPackageRoot({
       modulePath: fileURLToPath(import.meta.url),
       moduleUrl: import.meta.url,
     }) ?? fileURLToPath(new URL("../..", import.meta.url));
-  return cachedOpenClawPackageRoot;
+  return cachedOPNEXPackageRoot;
 }
 
 function createFacadeResolutionKey(params: {
@@ -76,7 +76,7 @@ function resolveFacadeModuleLocationUncached(params: {
   return resolveBundledFacadeModuleLocation({
     ...params,
     currentModulePath: CURRENT_MODULE_PATH,
-    packageRoot: getOpenClawPackageRoot(),
+    packageRoot: getOPNEXPackageRoot(),
     bundledPluginsDir,
   });
 }
@@ -210,8 +210,8 @@ export function loadFacadeModuleAtLocationSync<T extends object>(params: {
     absolutePath: location.modulePath,
     rootPath: location.boundaryRoot,
     boundaryLabel:
-      location.boundaryRoot === getOpenClawPackageRoot()
-        ? "OpenClaw package root"
+      location.boundaryRoot === getOPNEXPackageRoot()
+        ? "OPNEX package root"
         : (() => {
             const bundledDir = resolveBundledPluginsDir();
             return bundledDir && path.resolve(location.boundaryRoot) === path.resolve(bundledDir)
@@ -300,8 +300,8 @@ export async function loadBundledPluginPublicSurfaceModule<T extends object>(par
     absolutePath: preparedLocation.modulePath,
     rootPath: preparedLocation.boundaryRoot,
     boundaryLabel:
-      preparedLocation.boundaryRoot === getOpenClawPackageRoot()
-        ? "OpenClaw package root"
+      preparedLocation.boundaryRoot === getOPNEXPackageRoot()
+        ? "OPNEX package root"
         : "plugin root",
     rejectHardlinks: false,
   });
@@ -339,7 +339,7 @@ export function resetFacadeLoaderStateForTest(): void {
   jitiLoaders.clear();
   cachedFacadeModuleLocationsByKey.clear();
   facadeLoaderJitiFactory = undefined;
-  cachedOpenClawPackageRoot = undefined;
+  cachedOPNEXPackageRoot = undefined;
 }
 
 export function setFacadeLoaderJitiFactoryForTest(

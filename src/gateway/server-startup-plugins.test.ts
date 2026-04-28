@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 
 const applyPluginAutoEnable = vi.hoisted(() =>
@@ -84,7 +84,7 @@ const loadPluginLookUpTable = vi.hoisted(() =>
     metrics: pluginLookUpTableMetrics,
   })),
 );
-const resolveOpenClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
+const resolveOPNEXPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
 const runChannelPluginStartupMaintenance = vi.hoisted(() =>
   vi.fn(async (_params: unknown) => undefined),
 );
@@ -115,8 +115,8 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (params: { config: unknown }) => applyPluginAutoEnable(params),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync: (params: unknown) => resolveOpenClawPackageRootSync(params),
+vi.mock("../infra/opnex-root.js", () => ({
+  resolveOPNEXPackageRootSync: (params: unknown) => resolveOPNEXPackageRootSync(params),
 }));
 
 vi.mock("../plugins/bundled-runtime-deps.js", () => ({
@@ -180,7 +180,7 @@ describe("prepareGatewayPluginBootstrap runtime-deps staging", () => {
       },
       metrics: pluginLookUpTableMetrics,
     });
-    resolveOpenClawPackageRootSync.mockClear().mockReturnValue("/package");
+    resolveOPNEXPackageRootSync.mockClear().mockReturnValue("/package");
     runChannelPluginStartupMaintenance.mockClear();
     runStartupSessionMigration.mockClear();
     scanBundledPluginRuntimeDeps.mockClear().mockReturnValue({
@@ -273,7 +273,7 @@ describe("prepareGatewayPluginBootstrap runtime-deps staging", () => {
       plugins: {
         allow: ["bench-plugin"],
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const activationConfig = {
       channels: {
         telegram: {
@@ -289,7 +289,7 @@ describe("prepareGatewayPluginBootstrap runtime-deps staging", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const runtimeConfig = {
       channels: {
         telegram: {
@@ -315,7 +315,7 @@ describe("prepareGatewayPluginBootstrap runtime-deps staging", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     applyPluginAutoEnable.mockReturnValueOnce({
       config: activationConfig,
       changes: [],
@@ -453,7 +453,7 @@ describe("prepareGatewayPluginBootstrap runtime-deps staging", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const log = createLog();
     const { prepareGatewayPluginBootstrap } = await import("./server-startup-plugins.js");
 

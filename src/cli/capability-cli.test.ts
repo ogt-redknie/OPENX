@@ -69,12 +69,12 @@ const mocks = vi.hoisted(() => ({
     return {};
   }),
   describeImageFile: vi.fn(async () => ({
-    text: "friendly lobster",
+    text: "friendly opnex",
     provider: "openai",
     model: "gpt-4.1-mini",
   })),
   describeImageFileWithModel: vi.fn(async () => ({
-    text: "friendly lobster",
+    text: "friendly opnex",
     model: "gpt-4.1-mini",
   })),
   generateImage: vi.fn(),
@@ -656,7 +656,7 @@ describe("capability cli", () => {
       ],
     });
 
-    const tempOutput = path.join(os.tmpdir(), `openclaw-image-mismatch-${Date.now()}.png`);
+    const tempOutput = path.join(os.tmpdir(), `opnex-image-mismatch-${Date.now()}.png`);
     await fs.rm(tempOutput, { force: true });
     await fs.rm(tempOutput.replace(/\.png$/, ".jpg"), { force: true });
 
@@ -667,7 +667,7 @@ describe("capability cli", () => {
         "image",
         "generate",
         "--prompt",
-        "friendly lobster",
+        "friendly opnex",
         "--output",
         tempOutput,
         "--json",
@@ -707,7 +707,7 @@ describe("capability cli", () => {
         "image",
         "generate",
         "--prompt",
-        "friendly lobster",
+        "friendly opnex",
         "--timeout-ms",
         "180000",
         "--json",
@@ -716,7 +716,7 @@ describe("capability cli", () => {
 
     expect(mocks.generateImage).toHaveBeenCalledWith(
       expect.objectContaining({
-        prompt: "friendly lobster",
+        prompt: "friendly opnex",
         timeoutMs: 180000,
       }),
     );
@@ -778,7 +778,7 @@ describe("capability cli", () => {
         },
       ],
     });
-    const inputPath = path.join(os.tmpdir(), `openclaw-image-edit-${Date.now()}.png`);
+    const inputPath = path.join(os.tmpdir(), `opnex-image-edit-${Date.now()}.png`);
     await fs.writeFile(inputPath, Buffer.from("png-input"));
 
     await runRegisteredCli({
@@ -898,8 +898,8 @@ describe("capability cli", () => {
       ],
     });
 
-    const tempInput = path.join(os.tmpdir(), `openclaw-image-edit-input-${Date.now()}.png`);
-    const tempOutput = path.join(os.tmpdir(), `openclaw-image-edit-output-${Date.now()}.png`);
+    const tempInput = path.join(os.tmpdir(), `opnex-image-edit-input-${Date.now()}.png`);
+    const tempOutput = path.join(os.tmpdir(), `opnex-image-edit-output-${Date.now()}.png`);
     await fs.writeFile(tempInput, Buffer.from(pngBase64, "base64"));
     await fs.rm(tempOutput, { force: true });
 
@@ -993,7 +993,7 @@ describe("capability cli", () => {
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-video-generate-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-video-generate-"));
     const outputBase = path.join(tempDir, "result");
 
     await runRegisteredCli({
@@ -1003,7 +1003,7 @@ describe("capability cli", () => {
         "video",
         "generate",
         "--prompt",
-        "friendly lobster",
+        "friendly opnex",
         "--output",
         outputBase,
         "--json",
@@ -1052,7 +1052,7 @@ describe("capability cli", () => {
         "video",
         "generate",
         "--prompt",
-        "friendly lobster",
+        "friendly opnex",
         "--model",
         "minimax/MiniMax-Hailuo-2.3",
         "--size",
@@ -1073,7 +1073,7 @@ describe("capability cli", () => {
 
     expect(mocks.generateVideo).toHaveBeenCalledWith(
       expect.objectContaining({
-        prompt: "friendly lobster",
+        prompt: "friendly opnex",
         modelOverride: "minimax/MiniMax-Hailuo-2.3",
         size: "1280x768",
         aspectRatio: "16:9",
@@ -1097,7 +1097,7 @@ describe("capability cli", () => {
     await expect(
       runRegisteredCli({
         register: registerCapabilityCli as (program: Command) => void,
-        argv: ["capability", "video", "generate", "--prompt", "friendly lobster", "--json"],
+        argv: ["capability", "video", "generate", "--prompt", "friendly opnex", "--json"],
       }),
     ).rejects.toThrow("exit 1");
     expect(mocks.runtime.error).toHaveBeenCalledWith(
@@ -1464,7 +1464,7 @@ describe("capability cli", () => {
   it("rejects providerless video describe model overrides", async () => {
     const mediaRuntime = await import("../media-understanding/runtime.js");
     vi.mocked(mediaRuntime.describeVideoFile).mockResolvedValue({
-      text: "friendly lobster",
+      text: "friendly opnex",
       provider: "openai",
       model: "gpt-4.1-mini",
     } as never);

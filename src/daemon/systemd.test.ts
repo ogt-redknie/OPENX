@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const execFileMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeChildProcessExecFile } = await import("openclaw/plugin-sdk/test-node-mocks");
+  const { mockNodeChildProcessExecFile } = await import("opnex/plugin-sdk/test-node-mocks");
   return mockNodeChildProcessExecFile(
     Object.assign(execFileMock, {
       __promisify__: vi.fn(),
@@ -37,9 +37,9 @@ type ExecFileError = Error & {
 };
 
 const TEST_SERVICE_HOME = "/home/test";
-const TEST_MANAGED_HOME = "/tmp/openclaw-test-home";
-const GATEWAY_SERVICE = "openclaw-gateway.service";
-const NODE_SERVICE = "openclaw-node.service";
+const TEST_MANAGED_HOME = "/tmp/opnex-test-home";
+const GATEWAY_SERVICE = "opnex-gateway.service";
+const NODE_SERVICE = "opnex-node.service";
 
 const createExecFileError = (
   message: string,
@@ -112,10 +112,10 @@ function mockReadGatewayServiceFile(
 }
 
 async function expectExecStartWithoutEnvironment(envFileLine: string) {
-  mockReadGatewayServiceFile(["[Service]", "ExecStart=/usr/bin/openclaw gateway run", envFileLine]);
+  mockReadGatewayServiceFile(["[Service]", "ExecStart=/usr/bin/opnex gateway run", envFileLine]);
 
   const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-  expect(command?.programArguments).toEqual(["/usr/bin/openclaw", "gateway", "run"]);
+  expect(command?.programArguments).toEqual(["/usr/bin/opnex", "gateway", "run"]);
   expect(command?.environment).toBeUndefined();
 }
 
@@ -237,7 +237,7 @@ describe("systemd availability", () => {
     });
 
     await expect(
-      isSystemdUserServiceAvailable({ USER: "openclaw", SUDO_USER: "admin" }),
+      isSystemdUserServiceAvailable({ USER: "opnex", SUDO_USER: "admin" }),
     ).resolves.toBe(true);
     expect(execFileMock).toHaveBeenCalledTimes(1);
   });
@@ -264,7 +264,7 @@ describe("isSystemdServiceEnabled", () => {
     err.code = "ENOENT";
     vi.spyOn(fs, "access").mockRejectedValueOnce(err);
 
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/opnex-test-home" } });
 
     expect(result).toBe(false);
     expect(execFileMock).not.toHaveBeenCalled();
@@ -368,7 +368,7 @@ describe("isSystemdServiceEnabled", () => {
     vi.spyOn(fs, "access").mockResolvedValue(undefined);
     execFileMock
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        expect(args).toEqual(["--user", "is-enabled", "openclaw-gateway.service"]);
+        expect(args).toEqual(["--user", "is-enabled", "opnex-gateway.service"]);
         const err = new Error("Failed to connect to bus") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "Failed to connect to bus");
@@ -376,13 +376,13 @@ describe("isSystemdServiceEnabled", () => {
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
         expect(args[0]).toBe("--machine");
         expect(String(args[1])).toMatch(/^[^@]+@$/);
-        expect(args.slice(2)).toEqual(["--user", "is-enabled", "openclaw-gateway.service"]);
+        expect(args.slice(2)).toEqual(["--user", "is-enabled", "opnex-gateway.service"]);
         const err = new Error("permission denied") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "permission denied");
       });
     await expect(
-      isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } }),
+      isSystemdServiceEnabled({ env: { HOME: "/tmp/opnex-test-home" } }),
     ).rejects.toThrow("systemctl is-enabled unavailable: permission denied");
   });
 
@@ -392,12 +392,12 @@ describe("isSystemdServiceEnabled", () => {
       // On Ubuntu 24.04, `systemctl --user is-enabled <unit>` exits with
       // code 4 and prints "not-found" to stdout when the unit doesn't exist.
       const err = new Error(
-        "Command failed: systemctl --user is-enabled openclaw-gateway.service",
+        "Command failed: systemctl --user is-enabled opnex-gateway.service",
       ) as Error & { code?: number };
       err.code = 4;
       cb(err, "not-found\n", "");
     });
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/opnex-test-home" } });
     expect(result).toBe(false);
   });
 });
@@ -435,7 +435,7 @@ describe("isNonFatalSystemdInstallProbeError", () => {
   it("matches wrapper-only WSL install probe failures", () => {
     expect(
       isNonFatalSystemdInstallProbeError(
-        new Error("Command failed: systemctl --user is-enabled openclaw-gateway.service"),
+        new Error("Command failed: systemctl --user is-enabled opnex-gateway.service"),
       ),
     ).toBe(true);
   });
@@ -493,37 +493,37 @@ describe("systemd runtime parsing", () => {
 describe("resolveSystemdUserUnitPath", () => {
   it.each([
     {
-      name: "uses default service name when OPENCLAW_PROFILE is unset",
+      name: "uses default service name when OPNEX_PROFILE is unset",
       env: { HOME: "/home/test" },
-      expected: "/home/test/.config/systemd/user/openclaw-gateway.service",
+      expected: "/home/test/.config/systemd/user/opnex-gateway.service",
     },
     {
-      name: "uses profile-specific service name when OPENCLAW_PROFILE is set to a custom value",
-      env: { HOME: "/home/test", OPENCLAW_PROFILE: "jbphoenix" },
-      expected: "/home/test/.config/systemd/user/openclaw-gateway-jbphoenix.service",
+      name: "uses profile-specific service name when OPNEX_PROFILE is set to a custom value",
+      env: { HOME: "/home/test", OPNEX_PROFILE: "jbphoenix" },
+      expected: "/home/test/.config/systemd/user/opnex-gateway-jbphoenix.service",
     },
     {
-      name: "prefers OPENCLAW_SYSTEMD_UNIT over OPENCLAW_PROFILE",
+      name: "prefers OPNEX_SYSTEMD_UNIT over OPNEX_PROFILE",
       env: {
         HOME: "/home/test",
-        OPENCLAW_PROFILE: "jbphoenix",
-        OPENCLAW_SYSTEMD_UNIT: "custom-unit",
+        OPNEX_PROFILE: "jbphoenix",
+        OPNEX_SYSTEMD_UNIT: "custom-unit",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
     {
-      name: "handles OPENCLAW_SYSTEMD_UNIT with .service suffix",
+      name: "handles OPNEX_SYSTEMD_UNIT with .service suffix",
       env: {
         HOME: "/home/test",
-        OPENCLAW_SYSTEMD_UNIT: "custom-unit.service",
+        OPNEX_SYSTEMD_UNIT: "custom-unit.service",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
     {
-      name: "trims whitespace from OPENCLAW_SYSTEMD_UNIT",
+      name: "trims whitespace from OPNEX_SYSTEMD_UNIT",
       env: {
         HOME: "/home/test",
-        OPENCLAW_SYSTEMD_UNIT: "  custom-unit  ",
+        OPNEX_SYSTEMD_UNIT: "  custom-unit  ",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
@@ -534,8 +534,8 @@ describe("resolveSystemdUserUnitPath", () => {
 
 describe("splitArgsPreservingQuotes", () => {
   it("splits on whitespace outside quotes", () => {
-    expect(splitArgsPreservingQuotes('/usr/bin/openclaw gateway start --name "My Bot"')).toEqual([
-      "/usr/bin/openclaw",
+    expect(splitArgsPreservingQuotes('/usr/bin/opnex gateway start --name "My Bot"')).toEqual([
+      "/usr/bin/opnex",
       "gateway",
       "start",
       "--name",
@@ -545,32 +545,32 @@ describe("splitArgsPreservingQuotes", () => {
 
   it("supports systemd-style backslash escaping", () => {
     expect(
-      splitArgsPreservingQuotes('openclaw --name "My \\"Bot\\"" --foo bar', {
+      splitArgsPreservingQuotes('opnex --name "My \\"Bot\\"" --foo bar', {
         escapeMode: "backslash",
       }),
-    ).toEqual(["openclaw", "--name", 'My "Bot"', "--foo", "bar"]);
+    ).toEqual(["opnex", "--name", 'My "Bot"', "--foo", "bar"]);
   });
 
   it("supports schtasks-style escaped quotes while preserving other backslashes", () => {
     expect(
-      splitArgsPreservingQuotes('openclaw --path "C:\\\\Program Files\\\\OpenClaw"', {
+      splitArgsPreservingQuotes('opnex --path "C:\\\\Program Files\\\\OPNEX"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["openclaw", "--path", "C:\\\\Program Files\\\\OpenClaw"]);
+    ).toEqual(["opnex", "--path", "C:\\\\Program Files\\\\OPNEX"]);
 
     expect(
-      splitArgsPreservingQuotes('openclaw --label "My \\"Quoted\\" Name"', {
+      splitArgsPreservingQuotes('opnex --label "My \\"Quoted\\" Name"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["openclaw", "--label", 'My "Quoted" Name']);
+    ).toEqual(["opnex", "--label", 'My "Quoted" Name']);
   });
 });
 
 describe("parseSystemdExecStart", () => {
   it("preserves quoted arguments", () => {
-    const execStart = '/usr/bin/openclaw gateway start --name "My Bot"';
+    const execStart = '/usr/bin/opnex gateway start --name "My Bot"';
     expect(parseSystemdExecStart(execStart)).toEqual([
-      "/usr/bin/openclaw",
+      "/usr/bin/opnex",
       "gateway",
       "start",
       "--name",
@@ -584,14 +584,14 @@ describe("readSystemdServiceExecStart", () => {
     vi.restoreAllMocks();
   });
 
-  it("loads OPENCLAW_GATEWAY_TOKEN from EnvironmentFile", async () => {
+  it("loads OPNEX_GATEWAY_TOKEN from EnvironmentFile", async () => {
     const readFileSpy = mockReadGatewayServiceFile(
-      ["[Service]", "ExecStart=/usr/bin/openclaw gateway run", "EnvironmentFile=%h/.openclaw/.env"],
-      { [`${TEST_SERVICE_HOME}/.openclaw/.env`]: "OPENCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      ["[Service]", "ExecStart=/usr/bin/opnex gateway run", "EnvironmentFile=%h/.opnex/.env"],
+      { [`${TEST_SERVICE_HOME}/.opnex/.env`]: "OPNEX_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-    expect(command?.environment?.OPENCLAW_GATEWAY_TOKEN).toBe("env-file-token");
+    expect(command?.environment?.OPNEX_GATEWAY_TOKEN).toBe("env-file-token");
     expect(readFileSpy).toHaveBeenCalledTimes(2);
   });
 
@@ -599,97 +599,97 @@ describe("readSystemdServiceExecStart", () => {
     mockReadGatewayServiceFile(
       [
         "[Service]",
-        "ExecStart=/usr/bin/openclaw gateway run",
-        "EnvironmentFile=%h/.openclaw/.env",
-        'Environment="OPENCLAW_GATEWAY_TOKEN=inline-token"',
+        "ExecStart=/usr/bin/opnex gateway run",
+        "EnvironmentFile=%h/.opnex/.env",
+        'Environment="OPNEX_GATEWAY_TOKEN=inline-token"',
       ],
-      { [`${TEST_SERVICE_HOME}/.openclaw/.env`]: "OPENCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      { [`${TEST_SERVICE_HOME}/.opnex/.env`]: "OPNEX_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-    expect(command?.environment?.OPENCLAW_GATEWAY_TOKEN).toBe("env-file-token");
-    expect(command?.environmentValueSources?.OPENCLAW_GATEWAY_TOKEN).toBe("inline-and-file");
+    expect(command?.environment?.OPNEX_GATEWAY_TOKEN).toBe("env-file-token");
+    expect(command?.environmentValueSources?.OPNEX_GATEWAY_TOKEN).toBe("inline-and-file");
   });
 
   it("ignores missing optional EnvironmentFile entries", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.openclaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.opnex/missing.env");
   });
 
   it("keeps parsing when non-optional EnvironmentFile entries are missing", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.openclaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.opnex/missing.env");
   });
 
   it("supports multiple EnvironmentFile entries and quoted paths", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/opnex-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
-          'EnvironmentFile=%h/.openclaw/first.env "%h/.openclaw/second env.env"',
+          "ExecStart=/usr/bin/opnex gateway run",
+          'EnvironmentFile=%h/.opnex/first.env "%h/.opnex/second env.env"',
         ].join("\n");
       }
-      if (pathValue === "/home/test/.openclaw/first.env") {
-        return "OPENCLAW_GATEWAY_TOKEN=first-token\n"; // pragma: allowlist secret
+      if (pathValue === "/home/test/.opnex/first.env") {
+        return "OPNEX_GATEWAY_TOKEN=first-token\n"; // pragma: allowlist secret
       }
-      if (pathValue === "/home/test/.openclaw/second env.env") {
-        return 'OPENCLAW_GATEWAY_PASSWORD="second password"\n'; // pragma: allowlist secret
+      if (pathValue === "/home/test/.opnex/second env.env") {
+        return 'OPNEX_GATEWAY_PASSWORD="second password"\n'; // pragma: allowlist secret
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
     });
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      OPENCLAW_GATEWAY_TOKEN: "first-token",
-      OPENCLAW_GATEWAY_PASSWORD: "second password", // pragma: allowlist secret
+      OPNEX_GATEWAY_TOKEN: "first-token",
+      OPNEX_GATEWAY_PASSWORD: "second password", // pragma: allowlist secret
     });
   });
 
   it("resolves relative EnvironmentFile paths from the unit directory", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/opnex-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
+          "ExecStart=/usr/bin/opnex gateway run",
           "EnvironmentFile=./gateway.env ./override.env",
         ].join("\n");
       }
       if (pathValue.endsWith("/.config/systemd/user/gateway.env")) {
         return [
-          "OPENCLAW_GATEWAY_TOKEN=relative-token", // pragma: allowlist secret
-          "OPENCLAW_GATEWAY_PASSWORD=relative-password", // pragma: allowlist secret
+          "OPNEX_GATEWAY_TOKEN=relative-token", // pragma: allowlist secret
+          "OPNEX_GATEWAY_PASSWORD=relative-password", // pragma: allowlist secret
         ].join("\n");
       }
       if (pathValue.endsWith("/.config/systemd/user/override.env")) {
-        return "OPENCLAW_GATEWAY_TOKEN=override-token\n"; // pragma: allowlist secret
+        return "OPNEX_GATEWAY_TOKEN=override-token\n"; // pragma: allowlist secret
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
     });
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      OPENCLAW_GATEWAY_TOKEN: "override-token",
-      OPENCLAW_GATEWAY_PASSWORD: "relative-password", // pragma: allowlist secret
+      OPNEX_GATEWAY_TOKEN: "override-token",
+      OPNEX_GATEWAY_PASSWORD: "relative-password", // pragma: allowlist secret
     });
   });
 
   it("parses EnvironmentFile content with comments and quoted values", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/opnex-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
-          "EnvironmentFile=%h/.openclaw/gateway.env",
+          "ExecStart=/usr/bin/opnex gateway run",
+          "EnvironmentFile=%h/.opnex/gateway.env",
         ].join("\n");
       }
-      if (pathValue === "/home/test/.openclaw/gateway.env") {
+      if (pathValue === "/home/test/.opnex/gateway.env") {
         return [
           "# comment",
           "; another comment",
-          'OPENCLAW_GATEWAY_TOKEN="quoted token"', // pragma: allowlist secret
-          "OPENCLAW_GATEWAY_PASSWORD=quoted-password", // pragma: allowlist secret
+          'OPNEX_GATEWAY_TOKEN="quoted token"', // pragma: allowlist secret
+          "OPNEX_GATEWAY_PASSWORD=quoted-password", // pragma: allowlist secret
         ].join("\n");
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
@@ -697,12 +697,12 @@ describe("readSystemdServiceExecStart", () => {
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      OPENCLAW_GATEWAY_TOKEN: "quoted token",
-      OPENCLAW_GATEWAY_PASSWORD: "quoted-password", // pragma: allowlist secret
+      OPNEX_GATEWAY_TOKEN: "quoted token",
+      OPNEX_GATEWAY_PASSWORD: "quoted-password", // pragma: allowlist secret
     });
     expect(command?.environmentValueSources).toEqual({
-      OPENCLAW_GATEWAY_TOKEN: "file",
-      OPENCLAW_GATEWAY_PASSWORD: "file", // pragma: allowlist secret
+      OPNEX_GATEWAY_TOKEN: "file",
+      OPNEX_GATEWAY_PASSWORD: "file", // pragma: allowlist secret
     });
   });
 });
@@ -716,13 +716,13 @@ describe("stageSystemdService", () => {
       envFilePath: string;
     }) => Promise<void>,
   ): Promise<void> {
-    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-systemd-stage-"));
+    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-systemd-stage-"));
     const home = path.join(tempHomeRoot, "home");
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".opnex");
     const env = {
       HOME: home,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_SYSTEMD_UNIT: "openclaw-gateway-stage-test",
+      OPNEX_STATE_DIR: stateDir,
+      OPNEX_SYSTEMD_UNIT: "opnex-gateway-stage-test",
     };
     const unitPath = resolveSystemdUserUnitPath(env);
     const envFilePath = path.join(stateDir, "gateway.systemd.env");
@@ -751,7 +751,7 @@ describe("stageSystemdService", () => {
     await withStageFixture(async ({ env, stateDir, unitPath, envFilePath }) => {
       await fs.writeFile(
         path.join(stateDir, ".env"),
-        ["OPENCLAW_GATEWAY_TOKEN=dotenv-token", "LLM_API_KEY=dotenv-key"].join("\n"),
+        ["OPNEX_GATEWAY_TOKEN=dotenv-token", "LLM_API_KEY=dotenv-key"].join("\n"),
         "utf8",
       );
 
@@ -760,12 +760,12 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "gateway", "run"],
+        programArguments: ["/usr/bin/opnex", "gateway", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_GATEWAY_TOKEN: "dotenv-token",
+          OPNEX_GATEWAY_TOKEN: "dotenv-token",
           LLM_API_KEY: "dotenv-key",
-          OPENCLAW_GATEWAY_PORT: "18789",
+          OPNEX_GATEWAY_PORT: "18789",
         },
       });
 
@@ -776,10 +776,10 @@ describe("stageSystemdService", () => {
       ]);
 
       expect(unit).toContain(`EnvironmentFile=-${envFilePath}`);
-      expect(unit).toContain("Environment=OPENCLAW_GATEWAY_PORT=18789");
-      expect(unit).not.toContain("Environment=OPENCLAW_GATEWAY_TOKEN=dotenv-token");
+      expect(unit).toContain("Environment=OPNEX_GATEWAY_PORT=18789");
+      expect(unit).not.toContain("Environment=OPNEX_GATEWAY_TOKEN=dotenv-token");
       expect(unit).not.toContain("Environment=LLM_API_KEY=dotenv-key");
-      expect(envFile).toBe("OPENCLAW_GATEWAY_TOKEN=dotenv-token\nLLM_API_KEY=dotenv-key\n");
+      expect(envFile).toBe("OPNEX_GATEWAY_TOKEN=dotenv-token\nLLM_API_KEY=dotenv-key\n");
       expect(envFileStat.mode & 0o777).toBe(0o600);
     });
   });
@@ -788,7 +788,7 @@ describe("stageSystemdService", () => {
     await withStageFixture(async ({ env, stateDir, unitPath, envFilePath }) => {
       await fs.writeFile(
         path.join(stateDir, ".env"),
-        ["OPENCLAW_GATEWAY_TOKEN=stale-token", "LLM_API_KEY=dotenv-key"].join("\n"),
+        ["OPNEX_GATEWAY_TOKEN=stale-token", "LLM_API_KEY=dotenv-key"].join("\n"),
         "utf8",
       );
 
@@ -797,10 +797,10 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "gateway", "run"],
+        programArguments: ["/usr/bin/opnex", "gateway", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_GATEWAY_TOKEN: "fresh-token",
+          OPNEX_GATEWAY_TOKEN: "fresh-token",
           LLM_API_KEY: "dotenv-key",
         },
       });
@@ -811,7 +811,7 @@ describe("stageSystemdService", () => {
       ]);
 
       expect(unit).toContain(`EnvironmentFile=-${envFilePath}`);
-      expect(unit).toContain("Environment=OPENCLAW_GATEWAY_TOKEN=fresh-token");
+      expect(unit).toContain("Environment=OPNEX_GATEWAY_TOKEN=fresh-token");
       expect(envFile).toBe("LLM_API_KEY=dotenv-key\n");
     });
   });
@@ -821,13 +821,13 @@ describe("systemd service install and uninstall", () => {
   async function withNodeSystemdFixture(
     run: (context: { env: Record<string, string>; unitPath: string }) => Promise<void>,
   ): Promise<void> {
-    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-node-systemd-"));
+    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opnex-node-systemd-"));
     const home = path.join(tempHomeRoot, "home");
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".opnex");
     const env = {
       HOME: home,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+      OPNEX_STATE_DIR: stateDir,
+      OPNEX_SYSTEMD_UNIT: "opnex-node",
     };
     const unitPath = resolveSystemdUserUnitPath(env);
 
@@ -844,7 +844,7 @@ describe("systemd service install and uninstall", () => {
     execFileMock.mockReset();
   });
 
-  it("activates the OPENCLAW_SYSTEMD_UNIT override during install", async () => {
+  it("activates the OPNEX_SYSTEMD_UNIT override during install", async () => {
     await withNodeSystemdFixture(async ({ env, unitPath }) => {
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -867,16 +867,16 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "node", "run"],
+        programArguments: ["/usr/bin/opnex", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+          OPNEX_SYSTEMD_UNIT: "opnex-node",
         },
       });
 
       const unit = await fs.readFile(unitPath, "utf8");
-      expect(unitPath).toMatch(/openclaw-node\.service$/);
-      expect(unit).toContain("openclaw node run");
+      expect(unitPath).toMatch(/opnex-node\.service$/);
+      expect(unit).toContain("opnex node run");
       expect(execFileMock).toHaveBeenCalledTimes(4);
     });
   });
@@ -897,7 +897,7 @@ describe("systemd service install and uninstall", () => {
           cb(
             createExecFileError("enable failed"),
             "",
-            "Unit file openclaw-node.service does not exist.",
+            "Unit file opnex-node.service does not exist.",
           );
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -916,10 +916,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "node", "run"],
+        programArguments: ["/usr/bin/opnex", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+          OPNEX_SYSTEMD_UNIT: "opnex-node",
         },
       });
 
@@ -961,10 +961,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env: installEnv,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "node", "run"],
+        programArguments: ["/usr/bin/opnex", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+          OPNEX_SYSTEMD_UNIT: "opnex-node",
         },
       });
 
@@ -974,7 +974,7 @@ describe("systemd service install and uninstall", () => {
 
   it("uses the sudo-u target user for install activation machine-scope retry", async () => {
     await withNodeSystemdFixture(async ({ env }) => {
-      const installEnv = { ...env, USER: "openclaw", SUDO_USER: "admin" };
+      const installEnv = { ...env, USER: "opnex", SUDO_USER: "admin" };
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
           assertUserSystemctlArgs(args, "status");
@@ -995,7 +995,7 @@ describe("systemd service install and uninstall", () => {
           );
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
-          assertMachineUserSystemctlArgs(args, "openclaw", "enable", NODE_SERVICE);
+          assertMachineUserSystemctlArgs(args, "opnex", "enable", NODE_SERVICE);
           cb(null, "", "");
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -1006,10 +1006,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env: installEnv,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/openclaw", "node", "run"],
+        programArguments: ["/usr/bin/opnex", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+          OPNEX_SYSTEMD_UNIT: "opnex-node",
         },
       });
 
@@ -1046,10 +1046,10 @@ describe("systemd service install and uninstall", () => {
         installSystemdService({
           env,
           stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-          programArguments: ["/usr/bin/openclaw", "node", "run"],
+          programArguments: ["/usr/bin/opnex", "node", "run"],
           workingDirectory: "/tmp",
           environment: {
-            OPENCLAW_SYSTEMD_UNIT: "openclaw-node",
+            OPNEX_SYSTEMD_UNIT: "opnex-node",
           },
         }),
       ).rejects.toThrow("systemctl --user unavailable: Failed to connect to bus: No medium found");
@@ -1058,10 +1058,10 @@ describe("systemd service install and uninstall", () => {
     });
   });
 
-  it("disables the OPENCLAW_SYSTEMD_UNIT override during uninstall", async () => {
+  it("disables the OPNEX_SYSTEMD_UNIT override during uninstall", async () => {
     await withNodeSystemdFixture(async ({ env, unitPath }) => {
       await fs.mkdir(path.dirname(unitPath), { recursive: true });
-      await fs.writeFile(unitPath, "[Unit]\nDescription=OpenClaw Node\n", "utf8");
+      await fs.writeFile(unitPath, "[Unit]\nDescription=OPNEX Node\n", "utf8");
 
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -1132,10 +1132,10 @@ describe("systemd service control", () => {
     execFileMock
       .mockImplementationOnce((_cmd, _args, _opts, cb) => cb(null, "", ""))
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        assertUserSystemctlArgs(args, "restart", "openclaw-gateway-work.service");
+        assertUserSystemctlArgs(args, "restart", "opnex-gateway-work.service");
         cb(null, "", "");
       });
-    await assertRestartSuccess({ OPENCLAW_PROFILE: "work" });
+    await assertRestartSuccess({ OPNEX_PROFILE: "work" });
   });
 
   it("surfaces stop failures with systemctl detail", async () => {

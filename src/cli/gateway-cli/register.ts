@@ -397,12 +397,12 @@ export function registerGatewayCli(program: Command) {
         "after",
         () =>
           `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-            ["openclaw gateway run", "Run the gateway in the foreground."],
-            ["openclaw gateway status", "Show service status plus connectivity/capability."],
-            ["openclaw gateway discover", "Find local and wide-area gateway beacons."],
-            ["openclaw gateway stability", "Show recent stability diagnostics."],
-            ["openclaw gateway call health", "Call a gateway RPC method directly."],
-          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.openclaw.ai/cli/gateway")}\n`,
+            ["opnex gateway run", "Run the gateway in the foreground."],
+            ["opnex gateway status", "Show service status plus connectivity/capability."],
+            ["opnex gateway discover", "Find local and wide-area gateway beacons."],
+            ["opnex gateway stability", "Show recent stability diagnostics."],
+            ["opnex gateway call health", "Call a gateway RPC method directly."],
+          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.opnex.ai/cli/gateway")}\n`,
       ),
   );
 

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 
-const loadConfigMock = vi.fn<() => OpenClawConfig>();
+const loadConfigMock = vi.fn<() => OPNEXConfig>();
 
 vi.mock("../../config/config.js", async () => {
   const actual =
@@ -36,7 +36,7 @@ describe("agents_list tool", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig);
+    } satisfies OPNEXConfig);
 
     const { createAgentsListTool } = await import("./agents-list-tool.js");
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
@@ -63,7 +63,7 @@ describe("agents_list tool", () => {
       agents: {
         list: [{ id: "main", default: true }, { id: "codex" }],
       },
-    } satisfies OpenClawConfig);
+    } satisfies OPNEXConfig);
 
     const { createAgentsListTool } = await import("./agents-list-tool.js");
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
@@ -83,8 +83,8 @@ describe("agents_list tool", () => {
     });
   });
 
-  it("marks OPENCLAW_AGENT_RUNTIME as the effective runtime source", async () => {
-    vi.stubEnv("OPENCLAW_AGENT_RUNTIME", "codex");
+  it("marks OPNEX_AGENT_RUNTIME as the effective runtime source", async () => {
+    vi.stubEnv("OPNEX_AGENT_RUNTIME", "codex");
     loadConfigMock.mockReturnValue({
       agents: {
         defaults: {
@@ -92,7 +92,7 @@ describe("agents_list tool", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } satisfies OpenClawConfig);
+    } satisfies OPNEXConfig);
 
     const { createAgentsListTool } = await import("./agents-list-tool.js");
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(

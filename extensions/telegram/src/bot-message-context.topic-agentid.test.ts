@@ -1,4 +1,4 @@
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { getRuntimeConfig } from "opnex/plugin-sdk/runtime-config-snapshot";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { defaultRouteConfig } = vi.hoisted(() => ({
@@ -11,10 +11,10 @@ const { defaultRouteConfig } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("opnex/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("opnex/plugin-sdk/runtime-config-snapshot")
+  >("opnex/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: vi.fn(() => defaultRouteConfig),

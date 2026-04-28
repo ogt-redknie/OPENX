@@ -9,7 +9,7 @@ import {
 describe("gateway codex harness live helpers", () => {
   it("accepts the current codex status prose from the live harness", () => {
     const text =
-      "OpenClaw is running on `openai/gpt-5.5` with low reasoning/text settings. Context is at `22k/272k` tokens, no compactions, and the current session is `agent:dev:live-codex-harness`.";
+      "OPNEX is running on `openai/gpt-5.5` with low reasoning/text settings. Context is at `22k/272k` tokens, no compactions, and the current session is `agent:dev:live-codex-harness`.";
 
     expect(
       EXPECTED_CODEX_STATUS_COMMAND_TEXT.some((expectedText) => text.includes(expectedText)),
@@ -19,7 +19,7 @@ describe("gateway codex harness live helpers", () => {
 
   it("accepts current status prose that reports session context without the session id", () => {
     const text = [
-      "OpenClaw is running on `openai/gpt-5.5` with low reasoning/text settings.",
+      "OPNEX is running on `openai/gpt-5.5` with low reasoning/text settings.",
       "",
       "Session context is light: `22k/272k` tokens used, `8%`, no compactions. There is 1 active task: `/codex status`.",
     ].join("\n");
@@ -31,15 +31,15 @@ describe("gateway codex harness live helpers", () => {
     const text = [
       "Status: running on `openai/gpt-5.5` with low reasoning/text settings.",
       "",
-      "Session context is healthy: `22k/272k` tokens used, `0` compactions, `53%` cache hit. Current workspace is `/tmp/openclaw-live-codex-harness/workspace/dev`.",
+      "Session context is healthy: `22k/272k` tokens used, `0` compactions, `53%` cache hit. Current workspace is `/tmp/opnex-live-codex-harness/workspace/dev`.",
     ].join("\n");
 
     expect(isExpectedCodexStatusCommandText(text)).toBe(true);
   });
 
-  it("accepts current app-server status prose without the OpenClaw prefix", () => {
+  it("accepts current app-server status prose without the OPNEX prefix", () => {
     const text = [
-      "Status: running on `openai/gpt-5.5` in `/tmp/openclaw-live-codex-harness/workspace/dev`.",
+      "Status: running on `openai/gpt-5.5` in `/tmp/opnex-live-codex-harness/workspace/dev`.",
       "",
       "Context is at 22k / 272k tokens, with no compactions. There’s 1 active task: `/codex status`.",
     ].join("\n");
@@ -73,7 +73,7 @@ describe("gateway codex harness live helpers", () => {
 
   it("rejects status prose for a different codex session", () => {
     const text =
-      "OpenClaw is running on `openai/gpt-5.5` with low reasoning/text settings. Context is at `22k/272k` tokens, no compactions, and the current session is `agent:dev:other`.";
+      "OPNEX is running on `openai/gpt-5.5` with low reasoning/text settings. Context is at `22k/272k` tokens, no compactions, and the current session is `agent:dev:other`.";
 
     expect(isExpectedCodexStatusCommandText(text)).toBe(false);
   });

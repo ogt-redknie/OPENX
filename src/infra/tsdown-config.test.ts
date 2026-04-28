@@ -1,4 +1,4 @@
-import { bundledPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginRoot } from "opnex/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import tsdownConfig from "../../tsdown.config.ts";
 

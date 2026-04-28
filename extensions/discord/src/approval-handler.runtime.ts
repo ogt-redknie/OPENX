@@ -17,12 +17,12 @@ import type {
   PluginApprovalExpiredView,
   PluginApprovalPendingView,
   PluginApprovalResolvedView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import type { ExecApprovalActionDescriptor } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalDecision } from "openclaw/plugin-sdk/approval-runtime";
-import type { DiscordExecApprovalConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { logDebug, logError, normalizeOptionalString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "opnex/plugin-sdk/approval-handler-runtime";
+import type { ExecApprovalActionDescriptor } from "opnex/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalDecision } from "opnex/plugin-sdk/approval-runtime";
+import type { DiscordExecApprovalConfig, OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { logDebug, logError, normalizeOptionalString } from "opnex/plugin-sdk/text-runtime";
 import { shouldHandleDiscordApprovalRequest } from "./approval-shared.js";
 import { isDiscordExecApprovalClientEnabled } from "./exec-approvals.js";
 import { createDiscordClient, stripUndefinedFields } from "./send.shared.js";
@@ -59,7 +59,7 @@ function resolveHandlerContext(params: ChannelApprovalCapabilityHandlerContext):
 
 class ExecApprovalContainer extends DiscordUiContainer {
   constructor(params: {
-    cfg: OpenClawConfig;
+    cfg: OPNEXConfig;
     accountId: string;
     title: string;
     description?: string;
@@ -180,7 +180,7 @@ function resolveCommandPreviews(
 
 function createExecApprovalRequestContainer(params: {
   view: ExecApprovalPendingView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   actionRow?: Row<Button>;
 }): ExecApprovalContainer {
@@ -208,7 +208,7 @@ function createExecApprovalRequestContainer(params: {
 
 function createPluginApprovalRequestContainer(params: {
   view: PluginApprovalPendingView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   actionRow?: Row<Button>;
 }): ExecApprovalContainer {
@@ -232,7 +232,7 @@ function createPluginApprovalRequestContainer(params: {
 
 function createExecResolvedContainer(params: {
   view: ExecApprovalResolvedView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const { commandPreview, commandSecondaryPreview } = resolveCommandPreviews(
@@ -269,7 +269,7 @@ function createExecResolvedContainer(params: {
 
 function createPluginResolvedContainer(params: {
   view: PluginApprovalResolvedView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const decisionLabel =
@@ -300,7 +300,7 @@ function createPluginResolvedContainer(params: {
 
 function createExecExpiredContainer(params: {
   view: ExecApprovalExpiredView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const { commandPreview, commandSecondaryPreview } = resolveCommandPreviews(
@@ -324,7 +324,7 @@ function createExecExpiredContainer(params: {
 
 function createPluginExpiredContainer(params: {
   view: PluginApprovalExpiredView;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
 }): ExecApprovalContainer {
   return new ExecApprovalContainer({
@@ -348,7 +348,7 @@ export function buildExecApprovalCustomId(
 }
 
 async function updateMessage(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   token: string;
   channelId: string;
@@ -375,7 +375,7 @@ async function updateMessage(params: {
 }
 
 async function finalizeMessage(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId: string;
   token: string;
   cleanupAfterResolve?: boolean;

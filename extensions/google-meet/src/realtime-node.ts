@@ -1,13 +1,13 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { formatErrorMessage } from "opnex/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "opnex/plugin-sdk/plugin-runtime";
 import {
   createRealtimeVoiceBridgeSession,
   type RealtimeVoiceBridgeSession,
   type RealtimeVoiceProviderPlugin,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "opnex/plugin-sdk/realtime-voice";
 import {
-  consultOpenClawAgentForGoogleMeet,
+  consultOPNEXAgentForGoogleMeet,
   GOOGLE_MEET_AGENT_CONSULT_TOOL_NAME,
   resolveGoogleMeetRealtimeTools,
   submitGoogleMeetConsultWorkingResponse,
@@ -41,7 +41,7 @@ function readString(value: unknown): string | undefined {
 
 export async function startNodeRealtimeAudioBridge(params: {
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: OPNEXConfig;
   runtime: PluginRuntime;
   meetingSessionId: string;
   nodeId: string;
@@ -163,7 +163,7 @@ export async function startNodeRealtimeAudioBridge(params: {
         return;
       }
       submitGoogleMeetConsultWorkingResponse(session, event.callId || event.itemId);
-      void consultOpenClawAgentForGoogleMeet({
+      void consultOPNEXAgentForGoogleMeet({
         config: params.config,
         fullConfig: params.fullConfig,
         runtime: params.runtime,

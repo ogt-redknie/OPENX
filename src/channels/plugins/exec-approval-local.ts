@@ -1,10 +1,10 @@
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { OPNEXConfig } from "../../config/types.opnex.js";
 import { getChannelPlugin, normalizeChannelId } from "./registry.js";
 
 export function shouldSuppressLocalExecApprovalPrompt(params: {
   channel?: string | null;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {

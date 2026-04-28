@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "./sdk-config.js";
+import type { OPNEXConfig } from "./sdk-config.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./sdk-config.js";
 
-export function isDefaultBrowserPluginEnabled(cfg: OpenClawConfig): boolean {
+export function isDefaultBrowserPluginEnabled(cfg: OPNEXConfig): boolean {
   return resolveEffectiveEnableState({
     id: "browser",
     origin: "bundled",

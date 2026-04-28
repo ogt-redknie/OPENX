@@ -1,13 +1,13 @@
 import type {
   ChannelDoctorAdapter,
   ChannelDoctorConfigMutation,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+} from "opnex/plugin-sdk/channel-contract";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
 }): ChannelDoctorConfigMutation {
   const legacyAckReaction = cfg.messages?.ackReaction?.trim();
   if (!legacyAckReaction || cfg.channels?.whatsapp === undefined) {

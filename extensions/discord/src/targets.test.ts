@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   __resetDiscordDirectoryCacheForTest,
@@ -82,7 +82,7 @@ describe("resolveDiscordChannelId", () => {
 });
 
 describe("resolveDiscordTarget", () => {
-  const cfg = { channels: { discord: {} } } as OpenClawConfig;
+  const cfg = { channels: { discord: {} } } as OPNEXConfig;
 
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -126,7 +126,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     vi.spyOn(directoryLive, "listDiscordDirectoryPeersLive").mockResolvedValueOnce([
       { kind: "user", id: "user:999", name: "Jane" } as const,

@@ -6,12 +6,12 @@ import {
   isPrivateIpAddress,
   normalizeHostnameSuffixAllowlist,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-policy";
+} from "opnex/plugin-sdk/ssrf-policy";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { MSTeamsAttachmentLike } from "./types.js";
 
 type InlineImageCandidate =

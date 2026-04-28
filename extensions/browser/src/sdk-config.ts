@@ -1,26 +1,26 @@
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runtime";
+import { normalizeOptionalLowercaseString } from "opnex/plugin-sdk/text-runtime";
 
 export {
   getRuntimeConfig,
   getRuntimeConfigSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
-export { replaceConfigFile } from "openclaw/plugin-sdk/config-mutation";
+} from "opnex/plugin-sdk/runtime-config-snapshot";
+export { replaceConfigFile } from "opnex/plugin-sdk/config-mutation";
 export {
   type BrowserConfig,
   type BrowserProfileConfig,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/config-types";
+  type OPNEXConfig,
+} from "opnex/plugin-sdk/config-types";
 export {
   normalizePluginsConfig,
   resolveEffectiveEnableState,
-} from "openclaw/plugin-sdk/plugin-config-runtime";
-export { resolveGatewayPort } from "openclaw/plugin-sdk/core";
+} from "opnex/plugin-sdk/plugin-config-runtime";
+export { resolveGatewayPort } from "opnex/plugin-sdk/core";
 export {
   CONFIG_DIR,
   escapeRegExp,
   resolveUserPath,
   shortenHomePath,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 export { normalizeOptionalLowercaseString };
 
 export type PortRange = { start: number; end: number };

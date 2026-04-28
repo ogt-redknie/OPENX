@@ -1,21 +1,21 @@
 import { type Block, type KnownBlock, type WebClient } from "@slack/web-api";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { withTrustedEnvProxyGuardedFetchMode } from "openclaw/plugin-sdk/fetch-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { withTrustedEnvProxyGuardedFetchMode } from "opnex/plugin-sdk/fetch-runtime";
+import { resolveMarkdownTableMode } from "opnex/plugin-sdk/markdown-table-runtime";
+import { requireRuntimeConfig } from "opnex/plugin-sdk/plugin-config-runtime";
 import {
   chunkMarkdownTextWithMode,
   isSilentReplyText,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "openclaw/plugin-sdk/reply-chunking";
-import { resolveTextChunksWithFallback } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "opnex/plugin-sdk/reply-chunking";
+import { resolveTextChunksWithFallback } from "opnex/plugin-sdk/reply-payload";
+import { logVerbose } from "opnex/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "opnex/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 import type { SlackTokenSource } from "./accounts.js";
 import { resolveSlackAccount } from "./accounts.js";
 import { buildSlackBlocksFallbackText } from "./blocks-fallback.js";
@@ -51,7 +51,7 @@ export type SlackSendIdentity = {
 };
 
 type SlackSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;
@@ -395,7 +395,7 @@ export async function sendMessageSlack(
 async function sendMessageSlackQueued(params: {
   trimmedMessage: string;
   opts: SlackSendOpts;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   account: ReturnType<typeof resolveSlackAccount>;
   token: string;
   recipient: SlackRecipient;

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { GUARDED_EXTENSION_PUBLIC_SURFACE_BASENAMES } from "openclaw/plugin-sdk/plugin-test-contracts";
-import { BUNDLED_PLUGIN_PATH_PREFIX } from "openclaw/plugin-sdk/test-fixtures";
+import { GUARDED_EXTENSION_PUBLIC_SURFACE_BASENAMES } from "opnex/plugin-sdk/plugin-test-contracts";
+import { BUNDLED_PLUGIN_PATH_PREFIX } from "opnex/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
@@ -220,8 +220,8 @@ describe("non-extension test boundaries", () => {
 
   it("keeps extension tests off legacy broad testing barrels and repo helper bridges", () => {
     const bannedPatterns = [
-      /["']openclaw\/plugin-sdk\/testing["']/u,
-      /["']openclaw\/plugin-sdk\/test-utils["']/u,
+      /["']opnex\/plugin-sdk\/testing["']/u,
+      /["']opnex\/plugin-sdk\/test-utils["']/u,
       /["'](?:\.\.\/)+(?:test\/helpers\/channels\/)[^"']+["']/u,
       /["'](?:\.\.\/)+(?:src\/channels\/plugins\/contracts\/test-helpers\/)[^"']+["']/u,
       /["'](?:\.\.\/)+(?:test\/helpers\/plugins\/)[^"']+["']/u,
@@ -257,7 +257,7 @@ describe("non-extension test boundaries", () => {
 
     const offenders = files.filter((file) => {
       const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
-      return source.includes("openclaw/plugin-sdk/channel-config-schema-legacy");
+      return source.includes("opnex/plugin-sdk/channel-config-schema-legacy");
     });
 
     expect(offenders).toEqual([]);

@@ -21,7 +21,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import { applyPrimaryModel } from "../plugins/provider-model-primary.js";
 import { resolveOwningPluginIdsForProvider } from "../plugins/providers.js";
 import type { ProviderPlugin } from "../plugins/types.js";
@@ -41,7 +41,7 @@ const PROVIDER_FILTER_THRESHOLD = 30;
 const HIDDEN_ROUTER_MODELS = new Set(["openrouter/auto"]);
 
 export type PromptDefaultModelParams = {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   prompter: WizardPrompter;
   allowKeep?: boolean;
   includeManual?: boolean;
@@ -57,7 +57,7 @@ export type PromptDefaultModelParams = {
   message?: string;
 };
 
-export type PromptDefaultModelResult = { model?: string; config?: OpenClawConfig };
+export type PromptDefaultModelResult = { model?: string; config?: OPNEXConfig };
 export type PromptModelAllowlistResult = { models?: string[]; scopeKeys?: string[] };
 
 async function loadModelPickerRuntime() {
@@ -71,7 +71,7 @@ const loadResolvedModelPickerRuntime = createLazyRuntimeSurface(
 
 function hasAuthForProvider(
   provider: string,
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   store: ReturnType<typeof ensureAuthProfileStore>,
 ) {
   if (listProfilesForProvider(store, provider).length > 0) {
@@ -87,7 +87,7 @@ function hasAuthForProvider(
 }
 
 function createProviderAuthChecker(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   agentDir?: string;
 }): (provider: string) => boolean {
   const authStore = ensureAuthProfileStore(params.agentDir, {
@@ -105,18 +105,18 @@ function createProviderAuthChecker(params: {
   };
 }
 
-function resolveConfiguredModelRaw(cfg: OpenClawConfig): string {
+function resolveConfiguredModelRaw(cfg: OPNEXConfig): string {
   return resolveAgentModelPrimaryValue(cfg.agents?.defaults?.model) ?? "";
 }
 
-function resolveConfiguredModelKeys(cfg: OpenClawConfig): string[] {
+function resolveConfiguredModelKeys(cfg: OPNEXConfig): string[] {
   const models = cfg.agents?.defaults?.models ?? {};
   return Object.keys(models)
     .map((key) => key.trim())
     .filter((key) => key.length > 0);
 }
 
-function loadPickerModelCatalog(cfg: OpenClawConfig): ReturnType<typeof loadModelCatalog> {
+function loadPickerModelCatalog(cfg: OPNEXConfig): ReturnType<typeof loadModelCatalog> {
   if (cfg.models?.mode === "replace") {
     return Promise.resolve(buildConfiguredModelCatalog({ cfg }));
   }
@@ -138,7 +138,7 @@ function normalizeModelKeys(values: string[]): string[] {
 }
 
 function resolveFallbackModelKey(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   raw: string;
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -160,7 +160,7 @@ function resolveFallbackModelKey(params: {
 }
 
 function resolveFallbackModelKeys(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   rawFallbacks: string[];
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -281,7 +281,7 @@ function addModelKeySelectOption(params: {
 
 function createPreferredProviderMatcher(params: {
   preferredProvider: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): (entryProvider: string) => boolean {
@@ -364,7 +364,7 @@ async function maybeFilterModelsByProvider(params: {
   }>;
   preferredProvider?: string;
   prompter: WizardPrompter;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<typeof params.models> {
@@ -403,7 +403,7 @@ async function maybeFilterModelsByProvider(params: {
 }
 
 async function resolveProviderPluginSetupOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<WizardSelectOption[]> {
@@ -433,7 +433,7 @@ async function resolveProviderPluginSetupOptions(params: {
 
 async function maybeHandleProviderPluginSelection(params: {
   selection: string;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   prompter: WizardPrompter;
   agentDir?: string;
   workspaceDir?: string;
@@ -789,7 +789,7 @@ export async function promptDefaultModel(
 }
 
 export async function promptModelAllowlist(params: {
-  config: OpenClawConfig;
+  config: OPNEXConfig;
   prompter: WizardPrompter;
   message?: string;
   agentDir?: string;
@@ -1011,10 +1011,10 @@ export async function promptModelAllowlist(params: {
 }
 
 export function applyModelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   models: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): OPNEXConfig {
   const defaults = cfg.agents?.defaults;
   const normalized = normalizeModelKeys(models);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
@@ -1087,10 +1087,10 @@ export function applyModelAllowlist(
 }
 
 export function applyModelFallbacksFromSelection(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   selection: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): OPNEXConfig {
   const normalized = normalizeModelKeys(selection);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
   const scopeKeySet = scopeKeys.length > 0 ? new Set(scopeKeys) : null;

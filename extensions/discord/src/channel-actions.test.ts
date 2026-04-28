@@ -1,6 +1,6 @@
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-types";
-import { withEnv } from "openclaw/plugin-sdk/test-env";
+import type { ChannelMessageActionContext } from "opnex/plugin-sdk/channel-contract";
+import type { OPNEXConfig } from "opnex/plugin-sdk/config-types";
+import { withEnv } from "opnex/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 
 const handleDiscordMessageActionMock = vi.hoisted(() =>
@@ -23,7 +23,7 @@ describe("discordMessageActions", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as OPNEXConfig,
       });
 
       expect(discovery).toEqual({
@@ -49,7 +49,7 @@ describe("discordMessageActions", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
 
     expect(discovery?.capabilities).toEqual(["presentation"]);
@@ -81,7 +81,7 @@ describe("discordMessageActions", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
 
     const defaultDiscovery = discordMessageActions.describeMessageTool?.({
       cfg,
@@ -108,7 +108,7 @@ describe("discordMessageActions", () => {
             token: "Bot token-main",
           },
         },
-      } as OpenClawConfig,
+      } as OPNEXConfig,
     });
     expect(discovery?.schema).toBeUndefined();
   });
@@ -140,7 +140,7 @@ describe("discordMessageActions", () => {
           token: "Bot token-main",
         },
       },
-    } as OpenClawConfig;
+    } as OPNEXConfig;
     const toolContext: ChannelMessageActionContext["toolContext"] = {
       currentChannelProvider: "discord",
     };

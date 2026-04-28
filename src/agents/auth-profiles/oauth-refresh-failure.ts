@@ -63,6 +63,6 @@ export function classifyOAuthRefreshFailure(message: string): {
 export function buildOAuthRefreshFailureLoginCommand(provider: string | null | undefined): string {
   const safeProvider = sanitizeOAuthRefreshFailureProvider(provider);
   return safeProvider
-    ? formatCliCommand(`openclaw models auth login --provider ${safeProvider}`)
-    : formatCliCommand("openclaw models auth login");
+    ? formatCliCommand(`opnex models auth login --provider ${safeProvider}`)
+    : formatCliCommand("opnex models auth login");
 }

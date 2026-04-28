@@ -187,15 +187,15 @@ export function attachGatewayWsConnectionHandler(params: AttachGatewayWsConnecti
     const { remoteAddr, remotePort, localAddr, localPort, endpoint } = resolveSocketAddress(socket);
     const preauthBudgetKey = (
       socket as WebSocket & {
-        __openclawPreauthBudgetClaimed?: boolean;
-        __openclawPreauthBudgetKey?: string;
+        __opnexPreauthBudgetClaimed?: boolean;
+        __opnexPreauthBudgetKey?: string;
       }
-    ).__openclawPreauthBudgetKey;
+    ).__opnexPreauthBudgetKey;
     (
       socket as WebSocket & {
-        __openclawPreauthBudgetClaimed?: boolean;
+        __opnexPreauthBudgetClaimed?: boolean;
       }
-    ).__openclawPreauthBudgetClaimed = true;
+    ).__opnexPreauthBudgetClaimed = true;
     const headerValue = (value: string | string[] | undefined) =>
       Array.isArray(value) ? value[0] : value;
     const requestHost = headerValue(upgradeReq.headers.host);

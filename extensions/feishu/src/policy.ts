@@ -1,10 +1,10 @@
 import {
   normalizeAccountId,
   resolveMergedAccountConfig,
-} from "openclaw/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import { evaluateSenderGroupAccessForPolicy } from "openclaw/plugin-sdk/group-access";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/account-resolution";
+import type { OPNEXConfig } from "opnex/plugin-sdk/core";
+import { evaluateSenderGroupAccessForPolicy } from "opnex/plugin-sdk/group-access";
+import { normalizeOptionalLowercaseString } from "opnex/plugin-sdk/text-runtime";
 import type { AllowlistMatch, ChannelGroupContext } from "../runtime-api.js";
 import { detectIdType } from "./targets.js";
 import type { FeishuConfig } from "./types.js";
@@ -198,7 +198,7 @@ export function isFeishuGroupAllowed(params: {
 
 export function resolveFeishuReplyPolicy(params: {
   isDirectMessage: boolean;
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   accountId?: string | null;
   groupId?: string | null;
   /**

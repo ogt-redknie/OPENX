@@ -12,11 +12,11 @@ import { runFatalErrorHooks } from "./fatal-error-hooks.js";
 type UnhandledRejectionHandler = (reason: unknown) => boolean;
 type UncaughtExceptionHandler = (error: unknown) => boolean;
 
-// Plugins resolve `openclaw/plugin-sdk/runtime` through their own staged
+// Plugins resolve `opnex/plugin-sdk/runtime` through their own staged
 // `node_modules`, which loads a separate copy of this module. To keep registry
 // state shared across instances, anchor the handlers Set on globalThis.
-const HANDLERS_GLOBAL_KEY = Symbol.for("openclaw.unhandledRejection.handlers");
-const EXCEPTION_HANDLERS_GLOBAL_KEY = Symbol.for("openclaw.uncaughtException.handlers");
+const HANDLERS_GLOBAL_KEY = Symbol.for("opnex.unhandledRejection.handlers");
+const EXCEPTION_HANDLERS_GLOBAL_KEY = Symbol.for("opnex.uncaughtException.handlers");
 const handlers: Set<UnhandledRejectionHandler> = (() => {
   const g = globalThis as unknown as Record<symbol, Set<UnhandledRejectionHandler>>;
   const existing = g[HANDLERS_GLOBAL_KEY];
@@ -366,7 +366,7 @@ export function isUnhandledRejectionHandled(reason: unknown): boolean {
       }
     } catch (err) {
       console.error(
-        "[openclaw] Unhandled rejection handler failed:",
+        "[opnex] Unhandled rejection handler failed:",
         err instanceof Error ? (err.stack ?? err.message) : err,
       );
     }
@@ -389,7 +389,7 @@ export function isUncaughtExceptionHandled(error: unknown): boolean {
       }
     } catch (err) {
       console.error(
-        "[openclaw] Uncaught exception handler failed:",
+        "[opnex] Uncaught exception handler failed:",
         err instanceof Error ? (err.stack ?? err.message) : err,
       );
     }
@@ -400,7 +400,7 @@ export function isUncaughtExceptionHandled(error: unknown): boolean {
 export function installUnhandledRejectionHandler(): void {
   const exitWithTerminalRestore = (reason: string, error?: unknown, hookReason = reason) => {
     for (const message of runFatalErrorHooks({ reason: hookReason, error })) {
-      console.error("[openclaw]", message);
+      console.error("[opnex]", message);
     }
     restoreTerminalState(reason, { resumeStdinIfPaused: false });
     process.exit(1);
@@ -414,31 +414,31 @@ export function installUnhandledRejectionHandler(): void {
     // AbortError is typically an intentional cancellation (e.g., during shutdown)
     // Log it but don't crash - these are expected during graceful shutdown
     if (isAbortError(reason)) {
-      console.warn("[openclaw] Suppressed AbortError:", formatUncaughtError(reason));
+      console.warn("[opnex] Suppressed AbortError:", formatUncaughtError(reason));
       return;
     }
 
     if (isFatalError(reason)) {
-      console.error("[openclaw] FATAL unhandled rejection:", formatUncaughtError(reason));
+      console.error("[opnex] FATAL unhandled rejection:", formatUncaughtError(reason));
       exitWithTerminalRestore("fatal unhandled rejection", reason, "fatal_unhandled_rejection");
       return;
     }
 
     if (isConfigError(reason)) {
-      console.error("[openclaw] CONFIGURATION ERROR - requires fix:", formatUncaughtError(reason));
+      console.error("[opnex] CONFIGURATION ERROR - requires fix:", formatUncaughtError(reason));
       exitWithTerminalRestore("configuration error", reason, "configuration_error");
       return;
     }
 
     if (isTransientUnhandledRejectionError(reason)) {
       console.warn(
-        "[openclaw] Non-fatal unhandled rejection (continuing):",
+        "[opnex] Non-fatal unhandled rejection (continuing):",
         formatUncaughtError(reason),
       );
       return;
     }
 
-    console.error("[openclaw] Unhandled promise rejection:", formatUncaughtError(reason));
+    console.error("[opnex] Unhandled promise rejection:", formatUncaughtError(reason));
     exitWithTerminalRestore("unhandled rejection", reason, "unhandled_rejection");
   });
 }

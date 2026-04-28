@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import OPNEX
 
 struct BackgroundAliveBeaconTests {
     @Test func `normalize trigger accepts closed reasons`() {

@@ -5,11 +5,11 @@ import type {
   VerboseLevel,
 } from "../auto-reply/thinking.js";
 import type { SessionEntry, SessionScope } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { OPNEXConfig } from "../config/types.opnex.js";
 import type { MediaUnderstandingDecision } from "../media-understanding/types.js";
 
 export type BuildStatusTextParams = {
-  cfg: OpenClawConfig;
+  cfg: OPNEXConfig;
   sessionEntry?: SessionEntry;
   sessionKey: string;
   parentSessionKey?: string;

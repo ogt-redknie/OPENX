@@ -1,9 +1,9 @@
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import type { ModelDefinitionConfig } from "opnex/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger } from "opnex/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/text-runtime";
+} from "opnex/plugin-sdk/text-runtime";
 
 const log = createSubsystemLogger("chutes-models");
 

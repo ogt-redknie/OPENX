@@ -9,17 +9,17 @@ import { installProcessWarningFilter } from "./process-warning-filter.mjs";
 
 installProcessWarningFilter();
 
-process.env.OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
+process.env.OPNEX_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
 
 const { packageRoot } = parsePackageRootArg(
   process.argv.slice(2),
-  "OPENCLAW_BUNDLED_CHANNEL_SMOKE_ROOT",
+  "OPNEX_BUNDLED_CHANNEL_SMOKE_ROOT",
 );
 const distExtensionsRoot = path.join(packageRoot, "dist", "extensions");
-const installedLayoutEnv = "OPENCLAW_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
+const installedLayoutEnv = "OPNEX_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
 
 function packageRootLooksInstalled(root) {
-  return root.replaceAll("\\", "/").endsWith("/node_modules/openclaw");
+  return root.replaceAll("\\", "/").endsWith("/node_modules/opnex");
 }
 
 function smokeInInstalledLayoutIfNeeded() {
@@ -27,9 +27,9 @@ function smokeInInstalledLayoutIfNeeded() {
     return;
   }
 
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-channel-entry-smoke-"));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "opnex-channel-entry-smoke-"));
   const nodeModulesRoot = path.join(tempRoot, "node_modules");
-  const installedPackageRoot = path.join(nodeModulesRoot, "openclaw");
+  const installedPackageRoot = path.join(nodeModulesRoot, "opnex");
   fs.mkdirSync(nodeModulesRoot, { recursive: true });
   fs.symlinkSync(packageRoot, installedPackageRoot, "dir");
 
@@ -79,13 +79,13 @@ function collectBundledChannelEntryFiles() {
       continue;
     }
     const packageJson = readJson(packageJsonPath);
-    if (!packageJson.openclaw?.channel) {
+    if (!packageJson.opnex?.channel) {
       continue;
     }
 
     const extensionEntries =
-      Array.isArray(packageJson.openclaw.extensions) && packageJson.openclaw.extensions.length > 0
-        ? packageJson.openclaw.extensions
+      Array.isArray(packageJson.opnex.extensions) && packageJson.opnex.extensions.length > 0
+        ? packageJson.opnex.extensions
         : ["./index.ts"];
     for (const entry of extensionEntries) {
       if (typeof entry !== "string" || entry.trim().length === 0) {
@@ -98,7 +98,7 @@ function collectBundledChannelEntryFiles() {
       });
     }
 
-    const setupEntry = packageJson.openclaw.setupEntry;
+    const setupEntry = packageJson.opnex.setupEntry;
     if (typeof setupEntry === "string" && setupEntry.trim().length > 0) {
       files.push({
         id: dirent.name,

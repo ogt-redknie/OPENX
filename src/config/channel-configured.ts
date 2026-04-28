@@ -4,10 +4,10 @@ import {
   hasMeaningfulChannelConfigShallow,
   resolveChannelConfigRecord,
 } from "./channel-configured-shared.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { OPNEXConfig } from "./types.opnex.js";
 
 export function isChannelConfigured(
-  cfg: OpenClawConfig,
+  cfg: OPNEXConfig,
   channelId: string,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
